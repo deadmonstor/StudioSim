@@ -14,15 +14,19 @@
   <ItemGroup>
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Library\Aixlog.hpp" />
+    <ClInclude Include="Library\glfw3.h" />
+    <ClInclude Include="Library\glfw3native.h" />
     <ClInclude Include="Util\Events\Events.h" />
     <ClInclude Include="Util\Events\FunctionHandler.h" />
     <ClInclude Include="Util\Logger.h" />
     <ClInclude Include="Util\SingletonTemplate.h" />
     <ClInclude Include="Util\Time.h" />
+    <ClInclude Include="WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Util\Time.cpp" />
+    <ClCompile Include="WindowManager.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -1,7 +1,10 @@
 ﻿#include "Engine.h"
+
+#include "Library/glfw3.h"
 #include "Util/Events/Events.h"
 #include "Util/Logger.h"
 #include "Util/Time.h"
+#include "WindowManager.h"
 
 namespace Disunity
 {
@@ -16,6 +19,10 @@ namespace Disunity
 		Events::Instance()->unsubscribe(this, &Engine::onEvent, sub_index); // Unsubscribes from the event system
 		Events::Instance()->invoke(new Event()); // Will not call onEvent
 
+		if (!WindowManager::Instance()->CreateWindow_Diff())
+		{
+			return false;
+		}
 		// init
 		return true;
 	}
@@ -29,11 +36,13 @@ namespace Disunity
 	void Engine::update()
 	{
 		// update
+		glfwPollEvents();    
 	}
 
 	void Engine::render()
 	{
 		// render
+		glfwSwapBuffers(WindowManager::Instance()->GetWindow());
 	}
 
 	void Engine::cleanup()
@@ -65,6 +74,11 @@ namespace Disunity
 			
 			update();
 			render();
+
+			if (glfwWindowShouldClose(WindowManager::Instance()->GetWindow()))
+			{
+				m_Running = false;
+			}
 		}
 
 		cleanup();
