@@ -18,9 +18,11 @@
     <ClInclude Include="Util\Events\FunctionHandler.h" />
     <ClInclude Include="Util\Logger.h" />
     <ClInclude Include="Util\SingletonTemplate.h" />
+    <ClInclude Include="Util\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Util\Time.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

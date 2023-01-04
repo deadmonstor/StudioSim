@@ -1,6 +1,7 @@
 ﻿#include "Engine.h"
 #include "Util/Events/Events.h"
 #include "Util/Logger.h"
+#include "Util/Time.h"
 
 namespace Disunity
 {
@@ -8,7 +9,7 @@ namespace Disunity
 	{
 		// Do not move this logging down it will crash
 		Logger::Instance()->init();
-		
+
 		const int sub_index = Events::Instance()->subscribe(this, &Engine::onEvent); // Subscribes to the event system
 		Events::Instance()->invoke(new Event()); // Will call onEvent
 		Events::Instance()->invoke(new Event()); // Will call onEvent
@@ -53,11 +54,15 @@ namespace Disunity
 
 		LOG_INFO("Engine initialized");
 
+		Time::update();
+
 		m_Initialized = true;
 		m_Running = true;
 
 		while (m_Running)
 		{
+			Time::update();
+			
 			update();
 			render();
 		}

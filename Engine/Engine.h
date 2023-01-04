@@ -17,7 +17,7 @@ namespace Disunity
 
 		bool init();
 		void update();
-		void onEvent(Event *event);
+		void onEvent(Event* event);
 		void render();
 		void cleanup();
 	};
