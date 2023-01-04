@@ -1,14 +1,19 @@
 ﻿#pragma once
-#include "Library/glfw3.h"
+#include <string>
+
+
 #include "Util/SingletonTemplate.h"
 
+struct GLFWwindow;
 class WindowManager : public SingletonTemplate<WindowManager>
 {
-	GLFWwindow* window;
+	GLFWwindow* window = nullptr;
 
 	//Create window
 public:
 	GLFWwindow* GetWindow() const { return window; }
-	
-	bool CreateWindow_Diff();
+	void SetWindowTitle(std::string title)const;
+
+	bool createWindow(const std::string &windowName);
+	void cleanup()const;
 };

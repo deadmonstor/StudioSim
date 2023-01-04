@@ -1,4 +1,7 @@
 ﻿#pragma once
+#include <string>
+
+
 #include "Util/SingletonTemplate.h"
 
 namespace Disunity
@@ -7,6 +10,7 @@ namespace Disunity
 	class Engine : public SingletonTemplate<Engine>
 	{
 	public:
+		bool init();
 		void run();
 
 		static bool isRunning() { return Instance()->m_Running; }
@@ -15,9 +19,8 @@ namespace Disunity
 		bool m_Running = false;
 		bool m_Initialized = false;
 
-		bool init();
+		bool internalInit();
 		void update();
-		void onEvent(Event* event);
 		void render();
 		void cleanup();
 	};
