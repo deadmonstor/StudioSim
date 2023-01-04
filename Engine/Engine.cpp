@@ -12,7 +12,7 @@ namespace Disunity
 		const int sub_index = Events::Instance()->subscribe(this, &Engine::onEvent); // Subscribes to the event system
 		Events::Instance()->invoke(new Event()); // Will call onEvent
 		Events::Instance()->invoke(new Event()); // Will call onEvent
-		Events::unsubscribe(this, &Engine::onEvent, sub_index); // Unsubscribes from the event system
+		Events::Instance()->unsubscribe(this, &Engine::onEvent, sub_index); // Unsubscribes from the event system
 		Events::Instance()->invoke(new Event()); // Will not call onEvent
 
 		// init
