@@ -3,6 +3,6 @@
 
 int main(int, char**)
 {
-	MainGame::GetInstance()->run();
+	MainGame::Instance()->run();
 	return 0;
 }

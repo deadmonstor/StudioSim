@@ -12,7 +12,7 @@ namespace Disunity
 	class Logger : public SingletonTemplate<Logger>
 	{
 	public:
-		void Init() const
+		void init() const
 		{
 			using namespace AixLog;
 

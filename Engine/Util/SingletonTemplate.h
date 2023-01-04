@@ -6,7 +6,7 @@ template<typename T>
 class SingletonTemplate
 {
 public:
-	static T* GetInstance()
+	static T* Instance()
 	{
 		static std::unique_ptr<T> instance = std::make_unique<T>();
 		return instance.get();
