@@ -1,60 +1,41 @@
 ﻿#include "Engine.h"
-#include "Util/aixlog.hpp"
-
-#define LOG_INFO(message) LOG(INFO) << message << std::endl
-#define LOG_WARNING(message) LOG(WARNING) << message << std::endl
-#define LOG_ERROR(message) LOG(5) << message << std::endl
+#include "Util/Logger.h"
 
 namespace Disunity
 {
-	void Engine::m_SetupLogger()
+	bool Engine::init()
 	{
-		using namespace AixLog;
+		// Do not move this logging down it will crash
+		Logger::GetInstance()->Init();
 
-		// Create a logger
-		AixLog::Log::init(
-		{
-			std::make_shared<AixLog::SinkCout>(Severity::trace, "%H:%M.%S [#severity] [#file | Function: #function | Line: #line] #message"),
-			std::make_unique<AixLog::SinkFile>(Severity::trace, "latest.log", "%H:%M.%S [#severity] [#file | Function: #function | Line: #line] #message"),
-			std::make_shared<AixLog::SinkNative>("aixlog", AixLog::Severity::trace),
-		});
-
-		LOG_INFO("Logger initialized");
-		LOG_WARNING("Logger initialized");
-		LOG_ERROR("Logger initialized");
-	}
-
-	bool Engine::m_Init()
-	{
 		// init
 
-		m_SetupLogger();
 		return true;
 	}
 
-	void Engine::m_Update()
+	void Engine::update()
 	{
 		// update
 	}
 
-	void Engine::m_Render()
+	void Engine::render()
 	{
 		// render
 	}
 
-	void Engine::m_Cleanup()
+	void Engine::cleanup()
 	{
 		// cleanup
 	}
 
-	void Engine::Run()
+	void Engine::run()
 	{
-		if (!m_Init())
+		if (!init())
 		{
-			// TODO: LOG HERE/CRASH OUT
-
+			LOG_ERROR("Engine failed to initialize");
+			
 			// TODO: Should cleanup actually be here?
-			m_Cleanup();
+			cleanup();
 			return;
 		}
 
@@ -63,10 +44,10 @@ namespace Disunity
 
 		while (m_Running)
 		{
-			m_Update();
-			m_Render();
+			update();
+			render();
 		}
 
-		m_Cleanup();
+		cleanup();
 	}
 }
