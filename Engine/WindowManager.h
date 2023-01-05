@@ -15,5 +15,6 @@ public:
 	void SetWindowSize(std::pair<int, int>) const;
 	void SetWindowTitle(const std::string& title) const;
 	bool createWindow(const std::string &windowName);
-	void cleanup()const;
+	void cleanup() const;
+	void render();
 };

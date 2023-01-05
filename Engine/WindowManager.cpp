@@ -1,5 +1,6 @@
 ﻿#include "WindowManager.h"
 #include <Windows.h>
+#include <glad/glad.h> 
 #include "Library/glfw3.h"
 #include "Util/Logger.h"
 
@@ -8,6 +9,11 @@ void error_callback(const int error, const char *msg)
 	std::string s;
 	s = " [" + std::to_string(error) + "] " + msg + '\n';
 	LOG_ERROR(s);
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }
 
 void WindowManager::SetWindowTitle(const std::string& title) const
@@ -53,8 +59,15 @@ bool WindowManager::createWindow(const std::string &windowName)
 		LOG_ERROR("Failed to create GLFW window");
 		return false;
 	}
-
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwMakeContextCurrent(window);
+
+	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
+	{
+		LOG_ERROR("Failed to initialize GLAD");
+		return false;
+	} 
+	
 	return true;
 }
 
@@ -65,3 +78,10 @@ void WindowManager::cleanup() const
 		glfwDestroyWindow(window);
 	}
 }
+
+void WindowManager::render()
+{
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
