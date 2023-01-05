@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include "Library/glfw3.h"
 #include "Util/Events/Events.h"
+#include "Util/ImGuiHandler.h"
 #include "Util/Logger.h"
 #include "Util/Time.h"
 #include "WindowManager.h"
@@ -22,19 +23,21 @@ namespace Disunity
 		LOG_INFO("Engine initialized");
 		return true;
 	}
-	
+
 	bool Engine::internalInit()
 	{
 		// Do not move this logging down it will crash
 		Logger::Instance()->init();
-
 		if (!WindowManager::Instance()->createWindow(""))
 		{
 			return false;
 		}
 
+#if (!NDEBUG)
+		ImGuiHandler::Instance()->init();
+#endif
 		m_Initialized = true;
-		
+
 		// init
 		return true;
 	}
@@ -44,9 +47,12 @@ namespace Disunity
 		// update
 		glfwPollEvents();
 
+#if (!NDEBUG)
+		ImGuiHandler::Instance()->update();
+#endif
+		
 		// Check if we need to stop the engine
-		if (auto *window = WindowManager::Instance()->GetWindow();
-				window == nullptr || glfwWindowShouldClose(window))
+		if (auto *window = WindowManager::Instance()->GetWindow(); window == nullptr || glfwWindowShouldClose(window))
 		{
 			m_Running = false;
 		}
@@ -54,6 +60,13 @@ namespace Disunity
 
 	void Engine::render()
 	{
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+#if (!NDEBUG)
+		ImGuiHandler::Instance()->render();
+#endif
+
 		// render
 		glfwSwapBuffers(WindowManager::Instance()->GetWindow());
 	}
@@ -61,6 +74,9 @@ namespace Disunity
 	void Engine::cleanup()
 	{
 		WindowManager::Instance()->cleanup();
+#if (!NDEBUG)
+		ImGuiHandler::Instance()->cleanup();
+#endif
 		glfwTerminate();
 	}
 
@@ -78,7 +94,7 @@ namespace Disunity
 		while (m_Running)
 		{
 			Time::update();
-			
+
 			update();
 			render();
 		}

@@ -5,7 +5,7 @@
 class TestClass : public SingletonTemplate<TestClass>
 {
 public:
-	void TestFunc(Disunity::Event* test)
+	void TestFunc(Disunity::Event*)
 	{
 		LOG_INFO("TestFunc");
 	}

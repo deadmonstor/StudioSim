@@ -730,9 +730,8 @@ struct SinkFormat : public Sink
     }
 
     void log(const Metadata& metadata, const std::string& message) override = 0;
-
 protected:
-    virtual void do_log(std::ostream& stream, const Metadata& metadata, const std::string& message) const
+	virtual void do_log(std::ostream& stream, const Metadata& metadata, const std::string& message) const
     {
         std::string result = format_;
         if (metadata.timestamp)
@@ -802,6 +801,11 @@ struct SinkCout : public SinkFormat
     {
         do_log(std::cout, metadata, message);
     }
+
+	void log(std::ostream &stream, const Metadata &metadata, const std::string &message) const
+	{
+		do_log(stream, metadata, message);
+	}
 };
 
 /**
