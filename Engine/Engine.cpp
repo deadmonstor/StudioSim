@@ -10,13 +10,9 @@
 
 namespace Disunity
 {
-	//Try and make better 
-	void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+	void key_callback(GLFWwindow* window, const int key, const int scancode, const int action, const int mods)
 	{
-
-		//Add more keys here if you want switch or if statements
-		if (key == GLFW_KEY_E && action == GLFW_PRESS)
-			std::cout << "e\n";
+		KeyboardInput::Instance()->keyCallback(window, key, scancode, action, mods);
 	}
 
 	bool Engine::init()

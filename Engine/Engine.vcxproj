@@ -37,7 +37,6 @@
   <ItemGroup>
     <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="KeyboardInput.cpp" />
     <ClCompile Include="Library\imgui\imgui.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
