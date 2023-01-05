@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "../Library/imgui/imgui.h"
 #include "ImGuiHandler.h"
-#include "Library/Aixlog.hpp" // NOLINT(clang-diagnostic-microsoft-include)
 #include "SingletonTemplate.h"
+#include "../Library/imgui/imgui.h"
+#include "Library/Aixlog.hpp" // NOLINT(clang-diagnostic-microsoft-include)
 
 #define LOG_INFO(message) LOG(INFO) << (message) << std::endl
 #define LOG_WARNING(message) LOG(WARNING) << (message) << std::endl

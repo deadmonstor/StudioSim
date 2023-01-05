@@ -1,13 +1,14 @@
 ﻿#include "Engine.h"
 #include <Windows.h>
+#include "KeyboardInput.h"
+#include "WindowManager.h"
+#include "Core/SceneManager.h"
 #include "Library/glfw3.h"
-#include "Util/Events/Events.h"
 #include "Util/ImGuiHandler.h"
 #include "Util/Logger.h"
 #include "Util/Time.h"
-#include "WindowManager.h"
-#include "Core/SceneManager.h"
-#include "KeyboardInput.h"
+#include "Util/Events/EngineEvents.h"
+#include "Util/Events/Events.h"
 
 namespace Disunity
 {
@@ -35,6 +36,7 @@ namespace Disunity
 	{
 		// Do not move this logging down it will crash
 		Logger::Instance()->init();
+
 		if (!WindowManager::Instance()->createWindow(""))
 		{
 			return false;
@@ -61,6 +63,7 @@ namespace Disunity
 #endif
 
 		SceneManager::Instance()->update();
+		Events::Instance()->invoke(new OnEngineUpdate());
 		
 		// Check if we need to stop the engine
 		if (auto *window = WindowManager::Instance()->GetWindow(); window == nullptr || glfwWindowShouldClose(window))
@@ -89,6 +92,8 @@ namespace Disunity
 #if (!NDEBUG)
 		ImGuiHandler::Instance()->cleanup();
 #endif
+
+		Events::Instance()->invoke(new OnEngineStop());
 		glfwTerminate();
 	}
 
@@ -108,8 +113,7 @@ namespace Disunity
 			LOG_ERROR("Failed to load default scene");
 			return;
 		}
-
-		SceneManager::Instance()->createGameObject();
+		Events::Instance()->invoke(new OnEngineStart());
 		
 		while (m_Running)
 		{

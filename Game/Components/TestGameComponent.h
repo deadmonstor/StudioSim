@@ -1,11 +1,11 @@
 ﻿#pragma once
-#include "../Component.h"
+#include "Core/Component.h"
 
-class TestComponent : public Component
+class TestGameComponent : public Component
 {
 public:
-	~TestComponent() override {};
-	
+	~TestGameComponent() override = default;
+
 	void start() override;
 	void update() override;
 	void lateUpdate() override;

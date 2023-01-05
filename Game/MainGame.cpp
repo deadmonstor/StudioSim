@@ -1,6 +1,6 @@
 ﻿#include "MainGame.h"
 #include <Util/Logger.h>
-#include "TestClass.h"
+#include "TestGameplaySystem.h"
 #include "WindowManager.h"
 #include "Util/Events/Events.h"
 
@@ -17,9 +17,10 @@ int main(int, char**)
 	WindowManager->SetWindowSize({ 1920, 1080 });
 
 	const auto Events = Disunity::Events::Instance();
-	Events->subscribe(TestClass::Instance(), &TestClass::TestFunc);
-	Events->invoke(new testName());
-
+	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyDown);
+	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyUp);
+	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyRepeat);
+	
 	MainGame::Instance()->run();
 	return 0;
 }

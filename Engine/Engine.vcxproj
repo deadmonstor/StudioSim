@@ -13,7 +13,7 @@
   <ItemGroup>
     <ClInclude Include="Core\Component.h" />
     <ClInclude Include="Core\Components\SpriteRenderer.h" />
-    <ClInclude Include="Core\Components\TestComponent.h" />
+    <ClInclude Include="Core\Components\Transform.h" />
     <ClInclude Include="Core\GameObject.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
@@ -460,6 +460,7 @@
     <ClInclude Include="Library\imgui\imstb_truetype.h" />
     <ClInclude Include="Util\Events\Events.h" />
     <ClInclude Include="Util\Events\FunctionHandler.h" />
+    <ClInclude Include="Util\Events\EngineEvents.h" />
     <ClInclude Include="Util\ImGuiHandler.h" />
     <ClInclude Include="Util\Logger.h" />
     <ClInclude Include="Util\SingletonTemplate.h" />
@@ -469,7 +470,7 @@
   <ItemGroup>
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Components\SpriteRenderer.cpp" />
-    <ClCompile Include="Core\Components\TestComponent.cpp" />
+    <ClCompile Include="Core\Components\Transform.cpp" />
     <ClCompile Include="Core\GameObject.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -509,7 +510,7 @@
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <ObjectFileName>x64\Debug\</ObjectFileName>
       <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>C:\Users\m017451j\Documents\GitHub\StudioSim\x64\Debug\Engine.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>StudioSim\x64\Debug\Engine.pdb</ProgramDataBaseFileName>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
@@ -543,84 +544,11 @@
       <SDLCheck>true</SDLCheck>
       <LibCompiled>true</LibCompiled>
     </ClCompile>
-    <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
     <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Library\glm\detail\glm.cpp" />
-    <ClCompile Include="Library\imgui\imgui.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>x64\Debug\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>x64\Debug\Engine.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <LibCompiled>true</LibCompiled>
-    </ClCompile>
+    <ClCompile Include="Library\imgui\imgui.cpp" />
     <ClCompile Include="Library\imgui\imgui_demo.cpp" />
     <ClCompile Include="Library\imgui\imgui_draw.cpp" />
     <ClCompile Include="Library\imgui\imgui_impl_glfw.cpp" />

@@ -1,13 +1,27 @@
 #pragma once
-#include "Util/SingletonTemplate.h"
 #include "Library/glfw3.h"
+#include "Util/Logger.h"
+#include "Util/SingletonTemplate.h"
+#include "Util/Events/EngineEvents.h"
+#include "Util/Events/Events.h"
 
 class KeyboardInput : public SingletonTemplate<KeyboardInput>
 {
 public:
-	void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-		//Add more keys here if you want switch or if statements
-		if (key == GLFW_KEY_E && action == GLFW_PRESS)
-			std::cout << "e\n";
+	void keyCallback(GLFWwindow* window, const int key, const int scancode, const int action, int mods)
+	{
+		if (action == GLFW_PRESS)
+		{
+			Disunity::Events::Instance()->invoke(new OnKeyDown(key, scancode));
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			Disunity::Events::Instance()->invoke(new OnKeyUp(key, scancode));
+		}
+		else if (action == GLFW_REPEAT)
+		{
+			Disunity::Events::Instance()->invoke(new OnKeyRepeat(key, scancode));
+		}
+		
 	}
 };

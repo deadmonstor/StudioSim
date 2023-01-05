@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include <vector>
 
-#include "Util/SingletonTemplate.h"
-
 class GameObject;
 
 class Scene

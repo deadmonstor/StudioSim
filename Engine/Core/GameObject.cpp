@@ -1,10 +1,8 @@
 ﻿#include "GameObject.h"
+#include <typeinfo>
 #include "Component.h"
 
-GameObject::GameObject()
-{
-	
-}
+GameObject::GameObject() = default;
 
 GameObject::~GameObject()
 {
@@ -17,7 +15,6 @@ GameObject::~GameObject()
 
 void GameObject::start()
 {
-	// TODO: Make sure start is called after prefab creation or its gonna suck
 	for (Component* curComponent : components)
 	{
 		curComponent->start();
@@ -48,7 +45,40 @@ void GameObject::render()
 	}
 }
 
-void GameObject::addComponent(Component* component)
+void GameObject::addComponent(Component *component)
 {
+	if (isInitialized)
+		component->start();
+
 	components.push_back(component);
+}
+
+bool GameObject::hasComponent(const std::type_info &type_info) const
+{
+	return hasComponentInternal(type_info) != nullptr;
+}
+
+Component* GameObject::hasComponentInternal(const std::type_info &type_info) const
+{
+	for (Component* curComponent : components)
+	{
+		if (typeid(*curComponent) == type_info)
+		{
+			return curComponent;
+		}
+	}
+
+	return nullptr;
+}
+
+// TODO: Why can't we use this :(
+template <class T>
+T* GameObject::getComponent()
+{
+	if (Component *component = hasComponentInternal(typeid(T)); component != nullptr)
+	{
+		return dynamic_cast<T*>(component);
+	}
+
+	return nullptr;
 }

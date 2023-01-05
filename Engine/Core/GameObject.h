@@ -7,11 +7,13 @@ class GameObject
 {
 	std::vector<Component*> components;
 	
-private:
 	GameObject();
 	
+	template<class T>
+	T *getComponent();
+	
+	bool isInitialized = false;
 public:
-
 	~GameObject();
 	
 	void start();
@@ -19,7 +21,12 @@ public:
 	void lateUpdate();
 	void render();
 
-	void addComponent(Component* component);
+	void addComponent(Component *component);
+
+	// TODO: Move this when below works
+	Component *hasComponentInternal(const type_info &type_info) const;
+	bool hasComponent(const type_info &type_info) const;
 
 	friend class SceneManager;
 };
+
