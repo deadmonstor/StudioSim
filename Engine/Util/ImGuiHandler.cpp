@@ -19,7 +19,6 @@ void ImGuiHandler::init()
 	ImGui_ImplOpenGL3_Init("#version 330");
 	ImGui_ImplGlfw_InitForOpenGL(WindowManager::Instance()->GetWindow(), true);
 
-
 	//Create Image
 	Image diceImage;
 	diceImage.filename = "PNG_transparency_demonstration_1.png";

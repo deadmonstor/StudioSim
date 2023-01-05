@@ -1,11 +1,12 @@
 ﻿#include "SceneManager.h"
 
+#include "Components/SpriteRenderer.h"
 #include "Components/TestComponent.h"
 
 bool SceneManager::changeScene(const std::string& scene)
 {
-	// Something something something it failed for some reason kekw
 	LOG_INFO("Changed scene to " + scene);
+	currentScene = new Scene();
 	return true;
 }
 
@@ -18,12 +19,13 @@ GameObject* SceneManager::createGameObject()
 {
 	const auto created = new GameObject();
 	created->addComponent(new TestComponent());
+	created->addComponent(new SpriteRenderer());
 	created->start();
 
-	gameObjects.push_back(created);
-	if (gameObjects.size() > 100000)
+	currentScene->gameObjects.push_back(created);
+	if (currentScene->gameObjects.size() > 100000)
 	{
-		//LOG_ERROR("Somehow we have more than 100000 gameobjects, lets stop");
+		LOG_ERROR("Somehow we have more than 100000 gameobjects, lets stop");
 	}
 	
 	return created;
@@ -31,7 +33,7 @@ GameObject* SceneManager::createGameObject()
 
 void SceneManager::update()
 {
-	for(auto i : gameObjects)
+	for(auto i : currentScene->gameObjects)
 	{
 		i->update();
 	}
@@ -39,7 +41,7 @@ void SceneManager::update()
 
 void SceneManager::render()
 {
-	for(auto i : gameObjects)
+	for(auto i : currentScene->gameObjects)
 	{
 		i->render();
 	}

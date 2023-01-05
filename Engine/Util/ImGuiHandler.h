@@ -5,7 +5,6 @@
 #include "SingletonTemplate.h"
 #include "../Library/glfw3.h"
 
-
 class ImGuiHandler : public SingletonTemplate<ImGuiHandler>
 {
 	std::vector<std::string> m_vLog;

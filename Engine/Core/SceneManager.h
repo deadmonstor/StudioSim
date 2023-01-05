@@ -2,6 +2,7 @@
 #include <string>
 
 #include "GameObject.h"
+#include "Scene.h"
 #include "Util/Logger.h"
 #include "Util/SingletonTemplate.h"
 
@@ -15,5 +16,5 @@ public:
 	void update();
 	void render();
 
-	std::vector<GameObject*> gameObjects;
+	Scene* currentScene;
 };
