@@ -18,7 +18,7 @@ int main(int, char**)
 
 	const auto Events = Disunity::Events::Instance();
 	Events->subscribe(TestClass::Instance(), &TestClass::TestFunc);
-	Events->invoke(new Disunity::Event());
+	Events->invoke(new testName());
 
 	MainGame::Instance()->run();
 	return 0;
