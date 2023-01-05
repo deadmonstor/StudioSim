@@ -8,6 +8,9 @@
 #include "../Library/imgui/imgui_impl_opengl3.h"
 #include "../WindowManager.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "../Util/stb_image.h"
+
 void ImGuiHandler::init()
 {
 	IMGUI_CHECKVERSION();
@@ -15,6 +18,18 @@ void ImGuiHandler::init()
 	ImGui::StyleColorsDark();
 	ImGui_ImplOpenGL3_Init("#version 330");
 	ImGui_ImplGlfw_InitForOpenGL(WindowManager::Instance()->GetWindow(), true);
+
+
+	//Create Image
+	Image diceImage;
+	diceImage.filename = "PNG_transparency_demonstration_1.png";
+	m_Images.push_back(diceImage);
+
+	// Load Textures
+	for (int i = 0; i < m_Images.size(); i++)
+	{
+		loadTexture(m_Images.at(i).filename, &m_Images.at(i).texture, &m_Images.at(i).width, &m_Images.at(i).height);
+	}
 }
 
 void ImGuiHandler::update()
@@ -22,7 +37,8 @@ void ImGuiHandler::update()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-
+	
+;
 	// Make m_vLog into a string with newlines
 	std::string sLog;
 	for (auto& s : m_vLog)
@@ -31,6 +47,14 @@ void ImGuiHandler::update()
 	}
 
 	ImGui::Text("%s", sLog.c_str());
+	
+	ImGui::Begin("Image Window");
+	//Render Textures
+	for (int i = 0; i < m_Images.size(); i++) 
+	{
+		ImGui::Image((void *)(intptr_t)m_Images.at(i).texture, ImVec2(m_Images.at(i).width, m_Images.at(i).height));
+	}
+	ImGui::End();
 }
 
 void ImGuiHandler::render()
@@ -48,4 +72,35 @@ void ImGuiHandler::cleanup()
 {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
+}
+
+bool ImGuiHandler::loadTexture(const char *filename, GLuint *outputTexture, int *width, int *height)
+{ 
+	// Load from file
+	int image_width = 0;
+	int image_height = 0;
+	unsigned char *image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
+	if (image_data == NULL) {
+		return false;
+	}
+
+	GLuint image;
+	glGenTextures(1, &image);
+	glBindTexture(GL_TEXTURE_2D, image);
+
+	// Setup filtering parameters for display
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	// Upload pixels into texture
+#if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+#endif
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
+	stbi_image_free(image_data);
+
+	*outputTexture = image;
+	*width = image_width;
+	*height = image_height;
+
+	return true; 
 }

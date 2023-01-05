@@ -38,6 +38,8 @@ namespace Disunity
 #endif
 		m_Initialized = true;
 
+
+
 		// init
 		return true;
 	}
@@ -87,7 +89,7 @@ namespace Disunity
 			LOG_ERROR("Engine not initialized");
 			return;
 		}
-		
+
 		Time::update();
 		m_Running = true;
 
