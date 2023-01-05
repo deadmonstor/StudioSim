@@ -5,7 +5,8 @@ namespace Disunity
 {
 	class Event {};
 	
-	class FunctionBase {
+	class FunctionBase
+	{
 	public:
 		virtual ~FunctionBase() = default;
 		void invoke(Event* event) { call(event); }
@@ -14,20 +15,17 @@ namespace Disunity
 	};
 
 	template<class T, class EventType>
-	class FunctionHandler : public FunctionBase
+	class FunctionHandler final : public FunctionBase
 	{
 	public:
 		typedef void (T::*Func)(EventType*);
 
-		FunctionHandler(T *handler, const Func func) : instance{instance}, func{func} {}
+		FunctionHandler(T* handler, const Func func) : instance{instance}, func{func} {}
 
 		void call(Event *event) override
 		{
-			(instance->*func)(static_cast<EventType *>(event));
+			(instance->*func)(static_cast<EventType*>(event));
 		}
-
-		T* getInstance() const { return instance; }
-		Func getFunc() const { return func; }
 	private:
 		T* instance;
 		Func func;

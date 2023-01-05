@@ -2,9 +2,9 @@
 #include <list>
 #include <map>
 #include <typeindex>
+#include "FunctionHandler.h"
 #include "../Logger.h"
 #include "../SingletonTemplate.h"
-#include "FunctionHandler.h"
 
 namespace Disunity
 {
@@ -16,7 +16,7 @@ namespace Disunity
 		template<typename EventType>
 		void invoke(EventType *event)
 		{
-			const EventList *list = internalEvents[typeid(EventType)];
+			const EventList* list = internalEvents[typeid(EventType)];
 
 			if (list == nullptr)
 				return;
@@ -34,7 +34,7 @@ namespace Disunity
 		}
 
 		template<class T, class EventType>
-		int subscribe(T* instance, void (T::*func)(EventType *))
+		int subscribe(T* instance, void (T::*func)(EventType*))
 		{
 			EventList* list = internalEvents[typeid(EventType)];
 
@@ -68,8 +68,7 @@ namespace Disunity
 				return;
 			}
 
-			auto it = list->find(id);
-			if (it != list->end())
+			if (const auto it = list->find(id); it != list->end())
 			{
 				delete it->second;
 				list->erase(it);

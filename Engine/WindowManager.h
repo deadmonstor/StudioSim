@@ -8,12 +8,12 @@ struct GLFWwindow;
 class WindowManager : public SingletonTemplate<WindowManager>
 {
 	GLFWwindow* window = nullptr;
-
-	//Create window
 public:
 	GLFWwindow* GetWindow() const { return window; }
-	void SetWindowTitle(std::string title)const;
-
+	
+	// TODO: Change this to vector when we have it
+	void SetWindowSize(std::pair<int, int>) const;
+	void SetWindowTitle(const std::string& title) const;
 	bool createWindow(const std::string &windowName);
 	void cleanup()const;
 };
