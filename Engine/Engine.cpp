@@ -7,9 +7,15 @@
 #include "Util/Time.h"
 #include "WindowManager.h"
 #include "Core/SceneManager.h"
+#include "KeyboardInput.h"
 
 namespace Disunity
 {
+	void key_callback(GLFWwindow* window, const int key, const int scancode, const int action, const int mods)
+	{
+		KeyboardInput::Instance()->keyCallback(window, key, scancode, action, mods);
+	}
+
 	bool Engine::init()
 	{
 		if (!internalInit())
@@ -38,6 +44,8 @@ namespace Disunity
 		ImGuiHandler::Instance()->init();
 #endif
 		m_Initialized = true;
+
+		glfwSetKeyCallback(WindowManager::Instance()->GetWindow(), key_callback);
 
 		// init
 		return true;
@@ -91,7 +99,7 @@ namespace Disunity
 			LOG_ERROR("Engine not initialized");
 			return;
 		}
-		
+
 		Time::update();
 		m_Running = true;
 
