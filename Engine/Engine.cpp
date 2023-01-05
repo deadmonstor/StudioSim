@@ -6,6 +6,7 @@
 #include "Util/Logger.h"
 #include "Util/Time.h"
 #include "WindowManager.h"
+#include "Core/SceneManager.h"
 
 namespace Disunity
 {
@@ -50,6 +51,8 @@ namespace Disunity
 #if (!NDEBUG)
 		ImGuiHandler::Instance()->update();
 #endif
+
+		SceneManager::Instance()->update();
 		
 		// Check if we need to stop the engine
 		if (auto *window = WindowManager::Instance()->GetWindow(); window == nullptr || glfwWindowShouldClose(window))
@@ -66,6 +69,7 @@ namespace Disunity
 #if (!NDEBUG)
 		ImGuiHandler::Instance()->render();
 #endif
+		SceneManager::Instance()->render();
 
 		// render
 		glfwSwapBuffers(WindowManager::Instance()->GetWindow());
@@ -91,6 +95,14 @@ namespace Disunity
 		Time::update();
 		m_Running = true;
 
+		if (!SceneManager::Instance()->init())
+		{
+			LOG_ERROR("Failed to load default scene");
+			return;
+		}
+
+		SceneManager::Instance()->createGameObject();
+		
 		while (m_Running)
 		{
 			Time::update();
