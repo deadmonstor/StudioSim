@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="KeyboardInput.h" />
     <ClInclude Include="Library\Aixlog.hpp" />
     <ClInclude Include="Library\glfw3.h" />
     <ClInclude Include="Library\glfw3native.h" />
@@ -36,6 +37,7 @@
   <ItemGroup>
     <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="KeyboardInput.cpp" />
     <ClCompile Include="Library\imgui\imgui.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>

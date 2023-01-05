@@ -46,13 +46,25 @@ void ImGuiHandler::update()
 		sLog += s + "\n";
 	}
 
+	ImGui::Begin("Logging Window");
 	ImGui::Text("%s", sLog.c_str());
+	ImGui::End();
 	
+	//New Window For Image Testing
 	ImGui::Begin("Image Window");
 	//Render Textures
 	for (int i = 0; i < m_Images.size(); i++) 
 	{
 		ImGui::Image((void *)(intptr_t)m_Images.at(i).texture, ImVec2(m_Images.at(i).width, m_Images.at(i).height));
+	}
+	ImGui::End();
+
+	//Image Control Window
+	ImGui::Begin("Image Control Window");
+	for (int i = 0; i < m_Images.size(); i++)
+	{
+		ImGui::SliderInt("width", &m_Images.at(i).width, 100, 1000);
+		ImGui::SliderInt("height", &m_Images.at(i).height, 100, 1000);
 	}
 	ImGui::End();
 }

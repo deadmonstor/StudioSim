@@ -6,9 +6,19 @@
 #include "Util/Logger.h"
 #include "Util/Time.h"
 #include "WindowManager.h"
+#include "KeyboardInput.h"
 
 namespace Disunity
 {
+	//Try and make better 
+	void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+	{
+
+		//Add more keys here if you want switch or if statements
+		if (key == GLFW_KEY_E && action == GLFW_PRESS)
+			std::cout << "e\n";
+	}
+
 	bool Engine::init()
 	{
 		if (!internalInit())
@@ -38,7 +48,7 @@ namespace Disunity
 #endif
 		m_Initialized = true;
 
-
+		glfwSetKeyCallback(WindowManager::Instance()->GetWindow(), key_callback);
 
 		// init
 		return true;
