@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "SingletonTemplate.h"
-#include "../Library/glfw3.h"
+#include "Library/glfw3.h"
 
 class ImGuiHandler : public SingletonTemplate<ImGuiHandler>
 {

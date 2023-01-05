@@ -2,8 +2,8 @@
 
 #include "ImGuiHandler.h"
 #include "SingletonTemplate.h"
-#include "../Library/imgui/imgui.h"
 #include "Library/Aixlog.hpp" // NOLINT(clang-diagnostic-microsoft-include)
+#include "Library/imgui/imgui.h"
 
 #define LOG_INFO(message) LOG(INFO) << (message) << std::endl
 #define LOG_WARNING(message) LOG(WARNING) << (message) << std::endl
@@ -29,8 +29,8 @@ namespace Disunity
 				{
 					// TODO: Fix this its way to hacky for me to release
 					std::ostringstream ss;
-					auto test = std::make_shared<SinkCout>(Severity::trace, "%H:%M.%S [#severity] [#file | Function: #function | Line: #line] #message");
-					test->log(ss, metadata, internalMessage);
+					const auto log = std::make_shared<SinkCout>(Severity::trace, "%H:%M.%S [#severity] [#file | Function: #function | Line: #line] #message");
+					log->log(ss, metadata, internalMessage);
 					
 					ImGuiHandler::Instance()->addLog(ss.str());
 				}

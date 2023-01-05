@@ -3,10 +3,7 @@
 #include "Library/glm/ext.hpp"
 #include "Library/glm/glm.hpp"
 
-SpriteRenderer::~SpriteRenderer()
-{
-	
-}
+SpriteRenderer::~SpriteRenderer() = default;
 
 void SpriteRenderer::start()
 {

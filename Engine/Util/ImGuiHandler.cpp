@@ -1,15 +1,12 @@
 ﻿#include "ImGuiHandler.h"
-
-
-#include <iterator>
 #include <sstream>
 
-#include "../Library/imgui/imgui_impl_glfw.h"
-#include "../Library/imgui/imgui_impl_opengl3.h"
-#include "../WindowManager.h"
+#include "WindowManager.h"
+#include "Library/imgui/imgui_impl_glfw.h"
+#include "Library/imgui/imgui_impl_opengl3.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "../Util/stb_image.h"
+#include "Util/stb_image.h"
 
 void ImGuiHandler::init()
 {
@@ -20,14 +17,14 @@ void ImGuiHandler::init()
 	ImGui_ImplGlfw_InitForOpenGL(WindowManager::Instance()->GetWindow(), true);
 
 	//Create Image
-	Image diceImage;
+	Image diceImage {};
 	diceImage.filename = "PNG_transparency_demonstration_1.png";
 	m_Images.push_back(diceImage);
 
 	// Load Textures
-	for (int i = 0; i < m_Images.size(); i++)
+	for (auto& [filename, texture, width, height] : m_Images)
 	{
-		loadTexture(m_Images.at(i).filename, &m_Images.at(i).texture, &m_Images.at(i).width, &m_Images.at(i).height);
+		loadTexture(filename, &texture, &width, &height);
 	}
 }
 
@@ -52,18 +49,18 @@ void ImGuiHandler::update()
 	//New Window For Image Testing
 	ImGui::Begin("Image Window");
 	//Render Textures
-	for (int i = 0; i < m_Images.size(); i++) 
+	for (const auto& [filename, texture, width, height] : m_Images)
 	{
-		ImGui::Image((void *)(intptr_t)m_Images.at(i).texture, ImVec2(m_Images.at(i).width, m_Images.at(i).height));
+		ImGui::Image((void *)(intptr_t)texture, ImVec2(width, height));
 	}
 	ImGui::End();
 
 	//Image Control Window
 	ImGui::Begin("Image Control Window");
-	for (int i = 0; i < m_Images.size(); i++)
+	for (auto& [filename, texture, width, height] : m_Images)
 	{
-		ImGui::SliderInt("width", &m_Images.at(i).width, 100, 1000);
-		ImGui::SliderInt("height", &m_Images.at(i).height, 100, 1000);
+		ImGui::SliderInt("width", &width, 100, 1000);
+		ImGui::SliderInt("height", &height, 100, 1000);
 	}
 	ImGui::End();
 }
@@ -90,8 +87,8 @@ bool ImGuiHandler::loadTexture(const char *filename, GLuint *outputTexture, int 
 	// Load from file
 	int image_width = 0;
 	int image_height = 0;
-	unsigned char *image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
-	if (image_data == NULL) {
+	unsigned char *image_data = stbi_load(filename, &image_width, &image_height, nullptr, 4);
+	if (image_data == nullptr) {
 		return false;
 	}
 

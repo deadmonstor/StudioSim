@@ -7,8 +7,7 @@ bool SceneManager::changeScene(const std::string& scene)
 {
 	LOG_INFO("Changed scene to " + scene);
 	currentScene = new Scene();
-
-	// TODO: Move this into scene when we can load a scene file
+	
 	return true;
 }
 
@@ -21,7 +20,7 @@ GameObject* SceneManager::createGameObject(const glm::vec2 position)
 {
 	const auto created = new GameObject();
 
-	Transform* transform = new Transform();
+	const auto transform = new Transform();
 	created->addComponent(transform);
 	transform->SetPosition(position);
 	
