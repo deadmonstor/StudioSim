@@ -1,7 +1,4 @@
 ﻿#pragma once
-#include <string>
-
-
 #include "Util/SingletonTemplate.h"
 
 namespace Disunity

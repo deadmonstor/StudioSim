@@ -3,8 +3,7 @@
 #include <vector>
 
 #include "SingletonTemplate.h"
-#include "../Library/glfw3.h"
-
+#include "Library/glfw3.h"
 
 class ImGuiHandler : public SingletonTemplate<ImGuiHandler>
 {
@@ -15,7 +14,6 @@ public:
 	void render();
 	void addLog(const std::string &);
 	void cleanup();
-	bool loadTexture(const char *filename, GLuint *outputTexture, int *width, int *height);
 
 	struct Image
 	{

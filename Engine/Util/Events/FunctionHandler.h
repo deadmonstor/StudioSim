@@ -1,9 +1,13 @@
-﻿#pragma once
-
+﻿// ReSharper disable CppClangTidyBugproneMacroParentheses
+#pragma once
 
 namespace Disunity
 {
-	class Event {};
+	class Event
+	{
+		protected:
+			Event() {}
+	};
 	
 	class FunctionBase
 	{
@@ -20,7 +24,7 @@ namespace Disunity
 	public:
 		typedef void (T::*Func)(EventType*);
 
-		FunctionHandler(T* handler, const Func func) : instance{instance}, func{func} {}
+		FunctionHandler(T* instance, const Func func) : instance{instance}, func{func} {}
 
 		void call(Event *event) override
 		{
@@ -30,4 +34,9 @@ namespace Disunity
 		T* instance;
 		Func func;
 	};
+
+	#define NEW_EMPTY_EVENT(eventName) \
+		class eventName : public Disunity::Event\
+		{\
+		}
 }
