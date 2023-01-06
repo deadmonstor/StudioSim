@@ -38,14 +38,6 @@ void GameObject::lateUpdate()
 	}
 }
 
-void GameObject::render()
-{
-	for (Component* curComponent : components)
-	{
-		curComponent->render();
-	}
-}
-
 void GameObject::addComponent(Component *component)
 {
 	component->owner = this;

@@ -10,7 +10,6 @@ public:
 	void start() override;
 	void update() override;
 	void lateUpdate() override;
-	void render() override;
 
 	unsigned int quadVAO;
 	Shader shader; 

@@ -15,11 +15,6 @@ void Component::lateUpdate()
 	
 }
 
-void Component::render()
-{
-	
-}
-
 Component::~Component()
 {
 	
