@@ -3,6 +3,7 @@
 #include "Core/Renderer/Renderer.h"
 #include "Library/imgui/imgui_impl_glfw.h"
 #include "Library/imgui/imgui_impl_opengl3.h"
+#include "Core/Renderer/ResourceManager.h"
 
 void ImGuiHandler::init()
 {
@@ -29,6 +30,11 @@ void ImGuiHandler::update()
 
 	ImGui::Begin("Logging Window");
 	ImGui::Text("%s", sLog.c_str());
+	ImGui::End();
+
+	ImGui::Begin("Image Window");
+	ImGui::Image((void *)(intptr_t)ResourceManager::GetTexture("dice").ID, ImVec2(ResourceManager::GetTexture("dice").Width, 
+		ResourceManager::GetTexture("dice").Height));
 	ImGui::End();
 }
 
