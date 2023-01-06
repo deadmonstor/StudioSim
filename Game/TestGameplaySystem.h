@@ -126,7 +126,7 @@ public:
 		for (auto& sprite : sprites)
 		{
 			Transform* transform = sprite->owner->getTransform();
-			transform->SetPosition(transform->GetPosition() + glm::vec2(5, 0));
+			transform->SetPosition(transform->GetPosition() + glm::vec2(2, 0));
 		}
 	}
 
