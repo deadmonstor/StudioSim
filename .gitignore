@@ -399,3 +399,5 @@ FodyWeavers.xsd
 .idea
 
 imgui.ini
+
+!Library\fModLib\x64\**
