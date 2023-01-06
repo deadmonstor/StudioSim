@@ -1,6 +1,4 @@
 ﻿#include "SceneManager.h"
-
-#include "Components/SpriteRenderer.h"
 #include "Components/Transform.h"
 
 bool SceneManager::changeScene(const std::string& scene)
@@ -19,12 +17,10 @@ bool SceneManager::init()
 GameObject* SceneManager::createGameObject(const glm::vec2 position)
 {
 	const auto created = new GameObject();
-
-	const auto transform = new Transform();
-	created->addComponent(transform);
-	transform->SetPosition(position);
+	created->transform = new Transform();
 	
-	created->addComponent(new SpriteRenderer());
+	created->addComponent(created->transform);
+	created->transform->SetPosition(position);
 	created->start();
 	
 	currentScene->gameObjects.push_back(created);

@@ -1,9 +1,9 @@
 ﻿#include "Engine.h"
 #include <Windows.h>
 #include "KeyboardInput.h"
-#include "WindowManager.h"
 #include "Core/SceneManager.h"
-#include "Library/glfw3.h"
+#include "Core/Renderer/Renderer.h"
+#include "Core/Renderer/ResourceManager.h"
 #include "Util/ImGuiHandler.h"
 #include "Util/Logger.h"
 #include "Util/Time.h"
@@ -37,7 +37,7 @@ namespace Disunity
 		// Do not move this logging down it will crash
 		Logger::Instance()->init();
 
-		if (!WindowManager::Instance()->createWindow(""))
+		if (!Renderer::Instance()->createWindow(""))
 		{
 			return false;
 		}
@@ -47,7 +47,7 @@ namespace Disunity
 #endif
 		m_Initialized = true;
 
-		glfwSetKeyCallback(WindowManager::Instance()->GetWindow(), key_callback);
+		glfwSetKeyCallback(Renderer::GetWindow(), key_callback);
 
 		// init
 		return true;
@@ -66,7 +66,7 @@ namespace Disunity
 		Events::Instance()->invoke(new OnEngineUpdate());
 		
 		// Check if we need to stop the engine
-		if (auto *window = WindowManager::Instance()->GetWindow(); window == nullptr || glfwWindowShouldClose(window))
+		if (auto *window = Renderer::GetWindow(); window == nullptr || glfwWindowShouldClose(window))
 		{
 			m_Running = false;
 		}
@@ -74,20 +74,19 @@ namespace Disunity
 
 	void Engine::render()
 	{
-		WindowManager::Instance()->render();
+		Renderer::Instance()->render();
 
 #if (!NDEBUG)
 		ImGuiHandler::Instance()->render();
 #endif
 		SceneManager::Instance()->render();
-
-		// render
-		glfwSwapBuffers(WindowManager::Instance()->GetWindow());
+		
+		glfwSwapBuffers(Renderer::GetWindow());
 	}
 
 	void Engine::cleanup()
 	{
-		WindowManager::Instance()->cleanup();
+		Renderer::Instance()->cleanup();
 #if (!NDEBUG)
 		ImGuiHandler::Instance()->cleanup();
 #endif
@@ -107,12 +106,17 @@ namespace Disunity
 		Time::update();
 		m_Running = true;
 
+		Renderer::Instance()->initialize();
 		if (!SceneManager::Instance()->init())
 		{
 			LOG_ERROR("Failed to load default scene");
 			return;
 		}
-		Events::Instance()->invoke(new OnEngineStart());
+		
+		ResourceManager::LoadTexture("shaders\\image.png", false, "face");
+		ResourceManager::LoadTexture("shaders\\image2.png", true, "face2");
+		
+		bool firstFrame = true;
 		
 		while (m_Running)
 		{
@@ -120,6 +124,12 @@ namespace Disunity
 
 			update();
 			render();
+
+			if (firstFrame)
+			{
+				Events::Instance()->invoke(new OnEngineStart());
+				firstFrame = false;
+			}
 		}
 
 		cleanup();

@@ -1,6 +1,7 @@
 ﻿#include "GameObject.h"
 #include <typeinfo>
 #include "Component.h"
+#include "Util/Logger.h"
 
 GameObject::GameObject() = default;
 
@@ -47,6 +48,8 @@ void GameObject::render()
 
 void GameObject::addComponent(Component *component)
 {
+	component->owner = this;
+	
 	if (isInitialized)
 		component->start();
 

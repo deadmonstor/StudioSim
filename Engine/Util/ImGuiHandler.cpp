@@ -1,12 +1,8 @@
 ﻿#include "ImGuiHandler.h"
 #include <sstream>
-
-#include "WindowManager.h"
+#include "Core/Renderer/Renderer.h"
 #include "Library/imgui/imgui_impl_glfw.h"
 #include "Library/imgui/imgui_impl_opengl3.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "Util/stb_image.h"
 
 void ImGuiHandler::init()
 {
@@ -14,18 +10,7 @@ void ImGuiHandler::init()
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
 	ImGui_ImplOpenGL3_Init("#version 330");
-	ImGui_ImplGlfw_InitForOpenGL(WindowManager::Instance()->GetWindow(), true);
-
-	//Create Image
-	Image diceImage {};
-	diceImage.filename = "PNG_transparency_demonstration_1.png";
-	m_Images.push_back(diceImage);
-
-	// Load Textures
-	for (auto& [filename, texture, width, height] : m_Images)
-	{
-		loadTexture(filename, &texture, &width, &height);
-	}
+	ImGui_ImplGlfw_InitForOpenGL(Renderer::GetWindow(), true);
 }
 
 void ImGuiHandler::update()
@@ -45,24 +30,6 @@ void ImGuiHandler::update()
 	ImGui::Begin("Logging Window");
 	ImGui::Text("%s", sLog.c_str());
 	ImGui::End();
-	
-	//New Window For Image Testing
-	ImGui::Begin("Image Window");
-	//Render Textures
-	for (const auto& [filename, texture, width, height] : m_Images)
-	{
-		ImGui::Image((void *)(intptr_t)texture, ImVec2(width, height));
-	}
-	ImGui::End();
-
-	//Image Control Window
-	ImGui::Begin("Image Control Window");
-	for (auto& [filename, texture, width, height] : m_Images)
-	{
-		ImGui::SliderInt("width", &width, 100, 1000);
-		ImGui::SliderInt("height", &height, 100, 1000);
-	}
-	ImGui::End();
 }
 
 void ImGuiHandler::render()
@@ -80,35 +47,4 @@ void ImGuiHandler::cleanup()
 {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
-}
-
-bool ImGuiHandler::loadTexture(const char *filename, GLuint *outputTexture, int *width, int *height)
-{ 
-	// Load from file
-	int image_width = 0;
-	int image_height = 0;
-	unsigned char *image_data = stbi_load(filename, &image_width, &image_height, nullptr, 4);
-	if (image_data == nullptr) {
-		return false;
-	}
-
-	GLuint image;
-	glGenTextures(1, &image);
-	glBindTexture(GL_TEXTURE_2D, image);
-
-	// Setup filtering parameters for display
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	// Upload pixels into texture
-#if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
-	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-#endif
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
-	stbi_image_free(image_data);
-
-	*outputTexture = image;
-	*width = image_width;
-	*height = image_height;
-
-	return true; 
 }

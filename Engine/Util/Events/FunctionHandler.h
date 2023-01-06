@@ -24,7 +24,7 @@ namespace Disunity
 	public:
 		typedef void (T::*Func)(EventType*);
 
-		FunctionHandler(T*, const Func func) : instance{instance}, func{func} {}
+		FunctionHandler(T* instance, const Func func) : instance{instance}, func{func} {}
 
 		void call(Event *event) override
 		{

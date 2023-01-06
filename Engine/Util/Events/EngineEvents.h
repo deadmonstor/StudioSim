@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "FunctionHandler.h"
+#include "Core/Components/SpriteRenderer.h"
 
+class GameObject;
 NEW_EMPTY_EVENT(OnEngineStart);
 NEW_EMPTY_EVENT(OnEngineUpdate);
 NEW_EMPTY_EVENT(OnEngineStop);
@@ -29,4 +31,18 @@ class OnKeyRepeat : public OnKey
 {
 public:
 	OnKeyRepeat(const int key, const int scancode) : OnKey(key, scancode) {}
+};
+
+class OnSpriteRendererComponentStarted : public Disunity::Event
+{
+public:
+	explicit OnSpriteRendererComponentStarted(SpriteRenderer* spriteRenderer) : spriteRenderer(spriteRenderer) {}
+	SpriteRenderer* spriteRenderer;
+};
+
+class OnSpriteRendererComponentRemoved : public Disunity::Event
+{
+public:
+	explicit OnSpriteRendererComponentRemoved(SpriteRenderer* spriteRenderer) : spriteRenderer(spriteRenderer) {}
+	SpriteRenderer* spriteRenderer;
 };

@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include <list>
 #include <map>
 #include <typeindex>
 #include "FunctionHandler.h"

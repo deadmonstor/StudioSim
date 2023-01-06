@@ -1,7 +1,5 @@
 ﻿#include "Transform.h"
 
-Transform::~Transform() = default;
-
 void Transform::SetPosition(const glm::vec2 inPosition)
 {
 	this->position = inPosition;
