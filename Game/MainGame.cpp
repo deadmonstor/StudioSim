@@ -29,6 +29,7 @@ int main(int, char**)
 		ResourceManager::LoadTexture(currentString.c_str(), true, currentStringID);
 	}
 
+	//Slime Hurt
 	for (int i = 0; i < 11; i++)
 	{
 		std::string currentString("shaders\\Blue-Slime-Hurt\\tile00");
