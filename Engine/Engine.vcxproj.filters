@@ -1464,4 +1464,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Library\fmod.dll" />
+    <None Include="Library\fmodL.dll" />
+  </ItemGroup>
 </Project>
