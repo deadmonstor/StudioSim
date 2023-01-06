@@ -9,6 +9,7 @@
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
+#include "AudioEngine.h"
 
 namespace Disunity
 {
@@ -46,6 +47,8 @@ namespace Disunity
 		ImGuiHandler::Instance()->init();
 #endif
 		m_Initialized = true;
+
+		AudioEngine::Instance()->init();
 
 		glfwSetKeyCallback(Renderer::GetWindow(), key_callback);
 
