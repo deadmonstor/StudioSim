@@ -95,7 +95,7 @@ void Renderer::cleanup() const
 
 void Renderer::render()
 {
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -103,29 +103,32 @@ void Renderer::render()
 	for (SpriteRenderer* spriteRenderer : renderQueue)
 	{
 		const Transform* transform = dynamic_cast<Transform*>(spriteRenderer->owner->hasComponentInternal(typeid(Transform)));
-		
-		spriteRenderer->shader.Use();
-		glm::mat4 model = glm::mat4(1.0f);
-		model = translate(model, glm::vec3(transform->GetPosition(), 0.0f));  
-
-		model = translate(model, glm::vec3(0.5f * transform->GetScale().x, 0.5f * transform->GetScale().y, 0.0f)); 
-		model = rotate(model, glm::radians(transform->GetRotation()), glm::vec3(0.0f, 0.0f, 1.0f)); 
-		model = translate(model, glm::vec3(-0.5f * transform->GetScale().x, -0.5f * transform->GetScale().y, 0.0f));
-
-		model = scale(model, glm::vec3(transform->GetScale(), 1.0f)); 
-  
-		spriteRenderer->shader.SetMatrix4("model", model);
-		spriteRenderer->shader.SetVector3f("spriteColor", spriteRenderer->color);
-  
-		glActiveTexture(GL_TEXTURE0);
-		spriteRenderer->texture.Bind();
-
-		glBindVertexArray(spriteRenderer->quadVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		glBindVertexArray(0);
-
+		rendersprite(spriteRenderer, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
 	}
 	glDisable(GL_BLEND);
+}
+
+void Renderer::rendersprite(SpriteRenderer* spriteRenderer, const glm::vec2 position, glm::vec2 scale, const float rotation)
+{
+	spriteRenderer->shader.Use();
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(position, 0.0f));  
+
+	model = glm::translate(model, glm::vec3(0.5f * scale.x, 0.5f * scale.y, 0.0f)); 
+	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); 
+	model = glm::translate(model, glm::vec3(-0.5f * scale.x, -0.5f * scale.y, 0.0f));
+
+	model = glm::scale(model, glm::vec3(scale,  1.0f)); 
+  
+	spriteRenderer->shader.SetMatrix4("model", model);
+	spriteRenderer->shader.SetVector3f("spriteColor", spriteRenderer->color);
+  
+	glActiveTexture(GL_TEXTURE0);
+	spriteRenderer->texture.Bind();
+
+	glBindVertexArray(spriteRenderer->quadVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
 }
 
 void Renderer::initialize()

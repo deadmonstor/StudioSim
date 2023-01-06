@@ -81,8 +81,6 @@ public:
 			ResourceManager::GetTexture("BlueSlimeHurt008"),
 			ResourceManager::GetTexture("BlueSlimeHurt009"),
 			ResourceManager::GetTexture("BlueSlimeHurt0010"),
-
-			
 		};
 
 		sprite = new AnimatedSpriteRenderer(textureListHurt, 0.05f);

@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include "KeyboardInput.h"
 #include "Core/SceneManager.h"
+#include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Util/ImGuiHandler.h"
@@ -80,6 +81,7 @@ namespace Griddy
 		ImGuiHandler::Instance()->render();
 #endif
 		SceneManager::Instance()->render();
+		GridSystem::Instance()->render();
 		
 		glfwSwapBuffers(Renderer::GetWindow());
 	}

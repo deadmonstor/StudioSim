@@ -11,7 +11,13 @@ SpriteRenderer::~SpriteRenderer()
 void SpriteRenderer::start()
 {
 	Component::start();
+	createBuffers();
+	
+	Griddy::Events::Instance()->invoke(new OnSpriteRendererComponentStarted(this));
+}
 
+void SpriteRenderer::createBuffers()
+{
 	// configure VAO/VBO
 	unsigned int VBO;
 	float vertices[] = { 
@@ -36,8 +42,6 @@ void SpriteRenderer::start()
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);  
 	glBindVertexArray(0);
-
-	Griddy::Events::Instance()->invoke(new OnSpriteRendererComponentStarted(this));
 }
 
 void SpriteRenderer::update()
