@@ -16,7 +16,7 @@ int main(int, char**)
 	Renderer->SetWindowTitle("Game Name Here");
 	Renderer->SetWindowSize({ 1920, 1080 });
 
-	const auto Events = Disunity::Events::Instance();
+	const auto Events = Griddy::Events::Instance();
 	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFunc);
 	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncUpdate);
 	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyDown);

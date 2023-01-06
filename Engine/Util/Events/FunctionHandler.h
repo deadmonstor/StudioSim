@@ -1,7 +1,7 @@
 ﻿// ReSharper disable CppClangTidyBugproneMacroParentheses
 #pragma once
 
-namespace Disunity
+namespace Griddy
 {
 	class Event
 	{
@@ -36,7 +36,7 @@ namespace Disunity
 	};
 
 	#define NEW_EMPTY_EVENT(eventName) \
-		class eventName : public Disunity::Event\
+		class eventName : public Griddy::Event\
 		{\
 		}
 }

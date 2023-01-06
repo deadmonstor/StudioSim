@@ -5,7 +5,7 @@
 #include "../Logger.h"
 #include "../SingletonTemplate.h"
 
-namespace Disunity
+namespace Griddy
 {
 	class Events : public SingletonTemplate<Events>
 	{

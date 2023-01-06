@@ -5,7 +5,7 @@
 
 SpriteRenderer::~SpriteRenderer()
 {
-	Disunity::Events::Instance()->invoke(new OnSpriteRendererComponentRemoved(this));
+	Griddy::Events::Instance()->invoke(new OnSpriteRendererComponentRemoved(this));
 }
 
 void SpriteRenderer::start()
@@ -37,7 +37,7 @@ void SpriteRenderer::start()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);  
 	glBindVertexArray(0);
 
-	Disunity::Events::Instance()->invoke(new OnSpriteRendererComponentStarted(this));
+	Griddy::Events::Instance()->invoke(new OnSpriteRendererComponentStarted(this));
 }
 
 void SpriteRenderer::update()

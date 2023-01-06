@@ -126,8 +126,8 @@ void Renderer::render()
 
 void Renderer::initialize()
 {
-	Disunity::Events::Instance()->subscribe(this, &Renderer::addToRenderQueue);
-	Disunity::Events::Instance()->subscribe(this, &Renderer::removeFromRenderQueue);
+	Griddy::Events::Instance()->subscribe(this, &Renderer::addToRenderQueue);
+	Griddy::Events::Instance()->subscribe(this, &Renderer::removeFromRenderQueue);
 }
 
 void Renderer::addToRenderQueue(OnSpriteRendererComponentStarted* event)

@@ -10,7 +10,7 @@
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
 
-namespace Disunity
+namespace Griddy
 {
 	void key_callback(GLFWwindow* window, const int key, const int scancode, const int action, const int mods)
 	{

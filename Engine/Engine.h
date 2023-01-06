@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Util/SingletonTemplate.h"
 
-namespace Disunity
+namespace Griddy
 {
 	class Event;
 	class Engine : public SingletonTemplate<Engine>

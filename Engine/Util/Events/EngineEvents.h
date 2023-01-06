@@ -7,7 +7,7 @@ NEW_EMPTY_EVENT(OnEngineStart);
 NEW_EMPTY_EVENT(OnEngineUpdate);
 NEW_EMPTY_EVENT(OnEngineStop);
 
-class OnKey : public Disunity::Event
+class OnKey : public Griddy::Event
 {
 public:
 	OnKey(const int key, const int scancode) : key(key), scancode(scancode) {}
@@ -33,14 +33,14 @@ public:
 	OnKeyRepeat(const int key, const int scancode) : OnKey(key, scancode) {}
 };
 
-class OnSpriteRendererComponentStarted : public Disunity::Event
+class OnSpriteRendererComponentStarted : public Griddy::Event
 {
 public:
 	explicit OnSpriteRendererComponentStarted(SpriteRenderer* spriteRenderer) : spriteRenderer(spriteRenderer) {}
 	SpriteRenderer* spriteRenderer;
 };
 
-class OnSpriteRendererComponentRemoved : public Disunity::Event
+class OnSpriteRendererComponentRemoved : public Griddy::Event
 {
 public:
 	explicit OnSpriteRendererComponentRemoved(SpriteRenderer* spriteRenderer) : spriteRenderer(spriteRenderer) {}

@@ -9,7 +9,7 @@
 #define LOG_WARNING(message) LOG(WARNING) << (message) << std::endl
 #define LOG_ERROR(message) LOG(5) << (message) << std::endl
 
-namespace Disunity
+namespace Griddy
 {
 	class Logger : public SingletonTemplate<Logger>
 	{
