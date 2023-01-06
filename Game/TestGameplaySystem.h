@@ -6,7 +6,7 @@
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
-#include "Components/AnimatedSpriteRenderer.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -90,6 +90,36 @@ public:
 		testHurt->addComponent(sprite);
 		sprites.push_back(sprite);
 			
+
+		auto* fireball = SceneManager::Instance()->createGameObject(glm::vec2{ 200, 200 });
+		fireball->getTransform()->SetScale(glm::vec2(48, 48));
+
+		std::vector<Texture> textureListFireball =
+		{
+			ResourceManager::GetTexture("Fireball000"),
+			ResourceManager::GetTexture("Fireball001"),
+			ResourceManager::GetTexture("Fireball002"),
+			ResourceManager::GetTexture("Fireball003"),
+			ResourceManager::GetTexture("Fireball004"),
+			ResourceManager::GetTexture("Fireball005"),
+			ResourceManager::GetTexture("Fireball006"),
+			ResourceManager::GetTexture("Fireball007"),
+			ResourceManager::GetTexture("Fireball008"),
+			ResourceManager::GetTexture("Fireball009"),
+			ResourceManager::GetTexture("Fireball0010"),
+			ResourceManager::GetTexture("Fireball0011"),
+			ResourceManager::GetTexture("Fireball0012"),
+			ResourceManager::GetTexture("Fireball0013"),
+			ResourceManager::GetTexture("Fireball0014"),
+			
+
+		};
+
+		sprite = new AnimatedSpriteRenderer(textureListFireball, 0.05f);
+		sprite->color = glm::vec3(1, 1, 1);
+		fireball->addComponent(sprite);
+		sprites.push_back(sprite);
+
 	}
 
 	void TestFuncUpdate(OnEngineUpdate*)
@@ -97,18 +127,8 @@ public:
 		// Update all sprites color to be a random color
 		for (auto& sprite : sprites)
 		{
-			float deltaTime = Time::Instance()->getDeltaTime();
-			sprite->color = sprite->color + glm::vec3(deltaTime * 0.1, deltaTime * 0.1, deltaTime * 0.1);
-			
-			if (sprite->color.r > 1.0f)
-				sprite->color.r = 0.0f;
-			if (sprite->color.g > 1.0f)
-				sprite->color.g = 0.0f;
-			if (sprite->color.b > 1.0f)
-				sprite->color.b = 0.0f;
-			
 			Transform* transform = sprite->owner->getTransform();
-			transform->SetRotation(transform->GetRotation() + Time::getDeltaTime() * 100);
+			transform->SetPosition(transform->GetPosition() + glm::vec2(2, 0));
 		}
 	}
 

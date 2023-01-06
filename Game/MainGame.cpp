@@ -42,9 +42,22 @@ int main(int, char**)
 		ResourceManager::LoadTexture(currentString.c_str(), true, currentStringID);
 	}
 
+	//Fireball
+	for (int i = 0; i < 15; i++)
+	{
+		std::string currentString("shaders\\Fireball\\tile00");
+		currentString.append(std::to_string(i));
+		currentString.append(".png");
+
+		std::string currentStringID("Fireball00");
+		currentStringID.append(std::to_string(i));
+
+		ResourceManager::LoadTexture(currentString.c_str(), true, currentStringID);
+	}
+
 	const auto Events = Griddy::Events::Instance();
 	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncLewis);
-	//Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncUpdate);
+	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncUpdate);
 	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyDown);
 	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyUp);
 	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyRepeat);

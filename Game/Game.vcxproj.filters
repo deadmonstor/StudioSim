@@ -21,9 +21,6 @@
     <ClCompile Include="MainGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\AnimatedSpriteRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\TestGameComponent.h">
@@ -33,9 +30,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestGameplaySystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\AnimatedSpriteRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
