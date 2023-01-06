@@ -1,13 +1,14 @@
 ﻿#pragma once
 #include "Core/Component.h"
-#include "Core/Renderer/shader.h"
-#include "Core/Renderer/texture.h"
+#include "Core/Renderer/Shader.h"
+#include <Core/Renderer/texture.h>
 
 class SpriteRenderer : public Component
 {
 public:
 	~SpriteRenderer() override;
 	void start() override;
+	void createBuffers();
 	void update() override;
 	void lateUpdate() override;
 

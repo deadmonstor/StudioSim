@@ -6,7 +6,7 @@
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
-#include "Components/AnimatedSpriteRenderer.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -81,8 +81,6 @@ public:
 			ResourceManager::GetTexture("BlueSlimeHurt008"),
 			ResourceManager::GetTexture("BlueSlimeHurt009"),
 			ResourceManager::GetTexture("BlueSlimeHurt0010"),
-
-			
 		};
 
 		sprite = new AnimatedSpriteRenderer(textureListHurt, 0.05f);
