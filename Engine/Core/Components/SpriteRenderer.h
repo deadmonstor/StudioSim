@@ -3,7 +3,7 @@
 #include "Core/Renderer/shader.h"
 #include "Core/Renderer/texture.h"
 
-class SpriteRenderer final : public Component
+class SpriteRenderer : public Component
 {
 public:
 	~SpriteRenderer() override;

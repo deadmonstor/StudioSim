@@ -6,6 +6,7 @@
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
+#include "Components/AnimatedSpriteRenderer.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -41,6 +42,54 @@ public:
 			float b = (rand() % 100) / 100.0f;
 			sprite->color = glm::vec3(r, g, b);
 		}
+	}
+
+	void TestFuncLewis(OnEngineStart*) 
+	{
+		auto *test = SceneManager::Instance()->createGameObject(glm::vec2{100, 100});
+		test->getTransform()->SetScale(glm::vec2(96, 48));
+
+		std::vector<Texture> textureList =
+		{
+			ResourceManager::GetTexture("BlueSlime000"),
+			ResourceManager::GetTexture("BlueSlime001"),
+			ResourceManager::GetTexture("BlueSlime002"),
+			ResourceManager::GetTexture("BlueSlime003"),
+			ResourceManager::GetTexture("BlueSlime004"),
+			ResourceManager::GetTexture("BlueSlime005"),
+			ResourceManager::GetTexture("BlueSlime006"),
+		};
+
+		auto sprite = new AnimatedSpriteRenderer(textureList, 0.05f);
+		sprite->color = glm::vec3(1, 1, 1);
+		test->addComponent(sprite);
+		sprites.push_back(sprite);
+
+		auto* testHurt = SceneManager::Instance()->createGameObject(glm::vec2{ 300, 300 });
+		testHurt->getTransform()->SetScale(glm::vec2(96, 48));
+
+		std::vector<Texture> textureListHurt =
+		{
+			ResourceManager::GetTexture("BlueSlimeHurt000"),
+			ResourceManager::GetTexture("BlueSlimeHurt001"),
+			ResourceManager::GetTexture("BlueSlimeHurt002"),
+			ResourceManager::GetTexture("BlueSlimeHurt003"),
+			ResourceManager::GetTexture("BlueSlimeHurt004"),
+			ResourceManager::GetTexture("BlueSlimeHurt005"),
+			ResourceManager::GetTexture("BlueSlimeHurt006"),
+			ResourceManager::GetTexture("BlueSlimeHurt007"),
+			ResourceManager::GetTexture("BlueSlimeHurt008"),
+			ResourceManager::GetTexture("BlueSlimeHurt009"),
+			ResourceManager::GetTexture("BlueSlimeHurt0010"),
+
+			
+		};
+
+		sprite = new AnimatedSpriteRenderer(textureListHurt, 0.05f);
+		sprite->color = glm::vec3(1, 1, 1);
+		testHurt->addComponent(sprite);
+		sprites.push_back(sprite);
+			
 	}
 
 	void TestFuncUpdate(OnEngineUpdate*)

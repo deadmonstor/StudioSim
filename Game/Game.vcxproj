@@ -11,11 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\AnimatedSpriteRenderer.h" />
     <ClInclude Include="Components\TestGameComponent.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="TestGameplaySystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\AnimatedSpriteRenderer.cpp" />
     <ClCompile Include="Components\TestGameComponent.cpp" />
     <ClCompile Include="MainGame.cpp" />
   </ItemGroup>
