@@ -22,6 +22,7 @@ public:
 			
 			auto* test = SceneManager::Instance()->createGameObject(glm::vec2 { x, yy } );
 			test->addComponent(new TestGameComponent());
+			test->getTransform()->SetScale(glm::vec2(100,100));
 
 			// pick a random texture between these 2
 			int textureIndex = rand() % 2;

@@ -15,8 +15,3 @@ void TestGameComponent::lateUpdate()
 {
 	Component::lateUpdate();
 }
-
-void TestGameComponent::render()
-{
-	Component::render();
-}

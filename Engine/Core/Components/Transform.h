@@ -5,7 +5,7 @@
 class Transform final : public Component
 {
 	glm::vec2 position = { 0, 0};
-	glm::vec2 scale = {100, 100};
+	glm::vec2 scale = {1, 1};
 	float rotation = 0;
 	
 public:

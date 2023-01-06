@@ -49,8 +49,3 @@ void SpriteRenderer::lateUpdate()
 {
 	Component::lateUpdate();
 }
-
-void SpriteRenderer::render()
-{
-	Component::render();
-}

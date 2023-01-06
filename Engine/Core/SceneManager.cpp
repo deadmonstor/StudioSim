@@ -43,8 +43,5 @@ void SceneManager::update() const
 
 void SceneManager::render() const
 {
-	for(auto i : currentScene->gameObjects)
-	{
-		i->render();
-	}
+	
 }
