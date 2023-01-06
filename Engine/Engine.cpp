@@ -49,7 +49,11 @@ namespace Disunity
 		m_Initialized = true;
 
 		AudioEngine::Instance()->init();
+		AudioEngine::Instance()->loadSound("Sounds\\griddy.mp3", FMOD_2D);
+		AudioEngine::Instance()->playSound("Sounds\\griddy.mp3", false, 1.0);
 
+		AudioEngine::Instance()->loadSound("Sounds\\doneit.mp3", FMOD_2D);
+		AudioEngine::Instance()->playSound("Sounds\\doneit.mp3", false, 1.0);
 		glfwSetKeyCallback(Renderer::GetWindow(), key_callback);
 
 		// init
@@ -68,6 +72,7 @@ namespace Disunity
 		SceneManager::Instance()->update();
 		Events::Instance()->invoke(new OnEngineUpdate());
 		
+		AudioEngine::Instance()->update();
 		// Check if we need to stop the engine
 		if (auto *window = Renderer::GetWindow(); window == nullptr || glfwWindowShouldClose(window))
 		{
