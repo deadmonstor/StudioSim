@@ -51,10 +51,10 @@ namespace Griddy
 
 		AudioEngine::Instance()->init();
 		AudioEngine::Instance()->loadSound("Sounds\\griddy.mp3", FMOD_2D);
-		AudioEngine::Instance()->playSound("Sounds\\griddy.mp3", false, 1.0);
+		AudioEngine::Instance()->playSound("Sounds\\griddy.mp3", false, 0.1);
 
 		AudioEngine::Instance()->loadSound("Sounds\\doneit.mp3", FMOD_2D);
-		AudioEngine::Instance()->playSound("Sounds\\doneit.mp3", false, 1.0);
+		AudioEngine::Instance()->playSound("Sounds\\doneit.mp3", false, 0.1);
 		glfwSetKeyCallback(Renderer::GetWindow(), key_callback);
 
 		// init
