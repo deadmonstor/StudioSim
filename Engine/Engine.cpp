@@ -1,24 +1,32 @@
 ﻿#include "Engine.h"
 #include <Windows.h>
+#include "AudioEngine.h"
 #include "KeyboardInput.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
+#include "imgui/imgui_impl_glfw.h"
 #include "Util/ImGuiHandler.h"
 #include "Util/Logger.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
-#include "AudioEngine.h"
 
 namespace Griddy
 {
 	void key_callback(GLFWwindow* window, const int key, const int scancode, const int action, const int mods)
 	{
+		ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
 		KeyboardInput::Instance()->keyCallback(window, key, scancode, action, mods);
 	}
 
+	void mouse_callback(GLFWwindow* window, const int button, const int action, const int mods)
+	{
+		ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
+		KeyboardInput::Instance()->mouseCallback(window, button, action, mods);
+	}
+	
 	bool Engine::init()
 	{
 		if (!internalInit())
@@ -49,6 +57,7 @@ namespace Griddy
 
 		AudioEngine::Instance()->init();
 		glfwSetKeyCallback(Renderer::GetWindow(), key_callback);
+		glfwSetMouseButtonCallback(Renderer::GetWindow(), mouse_callback);
 
 		// init
 		return true;

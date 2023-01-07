@@ -8,7 +8,7 @@
 class KeyboardInput : public SingletonTemplate<KeyboardInput>
 {
 public:
-	void keyCallback(GLFWwindow* window, const int key, const int scancode, const int action, int mods)
+	void keyCallback(GLFWwindow* window, const int key, const int scancode, const int action, int mods) const
 	{
 		if (action == GLFW_PRESS)
 		{
@@ -22,6 +22,17 @@ public:
 		{
 			Griddy::Events::invoke<OnKeyRepeat>(key, scancode);
 		}
-		
+	}
+
+	void mouseCallback(GLFWwindow* window, const int key, const int action, int mods) const
+	{
+		if (action == GLFW_PRESS)
+		{
+			Griddy::Events::invoke<OnMouseDown>(key, action);
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			Griddy::Events::invoke<OnMouseUp>(key, action);
+		}
 	}
 };

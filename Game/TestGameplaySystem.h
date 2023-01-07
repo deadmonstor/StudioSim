@@ -146,4 +146,16 @@ public:
 		std::string strs(str);
 		LOG_INFO("Repeat: " + strs);
 	}
+
+	void TestMouseDown(const OnMouseDown* mouseDownEvent)
+	{
+		std::string strs(std::to_string(mouseDownEvent->key));
+		LOG_INFO("Mouse-Down: " + strs);
+	}
+
+	void TestMouseUp(const OnMouseUp* mouseUpEvent)
+	{
+		std::string strs(std::to_string(mouseUpEvent->key));
+		LOG_INFO("Mouse-Up: " + strs);
+	}
 };

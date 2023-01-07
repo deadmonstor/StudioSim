@@ -54,13 +54,16 @@ int main(int, char**)
 
 		ResourceManager::LoadTexture(currentString.c_str(), true, currentStringID);
 	}
+	
+	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncLewis);
+	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncUpdate);
 
-	const auto Events = Griddy::Events::Instance();
-	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncLewis);
-	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncUpdate);
-	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyDown);
-	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyUp);
-	Events->subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyRepeat);
+	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyDown);
+	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyUp);
+	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyRepeat);
+
+	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestMouseUp);
+	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestMouseDown);
 	
 	MainGame::Instance()->run();
 	return 0;
