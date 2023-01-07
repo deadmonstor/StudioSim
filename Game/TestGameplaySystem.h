@@ -100,7 +100,9 @@ public:
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)
 	{
 		const glm::vec2 mousePos = Input::getMousePosition();
-		CreateFireball(mousePos);
+		
+		if (mouseDownEvent->key == GLFW_MOUSE_BUTTON_3)
+			CreateFireball(mousePos);
 	}
 
 	void testKeyDown(const OnKeyDown* keyDown)
