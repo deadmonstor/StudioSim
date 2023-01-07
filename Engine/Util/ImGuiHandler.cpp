@@ -1,6 +1,7 @@
 ﻿#include "ImGuiHandler.h"
 
 #include "Core/SceneManager.h"
+#include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Events/EngineEvents.h"
@@ -19,6 +20,65 @@ void ImGuiHandler::init()
 	ImGui::StyleColorsDark();
 	ImGui_ImplOpenGL3_Init("#version 330");
 	ImGui_ImplGlfw_InitForOpenGL(Renderer::GetWindow(), true);
+}
+
+void ImGuiHandler::ImGUIGridSystem() const
+{
+	for (GridSystem* gridSystem = GridSystem::Instance();
+		const auto& [x, mapHolder] : gridSystem->internalMap)
+	{
+		std::string xString = "X: " + std::to_string(x);
+					
+		if (ImGui::TreeNode(xString.c_str()))
+		{
+			for (const auto& [y, gridHolder] : mapHolder)
+			{
+				std::string yString = "Y: " + std::to_string(y);
+					
+				if (ImGui::TreeNode(yString.c_str()))
+				{
+					if (Tile* tile = gridHolder->tile)
+					{
+						auto* tileString = new std::string("");
+						tile->getDebugInfo(tileString);
+						ImGui::Text("%s", tileString->c_str());
+					}
+					else
+					{
+						ImGui::Text("Tile: NULL");
+					}
+					ImGui::TreePop();
+				}
+			}
+						
+			ImGui::TreePop();
+		}
+	}
+}
+
+void ImGuiHandler::ImGUIGameObjects() const
+{
+	ImGui::Text("GameObjects:");
+
+	for (const std::vector<GameObject*>* gameObjectsList = &SceneManager::Instance()->currentScene->gameObjects;
+		const auto& curGameObject : *gameObjectsList)
+	{
+		if (ImGui::TreeNode(curGameObject->getName().c_str()))
+		{
+			for (const auto& curComponent : curGameObject->components)
+			{
+				if (ImGui::TreeNode(curComponent->name.c_str()))
+				{
+					std::string debugString;
+					curComponent->getDebugInfo(&debugString);
+					ImGui::Text("%s", debugString.c_str());
+					ImGui::TreePop();
+				}
+			}
+					
+			ImGui::TreePop();
+		}
+	}
 }
 
 void ImGuiHandler::update()
@@ -69,26 +129,12 @@ void ImGuiHandler::update()
 
 		if (ImGui::BeginTabItem("GameObject Window"))
 		{
-			ImGui::Text("GameObjects:");
-			const std::vector<GameObject*>* gameObjectsList = &SceneManager::Instance()->currentScene->gameObjects;
-
-			for (const auto& curGameObject : *gameObjectsList)
+			ImGUIGameObjects();
+			
+			if (ImGui::TreeNode("GridSystem"))
 			{
-				if (ImGui::TreeNode(curGameObject->getName().c_str()))
-				{
-					for (const auto& curComponent : curGameObject->components)
-					{
-						if (ImGui::TreeNode(curComponent->name.c_str()))
-						{
-							std::string debugString;
-							curComponent->getDebugInfo(&debugString);
-							ImGui::Text("%s", debugString.c_str());
-							ImGui::TreePop();
-						}
-					}
-					
-					ImGui::TreePop();
-				}
+				ImGUIGridSystem();
+				ImGui::TreePop();
 			}
 			
 			ImGui::EndTabItem();

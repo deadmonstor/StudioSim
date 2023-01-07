@@ -13,6 +13,8 @@ struct GridHolder
 
 class GridSystem : public SingletonTemplate<GridSystem>
 {
+	friend class ImGuiHandler;
+	
 	std::map<int, std::map<int, GridHolder*>> internalMap;
 	bool shouldRender = false;
 	
