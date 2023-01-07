@@ -1,8 +1,11 @@
 ﻿#pragma once
-
 #include <list>
 #include <map>
 #include <string>
+#include "Util/Audio/inc/fmod.h"
+#include "Util/Audio/inc/fmod_errors.h"
+#include "Util/Audio/inc/fmod.hpp"
+#include "Util//Audio/inc/fmod_common.h"
 #include <vector>
 
 #include "shader.h"
@@ -11,6 +14,8 @@
 class ResourceManager
 {
 public:
+	static std::map<std::string, FMOD::Sound *> Sounds;
+
 	static Shader    LoadShader(const char *vShaderFile, const char *fShaderFile, const char *gShaderFile, std::string name);
 	static Shader    GetShader(std::string name);
 
@@ -18,6 +23,10 @@ public:
 	static std::list<Texture> LoadTextureArray(const char* folder, const std::string& name, int numTextures);
 
 	static Texture              GetTexture(std::string name);
+	// load a sound using the passed in fmod system
+	static void LoadSound(const char *path, FMOD_MODE fMode, FMOD::System *fmodSystem);
+	// retrive a stored sound to play in the audio engine
+	static FMOD::Sound *GetSound(const char *path);
 	static std::vector<Texture> GetTexturesContaining(std::string name);
 
 	static void Clear();

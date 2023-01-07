@@ -40,7 +40,7 @@ void AudioEngine::update()
 bool AudioEngine::loadSound(const char *path, FMOD_MODE fMode) 
 { 
 	//Check if sound exists
-	if (loadedSounds.contains(path)) 
+	/* if (loadedSounds.contains(path)) 
 	{
 		//Already Loaded
 		LOG_ERROR("Trying to load already loaded sound");
@@ -52,17 +52,31 @@ bool AudioEngine::loadSound(const char *path, FMOD_MODE fMode)
 		fmodSystem->createSound(path, FMOD_2D, nullptr, &fmodSound);
 		loadedSounds[path] = fmodSound;
 		return true;
+	}*/
+
+	if (ResourceManager::Sounds.contains(path)) 
+	{
+		LOG_ERROR("Trying to load already loaded sound");
+		return false;
+	}
+	else 
+	{
+		ResourceManager::LoadSound(path, FMOD_2D, fmodSystem);
+		return true;
 	}
 }
 
 bool AudioEngine::playSound(const char *path, bool isPaused, float volume)
 {
-	FMOD::Sound* sound = loadedSounds[path];
+	/* FMOD::Sound *sound = loadedSounds[path];
 
 	// Test Create Channel
 	FMOD::Channel *fmodChannel = nullptr;
 	fmodSystem->playSound(sound, nullptr, isPaused, &fmodChannel);
 	fmodChannel->setVolume(volume);
+	return true;*/
+	FMOD::Channel *fmodChannel = nullptr;
+	fmodSystem->playSound(ResourceManager::GetSound(path), nullptr, isPaused, &fmodChannel);
 	return true;
 }
 
