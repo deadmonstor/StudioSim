@@ -5,50 +5,71 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Util/Logger.h"
+#include "Util/Events/Events.h"
 
-GridSystem::GridSystem()
+void GridSystem::init(const glm::fvec2 _tileSize, const glm::ivec2 _gridSize)
 {
-	for(int x = 0; x < 100; x++)
-	for(int y = 0; y < 100; y++)
-	{
-		map[x][y] = new GridHolder();
-		
-		std::vector<Texture> textureList =
+	tileSize = _tileSize;
+	gridSize = _gridSize;
+	
+	for(int x = 0; x < gridSize.x; x++)
+		for(int y = 0; y < gridSize.y; y++)
 		{
-			ResourceManager::GetTexture("BlueSlimeHurt000"),
-			ResourceManager::GetTexture("BlueSlimeHurt001"),
-			ResourceManager::GetTexture("BlueSlimeHurt002"),
-			ResourceManager::GetTexture("BlueSlimeHurt003"),
-			ResourceManager::GetTexture("BlueSlimeHurt004"),
-			ResourceManager::GetTexture("BlueSlimeHurt005"),
-			ResourceManager::GetTexture("BlueSlimeHurt006"),
-			ResourceManager::GetTexture("BlueSlimeHurt007"),
-			ResourceManager::GetTexture("BlueSlimeHurt008"),
-			ResourceManager::GetTexture("BlueSlimeHurt009"),
-			ResourceManager::GetTexture("BlueSlimeHurt0010"),
-		};
-		map[x][y]->tile = new Tile(textureList, 0.05f);
-		map[x][y]->tile->createBuffers();
-		map[x][y]->tile->SetShader(ResourceManager::GetShader("sprite"));
-	}
+			std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Hurt");
+
+			internalMap[x][y] = new GridHolder();
+			internalMap[x][y]->tile = new Tile(textureList, 0.075f);
+			internalMap[x][y]->tile->createBuffers();
+		}
+
+	// subscribe to the event
+	Griddy::Events::subscribe(this, &GridSystem::onDebugEvent);
 }
+
 void GridSystem::render()
 {
+	if (!shouldRender || internalMap.empty()) return;
+	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	for(auto [x, pointer] : map)
+	for(auto [x, pointer] : internalMap)
 	{
+		const auto windowSize = Renderer::GetWindowSize();
+		
+		const float cameraX = Renderer::Instance()->GetCameraPos().x;
+		const float cameraY = Renderer::Instance()->GetCameraPos().y;
+		
+		const float tileWidth = tileSize.x;
+		const float tileHeight = tileSize.y;
+		
+		const float tileX = x * tileWidth;
+		
 		for(auto [y, holder] : pointer)
 		{
-			map[x][y]->tile->update();
-			Renderer::Instance()->rendersprite(reinterpret_cast<SpriteRenderer *>(holder->tile),
-				{x * 96, y * 64},
-				{96, 64},
+			const float tileY = y * tileHeight;
+			const auto pos = glm::vec2{tileX - cameraX, tileY - cameraY};
+			
+			internalMap[x][y]->tile->update();
+			
+			Renderer::Instance()->renderSprite(holder->tile,
+				pos - (windowSize / 2.0f),
+				{tileWidth, tileHeight},
 				0
 			);
 		}
 	}
 
 	glDisable(GL_BLEND);
+}
+
+void GridSystem::onDebugEvent(const OnDebugEventChanged* event)
+{
+	if (event->key == DebugRenderGrid)
+		shouldRender = !shouldRender;
+}
+
+Tile* GridSystem::getTile(const glm::ivec2& _pos)
+{
+	return internalMap[_pos.x][_pos.y]->tile;
 }

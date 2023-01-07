@@ -10,10 +10,12 @@ class ImGuiHandler : public SingletonTemplate<ImGuiHandler>
 	std::vector<std::string> m_vLog;
 public:
 	void init();
+	void ImGUIGridSystem() const;
+	void ImGUIGameObjects() const;
 	void update();
-	void render();
+	static void render();
 	void addLog(const std::string &);
-	void cleanup();
+	static void cleanup();
 
 	struct Image
 	{

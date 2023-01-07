@@ -1,16 +1,18 @@
 #pragma once
-#include "Core/Components/SpriteRenderer.h"
 #include <vector>
+#include "Core/Components/SpriteRenderer.h"
 
 class AnimatedSpriteRenderer : public SpriteRenderer
 {
 public:
-	AnimatedSpriteRenderer(std::vector<Texture> textureList, float updateEveryXMS);
+	AnimatedSpriteRenderer(std::vector<Texture> textureList, double updateEveryXMS);
 
 	std::vector<Texture> textureList;
 
 	void update() override;
-	int currentIndex = 0;
-	float lastUpdate = 0;
-	float updateEveryXMS = 0;
+	void getDebugInfo(std::string*) override;
+	unsigned long long currentIndex = 0;
+
+	double lastUpdate = 0;
+	double updateEveryXMS = 0;
 };

@@ -1,11 +1,13 @@
 ﻿#include "SpriteRenderer.h"
 #include <glad/glad.h>
+
+#include "Core/Renderer/ResourceManager.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
 
 SpriteRenderer::~SpriteRenderer()
 {
-	Griddy::Events::Instance()->invoke(new OnSpriteRendererComponentRemoved(this));
+	Griddy::Events::invoke<OnSpriteRendererComponentRemoved>(this);
 }
 
 void SpriteRenderer::start()
@@ -13,15 +15,14 @@ void SpriteRenderer::start()
 	Component::start();
 	createBuffers();
 	
-	Griddy::Events::Instance()->invoke(new OnSpriteRendererComponentStarted(this));
+	Griddy::Events::invoke<OnSpriteRendererComponentStarted>(this);
 }
 
 void SpriteRenderer::createBuffers()
 {
-	// configure VAO/VBO
 	unsigned int VBO;
-	float vertices[] = { 
-		// pos      // tex
+	constexpr float vertices[] =
+	{
 		0.0f, 1.0f, 0.0f, 1.0f,
 		1.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 0.0f, 
@@ -42,6 +43,8 @@ void SpriteRenderer::createBuffers()
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);  
 	glBindVertexArray(0);
+
+	shader = ResourceManager::GetShader("sprite");
 }
 
 void SpriteRenderer::update()
@@ -52,4 +55,20 @@ void SpriteRenderer::update()
 void SpriteRenderer::lateUpdate()
 {
 	Component::lateUpdate();
+}
+
+void SpriteRenderer::getDebugInfo(std::string* string)
+{
+	std::stringstream ss;
+	ss << "Texture: " << texture.ID << std::endl;
+	ss << "Color: " << color.r << ", " << color.g << ", " << color.b << std::endl;
+	string->append(ss.str());
+	
+	Component::getDebugInfo(string);
+}
+
+void SpriteRenderer::setColor(const glm::vec3 color)
+{
+	this->color = color;
+	shader.SetVector3f("spriteColor", color);
 }

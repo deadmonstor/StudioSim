@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="Core\Component.h" />
     <ClInclude Include="Core\Components\AnimatedSpriteRenderer.h" />
+    <ClInclude Include="Core\Components\Camera.h" />
     <ClInclude Include="Core\Components\SpriteRenderer.h" />
     <ClInclude Include="Core\Components\Transform.h" />
     <ClInclude Include="Core\GameObject.h" />
@@ -26,7 +27,7 @@
     <ClInclude Include="Core\SceneManager.h" />
     <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="KeyboardInput.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Library\Aixlog.hpp" />
     <ClInclude Include="Library\glfw3.h" />
     <ClInclude Include="Library\glfw3native.h" />

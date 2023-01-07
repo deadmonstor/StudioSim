@@ -38,7 +38,7 @@ void GameObject::lateUpdate()
 	}
 }
 
-void GameObject::addComponent(Component *component)
+void GameObject::addComponent(Component* component)
 {
 	component->owner = this;
 	
@@ -61,18 +61,6 @@ Component* GameObject::hasComponentInternal(const std::type_info &type_info) con
 		{
 			return curComponent;
 		}
-	}
-
-	return nullptr;
-}
-
-// TODO: Why can't we use this :(
-template <class T>
-T* GameObject::getComponent()
-{
-	if (Component *component = hasComponentInternal(typeid(T)); component != nullptr)
-	{
-		return dynamic_cast<T*>(component);
 	}
 
 	return nullptr;
