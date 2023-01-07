@@ -109,19 +109,19 @@ public:
 	{
 		if (keyDown->key == GLFW_KEY_W)
 		{
-			direction.y = -1;
+			direction.y += -1;
 		}
 		else if (keyDown->key == GLFW_KEY_S)
 		{
-			direction.y = 1;
+			direction.y += 1;
 		}
 		else if (keyDown->key == GLFW_KEY_A)
 		{
-			direction.x = -1;
+			direction.x += -1;
 		}
 		else if (keyDown->key == GLFW_KEY_D)
 		{
-			direction.x = 1;
+			direction.x += 1;
 		}
 	}
 
@@ -129,19 +129,19 @@ public:
 	{
 		if (keyUp->key == GLFW_KEY_W)
 		{
-			direction.y = 0;
+			direction.y += 1;
 		}
 		else if (keyUp->key == GLFW_KEY_S)
 		{
-			direction.y = 0;
+			direction.y -= 1;
 		}
 		else if (keyUp->key == GLFW_KEY_A)
 		{
-			direction.x = 0;
+			direction.x += 1;
 		}
 		else if (keyUp->key == GLFW_KEY_D)
 		{
-			direction.x = 0;
+			direction.x -= 1;
 		}
 	}
 	
