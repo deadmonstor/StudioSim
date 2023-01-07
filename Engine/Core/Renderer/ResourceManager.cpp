@@ -28,15 +28,14 @@ Shader ResourceManager::GetShader(const std::string name)
     return Shaders[name];
 }
 
-Texture ResourceManager::LoadTexture(const char *file, const bool alpha, const std::string name)
+Texture ResourceManager::LoadTexture(const char *file, const std::string name)
 {
-    Textures[name] = loadTextureFromFile(file, alpha);
+    Textures[name] = loadTextureFromFile(file);
     return Textures[name];
 }
 
 std::list<Texture> ResourceManager::LoadTextureArray(const char* folder,
-                                                        const bool alpha,
-                                                        const std::string name,
+                                                        const std::string& name,
                                                         const int numTextures)
 {
     std::list<Texture> textures;
@@ -51,7 +50,7 @@ std::list<Texture> ResourceManager::LoadTextureArray(const char* folder,
         std::string currentStringID(name);
         currentStringID.append(std::to_string(i));
 
-        textures.push_back(LoadTexture(currentString.c_str(), alpha, currentStringID));
+        textures.push_back(LoadTexture(currentString.c_str(), currentStringID));
     }
     
     return textures;
@@ -62,7 +61,7 @@ Texture ResourceManager::GetTexture(std::string name)
     return Textures[name];
 }
 
-std::vector<Texture> ResourceManager::GetTexturesContaining(std::string name)
+std::vector<Texture> ResourceManager::GetTexturesContaining(const std::string name)
 {
     std::vector<Texture> textures;
     
@@ -145,22 +144,22 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char *
     return shader;
 }
 
-Texture ResourceManager::loadTextureFromFile(const char *file, const bool alpha)
+Texture ResourceManager::loadTextureFromFile(const char *file)
 {
     Texture texture;
-    if (alpha)
+    int width, height, nrChannels;
+    unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
+
+    // TODO: Check if this is correct
+    if (nrChannels == 4)
     {
         texture.Internal_Format = GL_RGBA;
         texture.Image_Format = GL_RGBA;
     }
-    
-    int width, height, nrChannels;
-    unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0); 
+        
     if (!stbi_failure_reason())
     {
-        // now generate texture
         texture.Generate(width, height, data);
-        // and finally free image data
         stbi_image_free(data);
     }
     else

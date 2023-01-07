@@ -31,6 +31,6 @@ public:
 	void init();
 
 	void addToRenderQueue(const OnSpriteRendererComponentStarted* OnSpriteRendererComponentStartedEvent);
-	void removeFromRenderQueue(OnSpriteRendererComponentRemoved* OnSpriteRendererComponentRemovedEvent);
+	void removeFromRenderQueue(const OnSpriteRendererComponentRemoved* OnSpriteRendererComponentRemovedEvent);
 	std::list<SpriteRenderer*> renderQueue;
 };

@@ -108,7 +108,7 @@ void Renderer::render()
 	glDisable(GL_BLEND);
 }
 
-void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 position, glm::vec2 scale, const float rotation)
+void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 position, const glm::vec2 scale, const float rotation)
 {
 	spriteRenderer->shader.Use();
 	glm::mat4 model = glm::mat4(1.0f);
@@ -142,7 +142,7 @@ void Renderer::addToRenderQueue(const OnSpriteRendererComponentStarted* event)
 	renderQueue.push_back(event->spriteRenderer);
 }
 
-void Renderer::removeFromRenderQueue(OnSpriteRendererComponentRemoved* event)
+void Renderer::removeFromRenderQueue(const OnSpriteRendererComponentRemoved* event)
 {
 	renderQueue.erase(std::ranges::remove(renderQueue, event->spriteRenderer).begin(), renderQueue.end());
 }
