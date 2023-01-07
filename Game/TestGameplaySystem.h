@@ -21,7 +21,7 @@ public:
 			float x = rand() % 1920;
 			float yy = rand() % 1080;
 			
-			auto* test = SceneManager::Instance()->createGameObject(glm::vec2 { x, yy } );
+			auto* test = SceneManager::Instance()->createGameObject("Test-1", glm::vec2 { x, yy });
 			test->addComponent<TestGameComponent>();
 			test->getTransform()->SetScale(glm::vec2(100,100));
 
@@ -45,7 +45,7 @@ public:
 
 	void TestFuncLewis(OnEngineStart*) 
 	{
-		auto *test = SceneManager::Instance()->createGameObject(glm::vec2{100, 100});
+		auto *test = SceneManager::Instance()->createGameObject("TestBlueSlime Idle", glm::vec2{100, 100});
 		test->getTransform()->SetScale(glm::vec2(96, 48));
 
 		std::vector<Texture> textureList =
@@ -63,7 +63,7 @@ public:
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprites.push_back(sprite);
 
-		auto* testHurt = SceneManager::Instance()->createGameObject(glm::vec2{ 300, 300 });
+		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlueSlime Hurt", glm::vec2{ 300, 300 });
 		testHurt->getTransform()->SetScale(glm::vec2(96, 48));
 
 		std::vector<Texture> textureListHurt =
@@ -86,7 +86,7 @@ public:
 		sprites.push_back(sprite);
 			
 
-		auto* fireball = SceneManager::Instance()->createGameObject(glm::vec2{ 200, 200 });
+		auto* fireball = SceneManager::Instance()->createGameObject("TestFireball", glm::vec2{ 200, 200 });
 		fireball->getTransform()->SetScale(glm::vec2(48, 48));
 
 		std::vector<Texture> textureListFireball =
@@ -111,7 +111,6 @@ public:
 		sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprites.push_back(sprite);
-
 	}
 
 	void TestFuncUpdate(OnEngineUpdate*)

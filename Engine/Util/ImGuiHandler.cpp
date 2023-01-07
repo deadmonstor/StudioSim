@@ -1,5 +1,6 @@
 ﻿#include "ImGuiHandler.h"
-#include <sstream>
+
+#include "Core/SceneManager.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Events/EngineEvents.h"
@@ -63,6 +64,33 @@ void ImGuiHandler::update()
 		{
 			const auto dice = ResourceManager::GetTexture("engine");
 			ImGui::Image((void *)(intptr_t)dice.ID, ImVec2((float)dice.Width, (float)dice.Height));
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("GameObject Window"))
+		{
+			ImGui::Text("GameObjects:");
+			const std::vector<GameObject*>* gameObjectsList = &SceneManager::Instance()->currentScene->gameObjects;
+
+			for (const auto& curGameObject : *gameObjectsList)
+			{
+				if (ImGui::TreeNode(curGameObject->getName().c_str()))
+				{
+					for (const auto& curComponent : curGameObject->components)
+					{
+						if (ImGui::TreeNode(curComponent->name.c_str()))
+						{
+							std::string debugString;
+							curComponent->getDebugInfo(&debugString);
+							ImGui::Text("%s", debugString.c_str());
+							ImGui::TreePop();
+						}
+					}
+					
+					ImGui::TreePop();
+				}
+			}
+			
 			ImGui::EndTabItem();
 		}
 		

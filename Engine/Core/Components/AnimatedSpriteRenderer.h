@@ -10,6 +10,7 @@ public:
 	std::vector<Texture> textureList;
 
 	void update() override;
+	void getDebugInfo(std::string*) override;
 	unsigned long long currentIndex = 0;
 
 	double lastUpdate = 0;

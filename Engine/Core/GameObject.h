@@ -1,18 +1,20 @@
 ﻿#pragma once
 #include <list>
 #include "Component.h"
+#include "SceneManager.h"
 
 class Transform;
 
 class GameObject
 {
-	std::list<Component*> components;
-	
 	GameObject();
-	Transform* transform{};
-	[[nodiscard]] Component* hasComponentInternal(const type_info &type_info) const;
-	
+
+	std::string name;
+	std::list<Component*> components;
+	Transform* transform {};
 	bool isInitialized = false;
+	
+	[[nodiscard]] Component* hasComponentInternal(const type_info &type_info) const;
 	void addComponent(Component* component);
 public:
 	~GameObject();
@@ -20,13 +22,19 @@ public:
 	void start();
 	void update();
 	void lateUpdate();
-
 	[[nodiscard]] Transform* getTransform() const { return transform; }
-	
+	[[nodiscard]] std::string getName() const { return name; }
+
 	template<typename T, typename... Args>
 	std::enable_if_t<std::is_base_of_v<Component, T>, T*> addComponent(Args... args)
 	{
 		T* newComponent = new T(args...);
+
+		std::string typeName = typeid(T).name();
+		//Remove "class" from this string
+		typeName = typeName.erase(0, 6);
+
+		newComponent->name = typeName;
 		newComponent->owner = this;
 	
 		if (isInitialized)
@@ -50,5 +58,6 @@ public:
 	}
 	
 	friend class SceneManager;
+	friend class ImGuiHandler;
 };
 

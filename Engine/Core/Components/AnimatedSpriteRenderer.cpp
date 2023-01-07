@@ -27,3 +27,14 @@ void AnimatedSpriteRenderer::update()
 
 	SpriteRenderer::update();
 }
+
+void AnimatedSpriteRenderer::getDebugInfo(std::string* string)
+{
+	std::stringstream ss;
+	ss << "Current Index: " << currentIndex << std::endl;
+	ss << "Last Update: " << lastUpdate << std::endl;
+	ss << "Update Every X MS: " << updateEveryXMS << std::endl;
+	ss << "Texture List Size: " << textureList.size() << std::endl;
+	string->append(ss.str());
+	SpriteRenderer::getDebugInfo(string);
+}

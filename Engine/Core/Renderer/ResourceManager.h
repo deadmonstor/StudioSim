@@ -3,8 +3,8 @@
 #include <map>
 #include <string>
 
-#include "texture.h"
 #include "shader.h"
+#include "texture.h"
 
 class ResourceManager
 {

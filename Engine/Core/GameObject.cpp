@@ -38,7 +38,7 @@ void GameObject::lateUpdate()
 	}
 }
 
-void GameObject::addComponent(Component *component)
+void GameObject::addComponent(Component* component)
 {
 	component->owner = this;
 	

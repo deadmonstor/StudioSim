@@ -9,6 +9,7 @@ class Transform final : public Component
 	float rotation = 0;
 	
 public:
+	void getDebugInfo(std::string*) override;
 	void SetPosition(glm::vec2 inPosition);
 	void SetScale(glm::vec2 inScale);
 	void SetRotation(float inRotation);

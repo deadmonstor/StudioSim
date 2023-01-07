@@ -57,6 +57,16 @@ void SpriteRenderer::lateUpdate()
 	Component::lateUpdate();
 }
 
+void SpriteRenderer::getDebugInfo(std::string* string)
+{
+	std::stringstream ss;
+	ss << "Texture: " << texture.ID << std::endl;
+	ss << "Color: " << color.r << ", " << color.g << ", " << color.b << std::endl;
+	string->append(ss.str());
+	
+	Component::getDebugInfo(string);
+}
+
 void SpriteRenderer::setColor(const glm::vec3 color)
 {
 	this->color = color;

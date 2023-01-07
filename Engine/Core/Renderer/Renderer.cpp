@@ -129,7 +129,7 @@ void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 posi
 	glBindVertexArray(0);
 }
 
-void Renderer::initialize()
+void Renderer::init()
 {
 	Griddy::Events::subscribe(this, &Renderer::addToRenderQueue);
 	Griddy::Events::subscribe(this, &Renderer::removeFromRenderQueue);

@@ -108,7 +108,8 @@ namespace Griddy
 		Time::update();
 		m_Running = true;
 
-		Renderer::Instance()->initialize();
+		Renderer::Instance()->init();
+
 		if (!SceneManager::Instance()->init())
 		{
 			LOG_ERROR("Failed to load default scene");
