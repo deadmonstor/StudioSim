@@ -15,7 +15,7 @@
 // Instantiate static variables
 std::map<std::string, Texture>    ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
-
+std::map<std::string, FMOD::Sound*>     ResourceManager::Sounds;
 
 Shader ResourceManager::LoadShader(const char *vShaderFile, const char *fShaderFile, const char *gShaderFile, std::string name)
 {
@@ -36,8 +36,18 @@ Texture ResourceManager::LoadTexture(const char *file, bool alpha, std::string n
 
 Texture ResourceManager::GetTexture(std::string name)
 {
-    return Textures[name];
+    return Textures[name]; }
+
+void ResourceManager::LoadSound(const char *path, FMOD_MODE fMode, FMOD::System *fmodSystem) 
+{ 
+    FMOD::Sound *fmodSound = nullptr;
+	fmodSystem->createSound(path, FMOD_2D, nullptr, &fmodSound);
+	Sounds[path] = fmodSound;
 }
+
+FMOD::Sound *ResourceManager::GetSound(const char *path) 
+{ 
+    return Sounds[path]; }
 
 void ResourceManager::Clear()
 {

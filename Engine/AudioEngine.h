@@ -1,9 +1,6 @@
 #pragma once
 #include "Util/SingletonTemplate.h"
-#include "Util/Audio/inc/fmod.h"
-#include "Util/Audio/inc/fmod_errors.h"
-#include "Util/Audio/inc/fmod.hpp"
-#include "Util//Audio/inc/fmod_common.h"
+#include "Core/Renderer/ResourceManager.h"
 #include "Util/Logger.h"
 class AudioEngine : public SingletonTemplate<AudioEngine>
 {
@@ -17,7 +14,7 @@ public:
 	FMOD::System *fmodSystem = NULL;
 
 	//Store all of the sounds in the game
-	std::map<std::string, FMOD::Sound*> loadedSounds;
+	//std::map<std::string, FMOD::Sound*> loadedSounds;
 
 	//Store all of the current channels
 	std::map<int, FMOD::Channel *> currentChannels;

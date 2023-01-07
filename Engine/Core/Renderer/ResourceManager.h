@@ -1,8 +1,10 @@
 ﻿#pragma once
-
 #include <map>
 #include <string>
-
+#include "Util/Audio/inc/fmod.h"
+#include "Util/Audio/inc/fmod_errors.h"
+#include "Util/Audio/inc/fmod.hpp"
+#include "Util//Audio/inc/fmod_common.h"
 #include "texture.h"
 #include "shader.h"
 
@@ -12,6 +14,8 @@ public:
 	// resource storage
 	static std::map<std::string, Shader>    Shaders;
 	static std::map<std::string, Texture> Textures;
+	static std::map<std::string, FMOD::Sound *> Sounds;
+
 	// loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not nullptr, it also loads a geometry shader
 	static Shader    LoadShader(const char *vShaderFile, const char *fShaderFile, const char *gShaderFile, std::string name);
 	// retrieves a stored sader
@@ -20,6 +24,10 @@ public:
 	static Texture LoadTexture(const char *file, bool alpha, std::string name);
 	// retrieves a stored texture
 	static Texture GetTexture(std::string name);
+	// load a sound using the passed in fmod system
+	static void LoadSound(const char *path, FMOD_MODE fMode, FMOD::System *fmodSystem);
+	// retrive a stored sound to play in the audio engine
+	static FMOD::Sound *GetSound(const char *path);
 	// properly de-allocates all loaded resources
 	static void      Clear();
 private:
