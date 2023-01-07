@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Input.h"
 #include "Components/TestGameComponent.h"
 #include "Core/SceneManager.h"
 #include "Core/Components/Transform.h"
@@ -44,6 +45,18 @@ public:
 		}
 	}
 
+	void CreateFireball(glm::vec2 mousePos)
+	{
+		auto* fireball = SceneManager::Instance()->createGameObject("TestFireball", mousePos);
+		fireball->getTransform()->SetScale(glm::vec2(48, 48));
+
+		std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
+
+		auto sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+		sprites.push_back(sprite);
+	}
+
 	void TestFuncLewis(OnEngineStart*) 
 	{
 		GridSystem::Instance()->init(glm::vec2(96, 48), glm::vec2(100, 100));
@@ -66,15 +79,7 @@ public:
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprites.push_back(sprite);
 			
-
-		auto* fireball = SceneManager::Instance()->createGameObject("TestFireball", glm::vec2{ 200, 200 });
-		fireball->getTransform()->SetScale(glm::vec2(48, 48));
-
-		std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
-
-		sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprites.push_back(sprite);
+		CreateFireball(glm::vec2{ 200, 200 });
 	}
 
 	void TestFuncUpdate(OnEngineUpdate*)
@@ -91,6 +96,7 @@ public:
 	{
 		const char* str = glfwGetKeyName(KeyDownEvent->key, KeyDownEvent->scancode);
 		if (!str) return;
+
 		std::string strs(str);
 		LOG_INFO("Down: " + strs);
 	}
@@ -99,7 +105,8 @@ public:
 	{
 		const char* str = glfwGetKeyName(KeyUpEvent->key, KeyUpEvent->scancode);
 		if (!str) return;
-		std::string strs(str);
+
+		const std::string strs(str);
 		LOG_INFO("Up: " + strs);
 	}
 
@@ -107,19 +114,28 @@ public:
 	{
 		const char* str = glfwGetKeyName(KeyRepeatEvent->key, KeyRepeatEvent->scancode);
 		if (!str) return;
-		std::string strs(str);
+
+		const std::string strs(str);
 		LOG_INFO("Repeat: " + strs);
 	}
 
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)
 	{
-		std::string strs(std::to_string(mouseDownEvent->key));
+		const std::string strs(std::to_string(mouseDownEvent->key));
 		LOG_INFO("Mouse-Down: " + strs);
+
+		const glm::vec2 mousePos = Input::getMousePosition();
+		LOG_INFO("Mouse Position: " + std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
+		
+		CreateFireball(mousePos);
 	}
 
 	void TestMouseUp(const OnMouseUp* mouseUpEvent)
 	{
 		std::string strs(std::to_string(mouseUpEvent->key));
 		LOG_INFO("Mouse-Up: " + strs);
+
+		const glm::vec2 mousePos = Input::getMousePosition();
+		LOG_INFO("Mouse Position: " + std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
 	}
 };

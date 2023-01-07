@@ -125,9 +125,9 @@ namespace Griddy
 			return;
 		}
 		
-		ResourceManager::LoadTexture("shaders\\image.png", false, "face");
-		ResourceManager::LoadTexture("shaders\\image2.png", true, "face2");
-		ResourceManager::LoadTexture("shaders\\engine.png", true, "engine");
+		ResourceManager::LoadTexture("shaders\\image.png", "face");
+		ResourceManager::LoadTexture("shaders\\image2.png", "face2");
+		ResourceManager::LoadTexture("shaders\\engine.png", "engine");
 		
 		bool firstFrame = true;
 		

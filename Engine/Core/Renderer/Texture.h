@@ -1,20 +1,21 @@
 ﻿#pragma once
 
-// TODO: Change this up it is copied so I can get it to work
+
+typedef int GLint;
 class Texture
 {
 public:
 	unsigned int ID {};
-	unsigned int Width, Height;
-	unsigned int Internal_Format;
-	unsigned int Image_Format;
+	GLint Width, Height;
+	GLint Internal_Format;
+	GLint Image_Format;
 
-	unsigned int Wrap_S;
-	unsigned int Wrap_T;
-	unsigned int Filter_Min;
-	unsigned int Filter_Max;
+	GLint Wrap_S;
+	GLint Wrap_T;
+	GLint Filter_Min;
+	GLint Filter_Max;
 	
 	Texture();
-	void Generate(unsigned int width, unsigned int height, const unsigned char* data);
+	void Generate(GLint width, GLint height, const unsigned char* data);
 	void Bind() const;
 };

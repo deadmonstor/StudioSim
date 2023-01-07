@@ -1,7 +1,6 @@
 ﻿#include "SceneManager.h"
 
 #include "Components/AnimatedSpriteRenderer.h"
-#include "Components/AnimatedSpriteRenderer.h"
 #include "Components/Transform.h"
 
 bool SceneManager::changeScene(const std::string& scene)
