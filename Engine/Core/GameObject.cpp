@@ -65,15 +65,3 @@ Component* GameObject::hasComponentInternal(const std::type_info &type_info) con
 
 	return nullptr;
 }
-
-// TODO: Why can't we use this :(
-template <class T>
-T* GameObject::getComponent()
-{
-	if (Component *component = hasComponentInternal(typeid(T)); component != nullptr)
-	{
-		return dynamic_cast<T*>(component);
-	}
-
-	return nullptr;
-}

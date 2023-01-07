@@ -10,9 +10,7 @@ class GameObject
 	
 	GameObject();
 	Transform* transform;
-	
-	template<class T>
-	T *getComponent();
+	Component* hasComponentInternal(const type_info &type_info) const;
 	
 	bool isInitialized = false;
 public:
@@ -21,16 +19,23 @@ public:
 	void start();
 	void update();
 	void lateUpdate();
-	void render();
 
-	void addComponent(Component *component);
-
-	// TODO: Move this when below works
-	Component *hasComponentInternal(const type_info &type_info) const;
-	bool hasComponent(const type_info &type_info) const;
-
+	
 	Transform* getTransform() const { return transform; }
+	void addComponent(Component *component);
+	bool hasComponent(const type_info &type_info) const;
+	
+	template <typename T>
+	T* getComponent()
+	{
+		if (Component* component = hasComponentInternal(typeid(T)); component != nullptr)
+		{
+			return static_cast<T*>(component);
+		}
 
+		return nullptr;
+	}
+	
 	friend class SceneManager;
 };
 

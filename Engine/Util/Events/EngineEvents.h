@@ -7,6 +7,19 @@ NEW_EMPTY_EVENT(OnEngineStart);
 NEW_EMPTY_EVENT(OnEngineUpdate);
 NEW_EMPTY_EVENT(OnEngineStop);
 
+enum DebugEvent
+{
+	DebugRenderGrid,	
+	DebugPlaySound,	
+};
+
+class OnDebugEventChanged : public Griddy::Event
+{
+public:
+	OnDebugEventChanged(const DebugEvent key) : key(key) {}
+	DebugEvent key;
+};
+
 class OnKey : public Griddy::Event
 {
 public:

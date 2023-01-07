@@ -109,8 +109,6 @@ public:
 			ResourceManager::GetTexture("Fireball0012"),
 			ResourceManager::GetTexture("Fireball0013"),
 			ResourceManager::GetTexture("Fireball0014"),
-			
-
 		};
 
 		sprite = new AnimatedSpriteRenderer(textureListFireball, 0.05f);
@@ -123,10 +121,10 @@ public:
 	void TestFuncUpdate(OnEngineUpdate*)
 	{
 		// Update all sprites color to be a random color
-		for (auto& sprite : sprites)
+		for (const auto& sprite : sprites)
 		{
 			Transform* transform = sprite->owner->getTransform();
-			transform->SetPosition(transform->GetPosition() + glm::vec2(2, 0));
+			transform->SetPosition(transform->GetPosition() + glm::vec2(100 * Time::getDeltaTime(), 0));
 		}
 	}
 

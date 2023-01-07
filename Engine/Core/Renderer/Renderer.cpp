@@ -12,12 +12,11 @@
 
 void error_callback(const int error, const char *msg)
 {
-	std::string s;
-	s = " [" + std::to_string(error) + "] " + msg + '\n';
+	std::string s = " [" + std::to_string(error) + "] " + msg + '\n';
 	LOG_ERROR(s);
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void framebuffer_size_callback(GLFWwindow* window, const int width, const int height)
 {
 	glViewport(0, 0, width, height);
 }
@@ -102,7 +101,7 @@ void Renderer::render()
 
 	for (SpriteRenderer* spriteRenderer : renderQueue)
 	{
-		const Transform* transform = dynamic_cast<Transform*>(spriteRenderer->owner->hasComponentInternal(typeid(Transform)));
+		const Transform* transform = spriteRenderer->owner->getTransform();
 		rendersprite(spriteRenderer, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
 	}
 	glDisable(GL_BLEND);
@@ -133,8 +132,8 @@ void Renderer::rendersprite(SpriteRenderer* spriteRenderer, const glm::vec2 posi
 
 void Renderer::initialize()
 {
-	Griddy::Events::Instance()->subscribe(this, &Renderer::addToRenderQueue);
-	Griddy::Events::Instance()->subscribe(this, &Renderer::removeFromRenderQueue);
+	Griddy::Events::subscribe(this, &Renderer::addToRenderQueue);
+	Griddy::Events::subscribe(this, &Renderer::removeFromRenderQueue);
 }
 
 void Renderer::addToRenderQueue(OnSpriteRendererComponentStarted* event)

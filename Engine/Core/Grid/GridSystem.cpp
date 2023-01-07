@@ -5,6 +5,7 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Util/Logger.h"
+#include "Util/Events/Events.h"
 
 GridSystem::GridSystem()
 {
@@ -31,9 +32,14 @@ GridSystem::GridSystem()
 		map[x][y]->tile->createBuffers();
 		map[x][y]->tile->SetShader(ResourceManager::GetShader("sprite"));
 	}
+
+	// subscribe to the event
+	Griddy::Events::subscribe(this, &GridSystem::onDebugEvent);
 }
 void GridSystem::render()
 {
+	if (!shouldRender) return;
+	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
@@ -42,7 +48,7 @@ void GridSystem::render()
 		for(auto [y, holder] : pointer)
 		{
 			map[x][y]->tile->update();
-			Renderer::Instance()->rendersprite(reinterpret_cast<SpriteRenderer *>(holder->tile),
+			Renderer::Instance()->rendersprite(holder->tile,
 				{x * 96, y * 64},
 				{96, 64},
 				0
@@ -51,4 +57,10 @@ void GridSystem::render()
 	}
 
 	glDisable(GL_BLEND);
+}
+
+void GridSystem::onDebugEvent(const OnDebugEventChanged* event)
+{
+	if (event->key == DebugRenderGrid)
+		shouldRender = !shouldRender;
 }

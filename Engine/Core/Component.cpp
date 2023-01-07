@@ -15,7 +15,4 @@ void Component::lateUpdate()
 	
 }
 
-Component::~Component()
-{
-	
-}
+Component::~Component() = default;

@@ -5,7 +5,7 @@
 class Transform final : public Component
 {
 	glm::vec2 position = { 0, 0};
-	glm::vec2 scale = {1, 1};
+	glm::vec2 size = {1, 1};
 	float rotation = 0;
 	
 public:
@@ -14,6 +14,6 @@ public:
 	void SetRotation(float inRotation);
 
 	[[nodiscard]] glm::vec2 GetPosition() const { return position; }
-	[[nodiscard]] glm::vec2 GetScale() const { return scale; }
+	[[nodiscard]] glm::vec2 GetScale() const { return size; }
 	[[nodiscard]] float GetRotation() const { return rotation; }
 };

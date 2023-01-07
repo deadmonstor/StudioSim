@@ -1,8 +1,8 @@
 ﻿#include "ResourceManager.h"
 
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fstream>
 #include <glad/glad.h>
 
 #include "Util/Logger.h"
@@ -49,8 +49,8 @@ void ResourceManager::Clear()
         glDeleteTextures(1, &iter.second.ID);
 }
 
-#include <Windows.h>
 #include <string>
+#include <Windows.h>
 
 std::string GetCurrentDirectory()
 {

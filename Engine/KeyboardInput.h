@@ -12,15 +12,15 @@ public:
 	{
 		if (action == GLFW_PRESS)
 		{
-			Griddy::Events::Instance()->invoke(new OnKeyDown(key, scancode));
+			Griddy::Events::invoke(new OnKeyDown(key, scancode));
 		}
 		else if (action == GLFW_RELEASE)
 		{
-			Griddy::Events::Instance()->invoke(new OnKeyUp(key, scancode));
+			Griddy::Events::invoke(new OnKeyUp(key, scancode));
 		}
 		else if (action == GLFW_REPEAT)
 		{
-			Griddy::Events::Instance()->invoke(new OnKeyRepeat(key, scancode));
+			Griddy::Events::invoke(new OnKeyRepeat(key, scancode));
 		}
 		
 	}

@@ -1,8 +1,12 @@
 #include "AudioEngine.h"
 
+#include "Util/Events/EngineEvents.h"
+#include "Util/Events/Events.h"
+
+class OnDebugEventChanged;
+
 bool AudioEngine::init() 
 { 
-
 	//To Do Abstract Into Classes
 	FMOD_RESULT fmodResult;
 
@@ -23,6 +27,8 @@ bool AudioEngine::init()
 		LOG_ERROR("FMod failed to initialise the system");
 		return false;
 	}
+
+	Griddy::Events::subscribe(this, &AudioEngine::onDebugEvent);
 }
 
 void AudioEngine::update() 
@@ -51,9 +57,8 @@ bool AudioEngine::loadSound(const char *path, FMOD_MODE fMode)
 
 bool AudioEngine::playSound(const char *path, bool isPaused, float volume)
 {
-	//const char *path = "Sounds\\griddy.mp3";
-
 	FMOD::Sound* sound = loadedSounds[path];
+
 	// Test Create Channel
 	FMOD::Channel *fmodChannel = nullptr;
 	fmodSystem->playSound(sound, nullptr, isPaused, &fmodChannel);
@@ -61,6 +66,16 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume)
 	return true;
 }
 
+void AudioEngine::onDebugEvent(const OnDebugEventChanged* event)
+{
+	if (event->key == DebugPlaySound)
+	{
+		AudioEngine::Instance()->loadSound("Sounds\\griddy.mp3", FMOD_2D);
+		AudioEngine::Instance()->playSound("Sounds\\griddy.mp3", false, 0.1f);
 
+		AudioEngine::Instance()->loadSound("Sounds\\doneit.mp3", FMOD_2D);
+		AudioEngine::Instance()->playSound("Sounds\\doneit.mp3", false, 0.1f);
+	}
+}
 
 

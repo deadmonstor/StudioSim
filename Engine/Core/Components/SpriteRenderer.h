@@ -1,7 +1,7 @@
 ﻿#pragma once
+#include <Core/Renderer/texture.h>
 #include "Core/Component.h"
 #include "Core/Renderer/Shader.h"
-#include <Core/Renderer/texture.h>
 
 class SpriteRenderer : public Component
 {

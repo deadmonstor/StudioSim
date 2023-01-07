@@ -5,7 +5,7 @@
 
 SpriteRenderer::~SpriteRenderer()
 {
-	Griddy::Events::Instance()->invoke(new OnSpriteRendererComponentRemoved(this));
+	Griddy::Events::invoke(new OnSpriteRendererComponentRemoved(this));
 }
 
 void SpriteRenderer::start()
@@ -13,15 +13,14 @@ void SpriteRenderer::start()
 	Component::start();
 	createBuffers();
 	
-	Griddy::Events::Instance()->invoke(new OnSpriteRendererComponentStarted(this));
+	Griddy::Events::invoke(new OnSpriteRendererComponentStarted(this));
 }
 
 void SpriteRenderer::createBuffers()
 {
-	// configure VAO/VBO
 	unsigned int VBO;
-	float vertices[] = { 
-		// pos      // tex
+	constexpr float vertices[] =
+	{
 		0.0f, 1.0f, 0.0f, 1.0f,
 		1.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 0.0f, 

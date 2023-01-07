@@ -5,6 +5,8 @@
 #include "Util/Audio/inc/fmod.hpp"
 #include "Util//Audio/inc/fmod_common.h"
 #include "Util/Logger.h"
+#include "Util/Events/EngineEvents.h"
+
 class AudioEngine : public SingletonTemplate<AudioEngine>
 {
 public:
@@ -13,6 +15,7 @@ public:
 	bool checkResult(FMOD_RESULT fmodResult);
 	bool loadSound(const char* path, FMOD_MODE fMode);
 	bool playSound(const char *path, bool isPaused, float volume);
+	void onDebugEvent(const OnDebugEventChanged* event);
 
 	FMOD::System *fmodSystem = NULL;
 

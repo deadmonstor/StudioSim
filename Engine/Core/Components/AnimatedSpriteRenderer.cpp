@@ -1,18 +1,20 @@
 #include "AnimatedSpriteRenderer.h"
+
+#include <utility>
 #include "Util/Time.h"
 
-AnimatedSpriteRenderer::AnimatedSpriteRenderer(std::vector<Texture> textureList, float updateEveryXMS)
-{ 
-	this->textureList = textureList;
+AnimatedSpriteRenderer::AnimatedSpriteRenderer(std::vector<Texture> textureList, const double updateEveryXMS)
+{
+	this->textureList = std::move(textureList);
 	this->updateEveryXMS = updateEveryXMS;
 }
 
-void AnimatedSpriteRenderer::update() 
-{ 
-	if (lastUpdate > (Time::getTime() - updateEveryXMS))
+void AnimatedSpriteRenderer::update()
+{
+	if (lastUpdate > Time::getTime() - updateEveryXMS)
 		return;
-	
-	if (textureList.size() == 0)
+
+	if (textureList.empty())
 		return;
 
 	currentIndex++;
@@ -25,4 +27,3 @@ void AnimatedSpriteRenderer::update()
 
 	SpriteRenderer::update();
 }
-

@@ -11,9 +11,9 @@ class ImGuiHandler : public SingletonTemplate<ImGuiHandler>
 public:
 	void init();
 	void update();
-	void render();
+	static void render();
 	void addLog(const std::string &);
-	void cleanup();
+	static void cleanup();
 
 	struct Image
 	{

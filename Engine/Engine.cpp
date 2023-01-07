@@ -43,18 +43,11 @@ namespace Griddy
 		{
 			return false;
 		}
-
-#if (!NDEBUG)
+		
 		ImGuiHandler::Instance()->init();
-#endif
 		m_Initialized = true;
 
 		AudioEngine::Instance()->init();
-		AudioEngine::Instance()->loadSound("Sounds\\griddy.mp3", FMOD_2D);
-		AudioEngine::Instance()->playSound("Sounds\\griddy.mp3", false, 0.1);
-
-		AudioEngine::Instance()->loadSound("Sounds\\doneit.mp3", FMOD_2D);
-		AudioEngine::Instance()->playSound("Sounds\\doneit.mp3", false, 0.1);
 		glfwSetKeyCallback(Renderer::GetWindow(), key_callback);
 
 		// init
@@ -66,12 +59,8 @@ namespace Griddy
 		// update
 		glfwPollEvents();
 
-#if (!NDEBUG)
-		ImGuiHandler::Instance()->update();
-#endif
-
 		SceneManager::Instance()->update();
-		Events::Instance()->invoke(new OnEngineUpdate());
+		Events::invoke(new OnEngineUpdate());
 		
 		AudioEngine::Instance()->update();
 		// Check if we need to stop the engine
@@ -79,29 +68,27 @@ namespace Griddy
 		{
 			m_Running = false;
 		}
+		
+		ImGuiHandler::Instance()->update();
 	}
 
 	void Engine::render()
 	{
 		Renderer::Instance()->render();
 
-#if (!NDEBUG)
-		ImGuiHandler::Instance()->render();
-#endif
 		SceneManager::Instance()->render();
 		GridSystem::Instance()->render();
 		
+		ImGuiHandler::Instance()->render();
 		glfwSwapBuffers(Renderer::GetWindow());
 	}
 
 	void Engine::cleanup()
 	{
 		Renderer::Instance()->cleanup();
-#if (!NDEBUG)
 		ImGuiHandler::Instance()->cleanup();
-#endif
 
-		Events::Instance()->invoke(new OnEngineStop());
+		Events::invoke(new OnEngineStop());
 		glfwTerminate();
 	}
 
@@ -138,7 +125,7 @@ namespace Griddy
 
 			if (firstFrame)
 			{
-				Events::Instance()->invoke(new OnEngineStart());
+				Events::invoke(new OnEngineStart());
 				firstFrame = false;
 			}
 		}
