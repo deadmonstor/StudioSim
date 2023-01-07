@@ -15,7 +15,9 @@ void Component::lateUpdate()
 	
 }
 
-Component::~Component()
+void Component::getDebugInfo(std::string*)
 {
-	
+
 }
+
+Component::~Component() = default;

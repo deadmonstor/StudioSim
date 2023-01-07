@@ -1,36 +1,63 @@
 ﻿#pragma once
 #include <list>
+#include "Component.h"
+#include "SceneManager.h"
 
 class Transform;
-class Component;
 
 class GameObject
 {
-	std::list<Component*> components;
-	
 	GameObject();
-	Transform* transform;
-	
-	template<class T>
-	T *getComponent();
-	
+
+	std::string name;
+	std::list<Component*> components;
+	Transform* transform {};
 	bool isInitialized = false;
+	
+	[[nodiscard]] Component* hasComponentInternal(const type_info &type_info) const;
+	void addComponent(Component* component);
 public:
 	~GameObject();
 	
 	void start();
 	void update();
 	void lateUpdate();
-	void render();
+	[[nodiscard]] Transform* getTransform() const { return transform; }
+	[[nodiscard]] std::string getName() const { return name; }
 
-	void addComponent(Component *component);
+	template<typename T, typename... Args>
+	std::enable_if_t<std::is_base_of_v<Component, T>, T*> addComponent(Args... args)
+	{
+		T* newComponent = new T(args...);
 
-	// TODO: Move this when below works
-	Component *hasComponentInternal(const type_info &type_info) const;
-	bool hasComponent(const type_info &type_info) const;
+		std::string typeName = typeid(T).name();
+		//Remove "class" from this string
+		typeName = typeName.erase(0, 6);
 
-	Transform* getTransform() const { return transform; }
+		newComponent->name = typeName;
+		newComponent->owner = this;
+	
+		if (isInitialized)
+			newComponent->start();
+		
+		components.push_back(newComponent);
+		return newComponent;
+	}
 
+	[[nodiscard]] bool hasComponent(const type_info &type_info) const;
+	
+	template <typename T>
+	T* getComponent()
+	{
+		if (Component* component = hasComponentInternal(typeid(T)); component != nullptr)
+		{
+			return static_cast<T*>(component);
+		}
+
+		return nullptr;
+	}
+	
 	friend class SceneManager;
+	friend class ImGuiHandler;
 };
 

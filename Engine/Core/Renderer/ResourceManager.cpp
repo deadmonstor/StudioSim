@@ -1,8 +1,8 @@
 ﻿#include "ResourceManager.h"
 
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fstream>
 #include <glad/glad.h>
 
 #include "Util/Logger.h"
@@ -13,9 +13,9 @@
 #endif
 
 // Instantiate static variables
-std::map<std::string, Texture>    ResourceManager::Textures;
-std::map<std::string, Shader>       ResourceManager::Shaders;
-
+std::map<std::string, Texture>          ResourceManager::Textures;
+std::map<std::string, Shader>           ResourceManager::Shaders;
+std::map<std::string, FMOD::Sound*>     ResourceManager::Sounds;
 
 Shader ResourceManager::LoadShader(const char *vShaderFile, const char *fShaderFile, const char *gShaderFile, std::string name)
 {
@@ -23,15 +23,37 @@ Shader ResourceManager::LoadShader(const char *vShaderFile, const char *fShaderF
     return Shaders[name];
 }
 
-Shader ResourceManager::GetShader(std::string name)
+Shader ResourceManager::GetShader(const std::string name)
 {
     return Shaders[name];
 }
 
-Texture ResourceManager::LoadTexture(const char *file, bool alpha, std::string name)
+Texture ResourceManager::LoadTexture(const char *file, const std::string name)
 {
-    Textures[name] = loadTextureFromFile(file, alpha);
+    Textures[name] = loadTextureFromFile(file);
     return Textures[name];
+}
+
+std::list<Texture> ResourceManager::LoadTextureArray(const char* folder,
+                                                        const std::string& name,
+                                                        const int numTextures)
+{
+    std::list<Texture> textures;
+    
+    for (int i = 0; i < numTextures; i++)
+    {
+        std::string currentString(folder);
+        currentString.append(name);
+        currentString.append(std::to_string(i));
+        currentString.append(".png");
+
+        std::string currentStringID(name);
+        currentStringID.append(std::to_string(i));
+
+        textures.push_back(LoadTexture(currentString.c_str(), currentStringID));
+    }
+    
+    return textures;
 }
 
 Texture ResourceManager::GetTexture(std::string name)
@@ -39,26 +61,40 @@ Texture ResourceManager::GetTexture(std::string name)
     return Textures[name];
 }
 
-void ResourceManager::Clear()
-{
-    // (properly) delete all shaders	
-    for (auto iter : Shaders)
-        glDeleteProgram(iter.second.ID);
-    // (properly) delete all textures
-    for (auto iter : Textures)
-        glDeleteTextures(1, &iter.second.ID);
+void ResourceManager::LoadSound(const char *path, FMOD_MODE fMode, FMOD::System *fmodSystem) 
+{ 
+    FMOD::Sound *fmodSound = nullptr;
+	fmodSystem->createSound(path, FMOD_2D, nullptr, &fmodSound);
+	Sounds[path] = fmodSound;
 }
 
-#include <Windows.h>
-#include <string>
+FMOD::Sound *ResourceManager::GetSound(const char *path) 
+{ 
+    return Sounds[path];
+}
 
-std::string GetCurrentDirectory()
+std::vector<Texture> ResourceManager::GetTexturesContaining(const std::string name)
 {
-    char buffer[MAX_PATH];
-    GetModuleFileNameA(NULL, buffer, MAX_PATH);
-    std::string::size_type pos = std::string(buffer).find_last_of("\\/");
-	
-    return std::string(buffer).substr(0, pos);
+    std::vector<Texture> textures;
+    
+    for (auto& [str, texture] : Textures)
+    {
+        if (str.find(name) == 0)
+        {
+            textures.push_back(texture);
+        }
+    }
+    
+    return textures;
+}
+
+void ResourceManager::Clear()
+{
+    for (const auto& [fst, snd] : Shaders)
+        glDeleteProgram(snd.ID);
+
+    for (const auto& [fst, snd] : Textures)
+        glDeleteTextures(1, &snd.ID);
 }
 
 Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char *fShaderFile, const char *gShaderFile)
@@ -93,7 +129,7 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char *
             geometryCode = gShaderStream.str();
         }
     }
-    catch (std::exception e)
+    catch (std::exception&)
     {
         LOG_ERROR("ERROR::SHADER: Failed to read shader files");
     }
@@ -101,15 +137,13 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char *
     if (vertexCode.empty())
     {
         LOG_ERROR("ERROR::SHADER: Failed to read vertex shader file");
-        // TODO: Crash here
-        return Shader();
+        abort();
     }
     
     if (fragmentCode.empty())
     {
         LOG_ERROR("ERROR::SHADER: Failed to read fragment shader file");
-        // TODO: Crash here
-        return Shader();
+        abort();
     }
     
     const char *vShaderCode = vertexCode.c_str();
@@ -122,28 +156,27 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char *
     return shader;
 }
 
-Texture ResourceManager::loadTextureFromFile(const char *file, const bool alpha)
+Texture ResourceManager::loadTextureFromFile(const char *file)
 {
-    // create texture object
     Texture texture;
-    if (alpha)
+    int width, height, nrChannels;
+    unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
+
+    // TODO: Check if this is correct
+    if (nrChannels == 4)
     {
         texture.Internal_Format = GL_RGBA;
         texture.Image_Format = GL_RGBA;
     }
-    // load image
-    int width, height, nrChannels;
-    unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0); 
+        
     if (!stbi_failure_reason())
     {
-        // now generate texture
         texture.Generate(width, height, data);
-        // and finally free image data
         stbi_image_free(data);
     }
     else
     {
-        LOG_ERROR("ERROR::TEXTURE: Failed to load texture");
+        LOG_ERROR("ERROR::TEXTURE: Failed to load texture " + std::string(file));
         LOG_ERROR(stbi_failure_reason());
     }
     

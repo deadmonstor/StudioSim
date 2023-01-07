@@ -1,31 +1,45 @@
 ﻿#include "Engine.h"
 #include <Windows.h>
-#include "KeyboardInput.h"
+#include "AudioEngine.h"
+#include "Input.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
+#include "imgui/imgui_impl_glfw.h"
 #include "Util/ImGuiHandler.h"
 #include "Util/Logger.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
-#include "AudioEngine.h"
 
 namespace Griddy
 {
 	void key_callback(GLFWwindow* window, const int key, const int scancode, const int action, const int mods)
 	{
-		KeyboardInput::Instance()->keyCallback(window, key, scancode, action, mods);
+		ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
+		Input::Instance()->keyCallback(window, key, scancode, action, mods);
 	}
 
+	void mouse_callback(GLFWwindow* window, const int button, const int action, const int mods)
+	{
+		ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
+		
+		if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
+			Input::Instance()->mouseCallback(window, button, action, mods);
+	}
+
+	void drop_callback(GLFWwindow* window, const int count, const char** paths)
+	{
+		Input::Instance()->dropCallback(window, count, paths);
+	}
+	
 	bool Engine::init()
 	{
 		if (!internalInit())
 		{
 			LOG_ERROR("Engine failed to initialize");
 
-			// TODO: Should cleanup actually be here?
 			cleanup();
 			return false;
 		}
@@ -43,19 +57,15 @@ namespace Griddy
 		{
 			return false;
 		}
-
-#if (!NDEBUG)
+		
+		AudioEngine::Instance()->init();
+		Input::Instance()->init();
 		ImGuiHandler::Instance()->init();
-#endif
 		m_Initialized = true;
 
-		AudioEngine::Instance()->init();
-		AudioEngine::Instance()->loadSound("Sounds\\griddy.mp3", FMOD_2D);
-		AudioEngine::Instance()->playSound("Sounds\\griddy.mp3", false, 0.1);
-
-		AudioEngine::Instance()->loadSound("Sounds\\doneit.mp3", FMOD_2D);
-		AudioEngine::Instance()->playSound("Sounds\\doneit.mp3", false, 0.1);
 		glfwSetKeyCallback(Renderer::GetWindow(), key_callback);
+		glfwSetMouseButtonCallback(Renderer::GetWindow(), mouse_callback);
+		glfwSetDropCallback(Renderer::GetWindow(), drop_callback);
 
 		// init
 		return true;
@@ -66,12 +76,8 @@ namespace Griddy
 		// update
 		glfwPollEvents();
 
-#if (!NDEBUG)
-		ImGuiHandler::Instance()->update();
-#endif
-
 		SceneManager::Instance()->update();
-		Events::Instance()->invoke(new OnEngineUpdate());
+		Events::invoke<OnEngineUpdate>();
 		
 		AudioEngine::Instance()->update();
 		// Check if we need to stop the engine
@@ -79,29 +85,32 @@ namespace Griddy
 		{
 			m_Running = false;
 		}
+		
+		ImGuiHandler::Instance()->update();
+	}
+
+	void Engine::lateUpdate()
+	{
+		SceneManager::Instance()->lateUpdate();
 	}
 
 	void Engine::render()
 	{
 		Renderer::Instance()->render();
 
-#if (!NDEBUG)
-		ImGuiHandler::Instance()->render();
-#endif
 		SceneManager::Instance()->render();
 		GridSystem::Instance()->render();
 		
+		ImGuiHandler::render();
 		glfwSwapBuffers(Renderer::GetWindow());
 	}
 
 	void Engine::cleanup()
 	{
 		Renderer::Instance()->cleanup();
-#if (!NDEBUG)
-		ImGuiHandler::Instance()->cleanup();
-#endif
+		ImGuiHandler::cleanup();
 
-		Events::Instance()->invoke(new OnEngineStop());
+		Events::invoke<OnEngineStop>();
 		glfwTerminate();
 	}
 
@@ -116,16 +125,17 @@ namespace Griddy
 		Time::update();
 		m_Running = true;
 
-		Renderer::Instance()->initialize();
+		Renderer::Instance()->init();
+
 		if (!SceneManager::Instance()->init())
 		{
 			LOG_ERROR("Failed to load default scene");
 			return;
 		}
 		
-		ResourceManager::LoadTexture("shaders\\image.png", false, "face");
-		ResourceManager::LoadTexture("shaders\\image2.png", true, "face2");
-		ResourceManager::LoadTexture("shaders\\PNG_transparency_demonstration_1.png", true, "dice");
+		ResourceManager::LoadTexture("Sprites\\image.png", "face");
+		ResourceManager::LoadTexture("Sprites\\image2.png", "face2");
+		ResourceManager::LoadTexture("Sprites\\engine.png", "engine");
 		
 		bool firstFrame = true;
 		
@@ -135,10 +145,11 @@ namespace Griddy
 
 			update();
 			render();
+			lateUpdate();
 
 			if (firstFrame)
 			{
-				Events::Instance()->invoke(new OnEngineStart());
+				Events::invoke<OnEngineStart>();
 				firstFrame = false;
 			}
 		}

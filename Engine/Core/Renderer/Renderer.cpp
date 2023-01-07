@@ -1,23 +1,21 @@
-﻿#include "Renderer.h"
+﻿#include <glad/glad.h>
+#include "Renderer.h"
 #include <Windows.h>
-#include <glad/glad.h>
 #include "ResourceManager.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
 #include "glm/gtx/transform.hpp"
-#include "Library/glfw3.h"
 #include "Util/Logger.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
 
 void error_callback(const int error, const char *msg)
 {
-	std::string s;
-	s = " [" + std::to_string(error) + "] " + msg + '\n';
+	const std::string s = "GLFW: [" + std::to_string(error) + "] " + msg + '\n';
 	LOG_ERROR(s);
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void framebuffer_size_callback(GLFWwindow* window, const int width, const int height)
 {
 	glViewport(0, 0, width, height);
 }
@@ -81,7 +79,7 @@ bool Renderer::createWindow(const std::string &windowName)
 		return false;
 	}
 	
-	ResourceManager::LoadShader("shaders/sprite.vs", "shaders/sprite.frag", nullptr, "sprite");
+	ResourceManager::LoadShader("Shader/sprite.vs", "Shader/sprite.frag", nullptr, "sprite");
 	return true;
 }
 
@@ -102,26 +100,31 @@ void Renderer::render()
 
 	for (SpriteRenderer* spriteRenderer : renderQueue)
 	{
-		const Transform* transform = dynamic_cast<Transform*>(spriteRenderer->owner->hasComponentInternal(typeid(Transform)));
-		rendersprite(spriteRenderer, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
+		const Transform* transform = spriteRenderer->owner->getTransform();
+		renderSprite(spriteRenderer, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
 	}
+	
 	glDisable(GL_BLEND);
 }
 
-void Renderer::rendersprite(SpriteRenderer* spriteRenderer, const glm::vec2 position, glm::vec2 scale, const float rotation)
+void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation) const
 {
+	if (position.x + size.x < 0 || position.x > windowSize.x || position.y + size.y < 0 || position.y > windowSize.y)
+	{
+		return;
+	}
+	
 	spriteRenderer->shader.Use();
-	glm::mat4 model = glm::mat4(1.0f);
+	auto model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(position, 0.0f));  
 
-	model = glm::translate(model, glm::vec3(0.5f * scale.x, 0.5f * scale.y, 0.0f)); 
+	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); 
 	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); 
-	model = glm::translate(model, glm::vec3(-0.5f * scale.x, -0.5f * scale.y, 0.0f));
+	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
 
-	model = glm::scale(model, glm::vec3(scale,  1.0f)); 
+	model = glm::scale(model, glm::vec3(size,  1.0f)); 
   
 	spriteRenderer->shader.SetMatrix4("model", model);
-	spriteRenderer->shader.SetVector3f("spriteColor", spriteRenderer->color);
   
 	glActiveTexture(GL_TEXTURE0);
 	spriteRenderer->texture.Bind();
@@ -131,19 +134,19 @@ void Renderer::rendersprite(SpriteRenderer* spriteRenderer, const glm::vec2 posi
 	glBindVertexArray(0);
 }
 
-void Renderer::initialize()
+void Renderer::init()
 {
-	Griddy::Events::Instance()->subscribe(this, &Renderer::addToRenderQueue);
-	Griddy::Events::Instance()->subscribe(this, &Renderer::removeFromRenderQueue);
+	Griddy::Events::subscribe(this, &Renderer::addToRenderQueue);
+	Griddy::Events::subscribe(this, &Renderer::removeFromRenderQueue);
 }
 
-void Renderer::addToRenderQueue(OnSpriteRendererComponentStarted* event)
+void Renderer::addToRenderQueue(const OnSpriteRendererComponentStarted* event)
 {
-	event->spriteRenderer->shader = ResourceManager::GetShader("sprite");
+	event->spriteRenderer->shader.SetVector3f("spriteColor", event->spriteRenderer->getColor());
 	renderQueue.push_back(event->spriteRenderer);
 }
 
-void Renderer::removeFromRenderQueue(OnSpriteRendererComponentRemoved* event)
+void Renderer::removeFromRenderQueue(const OnSpriteRendererComponentRemoved* event)
 {
 	renderQueue.erase(std::ranges::remove(renderQueue, event->spriteRenderer).begin(), renderQueue.end());
 }

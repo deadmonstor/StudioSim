@@ -2,12 +2,19 @@
 #include "texture.h"
 
 Texture::Texture()
-	: Width(0), Height(0), Internal_Format(GL_RGB), Image_Format(GL_RGB), Wrap_S(GL_REPEAT), Wrap_T(GL_REPEAT), Filter_Min(GL_LINEAR), Filter_Max(GL_LINEAR)
+	: Width(0),
+	Height(0),
+	Internal_Format(GL_RGB),
+	Image_Format(GL_RGB),
+	Wrap_S(GL_REPEAT),
+	Wrap_T(GL_REPEAT),
+	Filter_Min(GL_LINEAR),
+	Filter_Max(GL_LINEAR)
 {
 	glGenTextures(1, &this->ID);
 }
 
-void Texture::Generate(const unsigned int width, const unsigned int height, const unsigned char* data)
+void Texture::Generate(const GLint width, const GLint height, const unsigned char* data)
 {
 	this->Width = width;
 	this->Height = height;

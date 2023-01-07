@@ -1,11 +1,11 @@
 ﻿#include "Tile.h"
 
-void Tile::SetTexture(const Texture &texture)
+void Tile::SetTexture(const Texture& _texture)
 {
-	this->texture = texture;
+	this->texture = _texture;
 }
 
-void Tile::SetShader(const Shader &shader)
+void Tile::SetShader(const Shader& _shader)
 {
-	this->shader = shader;
+	this->shader = _shader;
 }

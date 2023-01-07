@@ -7,6 +7,22 @@ NEW_EMPTY_EVENT(OnEngineStart);
 NEW_EMPTY_EVENT(OnEngineUpdate);
 NEW_EMPTY_EVENT(OnEngineStop);
 
+enum DebugEvent
+{
+	DebugRenderGrid,	
+	DebugPlaySound,	
+	DebugKeyEvents,	
+	DebugMouseEvents,	
+};
+
+class OnDebugEventChanged : public Griddy::Event
+{
+public:
+	OnDebugEventChanged(const DebugEvent key) : key(key) {}
+	DebugEvent key;
+};
+
+#pragma region Key Events
 class OnKey : public Griddy::Event
 {
 public:
@@ -31,6 +47,37 @@ class OnKeyRepeat : public OnKey
 {
 public:
 	OnKeyRepeat(const int key, const int scancode) : OnKey(key, scancode) {}
+};
+
+#pragma endregion 
+#pragma region Mouse Events
+class OnMouse : public Griddy::Event
+{
+public:
+	OnMouse(const int key, const int action) : key(key), action(action) {}
+	int key;
+	int action;
+};
+
+class OnMouseDown : public OnMouse
+{
+public:
+	OnMouseDown(const int key, const int action) : OnMouse(key, action) {}
+};
+
+class OnMouseUp : public OnMouse
+{
+public:
+	OnMouseUp(const int key, const int action) : OnMouse(key, action) {}
+};
+#pragma endregion
+
+class OnFileDropCallback : public Griddy::Event
+{
+public:
+	OnFileDropCallback(const int count, const char** paths) : count(count), paths(paths) {}
+	int count;
+	const char** paths;
 };
 
 class OnSpriteRendererComponentStarted : public Griddy::Event

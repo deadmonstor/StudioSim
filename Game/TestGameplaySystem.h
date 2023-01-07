@@ -1,12 +1,14 @@
 ﻿#pragma once
+#include "Input.h"
 #include "Components/TestGameComponent.h"
 #include "Core/SceneManager.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
+#include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
-#include "Core/Components/AnimatedSpriteRenderer.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -21,17 +23,16 @@ public:
 			float x = rand() % 1920;
 			float yy = rand() % 1080;
 			
-			auto* test = SceneManager::Instance()->createGameObject(glm::vec2 { x, yy } );
-			test->addComponent(new TestGameComponent());
+			auto* test = SceneManager::Instance()->createGameObject("Test-1", glm::vec2 { x, yy });
+			test->addComponent<TestGameComponent>();
 			test->getTransform()->SetScale(glm::vec2(100,100));
 
 			// pick a random texture between these 2
 			int textureIndex = rand() % 2;
 			
-			auto sprite = new SpriteRenderer();
-			sprite->color = glm::vec3(1,1,1);
+			auto sprite = test->addComponent<SpriteRenderer>();
+			sprite->setColor(glm::vec3(1,1,1));
 			sprite->texture = ResourceManager::GetTexture(textureIndex == 0 ? "face" : "face2");
-			test->addComponent(sprite);
 			sprites.push_back(sprite);
 			
 			test->getTransform()->SetRotation(rand() % 360);
@@ -40,117 +41,128 @@ public:
 			float r = (rand() % 100) / 100.0f;
 			float g = (rand() % 100) / 100.0f;
 			float b = (rand() % 100) / 100.0f;
-			sprite->color = glm::vec3(r, g, b);
+			sprite->setColor(glm::vec3(r, g, b));
 		}
+	}
+
+	void CreateFireball(glm::vec2 mousePos)
+	{
+		mousePos.x = mousePos.x -24;
+		mousePos.y = mousePos.y - 24;
+		
+		auto* fireball = SceneManager::Instance()->createGameObject("TestFireball", mousePos);
+		fireball->getTransform()->SetScale(glm::vec2(48, 48));
+
+		const std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
+		const auto sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
 	}
 
 	void TestFuncLewis(OnEngineStart*) 
 	{
-		auto *test = SceneManager::Instance()->createGameObject(glm::vec2{100, 100});
+		GridSystem::Instance()->init(glm::vec2(96, 48), glm::vec2(100, 100));
+		
+		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->SetScale(glm::vec2(96, 48));
 
-		std::vector<Texture> textureList =
-		{
-			ResourceManager::GetTexture("BlueSlime000"),
-			ResourceManager::GetTexture("BlueSlime001"),
-			ResourceManager::GetTexture("BlueSlime002"),
-			ResourceManager::GetTexture("BlueSlime003"),
-			ResourceManager::GetTexture("BlueSlime004"),
-			ResourceManager::GetTexture("BlueSlime005"),
-			ResourceManager::GetTexture("BlueSlime006"),
-		};
+		const auto cam = test->addComponent<Camera>();
+		Renderer::Instance()->SetCamera(cam);
 
-		auto sprite = new AnimatedSpriteRenderer(textureList, 0.05f);
-		sprite->color = glm::vec3(1, 1, 1);
-		test->addComponent(sprite);
+		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+		auto sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
 		sprites.push_back(sprite);
 
-		auto* testHurt = SceneManager::Instance()->createGameObject(glm::vec2{ 300, 300 });
+		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
 		testHurt->getTransform()->SetScale(glm::vec2(96, 48));
 
-		std::vector<Texture> textureListHurt =
-		{
-			ResourceManager::GetTexture("BlueSlimeHurt000"),
-			ResourceManager::GetTexture("BlueSlimeHurt001"),
-			ResourceManager::GetTexture("BlueSlimeHurt002"),
-			ResourceManager::GetTexture("BlueSlimeHurt003"),
-			ResourceManager::GetTexture("BlueSlimeHurt004"),
-			ResourceManager::GetTexture("BlueSlimeHurt005"),
-			ResourceManager::GetTexture("BlueSlimeHurt006"),
-			ResourceManager::GetTexture("BlueSlimeHurt007"),
-			ResourceManager::GetTexture("BlueSlimeHurt008"),
-			ResourceManager::GetTexture("BlueSlimeHurt009"),
-			ResourceManager::GetTexture("BlueSlimeHurt0010"),
-		};
-
-		sprite = new AnimatedSpriteRenderer(textureListHurt, 0.05f);
-		sprite->color = glm::vec3(1, 1, 1);
-		testHurt->addComponent(sprite);
-		sprites.push_back(sprite);
+		const std::vector textureListHurt = ResourceManager::GetTexturesContaining("Blue-Slime-Hurt");
+		sprite = testHurt->addComponent<AnimatedSpriteRenderer>(textureListHurt, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
 			
-
-		auto* fireball = SceneManager::Instance()->createGameObject(glm::vec2{ 200, 200 });
-		fireball->getTransform()->SetScale(glm::vec2(48, 48));
-
-		std::vector<Texture> textureListFireball =
-		{
-			ResourceManager::GetTexture("Fireball000"),
-			ResourceManager::GetTexture("Fireball001"),
-			ResourceManager::GetTexture("Fireball002"),
-			ResourceManager::GetTexture("Fireball003"),
-			ResourceManager::GetTexture("Fireball004"),
-			ResourceManager::GetTexture("Fireball005"),
-			ResourceManager::GetTexture("Fireball006"),
-			ResourceManager::GetTexture("Fireball007"),
-			ResourceManager::GetTexture("Fireball008"),
-			ResourceManager::GetTexture("Fireball009"),
-			ResourceManager::GetTexture("Fireball0010"),
-			ResourceManager::GetTexture("Fireball0011"),
-			ResourceManager::GetTexture("Fireball0012"),
-			ResourceManager::GetTexture("Fireball0013"),
-			ResourceManager::GetTexture("Fireball0014"),
-			
-
-		};
-
-		sprite = new AnimatedSpriteRenderer(textureListFireball, 0.05f);
-		sprite->color = glm::vec3(1, 1, 1);
-		fireball->addComponent(sprite);
-		sprites.push_back(sprite);
-
+		CreateFireball(glm::vec2{ 200, 200 });
 	}
 
+	glm::fvec2 direction = glm::fvec2(0, 0);
+	
 	void TestFuncUpdate(OnEngineUpdate*)
 	{
 		// Update all sprites color to be a random color
-		for (auto& sprite : sprites)
+		for (const auto& sprite : sprites)
 		{
 			Transform* transform = sprite->owner->getTransform();
-			transform->SetPosition(transform->GetPosition() + glm::vec2(2, 0));
+			transform->SetPosition(transform->GetPosition() + direction * (float)(100.0f * Time::getDeltaTime()));
 		}
 	}
 
-	void TestKeyDown(const OnKeyDown* KeyDownEvent)
+	void TestMouseDown(const OnMouseDown* mouseDownEvent)
 	{
-		const char* str = glfwGetKeyName(KeyDownEvent->key, KeyDownEvent->scancode);
-		if (!str) return;
-		std::string strs(str);
-		LOG_INFO("Down: " + strs);
+		const glm::vec2 mousePos = Input::getMousePosition();
+		
+		if (mouseDownEvent->key == GLFW_MOUSE_BUTTON_3)
+			CreateFireball(mousePos);
 	}
 
-	void TestKeyUp(const OnKeyUp* KeyUpEvent)
+	void testKeyDown(const OnKeyDown* keyDown)
 	{
-		const char* str = glfwGetKeyName(KeyUpEvent->key, KeyUpEvent->scancode);
-		if (!str) return;
-		std::string strs(str);
-		LOG_INFO("Up: " + strs);
+		if (keyDown->key == GLFW_KEY_W)
+		{
+			direction.y += -1;
+		}
+		else if (keyDown->key == GLFW_KEY_S)
+		{
+			direction.y += 1;
+		}
+		else if (keyDown->key == GLFW_KEY_A)
+		{
+			direction.x += -1;
+		}
+		else if (keyDown->key == GLFW_KEY_D)
+		{
+			direction.x += 1;
+		}
 	}
 
-	void TestKeyRepeat(const OnKeyRepeat* KeyRepeatEvent)
+	void testKeyUp(const OnKeyUp* keyUp)
 	{
-		const char* str = glfwGetKeyName(KeyRepeatEvent->key, KeyRepeatEvent->scancode);
-		if (!str) return;
-		std::string strs(str);
-		LOG_INFO("Repeat: " + strs);
+		if (keyUp->key == GLFW_KEY_W)
+		{
+			direction.y += 1;
+		}
+		else if (keyUp->key == GLFW_KEY_S)
+		{
+			direction.y -= 1;
+		}
+		else if (keyUp->key == GLFW_KEY_A)
+		{
+			direction.x += 1;
+		}
+		else if (keyUp->key == GLFW_KEY_D)
+		{
+			direction.x -= 1;
+		}
+	}
+	
+	void testDropCallback(const OnFileDropCallback* dropCallback)
+	{
+		LOG_INFO(dropCallback->count);
+		glm::ivec2 mousePos = Input::getMousePosition();
+		mousePos.x = mousePos.x - 24;
+		mousePos.y = mousePos.y - 24;
+		
+		for (int i = 0; i < dropCallback->count; i++)
+		{
+			const Texture texture = ResourceManager::LoadTexture(dropCallback->paths[i], dropCallback->paths[i]);
+		
+			auto* fireball = SceneManager::Instance()->createGameObject(dropCallback->paths[i], mousePos);
+			fireball->getTransform()->SetScale(glm::vec2(texture.Width, texture.Height));
+
+			const std::vector textureListFireball = ResourceManager::GetTexturesContaining(dropCallback->paths[i]);
+			const auto sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
+			sprite->setColor(glm::vec3(1, 1, 1));
+
+			mousePos.x = mousePos.x - texture.Width;
+			mousePos.y = mousePos.y - texture.Height;
+		}
 	}
 };

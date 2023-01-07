@@ -10,10 +10,31 @@ namespace Griddy
 	class Events : public SingletonTemplate<Events>
 	{
 	public:
-		typedef std::map<int, FunctionBase*> EventList;
+		typedef std::map<int8_t, FunctionBase*> EventList;
+
+		template<typename T, typename... Args>
+		static void invoke(Args... args)
+		{
+			Instance()->invokeInternal(new T(args...));
+		}
+
+		template<class T, class EventType>
+		static int8_t subscribe(T* instance, void (T::*func)(EventType*))
+		{
+			return Instance()->subscribeInternal(instance, func);
+		}
+
+		template<class T, class EventType>
+		static void unsubscribe(T* instance, void (T::*func)(EventType*), const int8_t id)
+		{
+			Instance()->unsubscribeInternal(instance, func, id);
+		}
+		
+	private:
+		std::map<std::type_index, EventList*> internalEvents;
 
 		template<typename EventType>
-		void invoke(EventType *event)
+		void invokeInternal(EventType *event)
 		{
 			const EventList* list = internalEvents[typeid(EventType)];
 
@@ -33,7 +54,7 @@ namespace Griddy
 		}
 
 		template<class T, class EventType>
-		int subscribe(T* instance, void (T::*func)(EventType*))
+		int8_t subscribeInternal(T* instance, void (T::*func)(EventType*))
 		{
 			EventList* list = internalEvents[typeid(EventType)];
 
@@ -44,7 +65,7 @@ namespace Griddy
 			}
 
 			// TODO: Check if this is slow? 
-			int nextID = 0;
+			int8_t nextID = 0;
 			for (const auto [i, it] : *list)
 			{
 				if (i > nextID)
@@ -58,7 +79,7 @@ namespace Griddy
 		}
 
 		template<class T, class EventType>
-		void unsubscribe(T*, void (T::*)(EventType*), const int id)
+		void unsubscribeInternal(T*, void (T::*)(EventType*), const int8_t id)
 		{
 			EventList* list = internalEvents[typeid(EventType)];
 
@@ -77,7 +98,5 @@ namespace Griddy
 				LOG_ERROR("Event not found");
 			}
 		}
-	private:
-		std::map<std::type_index, EventList*> internalEvents;
 	};
 }
