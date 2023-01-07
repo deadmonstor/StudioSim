@@ -60,7 +60,7 @@ namespace Griddy
 		glfwPollEvents();
 
 		SceneManager::Instance()->update();
-		Events::invoke(new OnEngineUpdate());
+		Events::invoke<OnEngineUpdate>();
 		
 		AudioEngine::Instance()->update();
 		// Check if we need to stop the engine
@@ -72,6 +72,11 @@ namespace Griddy
 		ImGuiHandler::Instance()->update();
 	}
 
+	void Engine::lateUpdate()
+	{
+		SceneManager::Instance()->lateUpdate();
+	}
+
 	void Engine::render()
 	{
 		Renderer::Instance()->render();
@@ -79,16 +84,16 @@ namespace Griddy
 		SceneManager::Instance()->render();
 		GridSystem::Instance()->render();
 		
-		ImGuiHandler::Instance()->render();
+		ImGuiHandler::render();
 		glfwSwapBuffers(Renderer::GetWindow());
 	}
 
 	void Engine::cleanup()
 	{
 		Renderer::Instance()->cleanup();
-		ImGuiHandler::Instance()->cleanup();
+		ImGuiHandler::cleanup();
 
-		Events::invoke(new OnEngineStop());
+		Events::invoke<OnEngineStop>();
 		glfwTerminate();
 	}
 
@@ -122,10 +127,11 @@ namespace Griddy
 
 			update();
 			render();
+			lateUpdate();
 
 			if (firstFrame)
 			{
-				Events::invoke(new OnEngineStart());
+				Events::invoke<OnEngineStart>();
 				firstFrame = false;
 			}
 		}

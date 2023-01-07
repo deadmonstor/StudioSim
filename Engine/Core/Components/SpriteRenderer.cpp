@@ -7,7 +7,7 @@
 
 SpriteRenderer::~SpriteRenderer()
 {
-	Griddy::Events::invoke(new OnSpriteRendererComponentRemoved(this));
+	Griddy::Events::invoke<OnSpriteRendererComponentRemoved>(this);
 }
 
 void SpriteRenderer::start()
@@ -15,7 +15,7 @@ void SpriteRenderer::start()
 	Component::start();
 	createBuffers();
 	
-	Griddy::Events::invoke(new OnSpriteRendererComponentStarted(this));
+	Griddy::Events::invoke<OnSpriteRendererComponentStarted>(this);
 }
 
 void SpriteRenderer::createBuffers()

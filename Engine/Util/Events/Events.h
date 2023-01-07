@@ -12,10 +12,10 @@ namespace Griddy
 	public:
 		typedef std::map<int8_t, FunctionBase*> EventList;
 
-		template<typename EventType>
-			static void invoke(EventType *event)
+		template<typename T, typename... Args>
+		static void invoke(Args... args)
 		{
-			Instance()->invokeInternal(event);
+			Instance()->invokeInternal(new T(args...));
 		}
 
 		template<class T, class EventType>

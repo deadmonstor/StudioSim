@@ -18,6 +18,7 @@ namespace Griddy
 
 		bool internalInit();
 		void update();
+		void lateUpdate();
 		void render();
 		void cleanup();
 	};

@@ -13,7 +13,7 @@
 #endif
 
 // Instantiate static variables
-std::map<std::string, Texture>    ResourceManager::Textures;
+std::map<std::string, Texture>      ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
 
 

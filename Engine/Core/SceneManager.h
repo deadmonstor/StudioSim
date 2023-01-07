@@ -15,6 +15,7 @@ public:
 	GameObject* createGameObject(glm::vec2 position);
 
 	void update() const;
+	void lateUpdate() const;
 	void render() const;
 
 	Scene* currentScene;

@@ -42,12 +42,12 @@ void ImGuiHandler::update()
 		{
 			if (ImGui::Button("Debug Render Grid"))
 			{
-				Griddy::Events::invoke(new OnDebugEventChanged(DebugRenderGrid));
+				Griddy::Events::invoke<OnDebugEventChanged>(DebugRenderGrid);
 			}
 
 			if (ImGui::Button("Play Sound"))
 			{
-				Griddy::Events::invoke(new OnDebugEventChanged(DebugPlaySound));
+				Griddy::Events::invoke<OnDebugEventChanged>(DebugPlaySound);
 			}
 			
 			ImGui::EndTabItem();

@@ -22,16 +22,15 @@ public:
 			float yy = rand() % 1080;
 			
 			auto* test = SceneManager::Instance()->createGameObject(glm::vec2 { x, yy } );
-			test->addComponent(new TestGameComponent());
+			test->addComponent<TestGameComponent>();
 			test->getTransform()->SetScale(glm::vec2(100,100));
 
 			// pick a random texture between these 2
 			int textureIndex = rand() % 2;
 			
-			auto sprite = new SpriteRenderer();
+			auto sprite = test->addComponent<SpriteRenderer>();
 			sprite->setColor(glm::vec3(1,1,1));
 			sprite->texture = ResourceManager::GetTexture(textureIndex == 0 ? "face" : "face2");
-			test->addComponent(sprite);
 			sprites.push_back(sprite);
 			
 			test->getTransform()->SetRotation(rand() % 360);
@@ -60,9 +59,8 @@ public:
 			ResourceManager::GetTexture("BlueSlime006"),
 		};
 
-		auto sprite = new AnimatedSpriteRenderer(textureList, 0.05f);
+		auto sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
-		test->addComponent(sprite);
 		sprites.push_back(sprite);
 
 		auto* testHurt = SceneManager::Instance()->createGameObject(glm::vec2{ 300, 300 });
@@ -83,9 +81,8 @@ public:
 			ResourceManager::GetTexture("BlueSlimeHurt0010"),
 		};
 
-		sprite = new AnimatedSpriteRenderer(textureListHurt, 0.05f);
+		sprite = testHurt->addComponent<AnimatedSpriteRenderer>(textureListHurt, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
-		testHurt->addComponent(sprite);
 		sprites.push_back(sprite);
 			
 
@@ -111,9 +108,8 @@ public:
 			ResourceManager::GetTexture("Fireball0014"),
 		};
 
-		sprite = new AnimatedSpriteRenderer(textureListFireball, 0.05f);
+		sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
-		fireball->addComponent(sprite);
 		sprites.push_back(sprite);
 
 	}

@@ -41,6 +41,15 @@ void SceneManager::update() const
 	}
 }
 
+void SceneManager::lateUpdate() const
+{
+	for (auto i : currentScene->gameObjects)
+	{
+		i->lateUpdate();
+	}
+}
+
+
 void SceneManager::render() const
 {
 	
