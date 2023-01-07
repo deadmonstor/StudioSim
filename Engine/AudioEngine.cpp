@@ -37,44 +37,21 @@ void AudioEngine::update()
 	fmodSystem->update(); 
 }
 
-bool AudioEngine::loadSound(const char *path, FMOD_MODE fMode) 
+bool AudioEngine::loadSound(const char *path, const FMOD_MODE fMode) 
 { 
 	//Check if sound exists
-	/* if (loadedSounds.contains(path)) 
-	{
-		//Already Loaded
-		LOG_ERROR("Trying to load already loaded sound");
-		return false;
-	}
-	else
-	{
-		FMOD::Sound *fmodSound = nullptr;
-		fmodSystem->createSound(path, FMOD_2D, nullptr, &fmodSound);
-		loadedSounds[path] = fmodSound;
-		return true;
-	}*/
-
-	if (ResourceManager::Sounds.contains(path)) 
+	if (ResourceManager::GetSound(path) != nullptr) 
 	{
 		LOG_ERROR("Trying to load already loaded sound");
 		return false;
 	}
-	else 
-	{
-		ResourceManager::LoadSound(path, FMOD_2D, fmodSystem);
-		return true;
-	}
+	
+	ResourceManager::LoadSound(path, fMode, fmodSystem);
+	return true;
 }
 
 bool AudioEngine::playSound(const char *path, bool isPaused, float volume)
 {
-	/* FMOD::Sound *sound = loadedSounds[path];
-
-	// Test Create Channel
-	FMOD::Channel *fmodChannel = nullptr;
-	fmodSystem->playSound(sound, nullptr, isPaused, &fmodChannel);
-	fmodChannel->setVolume(volume);
-	return true;*/
 	FMOD::Channel *fmodChannel = nullptr;
 	fmodSystem->playSound(ResourceManager::GetSound(path), nullptr, isPaused, &fmodChannel);
 	return true;
@@ -84,11 +61,11 @@ void AudioEngine::onDebugEvent(const OnDebugEventChanged* event)
 {
 	if (event->key == DebugPlaySound)
 	{
-		AudioEngine::Instance()->loadSound("Sounds\\griddy.mp3", FMOD_2D);
-		AudioEngine::Instance()->playSound("Sounds\\griddy.mp3", false, 0.1f);
+		Instance()->loadSound("Sounds\\griddy.mp3", FMOD_2D);
+		Instance()->playSound("Sounds\\griddy.mp3", false, 0.1f);
 
-		AudioEngine::Instance()->loadSound("Sounds\\doneit.mp3", FMOD_2D);
-		AudioEngine::Instance()->playSound("Sounds\\doneit.mp3", false, 0.1f);
+		Instance()->loadSound("Sounds\\doneit.mp3", FMOD_2D);
+		Instance()->playSound("Sounds\\doneit.mp3", false, 0.1f);
 	}
 }
 

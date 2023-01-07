@@ -2,13 +2,13 @@
 #include "Input.h"
 #include "Components/TestGameComponent.h"
 #include "Core/SceneManager.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
+#include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
-#include "Core/Components/AnimatedSpriteRenderer.h"
-#include "Core/Grid/GridSystem.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -56,7 +56,6 @@ public:
 		const std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
 		const auto sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
-		//sprites.push_back(sprite);
 	}
 
 	void TestFuncLewis(OnEngineStart*) 
@@ -72,7 +71,7 @@ public:
 		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
 		auto sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
-		sprites.push_back(sprite);/*
+		sprites.push_back(sprite);
 
 		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
 		testHurt->getTransform()->SetScale(glm::vec2(96, 48));
@@ -80,9 +79,8 @@ public:
 		const std::vector textureListHurt = ResourceManager::GetTexturesContaining("Blue-Slime-Hurt");
 		sprite = testHurt->addComponent<AnimatedSpriteRenderer>(textureListHurt, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
-		sprites.push_back(sprite);
 			
-		CreateFireball(glm::vec2{ 200, 200 });*/
+		CreateFireball(glm::vec2{ 200, 200 });
 	}
 
 	glm::fvec2 direction = glm::fvec2(0, 0);
@@ -148,25 +146,23 @@ public:
 	void testDropCallback(const OnFileDropCallback* dropCallback)
 	{
 		LOG_INFO(dropCallback->count);
-		glm::vec2 mousePos = Input::getMousePosition();
+		glm::ivec2 mousePos = Input::getMousePosition();
 		mousePos.x = mousePos.x - 24;
 		mousePos.y = mousePos.y - 24;
 		
 		for (int i = 0; i < dropCallback->count; i++)
 		{
-			LOG_INFO(dropCallback->paths[i]);
-			ResourceManager::LoadTexture(dropCallback->paths[i], dropCallback->paths[i]);
+			const Texture texture = ResourceManager::LoadTexture(dropCallback->paths[i], dropCallback->paths[i]);
 		
 			auto* fireball = SceneManager::Instance()->createGameObject(dropCallback->paths[i], mousePos);
-			fireball->getTransform()->SetScale(glm::vec2(48, 48));
+			fireball->getTransform()->SetScale(glm::vec2(texture.Width, texture.Height));
 
 			const std::vector textureListFireball = ResourceManager::GetTexturesContaining(dropCallback->paths[i]);
 			const auto sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
 			sprite->setColor(glm::vec3(1, 1, 1));
-			//sprites.push_back(sprite);
 
-			mousePos.x = mousePos.x - 48;
-			mousePos.y = mousePos.y - 48;
+			mousePos.x = mousePos.x - texture.Width;
+			mousePos.y = mousePos.y - texture.Height;
 		}
 	}
 };

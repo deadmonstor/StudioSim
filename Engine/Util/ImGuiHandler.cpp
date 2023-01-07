@@ -133,7 +133,7 @@ void ImGuiHandler::update()
 		if (ImGui::BeginTabItem("Image Window"))
 		{
 			const auto dice = ResourceManager::GetTexture("engine");
-			ImGui::Image((void *)(intptr_t)dice.ID, ImVec2((float)dice.Width, (float)dice.Height));
+			ImGui::Image((void *)(intptr_t)dice.ID, ImVec2((float)dice.Width * 5, (float)dice.Height * 5));
 			ImGui::EndTabItem();
 		}
 

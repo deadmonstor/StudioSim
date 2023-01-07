@@ -2,10 +2,8 @@
 #include <list>
 #include <map>
 #include <string>
-#include "Util/Audio/inc/fmod.h"
-#include "Util/Audio/inc/fmod_errors.h"
 #include "Util/Audio/inc/fmod.hpp"
-#include "Util//Audio/inc/fmod_common.h"
+#include "Util/Audio/inc/fmod_common.h"
 #include <vector>
 
 #include "shader.h"
@@ -14,7 +12,6 @@
 class ResourceManager
 {
 public:
-	static std::map<std::string, FMOD::Sound *> Sounds;
 
 	static Shader    LoadShader(const char *vShaderFile, const char *fShaderFile, const char *gShaderFile, std::string name);
 	static Shader    GetShader(std::string name);
@@ -35,6 +32,7 @@ private:
 	static Shader    loadShaderFromFile(const char *vShaderFile, const char *fShaderFile, const char *gShaderFile = nullptr);
 	static Texture   loadTextureFromFile(const char *file);
 
-	static std::map<std::string, Shader>    Shaders;
-	static std::map<std::string, Texture>   Textures;
+	static std::map<std::string, Shader>		Shaders;
+	static std::map<std::string, Texture>		Textures;
+	static std::map<std::string, FMOD::Sound*> Sounds;
 };

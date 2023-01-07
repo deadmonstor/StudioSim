@@ -13,8 +13,8 @@
 #endif
 
 // Instantiate static variables
-std::map<std::string, Texture>      ResourceManager::Textures;
-std::map<std::string, Shader>       ResourceManager::Shaders;
+std::map<std::string, Texture>          ResourceManager::Textures;
+std::map<std::string, Shader>           ResourceManager::Shaders;
 std::map<std::string, FMOD::Sound*>     ResourceManager::Sounds;
 
 Shader ResourceManager::LoadShader(const char *vShaderFile, const char *fShaderFile, const char *gShaderFile, std::string name)
@@ -58,7 +58,8 @@ std::list<Texture> ResourceManager::LoadTextureArray(const char* folder,
 
 Texture ResourceManager::GetTexture(std::string name)
 {
-    return Textures[name]; }
+    return Textures[name];
+}
 
 void ResourceManager::LoadSound(const char *path, FMOD_MODE fMode, FMOD::System *fmodSystem) 
 { 
@@ -175,7 +176,7 @@ Texture ResourceManager::loadTextureFromFile(const char *file)
     }
     else
     {
-        LOG_ERROR("ERROR::TEXTURE: Failed to load texture");
+        LOG_ERROR("ERROR::TEXTURE: Failed to load texture " + std::string(file));
         LOG_ERROR(stbi_failure_reason());
     }
     

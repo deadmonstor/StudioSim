@@ -29,7 +29,7 @@ namespace Griddy
 			Input::Instance()->mouseCallback(window, button, action, mods);
 	}
 
-	void drop_callback(GLFWwindow* window, int count, const char** paths)
+	void drop_callback(GLFWwindow* window, const int count, const char** paths)
 	{
 		Input::Instance()->dropCallback(window, count, paths);
 	}
@@ -133,9 +133,9 @@ namespace Griddy
 			return;
 		}
 		
-		ResourceManager::LoadTexture("shaders\\image.png", "face");
-		ResourceManager::LoadTexture("shaders\\image2.png", "face2");
-		ResourceManager::LoadTexture("shaders\\engine.png", "engine");
+		ResourceManager::LoadTexture("Sprites\\image.png", "face");
+		ResourceManager::LoadTexture("Sprites\\image2.png", "face2");
+		ResourceManager::LoadTexture("Sprites\\engine.png", "engine");
 		
 		bool firstFrame = true;
 		

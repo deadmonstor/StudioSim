@@ -38,7 +38,7 @@ public:
 	void SetWindowSize(glm::ivec2);
 	void SetWindowTitle(const std::string& title) const;
 	bool createWindow(const std::string &windowName);
-	void renderSprite(SpriteRenderer* spriteRenderer, glm::vec2 position, glm::vec2 scale, float rotation) const;
+	void renderSprite(SpriteRenderer* spriteRenderer, glm::vec2 position, glm::vec2 size, float rotation) const;
 	void cleanup() const;
 	void render();
 	void init();
