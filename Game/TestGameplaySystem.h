@@ -56,7 +56,7 @@ public:
 		const std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
 		const auto sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
-		sprites.push_back(sprite);
+		//sprites.push_back(sprite);
 	}
 
 	void TestFuncLewis(OnEngineStart*) 
@@ -66,10 +66,13 @@ public:
 		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->SetScale(glm::vec2(96, 48));
 
+		const auto cam = test->addComponent<Camera>();
+		Renderer::Instance()->SetCamera(cam);
+
 		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
 		auto sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
-		sprites.push_back(sprite);
+		sprites.push_back(sprite);/*
 
 		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
 		testHurt->getTransform()->SetScale(glm::vec2(96, 48));
@@ -79,16 +82,18 @@ public:
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprites.push_back(sprite);
 			
-		CreateFireball(glm::vec2{ 200, 200 });
+		CreateFireball(glm::vec2{ 200, 200 });*/
 	}
 
+	glm::fvec2 direction = glm::fvec2(0, 0);
+	
 	void TestFuncUpdate(OnEngineUpdate*)
 	{
 		// Update all sprites color to be a random color
 		for (const auto& sprite : sprites)
 		{
 			Transform* transform = sprite->owner->getTransform();
-			transform->SetPosition(transform->GetPosition() + glm::vec2(100 * Time::getDeltaTime(), 0));
+			transform->SetPosition(transform->GetPosition() + direction * (float)(100.0f * Time::getDeltaTime()));
 		}
 	}
 
@@ -96,6 +101,46 @@ public:
 	{
 		const glm::vec2 mousePos = Input::getMousePosition();
 		CreateFireball(mousePos);
+	}
+
+	void testKeyDown(const OnKeyDown* keyDown)
+	{
+		if (keyDown->key == GLFW_KEY_W)
+		{
+			direction.y = -1;
+		}
+		else if (keyDown->key == GLFW_KEY_S)
+		{
+			direction.y = 1;
+		}
+		else if (keyDown->key == GLFW_KEY_A)
+		{
+			direction.x = -1;
+		}
+		else if (keyDown->key == GLFW_KEY_D)
+		{
+			direction.x = 1;
+		}
+	}
+
+	void testKeyUp(const OnKeyUp* keyUp)
+	{
+		if (keyUp->key == GLFW_KEY_W)
+		{
+			direction.y = 0;
+		}
+		else if (keyUp->key == GLFW_KEY_S)
+		{
+			direction.y = 0;
+		}
+		else if (keyUp->key == GLFW_KEY_A)
+		{
+			direction.x = 0;
+		}
+		else if (keyUp->key == GLFW_KEY_D)
+		{
+			direction.x = 0;
+		}
 	}
 	
 	void testDropCallback(const OnFileDropCallback* dropCallback)

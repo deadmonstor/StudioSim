@@ -1,4 +1,6 @@
 #pragma once
+#include "Core/GameObject.h"
+#include "Core/Components/Transform.h"
 #include "Core/Renderer/Renderer.h"
 #include "Library/glfw3.h"
 #include "Util/SingletonTemplate.h"
@@ -100,6 +102,11 @@ public:
 		const glm::vec2 windowSize = Renderer::GetWindowSize();
 		x = std::clamp(x, 0.0, static_cast<double>(windowSize.x));
 		y = std::clamp(y, 0.0, static_cast<double>(windowSize.y));
+
+		const glm::vec2 camPos = Renderer::Instance()->GetCamera()->owner->getTransform()->GetPosition();
+		x += camPos.x - windowSize.x / 2.0f;
+		y += camPos.y - windowSize.y / 2.0f;
+		
 		return {x, y};
 	}
 

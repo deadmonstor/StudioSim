@@ -1,11 +1,10 @@
-﻿#include "Renderer.h"
+﻿#include <glad/glad.h>
+#include "Renderer.h"
 #include <Windows.h>
-#include <glad/glad.h>
 #include "ResourceManager.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
 #include "glm/gtx/transform.hpp"
-#include "Library/glfw3.h"
 #include "Util/Logger.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
@@ -108,10 +107,15 @@ void Renderer::render()
 	glDisable(GL_BLEND);
 }
 
-void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 position, const glm::vec2 scale, const float rotation)
+void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 position, const glm::vec2 scale, const float rotation) const
 {
+	if (position.x + scale.x < 0 || position.x > windowSize.x || position.y + scale.y < 0 || position.y > windowSize.y)
+	{
+		return;
+	}
+	
 	spriteRenderer->shader.Use();
-	glm::mat4 model = glm::mat4(1.0f);
+	auto model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(position, 0.0f));  
 
 	model = glm::translate(model, glm::vec3(0.5f * scale.x, 0.5f * scale.y, 0.0f)); 

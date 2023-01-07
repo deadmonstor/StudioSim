@@ -2,6 +2,9 @@
 
 #include <sstream>
 
+#include "Core/GameObject.h"
+#include "Core/Renderer/Renderer.h"
+
 void Transform::getDebugInfo(std::string* string)
 {
 	std::stringstream ss;
@@ -11,9 +14,16 @@ void Transform::getDebugInfo(std::string* string)
 	string->append(ss.str());
 }
 
+glm::vec2 Transform::GetPosition() const
+{
+	const glm::vec2 camPos = Renderer::Instance()->GetCameraPos();
+	return position - camPos;
+}
+
 void Transform::SetPosition(const glm::vec2 inPosition)
 {
-	this->position = inPosition;
+	const glm::vec2 camPos = Renderer::Instance()->GetCameraPos();
+	this->position = inPosition + camPos;
 }
 
 void Transform::SetRotation(const float inRotation)

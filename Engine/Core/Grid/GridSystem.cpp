@@ -35,22 +35,25 @@ void GridSystem::render()
 	
 	for(auto [x, pointer] : internalMap)
 	{
-		// TODO: Move this when we actually have a camera system
-		const float cameraX = Renderer::GetWindowSize().x;
-		const float cameraY = Renderer::GetWindowSize().y;
+		const auto windowSize = Renderer::GetWindowSize();
+		
+		const float cameraX = Renderer::Instance()->GetCameraPos().x;
+		const float cameraY = Renderer::Instance()->GetCameraPos().y;
 		
 		const float tileWidth = tileSize.x;
 		const float tileHeight = tileSize.y;
 		
-		if (x * tileWidth < 0.0f || x * tileWidth > cameraX + 10.0f) continue;
+		const float tileX = x * tileWidth;
 		
 		for(auto [y, holder] : pointer)
 		{
-			if (y * tileHeight < 0.0f || y * tileHeight > cameraY + 10.0f) continue;
+			const float tileY = y * tileHeight;
+			const auto pos = glm::vec2{tileX - cameraX, tileY - cameraY};
 			
 			internalMap[x][y]->tile->update();
+			
 			Renderer::Instance()->renderSprite(holder->tile,
-				{x * tileWidth, y * tileHeight},
+				pos - (windowSize / 2.0f),
 				{tileWidth, tileHeight},
 				0
 			);
