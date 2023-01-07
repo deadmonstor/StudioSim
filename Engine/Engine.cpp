@@ -26,6 +26,11 @@ namespace Griddy
 		ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
 		Input::Instance()->mouseCallback(window, button, action, mods);
 	}
+
+	void drop_callback(GLFWwindow* window, int count, const char** paths)
+	{
+		Input::Instance()->dropCallback(window, count, paths);
+	}
 	
 	bool Engine::init()
 	{
@@ -33,7 +38,6 @@ namespace Griddy
 		{
 			LOG_ERROR("Engine failed to initialize");
 
-			// TODO: Should cleanup actually be here?
 			cleanup();
 			return false;
 		}
@@ -52,12 +56,14 @@ namespace Griddy
 			return false;
 		}
 		
+		AudioEngine::Instance()->init();
+		Input::Instance()->init();
 		ImGuiHandler::Instance()->init();
 		m_Initialized = true;
 
-		AudioEngine::Instance()->init();
 		glfwSetKeyCallback(Renderer::GetWindow(), key_callback);
 		glfwSetMouseButtonCallback(Renderer::GetWindow(), mouse_callback);
+		glfwSetDropCallback(Renderer::GetWindow(), drop_callback);
 
 		// init
 		return true;

@@ -106,9 +106,19 @@ void ImGuiHandler::update()
 				Griddy::Events::invoke<OnDebugEventChanged>(DebugRenderGrid);
 			}
 
-			if (ImGui::Button("Play Sound"))
+			if (ImGui::Button("Debug Play Sound"))
 			{
 				Griddy::Events::invoke<OnDebugEventChanged>(DebugPlaySound);
+			}
+
+			if (ImGui::Button("Debug Key Events"))
+			{
+				Griddy::Events::invoke<OnDebugEventChanged>(DebugKeyEvents);
+			}
+
+			if (ImGui::Button("Debug Mouse Events"))
+			{
+				Griddy::Events::invoke<OnDebugEventChanged>(DebugMouseEvents);
 			}
 			
 			ImGui::EndTabItem();

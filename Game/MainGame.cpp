@@ -22,12 +22,8 @@ int main(int, char**)
 	
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncLewis);
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncUpdate);
-
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyDown);
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyUp);
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestKeyRepeat);
-
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestMouseUp);
+	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testDropCallback);
+	
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestMouseDown);
 	
 	MainGame::Instance()->run();

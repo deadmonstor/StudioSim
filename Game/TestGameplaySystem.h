@@ -47,12 +47,14 @@ public:
 
 	void CreateFireball(glm::vec2 mousePos)
 	{
+		mousePos.x = mousePos.x -24;
+		mousePos.y = mousePos.y - 24;
+		
 		auto* fireball = SceneManager::Instance()->createGameObject("TestFireball", mousePos);
 		fireball->getTransform()->SetScale(glm::vec2(48, 48));
 
-		std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
-
-		auto sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
+		const std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
+		const auto sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprites.push_back(sprite);
 	}
@@ -64,8 +66,7 @@ public:
 		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->SetScale(glm::vec2(96, 48));
 
-		std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
-
+		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
 		auto sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprites.push_back(sprite);
@@ -73,8 +74,7 @@ public:
 		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
 		testHurt->getTransform()->SetScale(glm::vec2(96, 48));
 
-		std::vector textureListHurt = ResourceManager::GetTexturesContaining("Blue-Slime-Hurt");
-
+		const std::vector textureListHurt = ResourceManager::GetTexturesContaining("Blue-Slime-Hurt");
 		sprite = testHurt->addComponent<AnimatedSpriteRenderer>(textureListHurt, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprites.push_back(sprite);
@@ -92,50 +92,34 @@ public:
 		}
 	}
 
-	void TestKeyDown(const OnKeyDown* KeyDownEvent)
-	{
-		const char* str = glfwGetKeyName(KeyDownEvent->key, KeyDownEvent->scancode);
-		if (!str) return;
-
-		std::string strs(str);
-		LOG_INFO("Down: " + strs);
-	}
-
-	void TestKeyUp(const OnKeyUp* KeyUpEvent)
-	{
-		const char* str = glfwGetKeyName(KeyUpEvent->key, KeyUpEvent->scancode);
-		if (!str) return;
-
-		const std::string strs(str);
-		LOG_INFO("Up: " + strs);
-	}
-
-	void TestKeyRepeat(const OnKeyRepeat* KeyRepeatEvent)
-	{
-		const char* str = glfwGetKeyName(KeyRepeatEvent->key, KeyRepeatEvent->scancode);
-		if (!str) return;
-
-		const std::string strs(str);
-		LOG_INFO("Repeat: " + strs);
-	}
-
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)
 	{
-		const std::string strs(std::to_string(mouseDownEvent->key));
-		LOG_INFO("Mouse-Down: " + strs);
-
 		const glm::vec2 mousePos = Input::getMousePosition();
-		LOG_INFO("Mouse Position: " + std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
-		
 		CreateFireball(mousePos);
 	}
-
-	void TestMouseUp(const OnMouseUp* mouseUpEvent)
+	
+	void testDropCallback(const OnFileDropCallback* dropCallback)
 	{
-		std::string strs(std::to_string(mouseUpEvent->key));
-		LOG_INFO("Mouse-Up: " + strs);
+		LOG_INFO(dropCallback->count);
+		glm::vec2 mousePos = Input::getMousePosition();
+		mousePos.x = mousePos.x - 24;
+		mousePos.y = mousePos.y - 24;
+		
+		for (int i = 0; i < dropCallback->count; i++)
+		{
+			LOG_INFO(dropCallback->paths[i]);
+			ResourceManager::LoadTexture(dropCallback->paths[i], dropCallback->paths[i]);
+		
+			auto* fireball = SceneManager::Instance()->createGameObject(dropCallback->paths[i], mousePos);
+			fireball->getTransform()->SetScale(glm::vec2(48, 48));
 
-		const glm::vec2 mousePos = Input::getMousePosition();
-		LOG_INFO("Mouse Position: " + std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
+			const std::vector textureListFireball = ResourceManager::GetTexturesContaining(dropCallback->paths[i]);
+			const auto sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
+			sprite->setColor(glm::vec3(1, 1, 1));
+			sprites.push_back(sprite);
+
+			mousePos.x = mousePos.x - 48;
+			mousePos.y = mousePos.y - 48;
+		}
 	}
 };

@@ -11,6 +11,8 @@ enum DebugEvent
 {
 	DebugRenderGrid,	
 	DebugPlaySound,	
+	DebugKeyEvents,	
+	DebugMouseEvents,	
 };
 
 class OnDebugEventChanged : public Griddy::Event
@@ -69,6 +71,14 @@ public:
 	OnMouseUp(const int key, const int action) : OnMouse(key, action) {}
 };
 #pragma endregion
+
+class OnFileDropCallback : public Griddy::Event
+{
+public:
+	OnFileDropCallback(const int count, const char** paths) : count(count), paths(paths) {}
+	int count;
+	const char** paths;
+};
 
 class OnSpriteRendererComponentStarted : public Griddy::Event
 {
