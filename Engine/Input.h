@@ -1,11 +1,10 @@
 #pragma once
 #include "Library/glfw3.h"
-#include "Util/Logger.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
 
-class KeyboardInput : public SingletonTemplate<KeyboardInput>
+class Input : public SingletonTemplate<Input>
 {
 public:
 	void keyCallback(GLFWwindow* window, const int key, const int scancode, const int action, int mods) const

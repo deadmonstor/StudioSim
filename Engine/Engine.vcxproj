@@ -26,7 +26,7 @@
     <ClInclude Include="Core\SceneManager.h" />
     <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="KeyboardInput.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Library\Aixlog.hpp" />
     <ClInclude Include="Library\glfw3.h" />
     <ClInclude Include="Library\glfw3native.h" />

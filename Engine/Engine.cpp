@@ -1,7 +1,7 @@
 ﻿#include "Engine.h"
 #include <Windows.h>
 #include "AudioEngine.h"
-#include "KeyboardInput.h"
+#include "Input.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/Renderer.h"
@@ -18,13 +18,13 @@ namespace Griddy
 	void key_callback(GLFWwindow* window, const int key, const int scancode, const int action, const int mods)
 	{
 		ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
-		KeyboardInput::Instance()->keyCallback(window, key, scancode, action, mods);
+		Input::Instance()->keyCallback(window, key, scancode, action, mods);
 	}
 
 	void mouse_callback(GLFWwindow* window, const int button, const int action, const int mods)
 	{
 		ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
-		KeyboardInput::Instance()->mouseCallback(window, button, action, mods);
+		Input::Instance()->mouseCallback(window, button, action, mods);
 	}
 	
 	bool Engine::init()

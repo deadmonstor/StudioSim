@@ -19,6 +19,7 @@ class Renderer : public SingletonTemplate<Renderer>
 	
 public:
 	static GLFWwindow* GetWindow() { return Instance()->window; }
+	static glm::vec2 GetWindowSize() { return Instance()->windowSize; }
 	
 	// TODO: Change this to vector when we have it
 	void SetWindowSize(glm::ivec2);

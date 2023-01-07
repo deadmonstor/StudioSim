@@ -7,49 +7,51 @@
 #include "Util/Logger.h"
 #include "Util/Events/Events.h"
 
-GridSystem::GridSystem()
+void GridSystem::init(const glm::fvec2 _tileSize, const glm::ivec2 _gridSize)
 {
-	for(int x = 0; x < 100; x++)
-	for(int y = 0; y < 100; y++)
-	{
-		map[x][y] = new GridHolder();
-		
-		std::vector<Texture> textureList =
+	tileSize = _tileSize;
+	gridSize = _gridSize;
+	
+	for(int x = 0; x < gridSize.x; x++)
+		for(int y = 0; y < gridSize.y; y++)
 		{
-			ResourceManager::GetTexture("BlueSlimeHurt000"),
-			ResourceManager::GetTexture("BlueSlimeHurt001"),
-			ResourceManager::GetTexture("BlueSlimeHurt002"),
-			ResourceManager::GetTexture("BlueSlimeHurt003"),
-			ResourceManager::GetTexture("BlueSlimeHurt004"),
-			ResourceManager::GetTexture("BlueSlimeHurt005"),
-			ResourceManager::GetTexture("BlueSlimeHurt006"),
-			ResourceManager::GetTexture("BlueSlimeHurt007"),
-			ResourceManager::GetTexture("BlueSlimeHurt008"),
-			ResourceManager::GetTexture("BlueSlimeHurt009"),
-			ResourceManager::GetTexture("BlueSlimeHurt0010"),
-		};
-		map[x][y]->tile = new Tile(textureList, 0.05f);
-		map[x][y]->tile->createBuffers();
-	}
+			std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Hurt");
+
+			internalMap[x][y] = new GridHolder();
+			internalMap[x][y]->tile = new Tile(textureList, 0.075f);
+			internalMap[x][y]->tile->createBuffers();
+		}
 
 	// subscribe to the event
 	Griddy::Events::subscribe(this, &GridSystem::onDebugEvent);
 }
+
 void GridSystem::render()
 {
-	if (!shouldRender) return;
+	if (!shouldRender || internalMap.empty()) return;
 	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	for(auto [x, pointer] : map)
+	for(auto [x, pointer] : internalMap)
 	{
+		// TODO: Move this when we actually have a camera system
+		const float cameraX = Renderer::GetWindowSize().x;
+		const float cameraY = Renderer::GetWindowSize().y;
+		
+		const float tileWidth = tileSize.x;
+		const float tileHeight = tileSize.y;
+		
+		if (x * tileWidth < 0.0f || x * tileWidth > cameraX + 10.0f) continue;
+		
 		for(auto [y, holder] : pointer)
 		{
-			map[x][y]->tile->update();
+			if (y * tileHeight < 0.0f || y * tileHeight > cameraY + 10.0f) continue;
+			
+			internalMap[x][y]->tile->update();
 			Renderer::Instance()->renderSprite(holder->tile,
-				{x * 96, y * 64},
-				{96, 64},
+				{x * tileWidth, y * tileHeight},
+				{tileWidth, tileHeight},
 				0
 			);
 		}
@@ -62,4 +64,9 @@ void GridSystem::onDebugEvent(const OnDebugEventChanged* event)
 {
 	if (event->key == DebugRenderGrid)
 		shouldRender = !shouldRender;
+}
+
+Tile* GridSystem::getTile(const glm::ivec2& _pos)
+{
+	return internalMap[_pos.x][_pos.y]->tile;
 }

@@ -104,6 +104,7 @@ void Renderer::render()
 		const Transform* transform = spriteRenderer->owner->getTransform();
 		renderSprite(spriteRenderer, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
 	}
+	
 	glDisable(GL_BLEND);
 }
 

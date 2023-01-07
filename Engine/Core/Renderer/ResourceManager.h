@@ -1,7 +1,9 @@
 ﻿#pragma once
 
+#include <list>
 #include <map>
 #include <string>
+#include <vector>
 
 #include "shader.h"
 #include "texture.h"
@@ -18,8 +20,10 @@ public:
 	static Shader    GetShader(std::string name);
 	// loads (and generates) a texture from file
 	static Texture LoadTexture(const char *file, bool alpha, std::string name);
+	static std::list<Texture> LoadTextureArray(const char* folder, bool alpha, std::string name, int numTextures);
 	// retrieves a stored texture
 	static Texture GetTexture(std::string name);
+	static std::vector<Texture> GetTexturesContaining(std::string name);
 	// properly de-allocates all loaded resources
 	static void      Clear();
 private:
