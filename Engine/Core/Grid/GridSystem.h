@@ -14,7 +14,7 @@ struct GridHolder
 class GridSystem : public SingletonTemplate<GridSystem>
 {
 	std::map<int, std::map<int, GridHolder*>> map;
-	bool shouldRender = true;
+	bool shouldRender = false;
 	
 public:
 	GridSystem();

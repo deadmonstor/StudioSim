@@ -112,7 +112,7 @@ namespace Griddy
 		
 		ResourceManager::LoadTexture("shaders\\image.png", false, "face");
 		ResourceManager::LoadTexture("shaders\\image2.png", true, "face2");
-		ResourceManager::LoadTexture("shaders\\PNG_transparency_demonstration_1.png", true, "dice");
+		ResourceManager::LoadTexture("shaders\\engine.png", true, "engine");
 		
 		bool firstFrame = true;
 		

@@ -1,5 +1,7 @@
 ﻿#include "SpriteRenderer.h"
 #include <glad/glad.h>
+
+#include "Core/Renderer/ResourceManager.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
 
@@ -41,6 +43,8 @@ void SpriteRenderer::createBuffers()
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);  
 	glBindVertexArray(0);
+
+	shader = ResourceManager::GetShader("sprite");
 }
 
 void SpriteRenderer::update()
@@ -51,4 +55,10 @@ void SpriteRenderer::update()
 void SpriteRenderer::lateUpdate()
 {
 	Component::lateUpdate();
+}
+
+void SpriteRenderer::setColor(const glm::vec3 color)
+{
+	this->color = color;
+	shader.SetVector3f("spriteColor", color);
 }

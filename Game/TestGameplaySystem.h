@@ -29,7 +29,7 @@ public:
 			int textureIndex = rand() % 2;
 			
 			auto sprite = new SpriteRenderer();
-			sprite->color = glm::vec3(1,1,1);
+			sprite->setColor(glm::vec3(1,1,1));
 			sprite->texture = ResourceManager::GetTexture(textureIndex == 0 ? "face" : "face2");
 			test->addComponent(sprite);
 			sprites.push_back(sprite);
@@ -40,7 +40,7 @@ public:
 			float r = (rand() % 100) / 100.0f;
 			float g = (rand() % 100) / 100.0f;
 			float b = (rand() % 100) / 100.0f;
-			sprite->color = glm::vec3(r, g, b);
+			sprite->setColor(glm::vec3(r, g, b));
 		}
 	}
 
@@ -61,7 +61,7 @@ public:
 		};
 
 		auto sprite = new AnimatedSpriteRenderer(textureList, 0.05f);
-		sprite->color = glm::vec3(1, 1, 1);
+		sprite->setColor(glm::vec3(1, 1, 1));
 		test->addComponent(sprite);
 		sprites.push_back(sprite);
 
@@ -84,7 +84,7 @@ public:
 		};
 
 		sprite = new AnimatedSpriteRenderer(textureListHurt, 0.05f);
-		sprite->color = glm::vec3(1, 1, 1);
+		sprite->setColor(glm::vec3(1, 1, 1));
 		testHurt->addComponent(sprite);
 		sprites.push_back(sprite);
 			
@@ -112,7 +112,7 @@ public:
 		};
 
 		sprite = new AnimatedSpriteRenderer(textureListFireball, 0.05f);
-		sprite->color = glm::vec3(1, 1, 1);
+		sprite->setColor(glm::vec3(1, 1, 1));
 		fireball->addComponent(sprite);
 		sprites.push_back(sprite);
 

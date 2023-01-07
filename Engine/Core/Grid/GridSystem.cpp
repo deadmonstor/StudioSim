@@ -30,7 +30,6 @@ GridSystem::GridSystem()
 		};
 		map[x][y]->tile = new Tile(textureList, 0.05f);
 		map[x][y]->tile->createBuffers();
-		map[x][y]->tile->SetShader(ResourceManager::GetShader("sprite"));
 	}
 
 	// subscribe to the event
@@ -48,7 +47,7 @@ void GridSystem::render()
 		for(auto [y, holder] : pointer)
 		{
 			map[x][y]->tile->update();
-			Renderer::Instance()->rendersprite(holder->tile,
+			Renderer::Instance()->renderSprite(holder->tile,
 				{x * 96, y * 64},
 				{96, 64},
 				0

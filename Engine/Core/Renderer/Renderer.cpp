@@ -12,7 +12,7 @@
 
 void error_callback(const int error, const char *msg)
 {
-	std::string s = " [" + std::to_string(error) + "] " + msg + '\n';
+	const std::string s = "GLFW: [" + std::to_string(error) + "] " + msg + '\n';
 	LOG_ERROR(s);
 }
 
@@ -102,12 +102,12 @@ void Renderer::render()
 	for (SpriteRenderer* spriteRenderer : renderQueue)
 	{
 		const Transform* transform = spriteRenderer->owner->getTransform();
-		rendersprite(spriteRenderer, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
+		renderSprite(spriteRenderer, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
 	}
 	glDisable(GL_BLEND);
 }
 
-void Renderer::rendersprite(SpriteRenderer* spriteRenderer, const glm::vec2 position, glm::vec2 scale, const float rotation)
+void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 position, glm::vec2 scale, const float rotation)
 {
 	spriteRenderer->shader.Use();
 	glm::mat4 model = glm::mat4(1.0f);
@@ -120,7 +120,6 @@ void Renderer::rendersprite(SpriteRenderer* spriteRenderer, const glm::vec2 posi
 	model = glm::scale(model, glm::vec3(scale,  1.0f)); 
   
 	spriteRenderer->shader.SetMatrix4("model", model);
-	spriteRenderer->shader.SetVector3f("spriteColor", spriteRenderer->color);
   
 	glActiveTexture(GL_TEXTURE0);
 	spriteRenderer->texture.Bind();
@@ -136,9 +135,9 @@ void Renderer::initialize()
 	Griddy::Events::subscribe(this, &Renderer::removeFromRenderQueue);
 }
 
-void Renderer::addToRenderQueue(OnSpriteRendererComponentStarted* event)
+void Renderer::addToRenderQueue(const OnSpriteRendererComponentStarted* event)
 {
-	event->spriteRenderer->shader = ResourceManager::GetShader("sprite");
+	event->spriteRenderer->shader.SetVector3f("spriteColor", event->spriteRenderer->getColor());
 	renderQueue.push_back(event->spriteRenderer);
 }
 

@@ -37,24 +37,9 @@ void ImGuiHandler::update()
 		{
 			sLog += s + "\n";
 		}
-
-		if (ImGui::BeginTabItem("Logging Window"))
-		{
-			ImGui::Text("%s", sLog.c_str());
-			ImGui::EndTabItem();
-		}
-
-		if (ImGui::BeginTabItem("Image Window"))
-		{
-			const auto dice = ResourceManager::GetTexture("dice");
-			ImGui::Image((void *)(intptr_t)dice.ID, ImVec2((float)dice.Width, (float)dice.Height));
-			ImGui::EndTabItem();
-		}
-
+		
 		if (ImGui::BeginTabItem("Debug Settings Window"))
 		{
-			ImGui::NewLine();
-			
 			if (ImGui::Button("Debug Render Grid"))
 			{
 				Griddy::Events::invoke(new OnDebugEventChanged(DebugRenderGrid));
@@ -65,6 +50,19 @@ void ImGuiHandler::update()
 				Griddy::Events::invoke(new OnDebugEventChanged(DebugPlaySound));
 			}
 			
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Logging Window"))
+		{
+			ImGui::Text("%s", sLog.c_str());
+			ImGui::EndTabItem();
+		}
+		
+		if (ImGui::BeginTabItem("Image Window"))
+		{
+			const auto dice = ResourceManager::GetTexture("engine");
+			ImGui::Image((void *)(intptr_t)dice.ID, ImVec2((float)dice.Width, (float)dice.Height));
 			ImGui::EndTabItem();
 		}
 		

@@ -24,12 +24,12 @@ public:
 	void SetWindowSize(glm::ivec2);
 	void SetWindowTitle(const std::string& title) const;
 	bool createWindow(const std::string &windowName);
-	void rendersprite(SpriteRenderer* spriteRenderer, glm::vec2 position, glm::vec2 scale, float rotation);
+	void renderSprite(SpriteRenderer* spriteRenderer, glm::vec2 position, glm::vec2 scale, float rotation);
 	void cleanup() const;
 	void render();
 	void initialize();
 
-	void addToRenderQueue(OnSpriteRendererComponentStarted* OnSpriteRendererComponentStartedEvent);
+	void addToRenderQueue(const OnSpriteRendererComponentStarted* OnSpriteRendererComponentStartedEvent);
 	void removeFromRenderQueue(OnSpriteRendererComponentRemoved* OnSpriteRendererComponentRemovedEvent);
 	std::list<SpriteRenderer*> renderQueue;
 };
