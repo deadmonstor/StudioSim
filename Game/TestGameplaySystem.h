@@ -161,7 +161,7 @@ public:
 			const std::vector textureListFireball = ResourceManager::GetTexturesContaining(dropCallback->paths[i]);
 			const auto sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
 			sprite->setColor(glm::vec3(1, 1, 1));
-			sprites.push_back(sprite);
+			//sprites.push_back(sprite);
 
 			mousePos.x = mousePos.x - 48;
 			mousePos.y = mousePos.y - 48;

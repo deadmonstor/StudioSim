@@ -69,7 +69,8 @@ void ResourceManager::LoadSound(const char *path, FMOD_MODE fMode, FMOD::System 
 
 FMOD::Sound *ResourceManager::GetSound(const char *path) 
 { 
-    return Sounds[path]; }
+    return Sounds[path];
+}
 
 std::vector<Texture> ResourceManager::GetTexturesContaining(const std::string name)
 {

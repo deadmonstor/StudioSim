@@ -24,7 +24,9 @@ namespace Griddy
 	void mouse_callback(GLFWwindow* window, const int button, const int action, const int mods)
 	{
 		ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
-		Input::Instance()->mouseCallback(window, button, action, mods);
+		
+		if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
+			Input::Instance()->mouseCallback(window, button, action, mods);
 	}
 
 	void drop_callback(GLFWwindow* window, int count, const char** paths)
