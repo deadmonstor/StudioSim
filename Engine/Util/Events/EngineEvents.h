@@ -15,6 +15,7 @@ enum DebugEvent
 	DebugKeyEvents,	
 	DebugMouseEvents,	
 	DebugMouseLight,	
+	DebugLightColor,	
 };
 
 class OnDebugEventChanged : public Griddy::Event

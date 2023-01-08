@@ -40,6 +40,7 @@ public:
 	void SetWindowSize(glm::ivec2);
 	void SetWindowTitle(const std::string& title) const;
 	bool createWindow(const std::string &windowName);
+	void DoLight(::SpriteRenderer* spriteRenderer, int& i, const glm::vec2& position, const glm::vec4& lightColorBase) const;
 	void renderSprite(SpriteRenderer* spriteRenderer, glm::vec2 position, glm::vec2 size, float rotation) const;
 	void cleanup() const;
 	void render();

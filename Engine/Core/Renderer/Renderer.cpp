@@ -5,9 +5,11 @@
 #include "Input.h"
 #include "ResourceManager.h"
 #include "Core/GameObject.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
 #include "glm/gtx/transform.hpp"
 #include "Util/Logger.h"
+#include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
 
@@ -51,7 +53,6 @@ void Renderer::SetWindowSize(const glm::ivec2 value)
 	ResourceManager::GetShader("sprite").SetInteger("u_normals", 1);
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
 	ResourceManager::GetShader("sprite").SetVector2f("Resolution", {value.x, value.y});
-	ResourceManager::GetShader("sprite").SetVector4f("LightColor", {1.0f, 0.75f, 0.3f, 1.0f});
 	ResourceManager::GetShader("sprite").SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0});
 	ResourceManager::GetShader("sprite").SetVector3f("Falloff", {.4f, 3.0f, 20.0f});
 	
@@ -117,6 +118,33 @@ void Renderer::render()
 }
 
 static bool showMouseLight = false;
+static bool debugLightColor = false;
+
+void Renderer::DoLight(SpriteRenderer* spriteRenderer, int& i, const glm::vec2& position, const glm::vec4& lightColorBase) const
+{
+	glm::vec2 lightPos = position;
+	lightPos.x = lightPos.x / windowSize.x;
+	lightPos.y = lightPos.y / windowSize.y * -1 + 1;
+
+	glm::vec4 lightColor = lightColorBase;
+
+	if (debugLightColor)
+	{
+		const auto base_value = Time::getTime();
+	
+		auto r = 0.5 * (sin(base_value - 2)	    + 1);
+		auto g = 0.5 * (sin(base_value + 2)	    + 1);
+		auto b = 0.5 * (sin(base_value      )	    + 1);
+	
+		lightColor = glm::vec4(r,g,b, 0.5f);
+	}
+		
+		
+	spriteRenderer->shader.SetVector3f(("uLightsPos[" + std::to_string(i) + "]").c_str(), glm::vec3(lightPos, 0.1f));
+	spriteRenderer->shader.SetVector4f(("uLightColor["+ std::to_string(i) + "]").c_str(), lightColor);
+	i += 1;
+}
+
 void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation) const
 {
 	if (position.x + size.x < 0 || position.x > windowSize.x || position.y + size.y < 0 || position.y > windowSize.y)
@@ -139,25 +167,15 @@ void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 posi
 	int i = 0;
 	if (showMouseLight)
 	{
-		glm::vec2 lightPos = Input::getMousePosition();
-		lightPos.x = (lightPos.x / windowSize.x);
-		lightPos.y = (lightPos.y / windowSize.y) * -1 + 1;
-		
-		spriteRenderer->shader.SetVector3f(("uLightsPos[" + std::to_string(i) + "]").c_str(), glm::vec3(lightPos, 0.1f));
-		i = 1;	
+		DoLight(spriteRenderer, i, Input::getMousePosition(), {1.0f, 0.75f, 0.3f, 1.0f});	
 	}
 	
 	for (const Light* light : lightRenderQueue)
 	{
-		glm::vec2 lightPos = light->owner->getTransform()->GetPosition();
-		lightPos.x = (lightPos.x / windowSize.x);
-		lightPos.y = (lightPos.y / windowSize.y) * -1 + 1;
-		
-		spriteRenderer->shader.SetVector3f(("uLightsPos[" + std::to_string(i) + "]").c_str(), glm::vec3(lightPos, 0.1f));
-		i += 1;
+		DoLight(spriteRenderer, i, light->owner->getTransform()->GetPosition(), light->getColor());	
 	}
 	
-	spriteRenderer->shader.SetFloat("uLightCount", i);
+	spriteRenderer->shader.SetInteger("uLightCount", i);
 
 	glActiveTexture(GL_TEXTURE1);
 	spriteRenderer->normals.Bind();
@@ -204,6 +222,9 @@ void Renderer::onDebugEvent(const OnDebugEventChanged* event)
 {
 	if (event->key == DebugMouseLight)
 		showMouseLight = !showMouseLight;
+
+	if (event->key == DebugLightColor)
+		debugLightColor = !debugLightColor;
 		
 }
 

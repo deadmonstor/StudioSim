@@ -100,7 +100,8 @@ static std::map<std::string, DebugEvent> debugSettings
 	{"Debug Play Sound", DebugPlaySound},
 	{"Debug Key Events", DebugKeyEvents},
 	{"Debug Mouse Events", DebugMouseEvents},
-	{"Debug Mouse Light", DebugMouseLight}
+	{"Debug Mouse Light", DebugMouseLight},
+	{"Debug Light Color", DebugLightColor}
 };
 
 void ImGuiHandler::update()
