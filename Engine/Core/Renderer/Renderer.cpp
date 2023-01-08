@@ -48,13 +48,9 @@ void Renderer::SetWindowSize(const glm::ivec2 value)
 	
 	const glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(value.x), 
 											static_cast<float>(value.y), 0.0f, -1.0f, 1.0f);
-	
-	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
-	ResourceManager::GetShader("sprite").SetInteger("u_normals", 1);
-	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+
+	ResourceManager::GetShader("sprite").Use().SetMatrix4("projection", projection);
 	ResourceManager::GetShader("sprite").SetVector2f("Resolution", {value.x, value.y});
-	ResourceManager::GetShader("sprite").SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0.05f});
-	ResourceManager::GetShader("sprite").SetVector3f("Falloff", {.4f, 3.0f, 20.0f});
 	
 	glfwSetWindowSize(window, value.x, value.y);
 }
@@ -90,6 +86,10 @@ bool Renderer::createWindow(const std::string &windowName)
 	}
 	
 	ResourceManager::LoadShader("Shader/sprite.vs", "Shader/sprite.frag", nullptr, "sprite");
+	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
+	ResourceManager::GetShader("sprite").SetInteger("u_normals", 1);
+	ResourceManager::GetShader("sprite").SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0.05f});
+	
 	return true;
 }
 
