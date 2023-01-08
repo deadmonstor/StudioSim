@@ -134,6 +134,7 @@ namespace Griddy
 		}
 		
 		ResourceManager::LoadTexture("Sprites\\image.png", "face");
+		ResourceManager::LoadTexture("Sprites\\rock_n.png", "normals");
 		ResourceManager::LoadTexture("Sprites\\image2.png", "face2");
 		ResourceManager::LoadTexture("Sprites\\engine.png", "engine");
 		
