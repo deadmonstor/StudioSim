@@ -27,7 +27,7 @@ void AnimatedSpriteRenderer::update()
 	{
 		currentIndex = 0;
 		Griddy::Events::invoke<OnAnimationEnded>(this);
-		if (owner->isBeingDeleted()) return;
+		if (owner == NULL || owner->isBeingDeleted()) return;
 	}
 
 	texture = textureList[currentIndex];
