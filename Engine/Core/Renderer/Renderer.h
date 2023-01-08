@@ -4,10 +4,12 @@
 
 #include "Core/GameObject.h"
 #include "Core/Components/Camera.h"
+#include "Core/Components/Light.h"
 #include "Core/Components/Transform.h"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 #include "Util/SingletonTemplate.h"
+#include "Util/Events/EngineEvents.h"
 
 class OnSpriteRendererComponentRemoved;
 class OnSpriteRendererComponentStarted;
@@ -43,7 +45,12 @@ public:
 	void render();
 	void init();
 
-	void addToRenderQueue(const OnSpriteRendererComponentStarted* OnSpriteRendererComponentStartedEvent);
-	void removeFromRenderQueue(const OnSpriteRendererComponentRemoved* OnSpriteRendererComponentRemovedEvent);
-	std::list<SpriteRenderer*> renderQueue;
+	void addToRenderQueue(const OnSpriteRendererComponentStarted*);
+	void removeFromRenderQueue(const OnSpriteRendererComponentRemoved*);
+	void addToLightQueue(const OnLightComponentStarted*);
+	void removeFromLightQueue(const OnLightComponentRemoved*);
+	void onDebugEvent(const OnDebugEventChanged* event);
+
+	std::list<SpriteRenderer*> spriteRenderQueue;
+	std::list<Light*> lightRenderQueue;
 };

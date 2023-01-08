@@ -14,6 +14,7 @@
     <ClInclude Include="Core\Component.h" />
     <ClInclude Include="Core\Components\AnimatedSpriteRenderer.h" />
     <ClInclude Include="Core\Components\Camera.h" />
+    <ClInclude Include="Core\Components\Light.h" />
     <ClInclude Include="Core\Components\SpriteRenderer.h" />
     <ClInclude Include="Core\Components\Transform.h" />
     <ClInclude Include="Core\GameObject.h" />
@@ -477,6 +478,7 @@
   <ItemGroup>
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Components\AnimatedSpriteRenderer.cpp" />
+    <ClCompile Include="Core\Components\Light.cpp" />
     <ClCompile Include="Core\Components\SpriteRenderer.cpp" />
     <ClCompile Include="Core\Components\Transform.cpp" />
     <ClCompile Include="Core\GameObject.cpp" />
