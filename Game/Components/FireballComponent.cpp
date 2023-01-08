@@ -16,8 +16,8 @@ void FireballComponent::start()
 	Component::start();
 
 	const std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
-	owner->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.1f);
 	owner->addComponent<Light>();
+	owner->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.15f);
 
 	Griddy::Events::subscribe(this, &FireballComponent::onAnimationEnded);
 }

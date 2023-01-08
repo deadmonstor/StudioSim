@@ -141,13 +141,15 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char *
     
     if (vertexCode.empty())
     {
-        LOG_ERROR("ERROR::SHADER: Failed to read vertex shader file");
+        std::string errorFile(vShaderFile);
+        LOG_ERROR("ERROR::SHADER: Failed to read vertex shader file, file: " + errorFile);
         abort();
     }
     
     if (fragmentCode.empty())
     {
-        LOG_ERROR("ERROR::SHADER: Failed to read fragment shader file");
+        std::string errorFile(fShaderFile);
+        LOG_ERROR("ERROR::SHADER: Failed to read fragment shader file, file: " + errorFile);
         abort();
     }
     

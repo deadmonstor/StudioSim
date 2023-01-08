@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
+#include "Core/Renderer/Lighting.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "imgui/imgui_impl_glfw.h"
@@ -57,15 +58,16 @@ namespace Griddy
 		{
 			return false;
 		}
-		
+
+		Lighting::Instance()->init();
 		AudioEngine::Instance()->init();
 		Input::Instance()->init();
 		ImGuiHandler::Instance()->init();
 		m_Initialized = true;
 
-		glfwSetKeyCallback(Renderer::GetWindow(), key_callback);
-		glfwSetMouseButtonCallback(Renderer::GetWindow(), mouse_callback);
-		glfwSetDropCallback(Renderer::GetWindow(), drop_callback);
+		glfwSetKeyCallback(Renderer::getWindow(), key_callback);
+		glfwSetMouseButtonCallback(Renderer::getWindow(), mouse_callback);
+		glfwSetDropCallback(Renderer::getWindow(), drop_callback);
 
 		// init
 		return true;
@@ -81,7 +83,7 @@ namespace Griddy
 		
 		AudioEngine::Instance()->update();
 		// Check if we need to stop the engine
-		if (auto *window = Renderer::GetWindow(); window == nullptr || glfwWindowShouldClose(window))
+		if (auto *window = Renderer::getWindow(); window == nullptr || glfwWindowShouldClose(window))
 		{
 			m_Running = false;
 		}
@@ -102,7 +104,7 @@ namespace Griddy
 		//GridSystem::Instance()->render();
 		
 		ImGuiHandler::render();
-		glfwSwapBuffers(Renderer::GetWindow());
+		glfwSwapBuffers(Renderer::getWindow());
 	}
 
 	void Engine::cleanup()

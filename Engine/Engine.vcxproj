@@ -20,6 +20,7 @@
     <ClInclude Include="Core\GameObject.h" />
     <ClInclude Include="Core\Grid\GridSystem.h" />
     <ClInclude Include="Core\Grid\Tile.h" />
+    <ClInclude Include="Core\Renderer\Lighting.h" />
     <ClInclude Include="Core\Renderer\Renderer.h" />
     <ClInclude Include="Core\Renderer\ResourceManager.h" />
     <ClInclude Include="Core\Renderer\Shader.h" />
@@ -470,6 +471,7 @@
     <ClInclude Include="Util\Events\Events.h" />
     <ClInclude Include="Util\Events\FunctionHandler.h" />
     <ClInclude Include="Util\Events\EngineEvents.h" />
+    <ClInclude Include="Util\Events\RenderEvents.h" />
     <ClInclude Include="Util\ImGuiHandler.h" />
     <ClInclude Include="Util\Logger.h" />
     <ClInclude Include="Util\SingletonTemplate.h" />
@@ -484,6 +486,7 @@
     <ClCompile Include="Core\GameObject.cpp" />
     <ClCompile Include="Core\Grid\GridSystem.cpp" />
     <ClCompile Include="Core\Grid\Tile.cpp" />
+    <ClCompile Include="Core\Renderer\Lighting.cpp" />
     <ClCompile Include="Core\Renderer\Renderer.cpp" />
     <ClCompile Include="Core\Renderer\ResourceManager.cpp" />
     <ClCompile Include="Core\Renderer\Shader.cpp" />
