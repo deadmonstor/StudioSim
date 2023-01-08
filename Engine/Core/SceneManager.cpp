@@ -15,6 +15,8 @@ void SceneManager::destroyScene(const Scene* scene)
 	{
 		destroyGameObject(object);
 	}
+
+	deleteAllPendingObjects();
 }
 
 bool SceneManager::changeScene(const std::string& scene)
@@ -71,6 +73,22 @@ void SceneManager::update() const
 	}
 }
 
+void SceneManager::deleteAllPendingObjects() const
+{
+	for(auto i = currentScene->gameObjects.begin(); i != currentScene->gameObjects.end();)
+	{
+		if ((*i)->beingDeleted)
+		{
+			delete *i;
+			i = currentScene->gameObjects.erase(i);
+		}
+		else
+		{
+			++i;
+		}
+	}
+}
+
 void SceneManager::lateUpdate() const
 {
 	for (auto i : currentScene->gameObjects)
@@ -78,14 +96,7 @@ void SceneManager::lateUpdate() const
 		i->lateUpdate();
 	}
 
-	for (auto i : currentScene->gameObjects)
-	{
-		if (i->beingDeleted)
-		{
-			currentScene->gameObjects.erase(std::ranges::remove(currentScene->gameObjects, i).begin(), currentScene->gameObjects.end());
-			delete i;
-		}
-	}
+	deleteAllPendingObjects();
 }
 
 

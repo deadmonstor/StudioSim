@@ -155,10 +155,10 @@ void Renderer::DoLight(SpriteRenderer* spriteRenderer, int& i, const glm::vec2& 
 	if (debugLightColor)
 	{
 		const auto base_value = Time::getTime();
-	
-		auto r = 0.5 * (sin(base_value - 2)	    + 1);
-		auto g = 0.5 * (sin(base_value + 2)	    + 1);
-		auto b = 0.5 * (sin(base_value      )	    + 1);
+
+		const auto r = 0.5 * (sin(base_value - 2)	    + 1);
+		const auto g = 0.5 * (sin(base_value + 2)	    + 1);
+		const auto b = 0.5 * (sin(base_value      )	    + 1);
 	
 		lightColor = glm::vec4(r,g,b, 0.5f);
 	}
