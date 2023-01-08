@@ -156,4 +156,9 @@ namespace Griddy
 
 		cleanup();
 	}
+
+	void Engine::shutdown()
+	{
+		m_Running = false;
+	}
 }

@@ -3,5 +3,4 @@
 
 class Camera final : public Component
 {
-	
 };
