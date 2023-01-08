@@ -87,7 +87,7 @@ public:
 		sprite = testHurt->addComponent<AnimatedSpriteRenderer>(textureListHurt, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
 			
-		CreateFireball(glm::vec2{ 200, 200 });
+		CreateFireball(glm::vec2{ 1000, 500 });
 	}
 
 	glm::fvec2 direction = glm::fvec2(0, 0);

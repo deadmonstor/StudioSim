@@ -1,11 +1,11 @@
 ﻿#include "Light.h"
-
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
 
 Light::~Light()
 {
 	Griddy::Events::invoke<OnLightComponentRemoved>(this);
+	Component::~Component();
 }
 
 void Light::start()

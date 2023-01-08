@@ -12,10 +12,10 @@ out vec4 color;
 uniform vec2 Resolution;      //resolution of screen
 
 #define MAX_LIGHTS 10
-uniform float uLightCount;
+uniform int uLightCount;
 uniform vec3 uLightsPos[MAX_LIGHTS];
+uniform vec4 uLightColor[MAX_LIGHTS];      //light RGBA -- alpha is intensity
 
-uniform vec4 LightColor;      //light RGBA -- alpha is intensity
 uniform vec4 AmbientColor;    //ambient RGBA -- alpha is intensity 
 uniform vec3 Falloff;         //attenuation coefficients
 
@@ -40,6 +40,7 @@ void main()
 		//normalize our vectors
 		vec3 N = normalize(NormalMap * 2.0 - 1.0);
 
+		vec4 LightColor = uLightColor[i];
 		//Pre-multiply light color with intensity
 		//Then perform "N dot L" to determine our diffuse term
 		vec3 Diffuse = (LightColor.rgb * LightColor.a) * max(dot(N, vec3(1)), 0.0);
