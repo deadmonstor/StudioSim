@@ -18,6 +18,7 @@ void error_callback(const int error, const char *msg)
 void framebuffer_size_callback(GLFWwindow* window, const int width, const int height)
 {
 	glViewport(0, 0, width, height);
+	Renderer::Instance()->SetWindowSize({width, height});
 }
 
 void Renderer::SetWindowTitle(const std::string& title) const

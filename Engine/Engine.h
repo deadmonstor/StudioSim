@@ -9,6 +9,7 @@ namespace Griddy
 	public:
 		bool init();
 		void run();
+		void shutdown();
 
 		static bool isRunning() { return Instance()->m_Running; }
 		static bool isInitialized() { return Instance()->m_Initialized; }

@@ -29,6 +29,7 @@ bool AudioEngine::init()
 	}
 
 	Griddy::Events::subscribe(this, &AudioEngine::onDebugEvent);
+	return true;
 }
 
 void AudioEngine::update() 

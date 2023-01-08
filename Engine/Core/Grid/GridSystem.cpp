@@ -53,7 +53,7 @@ void GridSystem::render()
 			internalMap[x][y]->tile->update();
 			
 			Renderer::Instance()->renderSprite(holder->tile,
-				pos - (windowSize / 2.0f),
+				pos - windowSize / 2.0f,
 				{tileWidth, tileHeight},
 				0
 			);
