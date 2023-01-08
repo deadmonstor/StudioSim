@@ -29,6 +29,7 @@ void GameObject::update()
 {
 	for (Component* curComponent : components)
 	{
+		if (isBeingDeleted()) return;
 		curComponent->update();
 	}
 }
@@ -37,6 +38,7 @@ void GameObject::lateUpdate()
 {
 	for (Component* curComponent : components)
 	{
+		if (isBeingDeleted()) return;
 		curComponent->lateUpdate();
 	}
 }

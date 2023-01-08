@@ -1,7 +1,11 @@
 #include "AnimatedSpriteRenderer.h"
 
 #include <utility>
+
+#include "Core/GameObject.h"
 #include "Util/Time.h"
+#include "Util/Events/EngineEvents.h"
+#include "Util/Events/Events.h"
 
 AnimatedSpriteRenderer::AnimatedSpriteRenderer(std::vector<Texture> textureList, const double updateEveryXMS)
 {
@@ -20,7 +24,11 @@ void AnimatedSpriteRenderer::update()
 	currentIndex++;
 
 	if (textureList.size() <= currentIndex)
+	{
 		currentIndex = 0;
+		Griddy::Events::invoke<OnAnimationEnded>(this);
+		if (owner->isBeingDeleted()) return;
+	}
 
 	texture = textureList[currentIndex];
 	lastUpdate = Time::getTime();

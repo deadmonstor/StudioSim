@@ -13,6 +13,7 @@ class GameObject
 	std::list<Component*> components;
 	Transform* transform {};
 	bool isInitialized = false;
+	bool beingDeleted = false;
 	
 	[[nodiscard]] Component* hasComponentInternal(const type_info &type_info) const;
 	void addComponent(Component* component);
@@ -26,6 +27,7 @@ public:
 	[[nodiscard]] Transform* getTransform() const { return transform; }
 	[[nodiscard]] bool isValidTransform() const { return transform != nullptr; }
 	[[nodiscard]] std::string getName() const { return name; }
+	[[nodiscard]] bool isBeingDeleted() const { return beingDeleted; }
 
 	template<typename T, typename... Args>
 	std::enable_if_t<std::is_base_of_v<Component, T>, T*> addComponent(Args... args)

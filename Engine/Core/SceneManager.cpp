@@ -58,17 +58,9 @@ GameObject* SceneManager::createGameObject(const std::string name, const glm::ve
 	return created;
 }
 
-void SceneManager::destroyGameObject(const GameObject* gameObject) const
+void SceneManager::destroyGameObject(GameObject* gameObject) const
 {
-	for (auto it = currentScene->gameObjects.begin(); it != currentScene->gameObjects.end(); ++it)
-	{
-		if (*it == gameObject)
-		{
-			currentScene->gameObjects.erase(it);
-			delete gameObject;
-			return;
-		}
-	}
+	gameObject->beingDeleted = true;
 }
 
 void SceneManager::update() const
@@ -84,6 +76,15 @@ void SceneManager::lateUpdate() const
 	for (auto i : currentScene->gameObjects)
 	{
 		i->lateUpdate();
+	}
+
+	for (auto i : currentScene->gameObjects)
+	{
+		if (i->beingDeleted)
+		{
+			currentScene->gameObjects.erase(std::ranges::remove(currentScene->gameObjects, i).begin(), currentScene->gameObjects.end());
+			delete i;
+		}
 	}
 }
 

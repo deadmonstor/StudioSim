@@ -15,7 +15,7 @@ public:
 	bool changeScene(const std::string& scene);
 	bool init();
 	GameObject* createGameObject(const ::std::string name, glm::vec2 position);
-	void destroyGameObject(const GameObject* gameObject) const;
+	void destroyGameObject(GameObject* gameObject) const;
 
 	void update() const;
 	void lateUpdate() const;

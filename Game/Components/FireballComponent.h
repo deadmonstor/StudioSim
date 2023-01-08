@@ -1,10 +1,12 @@
 ﻿#pragma once
 #include "Core/Component.h"
+#include "Util/Events/EngineEvents.h"
 
-class TestGameComponent : public Component
+class FireballComponent : public Component
 {
 public:
 	void start() override;
 	void update() override;
 	void lateUpdate() override;
+	void onAnimationEnded(OnAnimationEnded* event);
 };
