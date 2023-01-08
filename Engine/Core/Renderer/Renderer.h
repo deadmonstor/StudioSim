@@ -5,54 +5,38 @@
 #include "Core/GameObject.h"
 #include "Core/Components/Camera.h"
 #include "Core/Components/Light.h"
-#include "Core/Components/Transform.h"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 #include "Util/SingletonTemplate.h"
-#include "Util/Events/EngineEvents.h"
+#include "Util/Events/RenderEvents.h"
 
-class OnSpriteRendererComponentRemoved;
-class OnSpriteRendererComponentStarted;
 class SpriteRenderer;
-
 struct GLFWwindow;
 class Renderer : public SingletonTemplate<Renderer>
 {
 	GLFWwindow* window = nullptr;
-	glm::vec2 windowSize = { 1, 1 };
 	Camera* mainCam = nullptr;
-	
-public:
-	static GLFWwindow* GetWindow() { return Instance()->window; }
-	static glm::vec2 GetWindowSize() { return Instance()->windowSize; }
+	glm::vec2 windowSize = { 1, 1 };
+	std::list<SpriteRenderer*> spriteRenderQueue;
 
-	[[nodiscard]] glm::vec2 GetCameraPos() const
-	{
-		if (mainCam == nullptr  || mainCam->owner == nullptr || !mainCam->owner->isValidTransform() )
-			return {0, 0};
-		
-		return mainCam->owner->getTransform()->position - GetWindowSize() / 2.f;
-	}
+	friend class Lighting;
+public:
+	static GLFWwindow* getWindow() { return Instance()->window; }
+	static glm::vec2 getWindowSize() { return Instance()->windowSize; }
+
+	[[nodiscard]] glm::vec2 getCameraPos() const;
+	void setCamera(Camera* cam) { mainCam = cam; }
+	[[nodiscard]] Camera* getCamera() const { return mainCam; }
 	
-	void SetCamera(Camera* cam) { mainCam = cam; }
-	[[nodiscard]] Camera* GetCamera() const { return mainCam; }
-	
-	// TODO: Change this to vector when we have it
-	void SetWindowSize(glm::ivec2);
-	void SetWindowTitle(const std::string& title) const;
+	void setWindowSize(glm::ivec2);
+	void setWindowTitle(const std::string& title) const;
 	bool createWindow(const std::string &windowName);
-	void DoLight(SpriteRenderer* spriteRenderer, int& i, const glm::vec2& position, const glm::vec4& lightColorBase, const glm::vec3& falloff) const;
 	void renderSprite(SpriteRenderer* spriteRenderer, glm::vec2 position, glm::vec2 size, float rotation) const;
+	
 	void cleanup() const;
 	void render();
 	void init();
 
 	void addToRenderQueue(const OnSpriteRendererComponentStarted*);
 	void removeFromRenderQueue(const OnSpriteRendererComponentRemoved*);
-	void addToLightQueue(const OnLightComponentStarted*);
-	void removeFromLightQueue(const OnLightComponentRemoved*);
-	void onDebugEvent(const OnDebugEventChanged* event);
-
-	std::list<SpriteRenderer*> spriteRenderQueue;
-	std::list<Light*> lightRenderQueue;
 };

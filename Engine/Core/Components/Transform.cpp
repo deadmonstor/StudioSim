@@ -16,13 +16,13 @@ void Transform::getDebugInfo(std::string* string)
 
 glm::vec2 Transform::GetPosition() const
 {
-	const glm::vec2 camPos = Renderer::Instance()->GetCameraPos();
+	const glm::vec2 camPos = Renderer::Instance()->getCameraPos();
 	return position - camPos;
 }
 
 void Transform::SetPosition(const glm::vec2 inPosition)
 {
-	const glm::vec2 camPos = Renderer::Instance()->GetCameraPos();
+	const glm::vec2 camPos = Renderer::Instance()->getCameraPos();
 	this->position = inPosition + camPos;
 }
 

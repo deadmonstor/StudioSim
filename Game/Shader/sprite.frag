@@ -11,7 +11,7 @@ out vec4 color;
 //values used for shading algorithm...
 uniform vec2 Resolution;      //resolution of screen
 
-#define MAX_LIGHTS 10
+#define MAX_LIGHTS 100
 uniform int uLightCount;
 uniform vec3 uLightsPos[MAX_LIGHTS];
 uniform vec4 uLightColor[MAX_LIGHTS];      //light RGBA -- alpha is intensity

@@ -7,5 +7,5 @@ void Tile::SetTexture(const Texture& _texture)
 
 void Tile::SetShader(const Shader& _shader)
 {
-	this->shader = _shader;
+	this->setShader(_shader);
 }

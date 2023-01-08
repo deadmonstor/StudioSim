@@ -8,7 +8,7 @@
 
 void SceneManager::destroyScene(const Scene* scene)
 {
-	Renderer::Instance()->SetCamera(nullptr);
+	Renderer::Instance()->setCamera(nullptr);
 	
 	const auto gameObjects = scene->gameObjects;
 	for(const auto object : gameObjects)

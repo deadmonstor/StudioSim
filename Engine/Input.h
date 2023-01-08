@@ -99,11 +99,11 @@ public:
 		double x, y;
 		glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 		
-		const glm::vec2 windowSize = Renderer::GetWindowSize();
+		const glm::vec2 windowSize = Renderer::getWindowSize();
 		x = std::clamp(x, 0.0, static_cast<double>(windowSize.x));
 		y = std::clamp(y, 0.0, static_cast<double>(windowSize.y));
 
-		if (const auto camera = Renderer::Instance()->GetCamera(); camera != nullptr)
+		if (const auto camera = Renderer::Instance()->getCamera(); camera != nullptr)
 		{
 			if (const auto owner = camera->owner; owner != nullptr)
 			{

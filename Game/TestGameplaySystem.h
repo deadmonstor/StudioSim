@@ -34,6 +34,23 @@ public:
 			return;
 
 		GameObject* test;
+		SpriteRenderer* sprite;
+
+		test = SceneManager::Instance()->createGameObject("Background", glm::vec2 { -(1920 / 2), -(1080 / 2) });
+		test->getTransform()->SetScale(glm::vec2(1920 * 1.3, 1080 * 1.3));
+		sprite = test->addComponent<SpriteRenderer>();
+		sprite->texture = ResourceManager::GetTexture("background");
+		sprite->setColor(glm::vec3(1, 1, 1));
+		sprites.push_back(sprite);
+
+		auto troll = SceneManager::Instance()->createGameObject("troll", glm::vec2 { -855, -540 + 127  });
+		troll->getTransform()->SetScale(glm::vec2(339, 26));
+
+		auto trollsprite = troll->addComponent<SpriteRenderer>();
+		trollsprite->setLit(false);
+		trollsprite->texture = ResourceManager::GetTexture("troll");
+		trollsprite->setColor(glm::vec3(1, 1, 1));
+		sprites.push_back(trollsprite);
 		
 		for (int y = 0; y < 100; y++)
 		{
@@ -47,7 +64,7 @@ public:
 			// pick a random texture between these 2
 			const int textureIndex = rand() % 2;
 
-			const auto sprite = test->addComponent<SpriteRenderer>();
+			sprite = test->addComponent<SpriteRenderer>();
 			sprite->setColor(glm::vec3(1,1,1));
 			sprite->texture = ResourceManager::GetTexture(textureIndex == 0 ? "face" : "face2");
 		}
@@ -56,9 +73,9 @@ public:
 		test->getTransform()->SetScale(glm::vec2(96, 48));
 		
 		auto cam = test->addComponent<Camera>();
-		Renderer::Instance()->SetCamera(cam);
+		Renderer::Instance()->setCamera(cam);
 		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
-		const auto sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
+		sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
         sprite->setColor(glm::vec3(1, 1, 1));
         sprites.push_back(sprite);
 	}
@@ -89,7 +106,7 @@ public:
 		test->getTransform()->SetScale(glm::vec2(96, 48));
 		
 		auto cam = test->addComponent<Camera>();
-		Renderer::Instance()->SetCamera(cam);
+		Renderer::Instance()->setCamera(cam);
 
 		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
 		sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);

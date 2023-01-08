@@ -35,10 +35,10 @@ void GridSystem::render()
 	
 	for(auto [x, pointer] : internalMap)
 	{
-		const auto windowSize = Renderer::GetWindowSize();
+		const auto windowSize = Renderer::getWindowSize();
 		
-		const float cameraX = Renderer::Instance()->GetCameraPos().x;
-		const float cameraY = Renderer::Instance()->GetCameraPos().y;
+		const float cameraX = Renderer::Instance()->getCameraPos().x;
+		const float cameraY = Renderer::Instance()->getCameraPos().y;
 		
 		const float tileWidth = tileSize.x;
 		const float tileHeight = tileSize.y;
