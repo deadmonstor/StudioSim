@@ -18,6 +18,7 @@ public:
 	void destroyGameObject(GameObject* gameObject) const;
 
 	void update() const;
+	void deleteAllPendingObjects() const;
 	void lateUpdate() const;
 	void render() const;
 
