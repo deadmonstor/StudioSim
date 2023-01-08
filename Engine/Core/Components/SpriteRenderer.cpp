@@ -7,6 +7,7 @@
 
 SpriteRenderer::~SpriteRenderer()
 {
+	Component::~Component();
 	Griddy::Events::invoke<OnSpriteRendererComponentRemoved>(this);
 }
 

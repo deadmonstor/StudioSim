@@ -15,13 +15,14 @@ uniform vec2 Resolution;      //resolution of screen
 uniform int uLightCount;
 uniform vec3 uLightsPos[MAX_LIGHTS];
 uniform vec4 uLightColor[MAX_LIGHTS];      //light RGBA -- alpha is intensity
+uniform vec3 uFalloff[MAX_LIGHTS];         //attenuation coefficients
 
 uniform vec4 AmbientColor;    //ambient RGBA -- alpha is intensity 
-uniform vec3 Falloff;         //attenuation coefficients
 
 void main()
 {
-	vec3 Sum = vec3(0.0);
+	vec3 Ambient = AmbientColor.rgb * AmbientColor.a;
+	vec3 Sum = Ambient;
 
 	for(int i=0; i < uLightCount; ++i)
 	{
@@ -38,21 +39,19 @@ void main()
 		float D = length(LightDir);
 
 		//normalize our vectors
+		vec4 LightColor = uLightColor[i];
 		vec3 N = normalize(NormalMap * 2.0 - 1.0);
 
-		vec4 LightColor = uLightColor[i];
 		//Pre-multiply light color with intensity
 		//Then perform "N dot L" to determine our diffuse term
 		vec3 Diffuse = (LightColor.rgb * LightColor.a) * max(dot(N, vec3(1)), 0.0);
 
-		//pre-multiply ambient color with intensity
-		vec3 Ambient = AmbientColor.rgb * AmbientColor.a;
-
 		//calculate attenuation
+		vec3 Falloff = uFalloff[i];
 		float Attenuation = 1.0 / ( Falloff.x + (Falloff.y*D) + (Falloff.z*D*D) );
 
 		//the calculation which brings it all together
-		vec3 Intensity = Ambient + Diffuse * Attenuation;
+		vec3 Intensity = Diffuse * Attenuation;
 
 		vec4 DiffuseColor = vec4(spriteColor, 1.0);
 		vec3 FinalColor = DiffuseColor.rgb * Intensity;

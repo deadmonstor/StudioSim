@@ -16,6 +16,7 @@ enum DebugEvent
 	DebugMouseEvents,	
 	DebugMouseLight,	
 	DebugLightColor,	
+	DebugChangeScene,	
 };
 
 class OnDebugEventChanged : public Griddy::Event
@@ -23,6 +24,13 @@ class OnDebugEventChanged : public Griddy::Event
 public:
 	OnDebugEventChanged(const DebugEvent key) : key(key) {}
 	DebugEvent key;
+};
+
+class OnSceneChangeRequested : public Griddy::Event
+{
+public:
+	OnSceneChangeRequested(const std::string key) : key(key) {}
+	std::string key;
 };
 
 class OnSceneChanged : public Griddy::Event
@@ -116,4 +124,11 @@ class OnLightComponentRemoved : public Griddy::Event
 public:
 	explicit OnLightComponentRemoved(Light* light) : light(light) {}
 	Light* light;
+};
+
+class OnGameObjectRemoved : public Griddy::Event
+{
+public:
+	explicit OnGameObjectRemoved(GameObject* _gameObject) : gameObject(_gameObject) {}
+	GameObject* gameObject;
 };

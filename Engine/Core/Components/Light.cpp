@@ -4,8 +4,8 @@
 
 Light::~Light()
 {
-	Griddy::Events::invoke<OnLightComponentRemoved>(this);
 	Component::~Component();
+	Griddy::Events::invoke<OnLightComponentRemoved>(this);
 }
 
 void Light::start()

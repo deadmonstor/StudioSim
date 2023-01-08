@@ -104,6 +104,12 @@ static std::map<std::string, DebugEvent> debugSettings
 	{"Debug Light Color", DebugLightColor}
 };
 
+static std::map<std::string, std::string> debugScenes
+{
+	{"Debug Rendering", "renderScene"},
+	{"Debug Scene", "debugScene"},
+};
+
 void ImGuiHandler::update()
 {
 #if (NDEBUG)
@@ -134,6 +140,19 @@ void ImGuiHandler::update()
 				if(ImGui::MenuItem(name.c_str()))
 				{
 					Griddy::Events::invoke<OnDebugEventChanged>(debugEvent);
+				}
+			}
+			
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Scenes"))
+		{
+			for (auto& [name, sceneName] : debugScenes)
+			{
+				if(ImGui::MenuItem(name.c_str()))
+				{
+					Griddy::Events::invoke<OnSceneChangeRequested>(sceneName);
 				}
 			}
 			

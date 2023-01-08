@@ -20,4 +20,7 @@ void Component::getDebugInfo(std::string*)
 
 }
 
-Component::~Component() = default;
+Component::~Component()
+{
+	this->owner = nullptr;
+}

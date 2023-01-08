@@ -22,7 +22,9 @@ public:
 	void start();
 	void update();
 	void lateUpdate();
+	
 	[[nodiscard]] Transform* getTransform() const { return transform; }
+	[[nodiscard]] bool isValidTransform() const { return transform != nullptr; }
 	[[nodiscard]] std::string getName() const { return name; }
 
 	template<typename T, typename... Args>
