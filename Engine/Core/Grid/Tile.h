@@ -5,7 +5,7 @@
 class Tile final : public AnimatedSpriteRenderer
 {
 public:
-	Tile(const std::vector<Texture> &_textureList, const float _updateEveryXMS) :
+	Tile(const std::vector<Texture> &_textureList, const double _updateEveryXMS) :
 		AnimatedSpriteRenderer(_textureList, _updateEveryXMS)
 	{
 		

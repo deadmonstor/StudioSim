@@ -61,6 +61,11 @@ public:
 	void TestFuncLewis(OnEngineStart*) 
 	{
 		GridSystem::Instance()->init(glm::vec2(96, 48), glm::vec2(100, 100));
+		auto *background = SceneManager::Instance()->createGameObject("Background", glm::vec2{0, 0});
+		background->getTransform()->SetScale(glm::vec2(300 * 3, 225 * 3));
+		auto sprite = background->addComponent<SpriteRenderer>();
+		sprite->setColor(glm::vec3(1,1,1));
+		sprite->texture = ResourceManager::GetTexture("rock");
 		
 		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->SetScale(glm::vec2(96, 48));
@@ -69,7 +74,7 @@ public:
 		Renderer::Instance()->SetCamera(cam);
 
 		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
-		auto sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
+		sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprites.push_back(sprite);
 

@@ -1,4 +1,4 @@
-﻿#include "SpriteRenderer.h"
+#include "SpriteRenderer.h"
 #include <glad/glad.h>
 
 #include "Core/Renderer/ResourceManager.h"

@@ -1,6 +1,8 @@
 ﻿#include <glad/glad.h>
 #include "Renderer.h"
 #include <Windows.h>
+
+#include "Input.h"
 #include "ResourceManager.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
@@ -44,8 +46,14 @@ void Renderer::SetWindowSize(const glm::ivec2 value)
 	
 	const glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(value.x), 
 											static_cast<float>(value.y), 0.0f, -1.0f, 1.0f);
+	
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
+	ResourceManager::GetShader("sprite").SetInteger("u_normals", 1);
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+	ResourceManager::GetShader("sprite").SetVector2f("Resolution", {value.x, value.y});
+	ResourceManager::GetShader("sprite").SetVector4f("LightColor", {1.0f, 0.75f, 0.3f, 1.0f});
+	ResourceManager::GetShader("sprite").SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0});
+	ResourceManager::GetShader("sprite").SetVector3f("Falloff", {.4f, 3.0f, 20.0f});
 	
 	glfwSetWindowSize(window, value.x, value.y);
 }
@@ -94,7 +102,7 @@ void Renderer::cleanup() const
 
 void Renderer::render()
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0,0,0, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -123,10 +131,21 @@ void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 posi
 	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); 
 	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
 
-	model = glm::scale(model, glm::vec3(size,  1.0f)); 
+	model = glm::scale(model, glm::vec3(size, 1.0f)); 
   
 	spriteRenderer->shader.SetMatrix4("model", model);
-  
+
+	// normalize the light position
+	glm::vec2 lightPos = Input::getMousePosition();
+	lightPos.x = (lightPos.x / windowSize.x);
+	lightPos.y = (lightPos.y / windowSize.y) * -1 + 1;
+	
+	spriteRenderer->shader.SetFloat("uLightCount", 2);
+	spriteRenderer->shader.SetVector3f("uLightsPos[0]", glm::vec3(lightPos, 0.1f));
+
+	glActiveTexture(GL_TEXTURE1);
+	spriteRenderer->normals.Bind();
+	
 	glActiveTexture(GL_TEXTURE0);
 	spriteRenderer->texture.Bind();
 
