@@ -2,18 +2,21 @@
 
 #include "Components/AnimatedSpriteRenderer.h"
 #include "Components/Transform.h"
+#include "Util/Events/EngineEvents.h"
+#include "Util/Events/Events.h"
 
 bool SceneManager::changeScene(const std::string& scene)
 {
 	LOG_INFO("Changed scene to " + scene);
 	currentScene = new Scene();
-	
+
+	Griddy::Events::invoke<OnSceneChanged>(scene);
 	return true;
 }
 
 bool SceneManager::init()
 {
-	return changeScene("scene stuff");
+	return changeScene("debugScene");
 }
 
 GameObject* SceneManager::createGameObject(const std::string name, const glm::vec2 position)

@@ -25,6 +25,13 @@ public:
 	DebugEvent key;
 };
 
+class OnSceneChanged : public Griddy::Event
+{
+public:
+	OnSceneChanged(const std::string key) : key(key) {}
+	std::string key;
+};
+
 #pragma region Key Events
 class OnKey : public Griddy::Event
 {
