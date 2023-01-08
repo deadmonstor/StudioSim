@@ -15,15 +15,20 @@ class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 public:
 	std::list<SpriteRenderer*> sprites;
 	
-	void TestFunc(OnEngineStart*)
+	void TestFunc(OnSceneChanged*)
 	{
+		auto* test = SceneManager::Instance()->createGameObject("Test-123", glm::vec2 { 0,0 });
+		test->getTransform()->SetScale(glm::vec2(96, 48));
+		auto cam = test->addComponent<Camera>();
+		Renderer::Instance()->SetCamera(cam);
+		
 		for (int y = 0; y < 100; y++)
 		{
 			// Get random position
 			float x = rand() % 1920;
 			float yy = rand() % 1080;
 			
-			auto* test = SceneManager::Instance()->createGameObject("Test-1", glm::vec2 { x, yy });
+			test = SceneManager::Instance()->createGameObject("Test-1", glm::vec2 { x, yy });
 			test->addComponent<TestGameComponent>();
 			test->getTransform()->SetScale(glm::vec2(100,100));
 
@@ -34,14 +39,6 @@ public:
 			sprite->setColor(glm::vec3(1,1,1));
 			sprite->texture = ResourceManager::GetTexture(textureIndex == 0 ? "face" : "face2");
 			sprites.push_back(sprite);
-			
-			test->getTransform()->SetRotation(rand() % 360);
-
-			// Get a random rgb color between 0 - 1
-			float r = (rand() % 100) / 100.0f;
-			float g = (rand() % 100) / 100.0f;
-			float b = (rand() % 100) / 100.0f;
-			sprite->setColor(glm::vec3(r, g, b));
 		}
 	}
 
@@ -60,7 +57,7 @@ public:
 		fireball->addComponent<Light>();
 	}
 
-	void TestFuncLewis(OnEngineStart*) 
+	void TestFuncLewis(OnSceneChanged*) 
 	{
 		GridSystem::Instance()->init(glm::vec2(96, 48), glm::vec2(100, 100));
 		auto *background = SceneManager::Instance()->createGameObject("Background", glm::vec2{0, 0});
