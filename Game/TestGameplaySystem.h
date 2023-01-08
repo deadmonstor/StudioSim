@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Input.h"
-#include "Components/TestGameComponent.h"
+#include "Components/FireballComponent.h"
 #include "Core/SceneManager.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
@@ -42,7 +42,6 @@ public:
 			float yy = rand() % 1080;
 			
 			test = SceneManager::Instance()->createGameObject("Test-1", glm::vec2 { x, yy });
-			test->addComponent<TestGameComponent>();
 			test->getTransform()->SetScale(glm::vec2(100,100));
 
 			// pick a random texture between these 2
@@ -70,12 +69,7 @@ public:
 		
 		auto* fireball = SceneManager::Instance()->createGameObject("TestFireball", mousePos);
 		fireball->getTransform()->SetScale(glm::vec2(48, 48));
-
-		const std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
-		const auto sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-
-		fireball->addComponent<Light>();
+		fireball->addComponent<FireballComponent>();
 	}
 	void TestFuncLewis(const OnSceneChanged* event) 
 	{

@@ -2,6 +2,7 @@
 #include "FunctionHandler.h"
 #include "Core/Components/SpriteRenderer.h"
 
+class AnimatedSpriteRenderer;
 class Light;
 class GameObject;
 NEW_EMPTY_EVENT(OnEngineStart);
@@ -131,4 +132,11 @@ class OnGameObjectRemoved : public Griddy::Event
 public:
 	explicit OnGameObjectRemoved(GameObject* _gameObject) : gameObject(_gameObject) {}
 	GameObject* gameObject;
+};
+
+class OnAnimationEnded : public Griddy::Event
+{
+public:
+	explicit OnAnimationEnded(AnimatedSpriteRenderer* _animatedSpriteRenderer) : animatedSpriteRenderer(_animatedSpriteRenderer) {}
+	AnimatedSpriteRenderer* animatedSpriteRenderer;
 };

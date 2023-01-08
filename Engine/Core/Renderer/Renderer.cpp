@@ -120,6 +120,30 @@ void Renderer::render()
 static bool showMouseLight = false;
 static bool debugLightColor = false;
 
+struct LightName
+{
+	LightName(const char* _pos, const char* _color, const char* _falloff)
+	{
+		auto res = new char[strlen(_pos)+1];
+		strcpy_s(res, strlen(_pos)+1, _pos);
+		pos = res;
+
+		res = new char[strlen(_color)+1];
+		strcpy_s(res, strlen(_color)+1, _color);
+		color = res;
+
+		res = new char[strlen(_falloff)+1];
+		strcpy_s(res, strlen(_falloff)+1, _falloff);
+		falloff = res;
+	}
+
+	char* pos;
+	char* color;
+	char* falloff;
+};
+
+static std::vector<LightName> lightIDToName {}; 
+
 void Renderer::DoLight(SpriteRenderer* spriteRenderer, int& i, const glm::vec2& position, const glm::vec4& lightColorBase, const glm::vec3& falloff) const
 {
 	glm::vec2 lightPos = position;
@@ -139,9 +163,26 @@ void Renderer::DoLight(SpriteRenderer* spriteRenderer, int& i, const glm::vec2& 
 		lightColor = glm::vec4(r,g,b, 0.5f);
 	}
 
-	spriteRenderer->shader.SetVector3f(("uLightsPos[" + std::to_string(i) + "]").c_str(), glm::vec3(lightPos, 0.1f));
-	spriteRenderer->shader.SetVector4f(("uLightColor["+ std::to_string(i) + "]").c_str(), lightColor);
-	spriteRenderer->shader.SetVector3f(("uFalloff["+ std::to_string(i) + "]").c_str(), falloff);
+	if (const auto size = lightIDToName.size(); size <= i)
+	{
+		const std::string id = std::to_string(i);
+		const std::string pos = "uLightsPos[" + id + "]";
+		const std::string light_color = "uLightColor[" + id + "]";
+		const std::string light_fallout = "uFalloff[" + id + "]";
+		
+		const LightName lightNameStruct =
+		{
+			pos.c_str(), 
+			light_color.c_str(), 
+			light_fallout.c_str()
+		};
+		
+		lightIDToName.insert(lightIDToName.end(), lightNameStruct);
+	}
+
+	spriteRenderer->shader.SetVector3f(lightIDToName[i].pos, glm::vec3(lightPos, 0.1f));
+	spriteRenderer->shader.SetVector4f(lightIDToName[i].color, lightColor);
+	spriteRenderer->shader.SetVector3f(lightIDToName[i].falloff, falloff);
 	i += 1;
 }
 
@@ -176,7 +217,7 @@ void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 posi
 		DoLight(spriteRenderer, i, lightPosition, light->getColor(), light->getFalloff());	
 	}
 	
-	spriteRenderer->shader.SetInteger("uLightCount", i);
+	spriteRenderer->shader.SetInteger("uLightCount", glm::clamp(i, 0, 10));
 
 	glActiveTexture(GL_TEXTURE1);
 	spriteRenderer->normals.Bind();

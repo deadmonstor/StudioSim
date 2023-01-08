@@ -85,6 +85,11 @@ std::vector<Texture> ResourceManager::GetTexturesContaining(const std::string na
         }
     }
     
+    std::ranges::sort(textures, [](const Texture& a, const Texture& b)
+    {
+        return a.ID < b.ID;
+    });
+    
     return textures;
 }
 

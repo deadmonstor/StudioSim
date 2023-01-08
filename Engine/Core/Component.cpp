@@ -1,4 +1,5 @@
 ﻿#include "Component.h"
+#include "Core/GameObject.h"
 
 void Component::start()
 {
