@@ -2,11 +2,14 @@
 #include <typeinfo>
 #include "Component.h"
 #include "Util/Logger.h"
+#include "Util/Events/Events.h"
 
 GameObject::GameObject() = default;
 
 GameObject::~GameObject()
 {
+	Griddy::Events::invoke<OnGameObjectRemoved>(this);
+
 	for (const Component* curComponent : components)
 	{
 		delete curComponent;

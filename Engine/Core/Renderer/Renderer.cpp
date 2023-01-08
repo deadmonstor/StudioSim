@@ -53,7 +53,7 @@ void Renderer::SetWindowSize(const glm::ivec2 value)
 	ResourceManager::GetShader("sprite").SetInteger("u_normals", 1);
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
 	ResourceManager::GetShader("sprite").SetVector2f("Resolution", {value.x, value.y});
-	ResourceManager::GetShader("sprite").SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0});
+	ResourceManager::GetShader("sprite").SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0.05f});
 	ResourceManager::GetShader("sprite").SetVector3f("Falloff", {.4f, 3.0f, 20.0f});
 	
 	glfwSetWindowSize(window, value.x, value.y);
@@ -120,7 +120,7 @@ void Renderer::render()
 static bool showMouseLight = false;
 static bool debugLightColor = false;
 
-void Renderer::DoLight(SpriteRenderer* spriteRenderer, int& i, const glm::vec2& position, const glm::vec4& lightColorBase) const
+void Renderer::DoLight(SpriteRenderer* spriteRenderer, int& i, const glm::vec2& position, const glm::vec4& lightColorBase, const glm::vec3& falloff) const
 {
 	glm::vec2 lightPos = position;
 	lightPos.x = lightPos.x / windowSize.x;
@@ -138,10 +138,10 @@ void Renderer::DoLight(SpriteRenderer* spriteRenderer, int& i, const glm::vec2& 
 	
 		lightColor = glm::vec4(r,g,b, 0.5f);
 	}
-		
-		
+
 	spriteRenderer->shader.SetVector3f(("uLightsPos[" + std::to_string(i) + "]").c_str(), glm::vec3(lightPos, 0.1f));
 	spriteRenderer->shader.SetVector4f(("uLightColor["+ std::to_string(i) + "]").c_str(), lightColor);
+	spriteRenderer->shader.SetVector3f(("uFalloff["+ std::to_string(i) + "]").c_str(), falloff);
 	i += 1;
 }
 
@@ -167,12 +167,13 @@ void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 posi
 	int i = 0;
 	if (showMouseLight)
 	{
-		DoLight(spriteRenderer, i, Input::getMousePosition(), {1.0f, 0.75f, 0.3f, 1.0f});	
+		DoLight(spriteRenderer, i, Input::getMousePosition(), {1.0f, 0.75f, 0.3f, 1.0f}, {0.4f, 3.0f, 20.0f});	
 	}
 	
 	for (const Light* light : lightRenderQueue)
 	{
-		DoLight(spriteRenderer, i, light->owner->getTransform()->GetPosition(), light->getColor());	
+		auto lightPosition = light->owner->getTransform()->GetPosition();
+		DoLight(spriteRenderer, i, lightPosition, light->getColor(), light->getFalloff());	
 	}
 	
 	spriteRenderer->shader.SetInteger("uLightCount", i);

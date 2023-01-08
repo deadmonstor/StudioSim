@@ -28,11 +28,12 @@ public:
 
 	[[nodiscard]] glm::vec2 GetCameraPos() const
 	{
-		if (!mainCam || !mainCam->owner )
+		if (mainCam == nullptr  || mainCam->owner == nullptr || !mainCam->owner->isValidTransform() )
 			return {0, 0};
 		
 		return mainCam->owner->getTransform()->position - GetWindowSize() / 2.f;
 	}
+	
 	void SetCamera(Camera* cam) { mainCam = cam; }
 	[[nodiscard]] Camera* GetCamera() const { return mainCam; }
 	
@@ -40,7 +41,7 @@ public:
 	void SetWindowSize(glm::ivec2);
 	void SetWindowTitle(const std::string& title) const;
 	bool createWindow(const std::string &windowName);
-	void DoLight(::SpriteRenderer* spriteRenderer, int& i, const glm::vec2& position, const glm::vec4& lightColorBase) const;
+	void DoLight(SpriteRenderer* spriteRenderer, int& i, const glm::vec2& position, const glm::vec4& lightColorBase, const glm::vec3& falloff) const;
 	void renderSprite(SpriteRenderer* spriteRenderer, glm::vec2 position, glm::vec2 size, float rotation) const;
 	void cleanup() const;
 	void render();

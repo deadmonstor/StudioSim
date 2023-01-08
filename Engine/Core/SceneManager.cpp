@@ -2,11 +2,28 @@
 
 #include "Components/AnimatedSpriteRenderer.h"
 #include "Components/Transform.h"
+#include "Renderer/Renderer.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
 
+void SceneManager::destroyScene(const Scene* scene)
+{
+	Renderer::Instance()->SetCamera(nullptr);
+	
+	const auto gameObjects = scene->gameObjects;
+	for(const auto object : gameObjects)
+	{
+		destroyGameObject(object);
+	}
+}
+
 bool SceneManager::changeScene(const std::string& scene)
 {
+	if (currentScene != nullptr)
+	{
+		destroyScene(currentScene);
+	}
+	
 	LOG_INFO("Changed scene to " + scene);
 	currentScene = new Scene();
 
@@ -16,7 +33,8 @@ bool SceneManager::changeScene(const std::string& scene)
 
 bool SceneManager::init()
 {
-	return changeScene("debugScene");
+	Griddy::Events::subscribe(this, &SceneManager::onSceneChanged);
+	return changeScene("renderScene");
 }
 
 GameObject* SceneManager::createGameObject(const std::string name, const glm::vec2 position)
@@ -73,4 +91,9 @@ void SceneManager::lateUpdate() const
 void SceneManager::render() const
 {
 	
+}
+
+void SceneManager::onSceneChanged(const OnSceneChangeRequested* event)
+{
+	changeScene(event->key);
 }
