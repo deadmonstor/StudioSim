@@ -107,7 +107,7 @@ void Renderer::render()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	for (SpriteRenderer* spriteRenderer : renderQueue)
+	for (SpriteRenderer* spriteRenderer : spriteRenderQueue)
 	{
 		const Transform* transform = spriteRenderer->owner->getTransform();
 		renderSprite(spriteRenderer, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
@@ -116,6 +116,7 @@ void Renderer::render()
 	glDisable(GL_BLEND);
 }
 
+static bool showMouseLight = false;
 void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation) const
 {
 	if (position.x + size.x < 0 || position.x > windowSize.x || position.y + size.y < 0 || position.y > windowSize.y)
@@ -135,13 +136,28 @@ void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 posi
   
 	spriteRenderer->shader.SetMatrix4("model", model);
 
-	// normalize the light position
-	glm::vec2 lightPos = Input::getMousePosition();
-	lightPos.x = (lightPos.x / windowSize.x);
-	lightPos.y = (lightPos.y / windowSize.y) * -1 + 1;
+	int i = 0;
+	if (showMouseLight)
+	{
+		glm::vec2 lightPos = Input::getMousePosition();
+		lightPos.x = (lightPos.x / windowSize.x);
+		lightPos.y = (lightPos.y / windowSize.y) * -1 + 1;
+		
+		spriteRenderer->shader.SetVector3f(("uLightsPos[" + std::to_string(i) + "]").c_str(), glm::vec3(lightPos, 0.1f));
+		i = 1;	
+	}
 	
-	spriteRenderer->shader.SetFloat("uLightCount", 2);
-	spriteRenderer->shader.SetVector3f("uLightsPos[0]", glm::vec3(lightPos, 0.1f));
+	for (const Light* light : lightRenderQueue)
+	{
+		glm::vec2 lightPos = light->owner->getTransform()->GetPosition();
+		lightPos.x = (lightPos.x / windowSize.x);
+		lightPos.y = (lightPos.y / windowSize.y) * -1 + 1;
+		
+		spriteRenderer->shader.SetVector3f(("uLightsPos[" + std::to_string(i) + "]").c_str(), glm::vec3(lightPos, 0.1f));
+		i += 1;
+	}
+	
+	spriteRenderer->shader.SetFloat("uLightCount", i);
 
 	glActiveTexture(GL_TEXTURE1);
 	spriteRenderer->normals.Bind();
@@ -158,16 +174,36 @@ void Renderer::init()
 {
 	Griddy::Events::subscribe(this, &Renderer::addToRenderQueue);
 	Griddy::Events::subscribe(this, &Renderer::removeFromRenderQueue);
+	Griddy::Events::subscribe(this, &Renderer::addToLightQueue);
+	Griddy::Events::subscribe(this, &Renderer::removeFromLightQueue);
+	Griddy::Events::subscribe(this, &Renderer::onDebugEvent);
 }
 
 void Renderer::addToRenderQueue(const OnSpriteRendererComponentStarted* event)
 {
 	event->spriteRenderer->shader.SetVector3f("spriteColor", event->spriteRenderer->getColor());
-	renderQueue.push_back(event->spriteRenderer);
+	spriteRenderQueue.push_back(event->spriteRenderer);
 }
 
 void Renderer::removeFromRenderQueue(const OnSpriteRendererComponentRemoved* event)
 {
-	renderQueue.erase(std::ranges::remove(renderQueue, event->spriteRenderer).begin(), renderQueue.end());
+	spriteRenderQueue.erase(std::ranges::remove(spriteRenderQueue, event->spriteRenderer).begin(), spriteRenderQueue.end());
+}
+
+void Renderer::addToLightQueue(const OnLightComponentStarted* event)
+{
+	lightRenderQueue.push_back(event->light);
+}
+
+void Renderer::removeFromLightQueue(const OnLightComponentRemoved* event)
+{
+	lightRenderQueue.erase(std::ranges::remove(lightRenderQueue, event->light).begin(), lightRenderQueue.end());
+}
+
+void Renderer::onDebugEvent(const OnDebugEventChanged* event)
+{
+	if (event->key == DebugMouseLight)
+		showMouseLight = !showMouseLight;
+		
 }
 

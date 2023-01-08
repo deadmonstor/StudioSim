@@ -2,6 +2,7 @@
 #include "FunctionHandler.h"
 #include "Core/Components/SpriteRenderer.h"
 
+class Light;
 class GameObject;
 NEW_EMPTY_EVENT(OnEngineStart);
 NEW_EMPTY_EVENT(OnEngineUpdate);
@@ -13,6 +14,7 @@ enum DebugEvent
 	DebugPlaySound,	
 	DebugKeyEvents,	
 	DebugMouseEvents,	
+	DebugMouseLight,	
 };
 
 class OnDebugEventChanged : public Griddy::Event
@@ -92,4 +94,18 @@ class OnSpriteRendererComponentRemoved : public Griddy::Event
 public:
 	explicit OnSpriteRendererComponentRemoved(SpriteRenderer* spriteRenderer) : spriteRenderer(spriteRenderer) {}
 	SpriteRenderer* spriteRenderer;
+};
+
+class OnLightComponentStarted : public Griddy::Event
+{
+public:
+	explicit OnLightComponentStarted(Light* light) : light(light) {}
+	Light* light;
+};
+
+class OnLightComponentRemoved : public Griddy::Event
+{
+public:
+	explicit OnLightComponentRemoved(Light* light) : light(light) {}
+	Light* light;
 };

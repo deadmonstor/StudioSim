@@ -56,6 +56,8 @@ public:
 		const std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
 		const auto sprite = fireball->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
+
+		fireball->addComponent<Light>();
 	}
 
 	void TestFuncLewis(OnEngineStart*) 
