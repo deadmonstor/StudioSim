@@ -14,17 +14,13 @@ bool AudioEngine::init()
 	fmodResult = FMOD::System_Create(&fmodSystem);
 
 	//Check if it was created
-	if (fmodResult != FMOD_OK) 
-	{
-		LOG_ERROR("FMod failed to create the system");
+	if (!checkResult(fmodResult, "Create System")) {
 		return false;
 	}
 
 	//Create the channels, flags set to normal
 	fmodResult = fmodSystem->init(512, FMOD_INIT_NORMAL, 0);
-	if (fmodResult != FMOD_OK) 
-	{
-		LOG_ERROR("FMod failed to initialise the system");
+	if (!checkResult(fmodResult, "Intialising")) {
 		return false;
 	}
 
@@ -35,6 +31,8 @@ bool AudioEngine::init()
 	fmodSystem->set3DSettings(1, 1, 1);
 
 	Griddy::Events::subscribe(this, &AudioEngine::onDebugEvent);
+
+	return true;
 }
 
 void AudioEngine::update() 
@@ -53,6 +51,16 @@ void AudioEngine::update()
 
 	//System must be updated once per cycle
 	fmodSystem->update(); 
+}
+
+bool AudioEngine::checkResult(FMOD_RESULT fmodResult, std::string area) 
+{
+	if (fmodResult != FMOD_OK) 
+	{
+		LOG_ERROR("FMod failed in " + area);
+		return false; 
+	}
+	return true;
 }
 
 bool AudioEngine::loadSound(const char *path, const FMOD_MODE fMode) 
