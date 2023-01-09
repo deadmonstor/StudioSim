@@ -20,16 +20,24 @@ bool AudioEngine::init()
 
 	//Create the channels, flags set to normal
 	fmodResult = fmodSystem->init(512, FMOD_INIT_NORMAL, 0);
-	if (!checkResult(fmodResult, "Intialising")) {
+	if (!checkResult(fmodResult, "Intialising")) 
+	{
 		return false;
 	}
 
 	//One listener (player)
-	fmodSystem->set3DNumListeners(1);
-
+	fmodResult = fmodSystem->set3DNumListeners(1);
+	if (!checkResult(fmodResult, "Set Listeners"))
+	{
+		return false;
+	}
 	
 	//Default factors
-	fmodSystem->set3DSettings(1, 1, 1);
+	fmodResult = fmodSystem->set3DSettings(1, 1, 1);
+	if (!checkResult(fmodResult, "Set 3D Settings System"))
+	{
+		return false;
+	}
 
 	Griddy::Events::subscribe(this, &AudioEngine::onDebugEvent);
 
@@ -37,23 +45,22 @@ bool AudioEngine::init()
 }
 
 void AudioEngine::update() 
-{ 
-	//updateListenerPositon(0, 0);
+{
+	FMOD_RESULT fmodResult;
 
 	//Position of listener
-	listenerPosition = FMOD_VECTOR(0, 0, 0);
-	
-	//forward/up vectors left at default
-	FMOD_VECTOR forward = FMOD_VECTOR(0, 0, 0);
-	const FMOD_VECTOR up = FMOD_VECTOR(0, 0, 0);
+	// Test Function
+	//updateListenerPositon(listenerPosition.x - 1, 0); 
+	const FMOD_VECTOR listenerPos = {listenerPosition.x, listenerPosition.y, 0};
 
-	//Set listener (player) position
-	FMOD_RESULT fmodResult;
-	fmodResult = fmodSystem->set3DListenerAttributes(0, 0, 0, 0, 0);
-	if (fmodResult != FMOD_OK)
-	{
-		LOG_ERROR("FMod failed to set listener 3D");
-	}
+
+	//forward/up vectors left at default for now (probably not needed)
+	//const FMOD_VECTOR forward = FMOD_VECTOR(0, 0, 0);
+	//const FMOD_VECTOR up = FMOD_VECTOR(0, 0, 0);
+
+	//Set listener Attributes (Listener ID, Position, Velocity, Forward Vector, Up Vector)
+	fmodResult = fmodSystem->set3DListenerAttributes(0, &listenerPos, 0, 0, 0);
+	checkResult(fmodResult, "Set 3D listener attributes");
 
 	//System must be updated once per cycle
 	fmodSystem->update(); 
@@ -84,36 +91,38 @@ bool AudioEngine::loadSound(const char *path, const FMOD_MODE fMode)
 
 bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float positionX, float positionY)
 {
+	//Debug
+	FMOD_RESULT fmodResult;
+
+	//Channel Creation
 	FMOD::Channel *fmodChannel = nullptr;
 	fmodSystem->playSound(ResourceManager::GetSound(path), nullptr, isPaused, &fmodChannel);
 
 	//Audio source position
-	FMOD_VECTOR sourcePosition = {0, 1, 1};
-	std::cout << "Source: " << sourcePosition.x << " " << sourcePosition.y << " " << sourcePosition.y << "\n";
-	std::cout << "Listener: " << listenerPosition.x << " " << listenerPosition.y << " " << listenerPosition.y << "\n";
+	FMOD_VECTOR sourcePosition = {positionX, positionY, 0};
 
+	//Enable Channel Modes
 	fmodChannel->setMode(FMOD_3D);
-	FMOD_RESULT fmodResult;
+	fmodChannel->setMode(FMOD_3D_LINEARROLLOFF);
+
+	//Set Volume
 	fmodResult = fmodChannel->setVolume(volume);
-	if (fmodResult != FMOD_OK)
+	if (!checkResult(fmodResult, "Set Channel Volume"))
 	{
-		LOG_ERROR("FMod failed to set volume");
 		return false;
 	}
+
 	//Set audio position
-	
 	fmodResult = fmodChannel->set3DAttributes(&sourcePosition, nullptr);
-	if (fmodResult != FMOD_OK)
+	if (!checkResult(fmodResult, "Set 3D Channel Attributes"))
 	{
-		LOG_ERROR("FMod failed to set attributes 3D");
 		return false;
 	}
 
 	//Set min/max falloff
-	fmodResult = fmodChannel->set3DMinMaxDistance(1, 10);
-	if (fmodResult != FMOD_OK)
+	fmodResult = fmodChannel->set3DMinMaxDistance(10, 1000);
+	if (!checkResult(fmodResult, "Set 3D Min/Max Distance"))
 	{
-		LOG_ERROR("FMod failed to set distance");
 		return false;
 	}
 	return true;
@@ -124,16 +133,16 @@ void AudioEngine::onDebugEvent(const OnDebugEventChanged* event)
 	if (event->key == DebugPlaySound)
 	{
 		Instance()->loadSound("Sounds\\griddy.mp3", FMOD_3D);
-		Instance()->playSound("Sounds\\griddy.mp3", false, 0.1f, 100, 100);
+		Instance()->playSound("Sounds\\griddy.mp3", false, 0.1f, 0, 0);
 
 		Instance()->loadSound("Sounds\\doneit.mp3", FMOD_3D);
-		//Instance()->playSound("Sounds\\doneit.mp3", false, 0.1f, 1000000000000, 100000000000);
+		//Instance()->playSound("Sounds\\doneit.mp3", false, 0.1f, 10, 10);
 	}
 }
 
 void AudioEngine::updateListenerPositon(float positionX, float positionY) 
 {
-	listenerPosition = FMOD_VECTOR(positionX, positionY, 0);
+	listenerPosition = {positionX, positionY, 0};
 }
 
 

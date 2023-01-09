@@ -19,7 +19,7 @@ public:
 	//Store all of the sounds in the game
 	//std::map<std::string, FMOD::Sound*> loadedSounds;
 
-	FMOD_VECTOR listenerPosition;
+	FMOD_VECTOR listenerPosition = {0, 0, 0};
 
 	//Store all of the current channels
 	std::map<int, FMOD::Channel *> currentChannels;
