@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "Lighting.h"
 #include "ResourceManager.h"
+#include "SortingLayer.h"
 #include "Core/GameObject.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
@@ -147,7 +148,7 @@ void Renderer::render()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	for (SpriteRenderer* spriteRenderer : spriteRenderQueue)
+	for (SpriteComponent* spriteRenderer : spriteRenderQueue)
 	{
 		const Transform* transform = spriteRenderer->getOwner()->getTransform();
 		renderSprite(spriteRenderer, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
@@ -156,7 +157,7 @@ void Renderer::render()
 	glDisable(GL_BLEND);
 }
 
-void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation) const
+void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation) const
 {
 	if (position.x + size.x < 0 || position.x > windowSize.x || position.y + size.y < 0 || position.y > windowSize.y)
 	{
@@ -164,7 +165,8 @@ void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 posi
 	}
 	
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
-	
+
+	spriteRenderer->getShader().Use();
 	auto model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(position, 0.0f));  
 
@@ -197,9 +199,10 @@ void Renderer::init()
 
 void Renderer::addToRenderQueue(const OnSpriteRendererComponentStarted* event)
 {
-	event->spriteRenderer->getShader().SetVector3f("spriteColor", event->spriteRenderer->getColor());
+	event->spriteRenderer->getShader().SetVector3f("spriteColor", event->spriteRenderer->getColor(), true);
 	
 	spriteRenderQueue.push_back(event->spriteRenderer);
+	sortRenderQueue();
 	Lighting::Instance()->refreshLightData(event->spriteRenderer, LightUpdateRequest::All);
 }
 
@@ -209,3 +212,43 @@ void Renderer::removeFromRenderQueue(const OnSpriteRendererComponentRemoved* eve
 	Lighting::Instance()->refreshLightData(event->spriteRenderer, LightUpdateRequest::All);
 }
 
+void Renderer::sortRenderQueue()
+{
+	// BUG : Is this slow?
+	std::sort(spriteRenderQueue.begin(), spriteRenderQueue.begin() + static_cast<long long>(spriteRenderQueue.size()),
+	[this](const SpriteComponent* x, const SpriteComponent* y) noexcept -> bool
+	{
+		if (x->getSortingLayer().getName() == y->getSortingLayer().getName())
+		{
+			return x->getSortingOrder() < y->getSortingOrder();
+		}
+		return x->getSortingLayer().getOrder() < y->getSortingLayer().getOrder();
+	});
+}
+
+SortingLayer& Renderer::getDefaultSortingLayer()
+{
+	return *Instance()->sortingLayers[defaultSortingLayer];
+}
+
+SortingLayer& Renderer::getSortingLayer(const std::string& layerName)
+{
+	if (Instance()->sortingLayers.contains(layerName))
+	{
+		return *Instance()->sortingLayers[layerName];
+	}
+	
+	LOG_WARNING("Tried to get SortingLayer (name: " + layerName + ") but it did not exist. Using default sorting layer instead.");
+	return getDefaultSortingLayer();
+}
+
+SortingLayer& Renderer::addSortingLayer(const std::string& layerName, const int order)
+{
+	Instance()->sortingLayers[layerName] = new SortingLayer(layerName, order);
+	return *Instance()->sortingLayers[layerName];
+}
+
+void Renderer::removeSortingLayer(const std::string& layerName)
+{
+	Instance()->sortingLayers.erase(layerName);
+}

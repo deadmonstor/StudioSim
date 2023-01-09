@@ -2,6 +2,9 @@
 #include <list>
 
 #include "Aixlog.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "glm/vec4.hpp"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/RenderEvents.h"
@@ -22,14 +25,14 @@ public:
 	void addToLightQueue(const OnLightComponentStarted*);
 	void removeFromLightQueue(const OnLightComponentRemoved*);
 	void refreshLightData(LightUpdateRequest lightUpdateRequest) const;
-	void doLight(SpriteRenderer* spriteRenderer,
+	void doLight(SpriteComponent* spriteRenderer,
 					int& i,
 					const glm::vec2& position,
 					const glm::vec4& lightColorBase,
 					const glm::vec3& falloff,
 					LightUpdateRequest lightUpdateRequest) const;
 
-	void refreshLightData(SpriteRenderer* spriteRenderer, LightUpdateRequest lightUpdateRequest) const;
+	void refreshLightData(SpriteComponent* spriteRenderer, LightUpdateRequest lightUpdateRequest) const;
 	
 	void onDebugEvent(const OnDebugEventChanged* event);
 	void init();

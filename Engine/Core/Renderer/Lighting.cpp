@@ -4,6 +4,7 @@
 
 #include "Input.h"
 #include "Renderer.h"
+#include "Core/Components/SpriteComponent.h"
 #include "glm/common.hpp"
 #include "Util/Time.h"
 
@@ -21,7 +22,7 @@ void Lighting::removeFromLightQueue(const OnLightComponentRemoved* event)
 
 static std::vector<LightName> lightIDToName {}; 
 
-void Lighting::doLight(SpriteRenderer* spriteRenderer,
+void Lighting::doLight(SpriteComponent* spriteRenderer,
 						int& i,
 						const glm::vec2& position,
 						const glm::vec4& lightColorBase,
@@ -64,14 +65,17 @@ void Lighting::doLight(SpriteRenderer* spriteRenderer,
 		lightIDToName.insert(lightIDToName.end(), lightNameStruct);
 	}
 
-	if (bool(lightUpdateRequest & LightUpdateRequest::Position))
+	spriteRenderer->getShader().Use();
+	
+	if (static_cast<bool>(lightUpdateRequest & LightUpdateRequest::Position))
 		spriteRenderer->getShader().SetVector3f(lightIDToName[i].pos, glm::vec3(lightPos, 0.1f));
 	
-	if (bool(lightUpdateRequest & LightUpdateRequest::Color))
+	if (static_cast<bool>(lightUpdateRequest & LightUpdateRequest::Color))
 		spriteRenderer->getShader().SetVector4f(lightIDToName[i].color, lightColor);
 
-	if (bool(lightUpdateRequest & LightUpdateRequest::Falloff))
+	if (static_cast<bool>(lightUpdateRequest & LightUpdateRequest::Falloff))
 		spriteRenderer->getShader().SetVector3f(lightIDToName[i].falloff, falloff);
+
 	i += 1;
 }
 
@@ -83,7 +87,7 @@ void Lighting::refreshLightData(const LightUpdateRequest lightUpdateRequest) con
 	}
 }
 
-void Lighting::refreshLightData(SpriteRenderer* spriteRenderer, const LightUpdateRequest lightUpdateRequest) const
+void Lighting::refreshLightData(SpriteComponent* spriteRenderer, const LightUpdateRequest lightUpdateRequest) const
 {
 	int i = 0;
 	if (showMouseLight)

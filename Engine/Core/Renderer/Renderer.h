@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include <list>
 #include <string>
 
+#include "SortingLayer.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Camera.h"
 #include "Core/Components/Light.h"
@@ -10,16 +10,26 @@
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/RenderEvents.h"
 
-class SpriteRenderer;
+class SortingLayer;
+class SpriteComponent;
 struct GLFWwindow;
+
+inline const std::string& defaultSortingLayer = "DefaultLayer";
+
 class Renderer : public SingletonTemplate<Renderer>
 {
 	GLFWwindow* window = nullptr;
 	Camera* mainCam = nullptr;
 	glm::vec2 windowSize = { 1, 1 };
-	std::list<SpriteRenderer*> spriteRenderQueue;
+	std::vector<SpriteComponent*> spriteRenderQueue;
 
+	std::map<std::string, SortingLayer*> sortingLayers
+	{
+		{defaultSortingLayer, new SortingLayer(defaultSortingLayer, 0)}
+	};
+	
 	friend class Lighting;
+	friend class ImGuiHandler;
 	void createVBOs();
 	unsigned int quadVAO;
 public:
@@ -33,7 +43,7 @@ public:
 	void setWindowSize(glm::ivec2);
 	void setWindowTitle(const std::string& title) const;
 	bool createWindow(const std::string &windowName);
-	void renderSprite(SpriteRenderer* spriteRenderer, glm::vec2 position, glm::vec2 size, float rotation) const;
+	void renderSprite(SpriteComponent* spriteRenderer, glm::vec2 position, glm::vec2 size, float rotation) const;
 	
 	void cleanup() const;
 	void render();
@@ -41,4 +51,10 @@ public:
 
 	void addToRenderQueue(const OnSpriteRendererComponentStarted*);
 	void removeFromRenderQueue(const OnSpriteRendererComponentRemoved*);
+
+	static SortingLayer& getDefaultSortingLayer();
+	static SortingLayer& getSortingLayer(const std::string& layerName);
+	static SortingLayer& addSortingLayer(const std::string& layerName, const int order);
+	static void removeSortingLayer(const std::string& layerName);
+	void sortRenderQueue();
 };
