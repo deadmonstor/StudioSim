@@ -10,6 +10,7 @@
 #include "Library/imgui/imgui_impl_glfw.h"
 #include "Library/imgui/imgui_impl_opengl3.h"
 
+static SpriteComponent* pausedSprite;
 void ImGuiHandler::init()
 {
 #if (NDEBUG)
@@ -21,6 +22,11 @@ void ImGuiHandler::init()
 	ImGui::StyleColorsDark();
 	ImGui_ImplOpenGL3_Init("#version 330");
 	ImGui_ImplGlfw_InitForOpenGL(Renderer::getWindow(), true);
+
+	pausedSprite = new SpriteComponent();
+	const Texture pause = ResourceManager::LoadTexture("Sprites\\pause.png", "pause");
+	pausedSprite->setTexture(pause);
+	pausedSprite->setLit(false);
 }
 
 void ImGuiHandler::ImGUIGridSystem() const
@@ -131,7 +137,8 @@ static std::map<std::string, DebugEvent> debugSettings
 	{"Debug Key Events", DebugKeyEvents},
 	{"Debug Mouse Events", DebugMouseEvents},
 	{"Debug Mouse Light", DebugMouseLight},
-	{"Debug Light Color", DebugLightColor}
+	{"Debug Light Color", DebugLightColor},
+	{"Debug Pause Game", DebugPauseGame}
 };
 
 static std::map<std::string, std::string> debugScenes
@@ -160,6 +167,7 @@ void ImGuiHandler::update()
 			{
 				Griddy::Engine::Instance()->shutdown();
 			}
+			
 			ImGui::EndMenu();
 		}
 		
@@ -201,7 +209,7 @@ void ImGuiHandler::update()
 			
 			ImGui::EndMenu();
 		}
-
+		
 		ImGui::EndMainMenuBar();
 	}
 
@@ -248,18 +256,25 @@ void ImGuiHandler::update()
 		ImGui::End();
 	}
 }
-
 void ImGuiHandler::render()
 {
 #if (NDEBUG)
 	return;
 #endif
+
+	if (Griddy::Engine::isPaused())
+	{
+		const auto windowSize = Renderer::getWindowSize();
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			Renderer::Instance()->renderSprite(pausedSprite, {windowSize.x - 142 , windowSize.y - 39}, {142, 39}, 0);
+		glDisable(GL_BLEND);
+	}
 	
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 }
-
-
 void ImGuiHandler::addLog(const std::string &log)
 {
 	if (m_vLog.size() > 1000)
@@ -269,7 +284,6 @@ void ImGuiHandler::addLog(const std::string &log)
 	
 	m_vLog.push_back(log);
 }
-
 void ImGuiHandler::cleanup()
 {
 #if (NDEBUG)
@@ -278,4 +292,12 @@ void ImGuiHandler::cleanup()
 	
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
+}
+
+void ImGuiHandler::onKeyDown(const int key, const int scancode, const int action, const int mods)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		Griddy::Events::invoke<OnDebugEventChanged>(DebugPauseGame);
+	}
 }

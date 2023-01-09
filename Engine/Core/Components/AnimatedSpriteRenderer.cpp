@@ -9,15 +9,16 @@ AnimatedSpriteRenderer::AnimatedSpriteRenderer(std::vector<Texture> textureList,
 {
 	this->textureList = std::move(textureList);
 	this->updateEveryXMS = updateEveryXMS;
+	doSpriteUpdate();
 }
 
-void AnimatedSpriteRenderer::update()
+bool AnimatedSpriteRenderer::doSpriteUpdate()
 {
 	if (lastUpdate > Time::getTime() - updateEveryXMS)
-		return;
+		return true;
 
 	if (textureList.empty())
-		return;
+		return true;
 
 	currentIndex++;
 
@@ -25,12 +26,17 @@ void AnimatedSpriteRenderer::update()
 	{
 		currentIndex = 0;
 		Griddy::Events::invoke<OnAnimationEnded>(this);
-		if (getOwner() == nullptr || getOwner()->isBeingDeleted()) return;
+		if (getOwner() == nullptr || getOwner()->isBeingDeleted()) return true;
 	}
 
 	setTexture(textureList[currentIndex]);
 	lastUpdate = Time::getTime();
+	return false;
+}
 
+void AnimatedSpriteRenderer::update()
+{
+	if (doSpriteUpdate()) return;
 	SpriteComponent::update();
 }
 

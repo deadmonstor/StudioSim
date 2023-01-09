@@ -16,7 +16,7 @@ void FireballComponent::start()
 	Component::start();
 
 	const std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
-	getOwner()->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.15f);
+	getOwner()->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.1f);
 	getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
 	getOwner()->getComponent<AnimatedSpriteRenderer>()->setSortingLayer(Renderer::getDefaultSortingLayer());
 	getOwner()->addComponent<Light>();
