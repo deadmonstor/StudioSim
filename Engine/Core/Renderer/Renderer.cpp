@@ -125,7 +125,7 @@ bool Renderer::createWindow(const std::string &windowName)
 	ResourceManager::LoadShader("Shader/sprite.vs", "Shader/sprite.frag", nullptr, "sprite");
 	ResourceManager::GetShader("sprite").SetInteger("image", 0, true);
 	ResourceManager::GetShader("sprite").SetInteger("normals", 1);
-	ResourceManager::GetShader("sprite").SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0.7f});
+	ResourceManager::GetShader("sprite").SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0.1f});
 	
 	ResourceManager::LoadShader("Shader/spriteunlit.vs", "Shader/spriteunlit.frag", nullptr, "spriteunlit");
 	ResourceManager::GetShader("spriteunlit").SetInteger("image", 0, true);
