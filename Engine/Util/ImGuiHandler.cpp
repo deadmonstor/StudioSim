@@ -42,7 +42,9 @@ void ImGuiHandler::ImGUIGridSystem() const
 					{
 						auto* tileString = new std::string("");
 						tile->getDebugInfo(tileString);
+						ImGui::Indent();
 						ImGui::Text("%s", tileString->c_str());
+						ImGui::Unindent();
 					}
 					else
 					{
@@ -72,7 +74,9 @@ void ImGuiHandler::ImGUIGameObjects() const
 				{
 					std::string debugString;
 					curComponent->getDebugInfo(&debugString);
+					ImGui::Indent();
 					ImGui::Text("%s", debugString.c_str());
+					ImGui::Unindent();
 					ImGui::TreePop();
 				}
 			}

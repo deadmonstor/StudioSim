@@ -11,6 +11,15 @@ Light::~Light()
 	Griddy::Events::invoke<OnLightComponentRemoved>(this);
 }
 
+void Light::getDebugInfo(std::string* string)
+{
+	std::stringstream ss;
+	ss << "Color: " << color.x << ", " << color.y << ", " << color.z << std::endl;
+	ss << "Falloff: " << falloff.x << ", " << falloff.y << ", " << falloff.z << std::endl;
+	string->append(ss.str());
+	Component::getDebugInfo(string);
+}
+
 void Light::setColor(const glm::vec4& _color)
 {
 	this->color = _color;
