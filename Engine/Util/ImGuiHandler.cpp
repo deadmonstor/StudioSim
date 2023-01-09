@@ -75,7 +75,8 @@ void ImGuiHandler::ImGUIGameObjects() const
 					std::string debugString;
 					curComponent->getDebugInfo(&debugString);
 					ImGui::Indent();
-					ImGui::Text("%s", debugString.c_str());
+					if (!debugString.empty())
+						ImGui::Text("%s", debugString.c_str());
 					ImGui::Unindent();
 					ImGui::TreePop();
 				}

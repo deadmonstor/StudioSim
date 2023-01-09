@@ -36,11 +36,20 @@ void SpriteComponent::lateUpdate()
 
 void SpriteComponent::getDebugInfo(std::string* string)
 {
-	std::stringstream ss;
-	ss << "Texture: " << texture.ID << std::endl;
-	ss << "Color: " << color.r << ", " << color.g << ", " << color.b << std::endl;
-	ss << "Shader ID: " << shader.ID << std::endl;
-	string->append(ss.str());
+	ImGui::Indent();
+	ImGui::TextUnformatted("Color: ");
+	const auto internalColor = new float[3]{ this->color.r, this->color.g, this->color.b};
+	ImGui::ColorEdit3("", internalColor);
+
+	ImGui::TextUnformatted("TextureID: ");
+	auto id = new int(texture.ID);
+	ImGui::InputInt("", id);
+	ImGui::Image((void *)(intptr_t)texture.ID, ImVec2(static_cast<float>(std::clamp(texture.Width, 50, 500)), static_cast<float>(std::clamp(texture.Height, 50, 250))));
+
+	ImGui::TextUnformatted("ShaderID: ");
+	id = new int(shader.ID);
+	ImGui::InputInt("", id);
+	ImGui::Unindent();
 	
 	Component::getDebugInfo(string);
 }
