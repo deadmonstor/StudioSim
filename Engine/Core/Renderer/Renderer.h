@@ -20,6 +20,8 @@ class Renderer : public SingletonTemplate<Renderer>
 	std::list<SpriteRenderer*> spriteRenderQueue;
 
 	friend class Lighting;
+	void createVBOs();
+	unsigned int quadVAO;
 public:
 	static GLFWwindow* getWindow() { return Instance()->window; }
 	static glm::vec2 getWindowSize() { return Instance()->windowSize; }

@@ -13,14 +13,14 @@ class SceneManager : public SingletonTemplate<SceneManager>
 public:
 	void destroyScene(const Scene* scene);
 	bool changeScene(const std::string& scene);
-	bool init();
-	GameObject* createGameObject(const ::std::string name, glm::vec2 position);
+	GameObject* createGameObject(std::string name, glm::vec2 position);
 	void destroyGameObject(GameObject* gameObject) const;
 
+	bool init();
 	void update() const;
-	void deleteAllPendingObjects() const;
 	void lateUpdate() const;
 	void render() const;
+	void deleteAllPendingObjects() const;
 
 	Scene* currentScene;
 	void onSceneChanged(const OnSceneChangeRequested* event);

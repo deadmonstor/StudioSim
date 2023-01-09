@@ -7,7 +7,8 @@ class SpriteRenderer : public Component
 {
 	glm::vec3 color = glm::vec3(1.0f);
 	Shader shader; 
-
+	Texture texture;
+	Texture normals;
 public:
 	~SpriteRenderer() override;
 	
@@ -24,7 +25,9 @@ public:
 	void setShader(Shader shader);
 	void setLit(bool lit);
 
-	unsigned int quadVAO;
-	Texture texture;
-	Texture normals;
+	Texture getTexture() const { return texture; }
+	void setTexture(const Texture texture) { this->texture = texture; }
+	
+	Texture getNormals() const { return normals; }
+	void setNormals(const Texture normals) { this->normals = normals; }
 };

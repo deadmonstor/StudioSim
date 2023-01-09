@@ -70,7 +70,7 @@ void ImGuiHandler::ImGUIGameObjects() const
 		{
 			for (const auto& curComponent : curGameObject->components)
 			{
-				if (ImGui::TreeNode(curComponent->name.c_str()))
+				if (ImGui::TreeNode(curComponent->getName().c_str()))
 				{
 					std::string debugString;
 					curComponent->getDebugInfo(&debugString);

@@ -105,7 +105,7 @@ public:
 
 		if (const auto camera = Renderer::Instance()->getCamera(); camera != nullptr)
 		{
-			if (const auto owner = camera->owner; owner != nullptr)
+			if (const auto owner = camera->getOwner(); owner != nullptr)
 			{
 				const glm::vec2 camPos = owner->getTransform()->GetPosition();
 				x += camPos.x - windowSize.x / 2.0f;

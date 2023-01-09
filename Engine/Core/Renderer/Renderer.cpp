@@ -36,12 +36,39 @@ void Renderer::setWindowTitle(const std::string& title) const
 	glfwSetWindowTitle(window, title.c_str());
 }
 
+void Renderer::createVBOs()
+{
+	unsigned int VBO;
+	constexpr float vertices[] =
+	{
+		0.0f, 1.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f, 
+    
+		0.0f, 1.0f, 0.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 0.0f
+	};
+
+	glGenVertexArrays(1, &this->quadVAO);
+	glGenBuffers(1, &VBO);
+    
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindVertexArray(this->quadVAO);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);  
+	glBindVertexArray(0);
+}
+
 glm::vec2 Renderer::getCameraPos() const
 {
-	if (mainCam == nullptr  || mainCam->owner == nullptr || !mainCam->owner->isValidTransform() )
+	if (mainCam == nullptr  || mainCam->getOwner() == nullptr || !mainCam->getOwner()->isValidTransform() )
 		return {0, 0};
 		
-	return mainCam->owner->getTransform()->position - getWindowSize() / 2.f;
+	return mainCam->getOwner()->getTransform()->position - getWindowSize() / 2.f;
 }
 
 void Renderer::setWindowSize(const glm::ivec2 value)
@@ -122,7 +149,7 @@ void Renderer::render()
 
 	for (SpriteRenderer* spriteRenderer : spriteRenderQueue)
 	{
-		const Transform* transform = spriteRenderer->owner->getTransform();
+		const Transform* transform = spriteRenderer->getOwner()->getTransform();
 		renderSprite(spriteRenderer, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
 	}
 	
@@ -150,12 +177,12 @@ void Renderer::renderSprite(SpriteRenderer* spriteRenderer, const glm::vec2 posi
 	spriteRenderer->getShader().SetMatrix4("model", model, true);
 
 	glActiveTexture(GL_TEXTURE1);
-	spriteRenderer->normals.Bind();
+	spriteRenderer->getNormals().Bind();
 	
 	glActiveTexture(GL_TEXTURE0);
-	spriteRenderer->texture.Bind();
+	spriteRenderer->getTexture().Bind();
 
-	glBindVertexArray(spriteRenderer->quadVAO);
+	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
 }
@@ -164,6 +191,8 @@ void Renderer::init()
 {
 	Griddy::Events::subscribe(this, &Renderer::addToRenderQueue);
 	Griddy::Events::subscribe(this, &Renderer::removeFromRenderQueue);
+
+	createVBOs();
 }
 
 void Renderer::addToRenderQueue(const OnSpriteRendererComponentStarted* event)

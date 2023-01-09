@@ -38,8 +38,8 @@ public:
 		//Remove "class" from this string
 		typeName = typeName.erase(0, 6);
 
-		newComponent->name = typeName;
-		newComponent->owner = this;
+		newComponent->setName(typeName);
+		newComponent->setOwner(this);
 	
 		if (isInitialized)
 			newComponent->start();
