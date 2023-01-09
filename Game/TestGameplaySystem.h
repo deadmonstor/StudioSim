@@ -19,7 +19,7 @@ public:
 		const auto gameObject = event->gameObject;
 		const auto it = std::ranges::find_if(sprites, [gameObject](const SpriteRenderer* sprite)
 		{
-			return sprite->owner == gameObject;
+			return sprite->getOwner() == gameObject;
 		});
 		
 		if (it != sprites.end())
@@ -39,7 +39,7 @@ public:
 		test = SceneManager::Instance()->createGameObject("Background", glm::vec2 { -(1920 / 2), -(1080 / 2) });
 		test->getTransform()->SetScale(glm::vec2(1920 * 1.3, 1080 * 1.3));
 		sprite = test->addComponent<SpriteRenderer>();
-		sprite->texture = ResourceManager::GetTexture("background");
+		sprite->setTexture(ResourceManager::GetTexture("background"));
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprites.push_back(sprite);
 
@@ -48,15 +48,15 @@ public:
 
 		auto trollsprite = troll->addComponent<SpriteRenderer>();
 		trollsprite->setLit(false);
-		trollsprite->texture = ResourceManager::GetTexture("troll");
+		trollsprite->setTexture(ResourceManager::GetTexture("troll"));
 		trollsprite->setColor(glm::vec3(1, 1, 1));
 		sprites.push_back(trollsprite);
 		
 		for (int y = 0; y < 100; y++)
 		{
 			// Get random position
-			float x = rand() % 1920;
-			float yy = rand() % 1080;
+			float x = 400 - rand() % 1920;
+			float yy = 400 - rand() % 1080;
 			
 			test = SceneManager::Instance()->createGameObject("Test-1", glm::vec2 { x, yy });
 			test->getTransform()->SetScale(glm::vec2(100,100));
@@ -66,7 +66,7 @@ public:
 
 			sprite = test->addComponent<SpriteRenderer>();
 			sprite->setColor(glm::vec3(1,1,1));
-			sprite->texture = ResourceManager::GetTexture(textureIndex == 0 ? "face" : "face2");
+			sprite->setTexture(ResourceManager::GetTexture(textureIndex == 0 ? "face" : "face2"));
 		}
 
 		test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
@@ -100,7 +100,7 @@ public:
 		background->getTransform()->SetScale(glm::vec2(300 * 3, 225 * 3));
 		auto sprite = background->addComponent<SpriteRenderer>();
 		sprite->setColor(glm::vec3(1,1,1));
-		sprite->texture = ResourceManager::GetTexture("rock");
+		sprite->setTexture(ResourceManager::GetTexture("rock"));
 		
 		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->SetScale(glm::vec2(96, 48));
@@ -129,8 +129,8 @@ public:
 		// Update all sprites color to be a random color
 		for (const auto& sprite : sprites)
 		{
-			if (sprite == nullptr || sprite->owner == nullptr) continue;
-			Transform* transform = sprite->owner->getTransform();
+			if (sprite == nullptr || sprite->getOwner() == nullptr) continue;
+			Transform* transform = sprite->getOwner()->getTransform();
 			transform->SetPosition(transform->GetPosition() + direction * static_cast<float>(100.0f * Time::getDeltaTime()));
 		}
 	}
@@ -145,7 +145,7 @@ public:
 	{
 		if (keyDown->key == GLFW_KEY_W)
 		{
-			direction.y += -1;
+			direction.y -= 1;
 		}
 		else if (keyDown->key == GLFW_KEY_S)
 		{
@@ -153,7 +153,7 @@ public:
 		}
 		else if (keyDown->key == GLFW_KEY_A)
 		{
-			direction.x += -1;
+			direction.x -= 1;
 		}
 		else if (keyDown->key == GLFW_KEY_D)
 		{

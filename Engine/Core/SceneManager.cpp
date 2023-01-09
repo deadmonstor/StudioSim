@@ -43,7 +43,7 @@ GameObject* SceneManager::createGameObject(const std::string name, const glm::ve
 {
 	const auto created = new GameObject();
 	created->transform = new Transform();
-	created->transform->name = "Transform";
+	created->transform->setName("Transform");
 	created->name = name;
 	
 	created->addComponent(created->transform);

@@ -97,7 +97,7 @@ void Lighting::refreshLightData(SpriteRenderer* spriteRenderer, const LightUpdat
 	
 	for (const Light* light : lightRenderQueue)
 	{
-		auto lightPosition = light->owner->getTransform()->GetPosition();
+		auto lightPosition = light->getOwner()->getTransform()->GetPosition();
 		
 		doLight(spriteRenderer,
 			i,

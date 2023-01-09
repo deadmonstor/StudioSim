@@ -45,7 +45,7 @@ void GameObject::lateUpdate()
 
 void GameObject::addComponent(Component* component)
 {
-	component->owner = this;
+	component->setOwner(this);
 	
 	if (isInitialized)
 		component->start();

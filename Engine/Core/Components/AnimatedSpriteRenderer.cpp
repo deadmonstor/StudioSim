@@ -27,10 +27,10 @@ void AnimatedSpriteRenderer::update()
 	{
 		currentIndex = 0;
 		Griddy::Events::invoke<OnAnimationEnded>(this);
-		if (owner == NULL || owner->isBeingDeleted()) return;
+		if (getOwner() == nullptr || getOwner()->isBeingDeleted()) return;
 	}
 
-	texture = textureList[currentIndex];
+	setTexture(textureList[currentIndex]);
 	lastUpdate = Time::getTime();
 
 	SpriteRenderer::update();

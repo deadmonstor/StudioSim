@@ -16,8 +16,8 @@ void FireballComponent::start()
 	Component::start();
 
 	const std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
-	owner->addComponent<Light>();
-	owner->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.15f);
+	getOwner()->addComponent<Light>();
+	getOwner()->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.15f);
 
 	Griddy::Events::subscribe(this, &FireballComponent::onAnimationEnded);
 }
@@ -27,7 +27,7 @@ void FireballComponent::update()
 	Component::update();
 
 	// move the fireball to the right
-	owner->getTransform()->SetPosition(owner->getTransform()->GetPosition() + glm::vec2{ 200.0f, 0.0f } * static_cast<float>(Time::getDeltaTime()));
+	getOwner()->getTransform()->SetPosition(getOwner()->getTransform()->GetPosition() + glm::vec2{ 200.0f, 0.0f } * static_cast<float>(Time::getDeltaTime()));
 }
 
 void FireballComponent::lateUpdate()
@@ -37,9 +37,9 @@ void FireballComponent::lateUpdate()
 
 void FireballComponent::onAnimationEnded(OnAnimationEnded* event)
 {
-	if (event->animatedSpriteRenderer->owner == owner)
+	if (event->animatedSpriteRenderer->getOwner() == getOwner())
 	{
-		SceneManager::Instance()->destroyGameObject(this->owner);
+		SceneManager::Instance()->destroyGameObject(this->getOwner());
 	}
 }
 
