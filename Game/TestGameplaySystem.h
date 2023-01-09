@@ -87,7 +87,7 @@ public:
 	
 	void CreateFireball(glm::vec2 mousePos)
 	{
-		mousePos.x = mousePos.x -24;
+		mousePos.x = mousePos.x - 24;
 		mousePos.y = mousePos.y - 24;
 		
 		auto* fireball = SceneManager::Instance()->createGameObject("TestFireball", mousePos);
