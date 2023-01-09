@@ -56,13 +56,13 @@ public:
 
 		sortingLayer = Renderer::addSortingLayer("middle", -1);
 		
-		for (int y = 0; y < 100; y++)
+		for (int y = 0; y < 10; y++)
 		{
 			// Get random position
 			float x = 400 - rand() % 1920;
 			float yy = 400 - rand() % 1080;
 			
-			test = SceneManager::Instance()->createGameObject("Test-1", glm::vec2 { x, yy });
+			test = SceneManager::Instance()->createGameObject("Test-" + std::to_string(y), glm::vec2 { x, yy });
 			test->getTransform()->SetScale(glm::vec2(100,100));
 
 			// pick a random texture between these 2

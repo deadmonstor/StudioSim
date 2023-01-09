@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <string>
 #include "FunctionHandler.h"
 
 class AnimatedSpriteRenderer;
@@ -17,6 +18,7 @@ enum DebugEvent
 	DebugMouseEvents,	
 	DebugMouseLight,	
 	DebugLightColor,	
+	DebugPauseGame,	
 	DebugChangeScene,	
 };
 

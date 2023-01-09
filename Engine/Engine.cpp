@@ -19,20 +19,25 @@ namespace Griddy
 	void key_callback(GLFWwindow* window, const int key, const int scancode, const int action, const int mods)
 	{
 		ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
-		Input::Instance()->keyCallback(window, key, scancode, action, mods);
+
+		if (!Engine::isPaused())
+			Input::Instance()->keyCallback(window, key, scancode, action, mods);
+		
+		ImGuiHandler::Instance()->onKeyDown(key, scancode, action, mods);
 	}
 
 	void mouse_callback(GLFWwindow* window, const int button, const int action, const int mods)
 	{
 		ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
 		
-		if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
+		if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !Engine::isPaused())
 			Input::Instance()->mouseCallback(window, button, action, mods);
 	}
 
 	void drop_callback(GLFWwindow* window, const int count, const char** paths)
 	{
-		Input::Instance()->dropCallback(window, count, paths);
+		if (!Engine::isPaused())
+			Input::Instance()->dropCallback(window, count, paths);
 	}
 	
 	bool Engine::init()
@@ -69,6 +74,7 @@ namespace Griddy
 		glfwSetMouseButtonCallback(Renderer::getWindow(), mouse_callback);
 		glfwSetDropCallback(Renderer::getWindow(), drop_callback);
 
+		Events::subscribe(this, &Engine::onDebugEvent);
 		// init
 		return true;
 	}
@@ -78,10 +84,13 @@ namespace Griddy
 		// update
 		glfwPollEvents();
 
-		SceneManager::Instance()->update();
-		Events::invoke<OnEngineUpdate>();
-		
-		AudioEngine::Instance()->update();
+		if (!isPaused())
+		{
+			SceneManager::Instance()->update();
+			Events::invoke<OnEngineUpdate>();
+			
+			AudioEngine::Instance()->update();
+		}
 		// Check if we need to stop the engine
 		if (auto *window = Renderer::getWindow(); window == nullptr || glfwWindowShouldClose(window))
 		{
@@ -162,5 +171,11 @@ namespace Griddy
 	void Engine::shutdown()
 	{
 		m_Running = false;
+	}
+
+	void Engine::onDebugEvent(const OnDebugEventChanged* event)
+	{
+		if (event->key == DebugPauseGame)
+			setPaused(!isPaused());
 	}
 }

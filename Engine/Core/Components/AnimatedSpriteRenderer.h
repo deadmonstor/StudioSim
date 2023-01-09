@@ -6,6 +6,7 @@ class AnimatedSpriteRenderer : public SpriteComponent
 {
 public:
 	AnimatedSpriteRenderer(std::vector<Texture> textureList, double updateEveryXMS);
+	bool doSpriteUpdate();
 
 	std::vector<Texture> textureList;
 
