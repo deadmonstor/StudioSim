@@ -1,17 +1,16 @@
-#include "SpriteRenderer.h"
-#include <glad/glad.h>
+#include "SpriteComponent.h"
 
 #include "Core/Renderer/ResourceManager.h"
-#include "Util/Events/RenderEvents.h"
 #include "Util/Events/Events.h"
+#include "Util/Events/RenderEvents.h"
 
-SpriteRenderer::~SpriteRenderer()
+SpriteComponent::~SpriteComponent()
 {
 	Component::~Component();
 	Griddy::Events::invoke<OnSpriteRendererComponentRemoved>(this);
 }
 
-void SpriteRenderer::start()
+void SpriteComponent::start()
 {
 	Component::start();
 	createBuffers();
@@ -19,23 +18,23 @@ void SpriteRenderer::start()
 	Griddy::Events::invoke<OnSpriteRendererComponentStarted>(this);
 }
 
-void SpriteRenderer::createBuffers()
+void SpriteComponent::createBuffers()
 {
 	if (shader.ID == 0)
 		shader = ResourceManager::GetShader("sprite");
 }
 
-void SpriteRenderer::update()
+void SpriteComponent::update()
 {
 	Component::update();
 }
 
-void SpriteRenderer::lateUpdate()
+void SpriteComponent::lateUpdate()
 {
 	Component::lateUpdate();
 }
 
-void SpriteRenderer::getDebugInfo(std::string* string)
+void SpriteComponent::getDebugInfo(std::string* string)
 {
 	std::stringstream ss;
 	ss << "Texture: " << texture.ID << std::endl;
@@ -46,23 +45,23 @@ void SpriteRenderer::getDebugInfo(std::string* string)
 	Component::getDebugInfo(string);
 }
 
-void SpriteRenderer::setColor(const glm::vec3 color)
+void SpriteComponent::setColor(const glm::vec3 color)
 {
 	this->color = color;
-	shader.SetVector3f("spriteColor", color);
+	shader.SetVector3f("spriteColor", color, true);
 }
 
-Shader SpriteRenderer::getShader() const
+Shader SpriteComponent::getShader() const
 {
 	return shader;
 }
 
-void SpriteRenderer::setShader(const Shader shader)
+void SpriteComponent::setShader(const Shader shader)
 {
 	this->shader = shader;
 }
 
-void SpriteRenderer::setLit(const bool lit)
+void SpriteComponent::setLit(const bool lit)
 {
 	setShader(ResourceManager::GetShader(lit ? "sprite" : "spriteunlit"));
 }

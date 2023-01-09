@@ -5,6 +5,12 @@
 #include "Util/Events/RenderEvents.h"
 #include "Util/Events/Events.h"
 
+void Light::start()
+{
+	Component::start();
+	Griddy::Events::invoke<OnLightComponentStarted>(this);
+}
+
 Light::~Light()
 {
 	Component::~Component();
@@ -32,8 +38,3 @@ void Light::setFalloff(const glm::vec3& _falloff)
 	Lighting::Instance()->refreshLightData(LightUpdateRequest::Falloff);
 }
 
-void Light::start()
-{
-	Component::start();
-	Griddy::Events::invoke<OnLightComponentStarted>(this);
-}

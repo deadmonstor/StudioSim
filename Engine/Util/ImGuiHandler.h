@@ -12,6 +12,7 @@ public:
 	void init();
 	void ImGUIGridSystem() const;
 	void ImGUIGameObjects() const;
+	void ImGUILayers() const;
 	void update();
 	static void render();
 	void addLog(const std::string &);

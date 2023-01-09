@@ -1,7 +1,5 @@
 #include "AnimatedSpriteRenderer.h"
 
-#include <utility>
-
 #include "Core/GameObject.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
@@ -33,7 +31,7 @@ void AnimatedSpriteRenderer::update()
 	setTexture(textureList[currentIndex]);
 	lastUpdate = Time::getTime();
 
-	SpriteRenderer::update();
+	SpriteComponent::update();
 }
 
 void AnimatedSpriteRenderer::getDebugInfo(std::string* string)
@@ -44,5 +42,5 @@ void AnimatedSpriteRenderer::getDebugInfo(std::string* string)
 	ss << "Update Every X MS: " << updateEveryXMS << std::endl;
 	ss << "Texture List Size: " << textureList.size() << std::endl;
 	string->append(ss.str());
-	SpriteRenderer::getDebugInfo(string);
+	SpriteComponent::getDebugInfo(string);
 }

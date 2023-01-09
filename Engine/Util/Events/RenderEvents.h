@@ -1,21 +1,21 @@
 ﻿#pragma once
 #include "FunctionHandler.h"
-#include "Core/Components/SpriteRenderer.h"
 
+class SpriteComponent;
 class Light;
 
 class OnSpriteRendererComponentStarted : public Griddy::Event
 {
 public:
-	explicit OnSpriteRendererComponentStarted(SpriteRenderer* spriteRenderer) : spriteRenderer(spriteRenderer) {}
-	SpriteRenderer* spriteRenderer;
+	explicit OnSpriteRendererComponentStarted(SpriteComponent* spriteRenderer) : spriteRenderer(spriteRenderer) {}
+	SpriteComponent* spriteRenderer;
 };
 
 class OnSpriteRendererComponentRemoved : public Griddy::Event
 {
 public:
-	explicit OnSpriteRendererComponentRemoved(SpriteRenderer* spriteRenderer) : spriteRenderer(spriteRenderer) {}
-	SpriteRenderer* spriteRenderer;
+	explicit OnSpriteRendererComponentRemoved(SpriteComponent* spriteRenderer) : spriteRenderer(spriteRenderer) {}
+	SpriteComponent* spriteRenderer;
 };
 
 class OnLightComponentStarted : public Griddy::Event

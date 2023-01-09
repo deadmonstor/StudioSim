@@ -1,6 +1,5 @@
-﻿#include "GridSystem.h"
-
-#include <glad/glad.h>
+﻿#include <glad/glad.h>
+#include "GridSystem.h"
 
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"

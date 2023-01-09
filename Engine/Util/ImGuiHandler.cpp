@@ -86,16 +86,41 @@ void ImGuiHandler::ImGUIGameObjects() const
 	}
 }
 
-static bool showDebugMenu;
+void ImGuiHandler::ImGUILayers() const
+{
+	ImGui::Text("Layers:");
+	
+	std::map<std::string, SortingLayer*> layers = Renderer::Instance()->sortingLayers;
+	std::vector<std::pair<std::string, SortingLayer*>> layersVector(layers.begin(), layers.end());
+	std::ranges::sort(layersVector,
+	  [](const std::pair<std::string, SortingLayer*>& a, const std::pair<std::string, SortingLayer*>& b)
+	  {
+	      return a.second->getOrder() < b.second->getOrder();
+	  });
+	
+	for (const auto& [layerName, layer] : layersVector)
+	{
+		if (ImGui::TreeNode(layerName.c_str()))
+		{
+			ImGui::Indent();
+			ImGui::Text("Order: %d", layer->getOrder());
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+	}
+}
+
 static bool showDebugLog;
 static bool showDebugImage;
 static bool showDebugGameObjects;
+static bool showDebugLayers;
 
 static std::map<std::string, bool*> showDebugComponents
 {
 	{"Debug Log", &showDebugLog},
 	{"Debug Image", &showDebugImage},
-	{"Debug Game Objects", &showDebugGameObjects}
+	{"Debug Game Objects", &showDebugGameObjects},
+	{"Debug Layers", &showDebugLayers}
 };
 
 static std::map<std::string, DebugEvent> debugSettings
@@ -213,6 +238,12 @@ void ImGuiHandler::update()
 			ImGui::TreePop();
 		}
 		
+		ImGui::End();
+	}
+	
+	if (showDebugLayers && ImGui::Begin("Layers Window", &showDebugLayers))
+	{
+		ImGUILayers();
 		ImGui::End();
 	}
 }

@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include "FunctionHandler.h"
-#include "Core/Components/SpriteRenderer.h"
 
 class AnimatedSpriteRenderer;
+class SpriteComponent;
 class Light;
 class GameObject;
 NEW_EMPTY_EVENT(OnEngineStart);

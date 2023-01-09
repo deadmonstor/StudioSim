@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Core/Components/AnimatedSpriteRenderer.h"
-#include "Core/Components/SpriteRenderer.h"
+#include "Core/Components/SpriteComponent.h"
 
 class Tile final : public AnimatedSpriteRenderer
 {
