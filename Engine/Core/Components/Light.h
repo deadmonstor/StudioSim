@@ -9,6 +9,8 @@ public:
 	void start() override;
 	~Light() override;
 
+	void getDebugInfo(std::string*) override;
+
 	glm::vec4 getColor() const { return color; }
 	void setColor(const glm::vec4& _color);
 

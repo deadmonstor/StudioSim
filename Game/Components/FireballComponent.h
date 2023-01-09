@@ -9,4 +9,6 @@ public:
 	void update() override;
 	void lateUpdate() override;
 	void onAnimationEnded(OnAnimationEnded* event);
+
+	void getDebugInfo(std::string*) override;
 };

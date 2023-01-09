@@ -42,3 +42,11 @@ void FireballComponent::onAnimationEnded(OnAnimationEnded* event)
 		SceneManager::Instance()->destroyGameObject(this->owner);
 	}
 }
+
+void FireballComponent::getDebugInfo(std::string* string)
+{
+	std::stringstream ss;
+	ss << "No data" << std::endl;
+	string->append(ss.str());
+	Component::getDebugInfo(string);
+}
