@@ -19,10 +19,16 @@ Light::~Light()
 
 void Light::getDebugInfo(std::string* string)
 {
-	std::stringstream ss;
-	ss << "Color: " << color.x << ", " << color.y << ", " << color.z << std::endl;
-	ss << "Falloff: " << falloff.x << ", " << falloff.y << ", " << falloff.z << std::endl;
-	string->append(ss.str());
+	ImGui::Indent();
+	ImGui::TextUnformatted("Color: ");
+	const auto internalColor = new float[4]{ this->color.r, this->color.g, this->color.b, this->color.a };
+	ImGui::ColorEdit4("", internalColor);
+
+	ImGui::TextUnformatted("Falloff: ");
+	const auto internalFloat = new float[3]{ this->falloff.x, this->falloff.y, this->falloff.z };
+	ImGui::DragFloat3("", internalFloat);
+	ImGui::Unindent();
+
 	Component::getDebugInfo(string);
 }
 

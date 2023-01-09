@@ -36,11 +36,23 @@ void AnimatedSpriteRenderer::update()
 
 void AnimatedSpriteRenderer::getDebugInfo(std::string* string)
 {
-	std::stringstream ss;
-	ss << "Current Index: " << currentIndex << std::endl;
-	ss << "Last Update: " << lastUpdate << std::endl;
-	ss << "Update Every X MS: " << updateEveryXMS << std::endl;
-	ss << "Texture List Size: " << textureList.size() << std::endl;
-	string->append(ss.str());
+	ImGui::Indent();
+	ImGui::TextUnformatted("Current Index: ");
+	auto id = new int(currentIndex);
+	ImGui::InputInt("", id);
+
+	ImGui::TextUnformatted("Last Updated: ");
+	id = new int(lastUpdate);
+	ImGui::InputInt("", id);
+	
+	ImGui::TextUnformatted("Update Every X MS: ");
+	id = new int(updateEveryXMS);
+	ImGui::InputInt("", id);
+
+	ImGui::TextUnformatted("Texture List Size: ");
+	id = new int(textureList.size());
+	ImGui::InputInt("", id);
+	ImGui::Unindent();
+	
 	SpriteComponent::getDebugInfo(string);
 }
