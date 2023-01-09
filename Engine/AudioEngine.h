@@ -9,7 +9,7 @@ class AudioEngine : public SingletonTemplate<AudioEngine>
 public:
 	bool init();
 	void update();
-	bool checkResult(FMOD_RESULT fmodResult);
+	bool checkResult(FMOD_RESULT fmodResult, std::string area);
 	bool loadSound(const char* path, FMOD_MODE fMode);
 	bool playSound(const char *path, bool isPaused, float volume, float positionX, float positionY);
 	void onDebugEvent(const OnDebugEventChanged* event);
