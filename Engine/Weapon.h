@@ -2,6 +2,9 @@
 #include "Core/Components/AnimatedSpriteRenderer.h"
 class Weapon
 {
-	void createWeaponAnimation(std::vector<Texture> textureList, double updateEveryXMS);
+	//Create Weapon Sprite
+	//Create Weapon Animation
 
+	//PlayAnimation
+	//Damage Float
 };
