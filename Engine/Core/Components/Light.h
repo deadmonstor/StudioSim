@@ -7,7 +7,7 @@ class Light final : public Component
 {
 public:
 	void start() override;
-	~Light() override;
+	void destroy() override;
 
 	void getDebugInfo(std::string*) override;
 

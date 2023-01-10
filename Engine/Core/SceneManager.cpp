@@ -9,6 +9,8 @@
 void SceneManager::destroyScene(const Scene* scene)
 {
 	Renderer::Instance()->setCamera(nullptr);
+
+	shuttingDown = true;
 	
 	const auto gameObjects = scene->gameObjects;
 	for(const auto object : gameObjects)
@@ -25,7 +27,8 @@ bool SceneManager::changeScene(const std::string& scene)
 	{
 		destroyScene(currentScene);
 	}
-	
+
+	shuttingDown = false;
 	LOG_INFO("Changed scene to " + scene);
 	currentScene = new Scene();
 
@@ -79,6 +82,7 @@ void SceneManager::deleteAllPendingObjects() const
 	{
 		if ((*i)->beingDeleted)
 		{
+			(*i)->destroy();
 			delete *i;
 			i = currentScene->gameObjects.erase(i);
 		}

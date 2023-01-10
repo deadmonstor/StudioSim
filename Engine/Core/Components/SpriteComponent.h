@@ -15,12 +15,12 @@ class SpriteComponent : public Component
 	int sortingOrder = 0;
 	SortingLayer sortingLayer = Renderer::getDefaultSortingLayer();
 public:
-	~SpriteComponent() override;
 
 	void start() override;
 	void createBuffers();
 	void update() override;
 	void lateUpdate() override;
+	void destroy() override;
 	void getDebugInfo(std::string*) override;
 
 	void setColor(glm::vec3 color);

@@ -8,12 +8,20 @@ GameObject::GameObject() = default;
 
 GameObject::~GameObject()
 {
-	Griddy::Events::invoke<OnGameObjectRemoved>(this);
-
 	for (const Component* curComponent : components)
 	{
 		delete curComponent;
 		curComponent = nullptr;
+	}
+}
+
+void GameObject::destroy()
+{
+	Griddy::Events::invoke<OnGameObjectRemoved>(this);
+
+	for (Component* curComponent : components)
+	{
+		curComponent->destroy();
 	}
 }
 

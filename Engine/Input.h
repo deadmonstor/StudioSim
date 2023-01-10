@@ -96,6 +96,9 @@ public:
 
 	static glm::vec2 getMousePosition()
 	{
+		if (SceneManager::Instance()->isShuttingDown())
+			return glm::vec2(0.0f);
+		
 		double x, y;
 		glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 		
