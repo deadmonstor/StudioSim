@@ -24,6 +24,8 @@ public:
 
 	Scene* currentScene;
 	void onSceneChanged(const OnSceneChangeRequested* event);
+	bool isShuttingDown() const { return shuttingDown; }
 private:
 	friend class ImGuiHandler;
+	bool shuttingDown = false;
 };

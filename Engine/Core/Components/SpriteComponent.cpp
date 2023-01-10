@@ -4,9 +4,9 @@
 #include "Util/Events/Events.h"
 #include "Util/Events/RenderEvents.h"
 
-SpriteComponent::~SpriteComponent()
+void SpriteComponent::destroy()
 {
-	Component::~Component();
+	Component::destroy();
 	Griddy::Events::invoke<OnSpriteRendererComponentRemoved>(this);
 }
 

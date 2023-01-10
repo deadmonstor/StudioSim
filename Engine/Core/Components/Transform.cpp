@@ -41,6 +41,11 @@ void Transform::SetRotation(const float inRotation)
 	this->rotation = inRotation;
 }
 
+void Transform::destroy()
+{
+	
+}
+
 void Transform::SetScale(const glm::vec2 inScale)
 {
 	this->size = inScale;

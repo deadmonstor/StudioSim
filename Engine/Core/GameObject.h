@@ -23,6 +23,7 @@ public:
 	void start();
 	void update();
 	void lateUpdate();
+	void destroy();
 	
 	[[nodiscard]] Transform* getTransform() const { return transform; }
 	[[nodiscard]] bool isValidTransform() const { return transform != nullptr; }

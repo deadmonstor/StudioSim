@@ -312,4 +312,9 @@ void ImGuiHandler::onKeyDown(const int key, const int scancode, const int action
 	{
 		Griddy::Events::invoke<OnDebugEventChanged>(DebugPauseGame);
 	}
+
+	if (key == GLFW_KEY_F8 && action == GLFW_PRESS)
+	{
+		Griddy::Events::invoke<OnSceneChangeRequested>("debugScene");
+	}
 }

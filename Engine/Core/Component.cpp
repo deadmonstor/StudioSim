@@ -16,6 +16,11 @@ void Component::lateUpdate()
 	
 }
 
+void Component::destroy()
+{
+	
+}
+
 void Component::getDebugInfo(std::string*)
 {
 

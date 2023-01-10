@@ -15,6 +15,7 @@ public:
 	void SetPosition(glm::vec2 inPosition);
 	void SetScale(glm::vec2 inScale);
 	void SetRotation(float inRotation);
+	void destroy() override;
 
 	[[nodiscard]] glm::vec2 GetPosition() const;
 	[[nodiscard]] glm::vec2 GetScale() const { return size; }
