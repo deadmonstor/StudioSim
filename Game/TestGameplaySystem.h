@@ -126,6 +126,13 @@ public:
 		const std::vector textureListHurt = ResourceManager::GetTexturesContaining("Blue-Slime-Hurt");
 		sprite = testHurt->addComponent<AnimatedSpriteRenderer>(textureListHurt, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
+
+		auto *testDeath = SceneManager::Instance()->createGameObject("Blue-Slime-Death", glm::vec2{350, 350});
+		testDeath->getTransform()->SetScale(glm::vec2(96, 48));
+
+		const std::vector textureListDeath = ResourceManager::GetTexturesContaining("Blue-Slime-Death");
+		sprite = testDeath->addComponent<AnimatedSpriteRenderer>(textureListDeath, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
 			
 		CreateFireball(glm::vec2{ 1000, 500 });
 	}
