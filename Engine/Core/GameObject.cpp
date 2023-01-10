@@ -23,12 +23,15 @@ void GameObject::destroy()
 	{
 		curComponent->destroy();
 	}
+
+	transform = nullptr;
 }
 
 void GameObject::start()
 {
 	for (Component* curComponent : components)
 	{
+		if (isBeingDeleted()) return;
 		curComponent->start();
 	}
 }
