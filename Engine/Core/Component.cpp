@@ -28,5 +28,5 @@ void Component::getDebugInfo(std::string*)
 
 Component::~Component()
 {
-	this->owner = nullptr;
+	
 }
