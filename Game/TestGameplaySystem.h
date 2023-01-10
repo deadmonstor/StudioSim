@@ -119,7 +119,8 @@ public:
 		sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprites.push_back(sprite);
-
+		
+		//Slime Hurt Anim
 		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
 		testHurt->getTransform()->SetScale(glm::vec2(96, 48));
 
@@ -127,13 +128,32 @@ public:
 		sprite = testHurt->addComponent<AnimatedSpriteRenderer>(textureListHurt, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
 
+		//Slime Death Animation
 		auto *testDeath = SceneManager::Instance()->createGameObject("Blue-Slime-Death", glm::vec2{350, 350});
 		testDeath->getTransform()->SetScale(glm::vec2(96, 48));
 
 		const std::vector textureListDeath = ResourceManager::GetTexturesContaining("Blue-Slime-Death");
 		sprite = testDeath->addComponent<AnimatedSpriteRenderer>(textureListDeath, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
-			
+		
+		//Add zombie and skeleton
+
+		//Zombie Animation
+		auto *testZombie = SceneManager::Instance()->createGameObject("Zombie", glm::vec2{400, 400});
+		testZombie->getTransform()->SetScale(glm::vec2(38, 38));
+
+		const std::vector textureListZombie = ResourceManager::GetTexturesContaining("Zombie");
+		sprite = testZombie->addComponent<AnimatedSpriteRenderer>(textureListZombie, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+
+		//Skeleton Animation
+		auto *testSkeleton = SceneManager::Instance()->createGameObject("Skeleton", glm::vec2{350, 400});
+		testSkeleton->getTransform()->SetScale(glm::vec2(38, 38));
+
+		const std::vector textureListSkeleton = ResourceManager::GetTexturesContaining("Skeleton");
+		sprite = testSkeleton->addComponent<AnimatedSpriteRenderer>(textureListSkeleton, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+
 		CreateFireball(glm::vec2{ 1000, 500 });
 	}
 
