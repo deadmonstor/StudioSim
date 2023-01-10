@@ -97,7 +97,8 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 	//Channel Creation
 	FMOD::Channel *fmodChannel = nullptr;
 	fmodSystem->playSound(ResourceManager::GetSound(path), nullptr, isPaused, &fmodChannel);
-
+	fmodChannel->setMode(FMOD_3D);
+	
 	//Audio source position
 	FMOD_VECTOR sourcePosition = {positionX, positionY, 0};
 

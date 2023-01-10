@@ -1,7 +1,10 @@
 ﻿#pragma once
+#include <string>
 #include "FunctionHandler.h"
-#include "Core/Components/SpriteRenderer.h"
 
+class AnimatedSpriteRenderer;
+class SpriteComponent;
+class Light;
 class GameObject;
 NEW_EMPTY_EVENT(OnEngineStart);
 NEW_EMPTY_EVENT(OnEngineUpdate);
@@ -13,6 +16,10 @@ enum DebugEvent
 	DebugPlaySound,	
 	DebugKeyEvents,	
 	DebugMouseEvents,	
+	DebugMouseLight,	
+	DebugLightColor,	
+	DebugPauseGame,	
+	DebugChangeScene,	
 };
 
 class OnDebugEventChanged : public Griddy::Event
@@ -20,6 +27,20 @@ class OnDebugEventChanged : public Griddy::Event
 public:
 	OnDebugEventChanged(const DebugEvent key) : key(key) {}
 	DebugEvent key;
+};
+
+class OnSceneChangeRequested : public Griddy::Event
+{
+public:
+	OnSceneChangeRequested(const std::string key) : key(key) {}
+	std::string key;
+};
+
+class OnSceneChanged : public Griddy::Event
+{
+public:
+	OnSceneChanged(const std::string key) : key(key) {}
+	std::string key;
 };
 
 #pragma region Key Events
@@ -80,16 +101,16 @@ public:
 	const char** paths;
 };
 
-class OnSpriteRendererComponentStarted : public Griddy::Event
+class OnGameObjectRemoved : public Griddy::Event
 {
 public:
-	explicit OnSpriteRendererComponentStarted(SpriteRenderer* spriteRenderer) : spriteRenderer(spriteRenderer) {}
-	SpriteRenderer* spriteRenderer;
+	explicit OnGameObjectRemoved(GameObject* _gameObject) : gameObject(_gameObject) {}
+	GameObject* gameObject;
 };
 
-class OnSpriteRendererComponentRemoved : public Griddy::Event
+class OnAnimationEnded : public Griddy::Event
 {
 public:
-	explicit OnSpriteRendererComponentRemoved(SpriteRenderer* spriteRenderer) : spriteRenderer(spriteRenderer) {}
-	SpriteRenderer* spriteRenderer;
+	explicit OnAnimationEnded(AnimatedSpriteRenderer* _animatedSpriteRenderer) : animatedSpriteRenderer(_animatedSpriteRenderer) {}
+	AnimatedSpriteRenderer* animatedSpriteRenderer;
 };

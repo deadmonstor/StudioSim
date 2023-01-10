@@ -2,25 +2,48 @@
 
 #include "Components/AnimatedSpriteRenderer.h"
 #include "Components/Transform.h"
+#include "Renderer/Renderer.h"
+#include "Util/Events/EngineEvents.h"
+#include "Util/Events/Events.h"
+
+void SceneManager::destroyScene(const Scene* scene)
+{
+	Renderer::Instance()->setCamera(nullptr);
+	
+	const auto gameObjects = scene->gameObjects;
+	for(const auto object : gameObjects)
+	{
+		destroyGameObject(object);
+	}
+
+	deleteAllPendingObjects();
+}
 
 bool SceneManager::changeScene(const std::string& scene)
 {
+	if (currentScene != nullptr)
+	{
+		destroyScene(currentScene);
+	}
+	
 	LOG_INFO("Changed scene to " + scene);
 	currentScene = new Scene();
-	
+
+	Griddy::Events::invoke<OnSceneChanged>(scene);
 	return true;
 }
 
 bool SceneManager::init()
 {
-	return changeScene("scene stuff");
+	Griddy::Events::subscribe(this, &SceneManager::onSceneChanged);
+	return changeScene("renderScene");
 }
 
 GameObject* SceneManager::createGameObject(const std::string name, const glm::vec2 position)
 {
 	const auto created = new GameObject();
 	created->transform = new Transform();
-	created->transform->name = "Transform";
+	created->transform->setName("Transform");
 	created->name = name;
 	
 	created->addComponent(created->transform);
@@ -37,17 +60,9 @@ GameObject* SceneManager::createGameObject(const std::string name, const glm::ve
 	return created;
 }
 
-void SceneManager::destroyGameObject(const GameObject* gameObject) const
+void SceneManager::destroyGameObject(GameObject* gameObject) const
 {
-	for (auto it = currentScene->gameObjects.begin(); it != currentScene->gameObjects.end(); ++it)
-	{
-		if (*it == gameObject)
-		{
-			currentScene->gameObjects.erase(it);
-			delete gameObject;
-			return;
-		}
-	}
+	gameObject->beingDeleted = true;
 }
 
 void SceneManager::update() const
@@ -58,16 +73,39 @@ void SceneManager::update() const
 	}
 }
 
+void SceneManager::deleteAllPendingObjects() const
+{
+	for(auto i = currentScene->gameObjects.begin(); i != currentScene->gameObjects.end();)
+	{
+		if ((*i)->beingDeleted)
+		{
+			delete *i;
+			i = currentScene->gameObjects.erase(i);
+		}
+		else
+		{
+			++i;
+		}
+	}
+}
+
 void SceneManager::lateUpdate() const
 {
 	for (auto i : currentScene->gameObjects)
 	{
 		i->lateUpdate();
 	}
+
+	deleteAllPendingObjects();
 }
 
 
 void SceneManager::render() const
 {
 	
+}
+
+void SceneManager::onSceneChanged(const OnSceneChangeRequested* event)
+{
+	changeScene(event->key);
 }

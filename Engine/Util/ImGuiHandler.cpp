@@ -1,5 +1,6 @@
 ﻿#include "ImGuiHandler.h"
 
+#include "Engine.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/Renderer.h"
@@ -9,6 +10,7 @@
 #include "Library/imgui/imgui_impl_glfw.h"
 #include "Library/imgui/imgui_impl_opengl3.h"
 
+static SpriteComponent* pausedSprite;
 void ImGuiHandler::init()
 {
 #if (NDEBUG)
@@ -19,7 +21,12 @@ void ImGuiHandler::init()
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
 	ImGui_ImplOpenGL3_Init("#version 330");
-	ImGui_ImplGlfw_InitForOpenGL(Renderer::GetWindow(), true);
+	ImGui_ImplGlfw_InitForOpenGL(Renderer::getWindow(), true);
+
+	pausedSprite = new SpriteComponent();
+	const Texture pause = ResourceManager::LoadTexture("Sprites\\pause.png", "pause");
+	pausedSprite->setTexture(pause);
+	pausedSprite->setLit(false);
 }
 
 void ImGuiHandler::ImGUIGridSystem() const
@@ -28,7 +35,7 @@ void ImGuiHandler::ImGUIGridSystem() const
 		const auto& [x, mapHolder] : gridSystem->internalMap)
 	{
 		std::string xString = "X: " + std::to_string(x);
-					
+
 		if (ImGui::TreeNode(xString.c_str()))
 		{
 			for (const auto& [y, gridHolder] : mapHolder)
@@ -41,7 +48,9 @@ void ImGuiHandler::ImGUIGridSystem() const
 					{
 						auto* tileString = new std::string("");
 						tile->getDebugInfo(tileString);
+						ImGui::Indent();
 						ImGui::Text("%s", tileString->c_str());
+						ImGui::Unindent();
 					}
 					else
 					{
@@ -67,11 +76,14 @@ void ImGuiHandler::ImGUIGameObjects() const
 		{
 			for (const auto& curComponent : curGameObject->components)
 			{
-				if (ImGui::TreeNode(curComponent->name.c_str()))
+				if (ImGui::TreeNode(curComponent->getName().c_str()))
 				{
 					std::string debugString;
 					curComponent->getDebugInfo(&debugString);
-					ImGui::Text("%s", debugString.c_str());
+					ImGui::Indent();
+					if (!debugString.empty())
+						ImGui::Text("%s", debugString.c_str());
+					ImGui::Unindent();
 					ImGui::TreePop();
 				}
 			}
@@ -80,6 +92,60 @@ void ImGuiHandler::ImGUIGameObjects() const
 		}
 	}
 }
+
+void ImGuiHandler::ImGUILayers() const
+{
+	ImGui::Text("Layers:");
+	
+	std::map<std::string, SortingLayer*> layers = Renderer::Instance()->sortingLayers;
+	std::vector<std::pair<std::string, SortingLayer*>> layersVector(layers.begin(), layers.end());
+	std::ranges::sort(layersVector,
+	  [](const std::pair<std::string, SortingLayer*>& a, const std::pair<std::string, SortingLayer*>& b)
+	  {
+	      return a.second->getOrder() < b.second->getOrder();
+	  });
+	
+	for (const auto& [layerName, layer] : layersVector)
+	{
+		if (ImGui::TreeNode(layerName.c_str()))
+		{
+			ImGui::Indent();
+			ImGui::Text("Order: %d", layer->getOrder());
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+	}
+}
+
+static bool showDebugLog;
+static bool showDebugImage;
+static bool showDebugGameObjects;
+static bool showDebugLayers;
+
+static std::map<std::string, bool*> showDebugComponents
+{
+	{"Debug Log", &showDebugLog},
+	{"Debug Image", &showDebugImage},
+	{"Debug Game Objects", &showDebugGameObjects},
+	{"Debug Layers", &showDebugLayers}
+};
+
+static std::map<std::string, DebugEvent> debugSettings
+{
+	{"Debug Render Grid", DebugRenderGrid},
+	{"Debug Play Sound", DebugPlaySound},
+	{"Debug Key Events", DebugKeyEvents},
+	{"Debug Mouse Events", DebugMouseEvents},
+	{"Debug Mouse Light", DebugMouseLight},
+	{"Debug Light Color", DebugLightColor},
+	{"Debug Pause Game", DebugPauseGame}
+};
+
+static std::map<std::string, std::string> debugScenes
+{
+	{"Debug Rendering", "renderScene"},
+	{"Debug Scene", "debugScene"},
+};
 
 void ImGuiHandler::update()
 {
@@ -90,85 +156,134 @@ void ImGuiHandler::update()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-	if (ImGui::BeginTabBar("TabBar"))
+
+	if(ImGui::BeginMainMenuBar())
 	{
-		// Make m_vLog into a string with newlines
-		std::string sLog;
-		for (auto& s : m_vLog)
-		{
-			sLog += s + "\n";
-		}
+		ImGui::Text("DEV MODE |");
 		
-		if (ImGui::BeginTabItem("Debug Settings Window"))
+		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::Button("Debug Render Grid"))
+			if (ImGui::MenuItem("Exit"))
 			{
-				Griddy::Events::invoke<OnDebugEventChanged>(DebugRenderGrid);
-			}
-
-			if (ImGui::Button("Debug Play Sound"))
-			{
-				Griddy::Events::invoke<OnDebugEventChanged>(DebugPlaySound);
-			}
-
-			if (ImGui::Button("Debug Key Events"))
-			{
-				Griddy::Events::invoke<OnDebugEventChanged>(DebugKeyEvents);
-			}
-
-			if (ImGui::Button("Debug Mouse Events"))
-			{
-				Griddy::Events::invoke<OnDebugEventChanged>(DebugMouseEvents);
+				Griddy::Engine::Instance()->shutdown();
 			}
 			
-			ImGui::EndTabItem();
-		}
-
-		if (ImGui::BeginTabItem("Logging Window"))
-		{
-			ImGui::Text("%s", sLog.c_str());
-			ImGui::EndTabItem();
+			ImGui::EndMenu();
 		}
 		
-		if (ImGui::BeginTabItem("Image Window"))
+		if (ImGui::BeginMenu("Debug"))
 		{
-			const auto dice = ResourceManager::GetTexture("engine");
-			ImGui::Image((void *)(intptr_t)dice.ID, ImVec2((float)dice.Width * 5, (float)dice.Height * 5));
-			ImGui::EndTabItem();
-		}
-
-		if (ImGui::BeginTabItem("GameObject Window"))
-		{
-			ImGUIGameObjects();
-			
-			if (ImGui::TreeNode("GridSystem"))
+			for (auto& [name, debugEvent] : debugSettings)
 			{
-				ImGUIGridSystem();
-				ImGui::TreePop();
+				if(ImGui::MenuItem(name.c_str()))
+				{
+					Griddy::Events::invoke<OnDebugEventChanged>(debugEvent);
+				}
 			}
 			
-			ImGui::EndTabItem();
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Scenes"))
+		{
+			for (auto& [name, sceneName] : debugScenes)
+			{
+				if(ImGui::MenuItem(name.c_str()))
+				{
+					Griddy::Events::invoke<OnSceneChangeRequested>(sceneName);
+				}
+			}
+			
+			ImGui::EndMenu();
 		}
 		
-		ImGui::EndTabBar();
+		if (ImGui::BeginMenu("Windows"))
+		{
+			for (auto& [name, show] : showDebugComponents)
+			{
+				if(ImGui::MenuItem(name.c_str(), "", show))
+				{
+					*show = true;
+				}
+			}
+			
+			ImGui::EndMenu();
+		}
+		
+		ImGui::EndMainMenuBar();
+	}
+
+	if (showDebugLog && ImGui::Begin("Logging Window", &showDebugLog))
+	{
+		if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -0), false, ImGuiWindowFlags_AlwaysVerticalScrollbar))
+		{
+			std::string sLog;
+			
+			for (auto it = m_vLog.rbegin(); it != m_vLog.rend(); ++it)
+			{
+				sLog += *it;
+			}
+			
+			ImGui::TextUnformatted(sLog.c_str());
+			ImGui::EndChild();
+		}
+		ImGui::End();
+	}
+	
+	if (showDebugImage && ImGui::Begin("Image Window", &showDebugImage))
+	{
+		const auto dice = ResourceManager::GetTexture("engine");
+		ImGui::Image((void *)(intptr_t)dice.ID, ImVec2((float)dice.Width * 5, (float)dice.Height * 5));
+		ImGui::End();
+	}
+
+	if (showDebugGameObjects && ImGui::Begin("GameObject Window", &showDebugGameObjects))
+	{
+		ImGUIGameObjects();
+		
+		if (ImGui::TreeNode("GridSystem"))
+		{
+			ImGUIGridSystem();
+			ImGui::TreePop();
+		}
+		
+		ImGui::End();
+	}
+	
+	if (showDebugLayers && ImGui::Begin("Layers Window", &showDebugLayers))
+	{
+		ImGUILayers();
+		ImGui::End();
 	}
 }
-
 void ImGuiHandler::render()
 {
 #if (NDEBUG)
 	return;
 #endif
+
+	if (Griddy::Engine::isPaused())
+	{
+		const auto windowSize = Renderer::getWindowSize();
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			Renderer::Instance()->renderSprite(pausedSprite, {windowSize.x - 142 , windowSize.y - 39}, {142, 39}, 0);
+		glDisable(GL_BLEND);
+	}
 	
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
 
+}
 void ImGuiHandler::addLog(const std::string &log)
 {
+	if (m_vLog.size() > 1000)
+	{
+		m_vLog.erase(m_vLog.begin());
+	}
+	
 	m_vLog.push_back(log);
 }
-
 void ImGuiHandler::cleanup()
 {
 #if (NDEBUG)
@@ -177,4 +292,12 @@ void ImGuiHandler::cleanup()
 	
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
+}
+
+void ImGuiHandler::onKeyDown(const int key, const int scancode, const int action, const int mods)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		Griddy::Events::invoke<OnDebugEventChanged>(DebugPauseGame);
+	}
 }

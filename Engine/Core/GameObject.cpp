@@ -2,11 +2,14 @@
 #include <typeinfo>
 #include "Component.h"
 #include "Util/Logger.h"
+#include "Util/Events/Events.h"
 
 GameObject::GameObject() = default;
 
 GameObject::~GameObject()
 {
+	Griddy::Events::invoke<OnGameObjectRemoved>(this);
+
 	for (const Component* curComponent : components)
 	{
 		delete curComponent;
@@ -26,6 +29,7 @@ void GameObject::update()
 {
 	for (Component* curComponent : components)
 	{
+		if (isBeingDeleted()) return;
 		curComponent->update();
 	}
 }
@@ -34,13 +38,14 @@ void GameObject::lateUpdate()
 {
 	for (Component* curComponent : components)
 	{
+		if (isBeingDeleted()) return;
 		curComponent->lateUpdate();
 	}
 }
 
 void GameObject::addComponent(Component* component)
 {
-	component->owner = this;
+	component->setOwner(this);
 	
 	if (isInitialized)
 		component->start();

@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
+#include "Core/Renderer/Lighting.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "imgui/imgui_impl_glfw.h"
@@ -18,20 +19,25 @@ namespace Griddy
 	void key_callback(GLFWwindow* window, const int key, const int scancode, const int action, const int mods)
 	{
 		ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
-		Input::Instance()->keyCallback(window, key, scancode, action, mods);
+
+		if (!Engine::isPaused())
+			Input::Instance()->keyCallback(window, key, scancode, action, mods);
+		
+		ImGuiHandler::Instance()->onKeyDown(key, scancode, action, mods);
 	}
 
 	void mouse_callback(GLFWwindow* window, const int button, const int action, const int mods)
 	{
 		ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
 		
-		if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
+		if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !Engine::isPaused())
 			Input::Instance()->mouseCallback(window, button, action, mods);
 	}
 
 	void drop_callback(GLFWwindow* window, const int count, const char** paths)
 	{
-		Input::Instance()->dropCallback(window, count, paths);
+		if (!Engine::isPaused())
+			Input::Instance()->dropCallback(window, count, paths);
 	}
 	
 	bool Engine::init()
@@ -57,16 +63,18 @@ namespace Griddy
 		{
 			return false;
 		}
-		
+
+		Lighting::Instance()->init();
 		AudioEngine::Instance()->init();
 		Input::Instance()->init();
 		ImGuiHandler::Instance()->init();
 		m_Initialized = true;
 
-		glfwSetKeyCallback(Renderer::GetWindow(), key_callback);
-		glfwSetMouseButtonCallback(Renderer::GetWindow(), mouse_callback);
-		glfwSetDropCallback(Renderer::GetWindow(), drop_callback);
+		glfwSetKeyCallback(Renderer::getWindow(), key_callback);
+		glfwSetMouseButtonCallback(Renderer::getWindow(), mouse_callback);
+		glfwSetDropCallback(Renderer::getWindow(), drop_callback);
 
+		Events::subscribe(this, &Engine::onDebugEvent);
 		// init
 		return true;
 	}
@@ -76,12 +84,15 @@ namespace Griddy
 		// update
 		glfwPollEvents();
 
-		SceneManager::Instance()->update();
-		Events::invoke<OnEngineUpdate>();
-		
-		AudioEngine::Instance()->update();
+		if (!isPaused())
+		{
+			SceneManager::Instance()->update();
+			Events::invoke<OnEngineUpdate>();
+			
+			AudioEngine::Instance()->update();
+		}
 		// Check if we need to stop the engine
-		if (auto *window = Renderer::GetWindow(); window == nullptr || glfwWindowShouldClose(window))
+		if (auto *window = Renderer::getWindow(); window == nullptr || glfwWindowShouldClose(window))
 		{
 			m_Running = false;
 		}
@@ -99,10 +110,10 @@ namespace Griddy
 		Renderer::Instance()->render();
 
 		SceneManager::Instance()->render();
-		GridSystem::Instance()->render();
+		//GridSystem::Instance()->render();
 		
 		ImGuiHandler::render();
-		glfwSwapBuffers(Renderer::GetWindow());
+		glfwSwapBuffers(Renderer::getWindow());
 	}
 
 	void Engine::cleanup()
@@ -126,16 +137,16 @@ namespace Griddy
 		m_Running = true;
 
 		Renderer::Instance()->init();
+		ResourceManager::LoadTexture("Sprites\\image.png", "face");
+		ResourceManager::LoadTexture("Sprites\\rock_n.png", "normals");
+		ResourceManager::LoadTexture("Sprites\\image2.png", "face2");
+		ResourceManager::LoadTexture("Sprites\\engine.png", "engine");
 
 		if (!SceneManager::Instance()->init())
 		{
 			LOG_ERROR("Failed to load default scene");
 			return;
 		}
-		
-		ResourceManager::LoadTexture("Sprites\\image.png", "face");
-		ResourceManager::LoadTexture("Sprites\\image2.png", "face2");
-		ResourceManager::LoadTexture("Sprites\\engine.png", "engine");
 		
 		bool firstFrame = true;
 		
@@ -155,5 +166,16 @@ namespace Griddy
 		}
 
 		cleanup();
+	}
+
+	void Engine::shutdown()
+	{
+		m_Running = false;
+	}
+
+	void Engine::onDebugEvent(const OnDebugEventChanged* event)
+	{
+		if (event->key == DebugPauseGame)
+			setPaused(!isPaused());
 	}
 }

@@ -1,11 +1,12 @@
 #pragma once
 #include <vector>
-#include "Core/Components/SpriteRenderer.h"
+#include "Core/Components/SpriteComponent.h"
 
-class AnimatedSpriteRenderer : public SpriteRenderer
+class AnimatedSpriteRenderer : public SpriteComponent
 {
 public:
 	AnimatedSpriteRenderer(std::vector<Texture> textureList, double updateEveryXMS);
+	bool doSpriteUpdate();
 
 	std::vector<Texture> textureList;
 

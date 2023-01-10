@@ -7,22 +7,32 @@
 
 void Transform::getDebugInfo(std::string* string)
 {
-	std::stringstream ss;
-	ss << "Position: " << position.x << ", " << position.y << std::endl;
-	ss << "Rotation: " << rotation << std::endl;
-	ss << "Size: " << size.x << ", " << size.y << std::endl;
-	string->append(ss.str());
+	ImGui::Indent();
+	ImGui::TextUnformatted("Position: ");
+	const auto internalPos = new float[2]{ this->position.x, this->position.y};
+	ImGui::DragFloat2("", internalPos);
+
+	ImGui::TextUnformatted("Rotation: ");
+	auto id = new int(rotation);
+	ImGui::InputInt("", id);
+
+	ImGui::TextUnformatted("Size: ");
+	const auto internalSize = new float[2]{ this->size.x, this->size.y};
+	ImGui::DragFloat2("", internalSize);
+	ImGui::Unindent();
+
+	Component::getDebugInfo(string);
 }
 
 glm::vec2 Transform::GetPosition() const
 {
-	const glm::vec2 camPos = Renderer::Instance()->GetCameraPos();
+	const glm::vec2 camPos = Renderer::Instance()->getCameraPos();
 	return position - camPos;
 }
 
 void Transform::SetPosition(const glm::vec2 inPosition)
 {
-	const glm::vec2 camPos = Renderer::Instance()->GetCameraPos();
+	const glm::vec2 camPos = Renderer::Instance()->getCameraPos();
 	this->position = inPosition + camPos;
 }
 
