@@ -213,46 +213,58 @@ void ImGuiHandler::update()
 		ImGui::EndMainMenuBar();
 	}
 
-	if (showDebugLog && ImGui::Begin("Logging Window", &showDebugLog))
+	if (showDebugLog)
 	{
-		if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -0), false, ImGuiWindowFlags_AlwaysVerticalScrollbar))
+		if (ImGui::Begin("Logging Window", &showDebugLog))
 		{
-			std::string sLog;
-			
-			for (auto it = m_vLog.rbegin(); it != m_vLog.rend(); ++it)
+			if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -0), false, ImGuiWindowFlags_AlwaysVerticalScrollbar))
 			{
-				sLog += *it;
-			}
+				std::string sLog;
 			
-			ImGui::TextUnformatted(sLog.c_str());
-			ImGui::EndChild();
+				for (auto it = m_vLog.rbegin(); it != m_vLog.rend(); ++it)
+				{
+					sLog += *it;
+				}
+			
+				ImGui::TextUnformatted(sLog.c_str());
+				ImGui::EndChild();
+			}
 		}
 		ImGui::End();
 	}
 	
-	if (showDebugImage && ImGui::Begin("Image Window", &showDebugImage))
+	if (showDebugImage) 
 	{
-		const auto dice = ResourceManager::GetTexture("engine");
-		ImGui::Image((void *)(intptr_t)dice.ID, ImVec2((float)dice.Width * 5, (float)dice.Height * 5));
+		if (ImGui::Begin("Image Window", &showDebugImage))
+		{
+			const auto dice = ResourceManager::GetTexture("engine");
+			ImGui::Image((void *)(intptr_t)dice.ID, ImVec2((float)dice.Width * 5, (float)dice.Height * 5));
+		}
 		ImGui::End();
 	}
 
-	if (showDebugGameObjects && ImGui::Begin("GameObject Window", &showDebugGameObjects))
+	if (showDebugGameObjects)
 	{
-		ImGUIGameObjects();
-		
-		if (ImGui::TreeNode("GridSystem"))
+		if (ImGui::Begin("GameObject Window", &showDebugGameObjects))
 		{
-			ImGUIGridSystem();
-			ImGui::TreePop();
-		}
+			ImGUIGameObjects();
 		
+			if (ImGui::TreeNode("GridSystem"))
+			{
+				ImGUIGridSystem();
+				ImGui::TreePop();
+			}
+		
+		}
 		ImGui::End();
 	}
 	
-	if (showDebugLayers && ImGui::Begin("Layers Window", &showDebugLayers))
+	if (showDebugLayers)
 	{
-		ImGUILayers();
+		if (ImGui::Begin("Layers Window", &showDebugLayers))
+		{
+			ImGUILayers();
+		}
 		ImGui::End();
 	}
 }
