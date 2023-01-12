@@ -1,6 +1,7 @@
 ﻿#include "Engine.h"
 #include <Windows.h>
 #include "AudioEngine.h"
+#include "Core/Components/TextRenderer.h"
 #include "Input.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
@@ -13,7 +14,7 @@
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
-#include "Core/Components/TextRenderer.h"
+
 
 namespace Griddy
 {

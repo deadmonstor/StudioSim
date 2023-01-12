@@ -2,7 +2,6 @@
 #include "Util/SingletonTemplate.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Core/Renderer/Texture.h"
-#include <glad/glad.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
