@@ -6,13 +6,22 @@
 class StateMachine;
 class Behaviour;
 
-//unsure about this. Is this the correct structure to make a specific state machine listen to this event?
+//targets a particular behaviour and sends an event to read
+class BehaviourEvent : public Griddy::Event
+{
+public:
+	explicit BehaviourEvent(Behaviour* targetBehaviourParam, Griddy::Event* readEventParam)
+		: targetBehaviour(targetBehaviourParam), readEvent(readEventParam) {}
+	Griddy::Event* readEvent;
+	Behaviour* targetBehaviour;
+};
+
+//targets a particular state machine and tells it to transition to the parametered behaviour
 class FSMTransition : public Griddy::Event
 {
 public:
-	FSMTransition() { stateMachine = nullptr; }
-	explicit FSMTransition(StateMachine *stateMachine) : stateMachine(stateMachine) {}
-	StateMachine *stateMachine;
+	explicit FSMTransition(StateMachine* targetStateMachineParam, Behaviour newBehaviourParam)
+		: targetStateMachine(targetStateMachineParam), newBehaviour(newBehaviourParam) {}
+	Behaviour newBehaviour;
+	StateMachine* targetStateMachine;
 };
-
-//continue development here.....
