@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Input.h"
 #include "Components/FireballComponent.h"
+#include "Core/Components/AI/StateMachine.h"
 #include "Core/SceneManager.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
@@ -12,6 +13,7 @@
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
+	StateMachine* sm;
 public:
 	std::list<SpriteComponent*> sprites;
 	void testGameObjectDestroy(const OnGameObjectRemoved* event)
@@ -93,6 +95,7 @@ public:
 		auto* fireball = SceneManager::Instance()->createGameObject("TestFireball", mousePos);
 		fireball->getTransform()->SetScale(glm::vec2(48, 48));
 		fireball->addComponent<FireballComponent>();
+		sm = fireball->addComponent<StateMachine>();
 	}
 	
 	void TestFuncLewis(const OnSceneChanged* event) 
@@ -234,7 +237,11 @@ public:
 		const glm::vec2 mousePos = Input::getMousePosition();
 		
 		if (mouseDownEvent->key == GLFW_MOUSE_BUTTON_3)
+		{
 			CreateFireball(mousePos);
+			Griddy::Events::invoke<BehaviourEvent>(sm, mouseDownEvent);
+		}
+			
 	}
 	void testKeyDown(const OnKeyDown* keyDown)
 	{

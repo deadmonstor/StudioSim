@@ -4,9 +4,13 @@
 #include "Util/Events/Events.h"
 #include "Util/Events/AIEvents.h"
 
+#include <map>
+
 //Interface defining AI behaviours. Derive this interface into unique game behaviours.
 class Behaviour : public Component
 {
+protected:
+	bool initialized = false;
 //Public Methods
 public:
 
@@ -16,10 +20,12 @@ public:
 
 	//Function defining a single-shot behaviour
 	virtual void Act() {}
-	virtual void EventResponse(BehaviourEvent* readEvent);
+	virtual void EventResponse(const BehaviourEvent* event);
 
 
-	void start() override {}
+	void start() override;
 	void update() override {}
 	void lateUpdate() override {}
+
+	bool GetInitValue() { return initialized; }
 };

@@ -10,18 +10,18 @@ class Behaviour;
 class BehaviourEvent : public Griddy::Event
 {
 public:
-	explicit BehaviourEvent(Behaviour* targetBehaviourParam, Griddy::Event* readEventParam)
+	explicit BehaviourEvent(Behaviour* targetBehaviourParam, const Griddy::Event* readEventParam)
 		: targetBehaviour(targetBehaviourParam), readEvent(readEventParam) {}
-	Griddy::Event* readEvent;
+	const Griddy::Event* readEvent;
 	Behaviour* targetBehaviour;
 };
 
 //targets a particular state machine and tells it to transition to the parametered behaviour
-class FSMTransition : public Griddy::Event
+class StateTransition : public Griddy::Event
 {
 public:
-	explicit FSMTransition(StateMachine* targetStateMachineParam, Behaviour newBehaviourParam)
+	explicit StateTransition(StateMachine* targetStateMachineParam, Behaviour* newBehaviourParam)
 		: targetStateMachine(targetStateMachineParam), newBehaviour(newBehaviourParam) {}
-	Behaviour newBehaviour;
+	Behaviour* newBehaviour;
 	StateMachine* targetStateMachine;
 };

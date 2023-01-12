@@ -30,10 +30,10 @@ public:
 	//Sets the behaviour to the state machine's base state.
 	virtual void ResetToBase();
 
-	void EventResponse(BehaviourEvent* readEvent) override;
+	void EventResponse(const BehaviourEvent* event) override;
 
 	//Checks the transition against the current state.
-	virtual void OnTransitionReceived(const FSMTransition* transitionEvent);
+	virtual void OnTransitionReceived(const StateTransition* event);
 
 	void CleanUp();
 };
