@@ -14,10 +14,14 @@
     <ClInclude Include="Components\FireballComponent.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="TestGameplaySystem.h" />
+    <ClInclude Include="TurnComponent.h" />
+    <ClInclude Include="TurnManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Components\FireballComponent.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="TurnComponent.cpp" />
+    <ClCompile Include="TurnManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

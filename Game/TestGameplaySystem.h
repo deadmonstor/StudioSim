@@ -9,6 +9,7 @@
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
+#include "TurnManager.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -108,7 +109,9 @@ public:
 		auto sprite = background->addComponent<SpriteComponent>();
 		sprite->setColor(glm::vec3(1,1,1));
 		sprite->setTexture(ResourceManager::GetTexture("rock"));
+
 		
+
 		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->SetScale(glm::vec2(96, 48));
 		
@@ -204,6 +207,8 @@ public:
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
 
+		TurnManager::Instance()->addToTurnQueue(testRST);
+		TurnManager::Instance()->addToTurnQueue(testRSW);
 
 		////Player Idle Anim
 		//auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
