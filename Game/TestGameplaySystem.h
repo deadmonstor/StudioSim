@@ -222,7 +222,7 @@ public:
 
 	void testRender(OnEngineRender*)
 	{
-		TextRenderer::Instance()->renderText("asdasdasd", 500, 500, 1, glm::vec3(1, 1, 1));
+		TextRenderer::Instance()->renderText("abcdefghijklmnopqrstuvwsyz", 500, 500, 1, glm::vec3(1, 1, 1));
 	}
 	
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)
