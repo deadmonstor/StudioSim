@@ -22,22 +22,26 @@ DEFINE_ENUM_FLAG_OPERATORS(LightUpdateRequest);
 class Lighting : public SingletonTemplate<Lighting>
 {
 public:
+	void init();
 	void addToLightQueue(const OnLightComponentStarted*);
 	void removeFromLightQueue(const OnLightComponentRemoved*);
 	void refreshLightData(LightUpdateRequest lightUpdateRequest) const;
-	void doLight(SpriteComponent* spriteRenderer,
-					int& i,
-					const glm::vec2& position,
-					const glm::vec4& lightColorBase,
-					const glm::vec3& falloff,
-					LightUpdateRequest lightUpdateRequest) const;
-
+	void doLight(const SpriteComponent* spriteRenderer,
+	             int& i,
+	             const glm::vec2& position,
+	             const glm::vec4& lightColorBase,
+	             const glm::vec3& falloff,
+	             LightUpdateRequest lightUpdateRequest) const;
 	void refreshLightData(SpriteComponent* spriteRenderer, LightUpdateRequest lightUpdateRequest) const;
+
 	
+
 	void onDebugEvent(const OnDebugEventChanged* event);
-	void init();
+	[[nodiscard]] const glm::vec4& getAmbientColor() const { return ambientColor; }
+	void setAmbientColor(const glm::vec4& _ambientColor) { this->ambientColor = _ambientColor; }
 private:
 	std::list<Light*> lightRenderQueue;
+	glm::vec4 ambientColor = {0.6f, 0.6f, 1.0f, 0.1f};
 	bool showMouseLight = false;
 	bool debugLightColor = false;
 };

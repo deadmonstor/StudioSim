@@ -22,12 +22,12 @@ void Lighting::removeFromLightQueue(const OnLightComponentRemoved* event)
 
 static std::vector<LightName> lightIDToName {}; 
 
-void Lighting::doLight(SpriteComponent* spriteRenderer,
-						int& i,
-						const glm::vec2& position,
-						const glm::vec4& lightColorBase,
-						const glm::vec3& falloff,
-						const LightUpdateRequest lightUpdateRequest) const
+void Lighting::doLight(const SpriteComponent* spriteRenderer,
+                       int& i,
+                       const glm::vec2& position,
+                       const glm::vec4& lightColorBase,
+                       const glm::vec3& falloff,
+                       const LightUpdateRequest lightUpdateRequest) const
 {
 	const auto windowSize = Renderer::getWindowSize();
 	

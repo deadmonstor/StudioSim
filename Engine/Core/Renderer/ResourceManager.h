@@ -2,9 +2,9 @@
 #include <list>
 #include <map>
 #include <string>
+#include <vector>
 #include "Util/Audio/inc/fmod.hpp"
 #include "Util/Audio/inc/fmod_common.h"
-#include <vector>
 
 #include "shader.h"
 #include "texture.h"
@@ -34,5 +34,5 @@ private:
 
 	static std::map<std::string, Shader>		Shaders;
 	static std::map<std::string, Texture>		Textures;
-	static std::map<std::string, FMOD::Sound*> Sounds;
+	static std::map<std::string, FMOD::Sound*>  Sounds;
 };

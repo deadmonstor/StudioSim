@@ -77,7 +77,7 @@ void Renderer::setupCommonShader(const std::string& name, const glm::ivec2 value
 	ResourceManager::GetShader(name).SetInteger("image", 0, true);
 	ResourceManager::GetShader(name).SetInteger("normals", 1);
 	ResourceManager::GetShader(name).SetVector2f("Resolution", {value.x, value.y}, true);
-	ResourceManager::GetShader(name).SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0.1f}, true);
+	ResourceManager::GetShader(name).SetVector4f("AmbientColor", Lighting::Instance()->getAmbientColor(), true);
 	ResourceManager::GetShader(name).SetMatrix4("projection", glm::mat4(projection), true);
 }
 
@@ -90,20 +90,28 @@ void Renderer::setWindowSize(const glm::ivec2 value)
 	}
 	
 	windowSize = value;
-	
-	const glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(value.x), 
-											static_cast<float>(value.y), 0.0f, -1.0f, 1.0f);
 
 	ResourceManager::LoadShader("Shader/sprite.vs", "Shader/sprite.frag", nullptr, "sprite");
 	ResourceManager::LoadShader("Shader/textlit.vs", "Shader/textlit.frag", nullptr, "text");
 	ResourceManager::LoadShader("Shader/textunlit.vs", "Shader/textunlit.frag", nullptr, "textunlit");
 	ResourceManager::LoadShader("Shader/spriteunlit.vs", "Shader/spriteunlit.frag", nullptr, "spriteunlit");
+
+	resetShaders();
+	
+	glfwSetWindowSize(window, value.x, value.y);
+}
+
+void Renderer::resetShaders()
+{
+	glm::vec2 value = getWindowSize();
+	
+	const glm::mat4 projection = glm::ortho(0.0f, value.x, 
+											value.y, 0.0f, -1.0f, 1.0f);
+	
 	setupCommonShader("sprite", value, projection);
 	setupCommonShader("spriteunlit", value, projection);
 	setupCommonShader("text", value, projection);
 	setupCommonShader("textunlit", value, projection);
-	
-	glfwSetWindowSize(window, value.x, value.y);
 }
 
 bool Renderer::createWindow(const std::string &windowName)

@@ -44,6 +44,7 @@ public:
 	[[nodiscard]] Camera* getCamera() const { return mainCam; }
 	
 	void setWindowSize(glm::ivec2);
+	void resetShaders();
 	void setWindowTitle(const std::string& title) const;
 	bool createWindow(const std::string &windowName);
 	void renderSprite(SpriteComponent* spriteRenderer, glm::vec2 position, glm::vec2 size, float rotation) const;
