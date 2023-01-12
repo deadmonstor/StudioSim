@@ -13,6 +13,7 @@
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
+#include "Core/Components/TextRenderer.h"
 
 namespace Griddy
 {
@@ -68,6 +69,7 @@ namespace Griddy
 		AudioEngine::Instance()->init();
 		Input::Instance()->init();
 		ImGuiHandler::Instance()->init();
+		TextRenderer::Instance()->init();
 		m_Initialized = true;
 
 		glfwSetKeyCallback(Renderer::getWindow(), key_callback);

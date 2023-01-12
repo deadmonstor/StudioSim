@@ -85,6 +85,9 @@ void Renderer::setWindowSize(const glm::ivec2 value)
 	const glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(value.x), 
 											static_cast<float>(value.y), 0.0f, -1.0f, 1.0f);
 
+	ResourceManager::LoadShader("Shader/textunlit.vs", "Shader/textunlit.frag", nullptr, "text");
+	ResourceManager::GetShader("text").SetMatrix4("projection", glm::mat4(projection));
+
 	ResourceManager::GetShader("sprite").Use().SetMatrix4("projection", projection);
 	ResourceManager::GetShader("sprite").SetVector2f("Resolution", {value.x, value.y});
 	ResourceManager::GetShader("spriteunlit").Use().SetMatrix4("projection", projection);
@@ -122,6 +125,8 @@ bool Renderer::createWindow(const std::string &windowName)
 		return false;
 	}
 	
+
+
 	ResourceManager::LoadShader("Shader/sprite.vs", "Shader/sprite.frag", nullptr, "sprite");
 	ResourceManager::GetShader("sprite").SetInteger("image", 0, true);
 	ResourceManager::GetShader("sprite").SetInteger("normals", 1);
