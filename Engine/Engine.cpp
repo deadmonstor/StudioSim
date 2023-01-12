@@ -110,7 +110,7 @@ namespace Griddy
 		Renderer::Instance()->render();
 
 		SceneManager::Instance()->render();
-		//GridSystem::Instance()->render();
+		GridSystem::Instance()->render();
 		
 		ImGuiHandler::render();
 		glfwSwapBuffers(Renderer::getWindow());

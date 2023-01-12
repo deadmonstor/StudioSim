@@ -11,9 +11,9 @@ void Light::start()
 	Griddy::Events::invoke<OnLightComponentStarted>(this);
 }
 
-Light::~Light()
+void Light::destroy()
 {
-	Component::~Component();
+	Component::destroy();
 	Griddy::Events::invoke<OnLightComponentRemoved>(this);
 }
 
