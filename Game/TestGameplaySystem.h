@@ -204,6 +204,17 @@ public:
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
 
+
+		////Player Idle Anim
+		//auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
+		//testPlayerIdle->getTransform()->SetScale(glm::vec2(256, 256));
+
+		//const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
+		//sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.1f);
+		//sprite->setColor(glm::vec3(1, 1, 1));
+		//sprite->setLit(false);
+
+
 		CreateFireball(glm::vec2{ 1000, 500 });
 	}
 
