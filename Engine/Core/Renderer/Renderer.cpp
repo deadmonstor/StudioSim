@@ -167,6 +167,7 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 
 	spriteRenderer->getShader().Use();
+	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);
 	auto model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(position, 0.0f));  
 

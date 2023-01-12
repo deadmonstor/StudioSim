@@ -14,6 +14,8 @@ void SpriteComponent::start()
 {
 	Component::start();
 	createBuffers();
+
+	setColor({1, 1, 1});
 	
 	Griddy::Events::invoke<OnSpriteRendererComponentStarted>(this);
 }
@@ -27,6 +29,9 @@ void SpriteComponent::createBuffers()
 void SpriteComponent::update()
 {
 	Component::update();
+
+	if (debugColor[0] != color.r || debugColor[1] != color.g || debugColor[2] != color.b)
+		setColor({ debugColor[0], debugColor[1], debugColor[2]});
 }
 
 void SpriteComponent::lateUpdate()
@@ -37,9 +42,7 @@ void SpriteComponent::lateUpdate()
 void SpriteComponent::getDebugInfo(std::string* string)
 {
 	ImGui::Indent();
-	ImGui::TextUnformatted("Color: ");
-	const auto internalColor = new float[3]{ this->color.r, this->color.g, this->color.b};
-	ImGui::ColorEdit3("", internalColor);
+	ImGui::ColorEdit3("Color: ", debugColor);
 
 	ImGui::TextUnformatted("TextureID: ");
 	auto id = new int(texture.ID);
@@ -57,6 +60,9 @@ void SpriteComponent::getDebugInfo(std::string* string)
 void SpriteComponent::setColor(const glm::vec3 color)
 {
 	this->color = color;
+	debugColor[0] = color.r;
+	debugColor[1] = color.g;
+	debugColor[2] = color.b;
 	shader.SetVector3f("spriteColor", color, true);
 }
 
