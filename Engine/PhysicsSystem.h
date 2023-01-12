@@ -13,7 +13,7 @@ public:
 		bool collisionXAxis = gameObject1.getTransform()->GetPosition().x + gameObject1.getTransform()->GetScale().x >= gameObject2.getTransform()->GetPosition().x &&
 							  gameObject2.getTransform()->GetPosition().x + gameObject2.getTransform()->GetScale().x >= gameObject1.getTransform()->GetPosition().x;
 
-		bool collisionYAxis = gameObject1.getTransform()->GetPosition().y + gameObject1.getTransform()->GetScale().t >= gameObject2.getTransform()->GetPosition().y &&
+		bool collisionYAxis = gameObject1.getTransform()->GetPosition().y + gameObject1.getTransform()->GetScale().y >= gameObject2.getTransform()->GetPosition().y &&
 							  gameObject2.getTransform()->GetPosition().y + gameObject2.getTransform()->GetScale().y >= gameObject1.getTransform()->GetPosition().y;
 
 		return collisionXAxis && collisionYAxis;

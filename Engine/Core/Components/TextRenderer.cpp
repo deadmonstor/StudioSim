@@ -70,20 +70,20 @@ void TextRenderer::renderText(std::string text, float screenPosX, float screenPo
 	{
 		const auto [texture, Size, Bearing, Advance] = Chars[*c];
 		float xPosition = screenPosX + Bearing.x * scale;
-		float yPosition = screenPosY + (Size.y - Bearing.y) * scale;
+		float yPosition = screenPosY - (Size.y - Bearing.y) * scale;
 
 		float width = Size.x * scale;
-		float height = Size.y * scale;
+		float  height = Size.y * scale;
 
 		float vertices[6][4] =
 		{
-			{xPosition, yPosition + height, 0.0f, 1.0f},
-			{xPosition + width, yPosition, 1.0f, 0.0f},
-			{xPosition, yPosition, 0.0f, 0.0f},
+			{xPosition, yPosition - height, 0.0f, 0.0f},
+			{xPosition, yPosition, 0.0f, 1.0f},
+			{xPosition + width, yPosition, 1.0f, 1.0f},
 
-			{xPosition, yPosition + height, 0.0f, 1.0f},
-			{xPosition + width, yPosition + height, 1.0f, 1.0f},
-			{xPosition + width, yPosition, 1.0f, 0.0f}
+			{xPosition, yPosition - height, 0.0f, 0.0f},
+			{xPosition + width, yPosition, 1.0f, 1.0f},
+			{xPosition + width, yPosition - height, 1.0f, 0.0f},
 		};
 
 		texture->Bind();
