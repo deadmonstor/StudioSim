@@ -8,12 +8,12 @@ class Component
 	GameObject* owner = nullptr;
 	std::string name;
 public:
-	virtual ~Component() = 0;
-
 	virtual void start();
 	virtual void update();
 	virtual void lateUpdate();
+	virtual void destroy();
 	virtual void getDebugInfo(std::string*);
+	~Component();
 
 	void setOwner(GameObject* owner) { this->owner = owner; }
 	GameObject* getOwner() const { return owner; }

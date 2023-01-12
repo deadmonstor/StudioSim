@@ -9,6 +9,12 @@ AnimatedSpriteRenderer::AnimatedSpriteRenderer(std::vector<Texture> textureList,
 {
 	this->textureList = std::move(textureList);
 	this->updateEveryXMS = updateEveryXMS;
+
+	debugCurIndex = currentIndex;
+	debugUpdateEverXMS = updateEveryXMS;
+	debugLastUpdate = 0;
+	debugTextureList = this->textureList.size();
+	
 	doSpriteUpdate();
 }
 
@@ -38,26 +44,18 @@ void AnimatedSpriteRenderer::update()
 {
 	if (doSpriteUpdate()) return;
 	SpriteComponent::update();
+
+	if (updateEveryXMS != 0.0)
+		updateEveryXMS = debugUpdateEverXMS;
 }
 
 void AnimatedSpriteRenderer::getDebugInfo(std::string* string)
 {
 	ImGui::Indent();
-	ImGui::TextUnformatted("Current Index: ");
-	auto id = new int(currentIndex);
-	ImGui::InputInt("", id);
-
-	ImGui::TextUnformatted("Last Updated: ");
-	id = new int(lastUpdate);
-	ImGui::InputInt("", id);
-	
-	ImGui::TextUnformatted("Update Every X MS: ");
-	id = new int(updateEveryXMS);
-	ImGui::InputInt("", id);
-
-	ImGui::TextUnformatted("Texture List Size: ");
-	id = new int(textureList.size());
-	ImGui::InputInt("", id);
+	ImGui::InputInt("Cur Index", &debugCurIndex);
+	ImGui::InputFloat("Last Updated", &debugLastUpdate);
+	ImGui::InputDouble("Update Every X MS", &debugUpdateEverXMS, 0.01, 1.0, "%.3f");
+	ImGui::InputDouble("Texture List Size", &debugTextureList);
 	ImGui::Unindent();
 	
 	SpriteComponent::getDebugInfo(string);

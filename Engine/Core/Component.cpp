@@ -16,6 +16,11 @@ void Component::lateUpdate()
 	
 }
 
+void Component::destroy()
+{
+	
+}
+
 void Component::getDebugInfo(std::string*)
 {
 
@@ -23,5 +28,5 @@ void Component::getDebugInfo(std::string*)
 
 Component::~Component()
 {
-	this->owner = nullptr;
+	
 }

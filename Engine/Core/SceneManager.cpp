@@ -8,28 +8,33 @@
 
 void SceneManager::destroyScene(const Scene* scene)
 {
-	Renderer::Instance()->setCamera(nullptr);
-	
-	const auto gameObjects = scene->gameObjects;
-	for(const auto object : gameObjects)
+	shuttingDown = true;
+
+	for(const auto gameObjects = scene->gameObjects; const auto object : gameObjects)
 	{
 		destroyGameObject(object);
 	}
 
+	Renderer::Instance()->setCamera(nullptr);
 	deleteAllPendingObjects();
 }
 
 bool SceneManager::changeScene(const std::string& scene)
 {
+	if (isLoadingScene()) return false;
+	
+	loadingScene = true;
 	if (currentScene != nullptr)
 	{
 		destroyScene(currentScene);
 	}
-	
+
+	shuttingDown = false;
 	LOG_INFO("Changed scene to " + scene);
 	currentScene = new Scene();
 
 	Griddy::Events::invoke<OnSceneChanged>(scene);
+	loadingScene = false;
 	return true;
 }
 
@@ -63,6 +68,7 @@ GameObject* SceneManager::createGameObject(const std::string name, const glm::ve
 void SceneManager::destroyGameObject(GameObject* gameObject) const
 {
 	gameObject->beingDeleted = true;
+	gameObject->destroy();
 }
 
 void SceneManager::update() const

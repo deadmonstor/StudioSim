@@ -118,15 +118,103 @@ public:
 		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
 		sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setLit(false);
 		sprites.push_back(sprite);
-
+		
+		//Slime Hurt Anim
 		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
 		testHurt->getTransform()->SetScale(glm::vec2(96, 48));
 
 		const std::vector textureListHurt = ResourceManager::GetTexturesContaining("Blue-Slime-Hurt");
 		sprite = testHurt->addComponent<AnimatedSpriteRenderer>(textureListHurt, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
-			
+		sprite->setLit(false);
+
+		//Slime Death Animation
+		auto *testDeath = SceneManager::Instance()->createGameObject("Blue-Slime-Death", glm::vec2{350, 350});
+		testDeath->getTransform()->SetScale(glm::vec2(96, 48));
+
+		const std::vector textureListDeath = ResourceManager::GetTexturesContaining("Blue-Slime-Death");
+		sprite = testDeath->addComponent<AnimatedSpriteRenderer>(textureListDeath, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setLit(false);
+		
+		//Add zombie and skeleton
+
+		//Zombie Animation
+		auto *testZombie = SceneManager::Instance()->createGameObject("Zombie", glm::vec2{400, 400});
+		testZombie->getTransform()->SetScale(glm::vec2(38, 38));
+
+		const std::vector textureListZombie = ResourceManager::GetTexturesContaining("Zombie");
+		sprite = testZombie->addComponent<AnimatedSpriteRenderer>(textureListZombie, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setLit(false);
+		
+
+		//Skeleton Animation
+		auto *testSkeleton = SceneManager::Instance()->createGameObject("Skeleton", glm::vec2{350, 400});
+		testSkeleton->getTransform()->SetScale(glm::vec2(38, 38));
+
+
+		const std::vector textureListSkeleton = ResourceManager::GetTexturesContaining("Skeleton");
+		sprite = testSkeleton->addComponent<AnimatedSpriteRenderer>(textureListSkeleton, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setLit(false);
+
+		//FX1
+		auto *testFX1 = SceneManager::Instance()->createGameObject("FX1", glm::vec2{350, 500});
+		testFX1->getTransform()->SetScale(glm::vec2(64, 64));
+
+		const std::vector textureListFX1 = ResourceManager::GetTexturesContaining("FXSCircle");
+		sprite = testFX1->addComponent<AnimatedSpriteRenderer>(textureListFX1, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setLit(false);
+		//FX2
+		auto *testFX2 = SceneManager::Instance()->createGameObject("FX2", glm::vec2{420, 500});
+		testFX2->getTransform()->SetScale(glm::vec2(64, 64));
+
+		const std::vector textureListFX2 = ResourceManager::GetTexturesContaining("FXSDrop");
+		sprite = testFX2->addComponent<AnimatedSpriteRenderer>(textureListFX2, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setLit(false);
+		//FX3
+		auto *testFX3 = SceneManager::Instance()->createGameObject("FX3", glm::vec2{280, 500});
+		testFX3->getTransform()->SetScale(glm::vec2(64, 64));
+
+		const std::vector textureListFX3 = ResourceManager::GetTexturesContaining("FXSExpl");
+		sprite = testFX3->addComponent<AnimatedSpriteRenderer>(textureListFX3, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setLit(false);
+
+		//Red-Slash-Thin
+		auto *testRST = SceneManager::Instance()->createGameObject("Red-Slash-Thin", glm::vec2{280, 700});
+		testRST->getTransform()->SetScale(glm::vec2(55, 40));
+
+		const std::vector textureListRST = ResourceManager::GetTexturesContaining("RedSlashThin");
+		sprite = testRST->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setLit(false);
+
+		//Red-Slash-Wide
+		auto *testRSW = SceneManager::Instance()->createGameObject("Red-Slash-Wide", glm::vec2{480, 700});
+		testRSW->getTransform()->SetScale(glm::vec2(55, 40));
+
+		const std::vector textureListRSW = ResourceManager::GetTexturesContaining("Red-Slash-Wide");
+		sprite = testRSW->addComponent<AnimatedSpriteRenderer>(textureListRSW, 0.05f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setLit(false);
+
+
+		////Player Idle Anim
+		//auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
+		//testPlayerIdle->getTransform()->SetScale(glm::vec2(256, 256));
+
+		//const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
+		//sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.1f);
+		//sprite->setColor(glm::vec3(1, 1, 1));
+		//sprite->setLit(false);
+
+
 		CreateFireball(glm::vec2{ 1000, 500 });
 	}
 

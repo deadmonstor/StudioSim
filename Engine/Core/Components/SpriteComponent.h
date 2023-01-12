@@ -8,6 +8,7 @@
 class SpriteComponent : public Component
 {
 	glm::vec3 color = glm::vec3(1.0f);
+	float debugColor[3] = {1, 1, 1};
 	Shader shader;
 	Texture texture;
 	Texture normals;
@@ -15,12 +16,12 @@ class SpriteComponent : public Component
 	int sortingOrder = 0;
 	SortingLayer sortingLayer = Renderer::getDefaultSortingLayer();
 public:
-	~SpriteComponent() override;
 
 	void start() override;
 	void createBuffers();
 	void update() override;
 	void lateUpdate() override;
+	void destroy() override;
 	void getDebugInfo(std::string*) override;
 
 	void setColor(glm::vec3 color);

@@ -4,6 +4,11 @@
 
 class AnimatedSpriteRenderer : public SpriteComponent
 {
+private:
+	int debugCurIndex = 0;
+	double debugUpdateEverXMS = 0;
+	float debugLastUpdate = 0;
+	double debugTextureList = 0;
 public:
 	AnimatedSpriteRenderer(std::vector<Texture> textureList, double updateEveryXMS);
 	bool doSpriteUpdate();
