@@ -114,6 +114,8 @@ namespace Griddy
 
 		SceneManager::Instance()->render();
 		GridSystem::Instance()->render();
+
+		Griddy::Events::invoke<OnEngineRender>();
 		
 		ImGuiHandler::render();
 		glfwSwapBuffers(Renderer::getWindow());

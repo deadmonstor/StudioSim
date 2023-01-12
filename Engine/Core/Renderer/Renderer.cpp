@@ -90,7 +90,10 @@ void Renderer::setWindowSize(const glm::ivec2 value)
 
 	ResourceManager::GetShader("sprite").Use().SetMatrix4("projection", projection);
 	ResourceManager::GetShader("sprite").SetVector2f("Resolution", {value.x, value.y});
+	
 	ResourceManager::GetShader("spriteunlit").Use().SetMatrix4("projection", projection);
+	ResourceManager::GetShader("text").Use().SetMatrix4("projection", projection);
+	ResourceManager::GetShader("textunlit").Use().SetMatrix4("projection", projection);
 	
 	glfwSetWindowSize(window, value.x, value.y);
 }

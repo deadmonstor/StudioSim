@@ -3,6 +3,7 @@
 #include "Components/FireballComponent.h"
 #include "Core/SceneManager.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
+#include "Core/Components/TextRenderer.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
@@ -218,6 +219,12 @@ public:
 			transform->SetPosition(transform->GetPosition() + direction * static_cast<float>(100.0f * Time::getDeltaTime()));
 		}
 	}
+
+	void testRender(OnEngineRender*)
+	{
+		TextRenderer::Instance()->renderText("asdasdasd", 500, 500, 1, glm::vec3(1, 1, 1));
+	}
+	
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)
 	{
 		const glm::vec2 mousePos = Input::getMousePosition();

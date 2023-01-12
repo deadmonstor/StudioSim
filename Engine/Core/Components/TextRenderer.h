@@ -16,11 +16,10 @@ public:
 private:
 	FT_Library ft;
 	FT_Face face;
-	Texture* texture;
 
 	struct Char
 	{
-		unsigned int TextureID;
+		Texture* texture;
 		glm::ivec2 Size;
 		glm::ivec2 Bearing;
 		unsigned int Advance;
