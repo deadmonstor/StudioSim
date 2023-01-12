@@ -467,6 +467,7 @@
     <ClInclude Include="Library\imgui\imstb_rectpack.h" />
     <ClInclude Include="Library\imgui\imstb_textedit.h" />
     <ClInclude Include="Library\imgui\imstb_truetype.h" />
+    <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="Util\Events\Events.h" />
     <ClInclude Include="Util\Events\FunctionHandler.h" />
     <ClInclude Include="Util\Events\EngineEvents.h" />
@@ -501,6 +502,7 @@
     <ClCompile Include="Library\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Library\imgui\imgui_tables.cpp" />
     <ClCompile Include="Library\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="Util\ImGuiHandler.cpp" />
     <ClCompile Include="Util\Time.cpp" />
     <ClCompile Include="Weapon.cpp" />
@@ -554,7 +556,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Engine\Library\;$(SolutionDir)\Engine\;%(AdditionalLibraryDirectories);$(SolutionDir)\Library\glfw-3.3.8.bin.WIN64\lib-vc2022</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Engine\Library\;$(SolutionDir)\Engine\;%(AdditionalLibraryDirectories);$(SolutionDir)\Library\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)\Library\FreeType</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
