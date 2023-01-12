@@ -1,5 +1,8 @@
 #include <glad/glad.h>
 #include "TextRenderer.h"
+
+#include "SpriteComponent.h"
+#include "Core/Renderer/Lighting.h"
 #include "Util/Logger.h"
 
 void TextRenderer::init()
@@ -58,8 +61,10 @@ void TextRenderer::init()
 
 void TextRenderer::renderText(std::string text, float screenPosX, float screenPosY, float scale, glm::vec3 colour)
 {
-	ResourceManager::GetShader("text").Use();
-	ResourceManager::GetShader("text").SetVector3f(("textColor"), colour.x, colour.y, colour.z);
+	SpriteComponent* test = new SpriteComponent();
+	test->setShader(ResourceManager::GetShader("text"));
+	Lighting::Instance()->refreshLightData(test, LightUpdateRequest::All);
+	ResourceManager::GetShader("text").SetVector3f(("spriteColor"), colour.x, colour.y, colour.z);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

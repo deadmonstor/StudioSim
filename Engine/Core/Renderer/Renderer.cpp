@@ -85,15 +85,18 @@ void Renderer::setWindowSize(const glm::ivec2 value)
 	const glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(value.x), 
 											static_cast<float>(value.y), 0.0f, -1.0f, 1.0f);
 
-	ResourceManager::LoadShader("Shader/textunlit.vs", "Shader/textunlit.frag", nullptr, "text");
-	ResourceManager::GetShader("text").SetMatrix4("projection", glm::mat4(projection));
+	ResourceManager::LoadShader("Shader/textlit.vs", "Shader/textlit.frag", nullptr, "text");
+	ResourceManager::LoadShader("Shader/textunlit.vs", "Shader/textunlit.frag", nullptr, "textunlit");
 
-	ResourceManager::GetShader("sprite").Use().SetMatrix4("projection", projection);
+	ResourceManager::GetShader("text").SetVector2f("Resolution", {value.x, value.y});
 	ResourceManager::GetShader("sprite").SetVector2f("Resolution", {value.x, value.y});
+	ResourceManager::GetShader("textunlit").SetVector2f("Resolution", {value.x, value.y});
+	ResourceManager::GetShader("spriteunlit").SetVector2f("Resolution", {value.x, value.y});
 	
-	ResourceManager::GetShader("spriteunlit").Use().SetMatrix4("projection", projection);
-	ResourceManager::GetShader("text").Use().SetMatrix4("projection", projection);
-	ResourceManager::GetShader("textunlit").Use().SetMatrix4("projection", projection);
+	ResourceManager::GetShader("text").Use().SetMatrix4("projection", glm::mat4(projection));
+	ResourceManager::GetShader("sprite").Use().SetMatrix4("projection", glm::mat4(projection));
+	ResourceManager::GetShader("textunlit").Use().SetMatrix4("projection", glm::mat4(projection));
+	ResourceManager::GetShader("spriteunlit").Use().SetMatrix4("projection", glm::mat4(projection));
 	
 	glfwSetWindowSize(window, value.x, value.y);
 }
