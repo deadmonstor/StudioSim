@@ -121,13 +121,15 @@ static bool showDebugLog;
 static bool showDebugImage;
 static bool showDebugGameObjects;
 static bool showDebugLayers;
+static bool showDebugInventory;
 
 static std::map<std::string, bool*> showDebugComponents
 {
 	{"Debug Log", &showDebugLog},
 	{"Debug Image", &showDebugImage},
 	{"Debug Game Objects", &showDebugGameObjects},
-	{"Debug Layers", &showDebugLayers}
+	{"Debug Layers", &showDebugLayers},
+	{"Debug Inventroy", &showDebugInventory}
 };
 
 static std::map<std::string, DebugEvent> debugSettings
@@ -265,6 +267,16 @@ void ImGuiHandler::update()
 		{
 			ImGUILayers();
 		}
+		ImGui::End();
+	}
+
+	if (showDebugInventory)
+	{
+		if (ImGui::Begin("Inventory Window", &showDebugInventory))
+		{
+			
+		}
+
 		ImGui::End();
 	}
 }

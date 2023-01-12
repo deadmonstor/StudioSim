@@ -12,11 +12,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\FireballComponent.h" />
+    <ClInclude Include="Inventory.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="TestGameplaySystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Components\FireballComponent.cpp" />
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="MainGame.cpp" />
   </ItemGroup>
   <ItemGroup>

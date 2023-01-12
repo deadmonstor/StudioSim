@@ -3,6 +3,7 @@
 #include "TestGameplaySystem.h"
 #include "Core/Renderer/Renderer.h"
 #include "Util/Events/Events.h"
+#include "Inventory.h"
 
 int main(int, char**)
 {
@@ -41,7 +42,47 @@ int main(int, char**)
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testGameObjectDestroy);
 	
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestMouseDown);
+
+	Inventory myInventory(50); // Holds 10 items
 	
+	Item sword;
+	sword.name = "Bandit sword";
+	sword.type = "Weapon";
+	sword.itemDescription = "A common sword";
+	sword.equipSlot = "Hand";
+	sword.isEquipped = false;
+	sword.atk = 10;
+	sword.crit = 2;
+	myInventory.add_item(sword);
+
+	Item armour;
+	armour.name = "Bandit armor";
+	armour.type = "Armour";
+	armour.equipSlot = "Chest";
+	armour.isEquipped = false;
+	armour.def = 15;
+	myInventory.add_item(armour);
+
+	Item spell;
+	spell.name = "Fireball";
+	spell.type = "Spell";
+	spell.equipSlot = "Spells";
+	spell.isEquipped = false;
+	spell.spellAtk = 20;
+	spell.manaCost = 10;
+	spell.coolDown = 4; //Secods
+	spell.effectDuration = 3; //Seconds
+	myInventory.add_item(spell);
+
+	myInventory.draw_inventory();
+	myInventory.equip_item("Bandit sword");
+	myInventory.draw_inventory();
+	
+	myInventory.equip_item("Fireball");
+	myInventory.unequip_item("Bandit sword");
+	myInventory.draw_inventory();
+
+
 	MainGame::Instance()->run();
 	return 0;
 }
