@@ -1,19 +1,13 @@
 #pragma once
 
-#include "Core/Component.h"
+
 #include "Core/Components/AI/Behaviour.h"
 
-#include "Util/Events/Events.h"
-#include "Util/Events/AIEvents.h"
-
-#include <vector>
-
 //Class interface used for Behaviour Selection based on FSMTransition Events. Derive this class into unique AI state machines for the games.
-class StateMachine final : public Component
+class StateMachine : public Behaviour
 {
 // Properties
 protected:
-	bool initialised;
 
 	// List of available behaviours. Can be fed in from outside system, or instantiated in constructor overloads.
 	std::vector<Behaviour*> behaviours;
@@ -24,11 +18,6 @@ protected:
 
 	//Public Methods
 public:
-	//Default Constructor
-	StateMachine();
-
-	//Destructor
-	~StateMachine() override;
 
 	//Returns the behaviours list.
 	virtual std::vector<Behaviour*> GetBehaviours() { return behaviours; }
