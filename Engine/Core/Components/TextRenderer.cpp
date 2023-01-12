@@ -61,6 +61,7 @@ void TextRenderer::init()
 
 void TextRenderer::renderText(std::string text, float screenPosX, float screenPosY, float scale, glm::vec3 colour)
 {
+	// TODO: Remove this
 	SpriteComponent* test = new SpriteComponent();
 	test->setShader(ResourceManager::GetShader("text"));
 	ResourceManager::GetShader("text").SetVector3f(("spriteColor"), colour.x, colour.y, colour.z, true);

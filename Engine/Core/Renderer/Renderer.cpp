@@ -72,6 +72,15 @@ glm::vec2 Renderer::getCameraPos() const
 	return mainCam->getOwner()->getTransform()->position - getWindowSize() / 2.f;
 }
 
+void Renderer::setupCommonShader(const std::string& name, const glm::ivec2 value, const glm::mat4 projection)
+{
+	ResourceManager::GetShader(name).SetInteger("image", 0, true);
+	ResourceManager::GetShader(name).SetInteger("normals", 1);
+	ResourceManager::GetShader(name).SetVector2f("Resolution", {value.x, value.y}, true);
+	ResourceManager::GetShader(name).SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0.1f}, true);
+	ResourceManager::GetShader(name).SetMatrix4("projection", glm::mat4(projection), true);
+}
+
 void Renderer::setWindowSize(const glm::ivec2 value)
 {
 	if (window == nullptr)
@@ -85,20 +94,14 @@ void Renderer::setWindowSize(const glm::ivec2 value)
 	const glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(value.x), 
 											static_cast<float>(value.y), 0.0f, -1.0f, 1.0f);
 
+	ResourceManager::LoadShader("Shader/sprite.vs", "Shader/sprite.frag", nullptr, "sprite");
 	ResourceManager::LoadShader("Shader/textlit.vs", "Shader/textlit.frag", nullptr, "text");
 	ResourceManager::LoadShader("Shader/textunlit.vs", "Shader/textunlit.frag", nullptr, "textunlit");
-
-	ResourceManager::GetShader("text").SetVector2f("Resolution", {value.x, value.y}, true);
-	ResourceManager::GetShader("sprite").SetVector2f("Resolution", {value.x, value.y}, true);
-	ResourceManager::GetShader("textunlit").SetVector2f("Resolution", {value.x, value.y}, true);
-	ResourceManager::GetShader("spriteunlit").SetVector2f("Resolution", {value.x, value.y}, true);
-
-	ResourceManager::GetShader("text").SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0.1f}, true);
-	
-	ResourceManager::GetShader("text").Use().SetMatrix4("projection", glm::mat4(projection), true);
-	ResourceManager::GetShader("sprite").Use().SetMatrix4("projection", glm::mat4(projection), true);
-	ResourceManager::GetShader("textunlit").Use().SetMatrix4("projection", glm::mat4(projection), true);
-	ResourceManager::GetShader("spriteunlit").Use().SetMatrix4("projection", glm::mat4(projection), true);
+	ResourceManager::LoadShader("Shader/spriteunlit.vs", "Shader/spriteunlit.frag", nullptr, "spriteunlit");
+	setupCommonShader("sprite", value, projection);
+	setupCommonShader("spriteunlit", value, projection);
+	setupCommonShader("text", value, projection);
+	setupCommonShader("textunlit", value, projection);
 	
 	glfwSetWindowSize(window, value.x, value.y);
 }
@@ -132,16 +135,6 @@ bool Renderer::createWindow(const std::string &windowName)
 		LOG_ERROR("Failed to initialize GLAD");
 		return false;
 	}
-	
-
-
-	ResourceManager::LoadShader("Shader/sprite.vs", "Shader/sprite.frag", nullptr, "sprite");
-	ResourceManager::GetShader("sprite").SetInteger("image", 0, true);
-	ResourceManager::GetShader("sprite").SetInteger("normals", 1);
-	ResourceManager::GetShader("sprite").SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0.1f});
-	
-	ResourceManager::LoadShader("Shader/spriteunlit.vs", "Shader/spriteunlit.frag", nullptr, "spriteunlit");
-	ResourceManager::GetShader("spriteunlit").SetInteger("image", 0, true);
 	
 	return true;
 }
@@ -179,7 +172,6 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 
-	spriteRenderer->getShader().Use();
 	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);
 	auto model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(position, 0.0f));  
@@ -189,7 +181,6 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
 
 	model = glm::scale(model, glm::vec3(size, 1.0f)); 
-  
 	spriteRenderer->getShader().SetMatrix4("model", model, true);
 
 	glActiveTexture(GL_TEXTURE1);
@@ -197,7 +188,6 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	
 	glActiveTexture(GL_TEXTURE0);
 	spriteRenderer->getTexture().Bind();
-
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);

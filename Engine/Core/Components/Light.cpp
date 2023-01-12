@@ -23,11 +23,13 @@ void Light::getDebugInfo(std::string* string)
 	ImGui::TextUnformatted("Color: ");
 	const auto internalColor = new float[4]{ this->color.r, this->color.g, this->color.b, this->color.a };
 	ImGui::ColorEdit4("", internalColor);
+	delete[] internalColor;
 
 	ImGui::TextUnformatted("Falloff: ");
 	const auto internalFloat = new float[3]{ this->falloff.x, this->falloff.y, this->falloff.z };
 	ImGui::DragFloat3("", internalFloat);
 	ImGui::Unindent();
+	delete[] internalFloat;
 
 	Component::getDebugInfo(string);
 }

@@ -48,11 +48,13 @@ void SpriteComponent::getDebugInfo(std::string* string)
 	auto id = new int(texture.ID);
 	ImGui::InputInt("", id);
 	ImGui::Image((void *)(intptr_t)texture.ID, ImVec2(static_cast<float>(std::clamp(texture.Width, 50, 500)), static_cast<float>(std::clamp(texture.Height, 50, 250))));
+	delete id;
 
 	ImGui::TextUnformatted("ShaderID: ");
 	id = new int(shader.ID);
 	ImGui::InputInt("", id);
 	ImGui::Unindent();
+	delete id;
 	
 	Component::getDebugInfo(string);
 }

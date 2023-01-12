@@ -11,15 +11,18 @@ void Transform::getDebugInfo(std::string* string)
 	ImGui::TextUnformatted("Position: ");
 	const auto internalPos = new float[2]{ this->position.x, this->position.y};
 	ImGui::DragFloat2("", internalPos);
+	delete[] internalPos;
 
 	ImGui::TextUnformatted("Rotation: ");
 	auto id = new int(rotation);
 	ImGui::InputInt("", id);
+	delete id;
 
 	ImGui::TextUnformatted("Size: ");
 	const auto internalSize = new float[2]{ this->size.x, this->size.y};
 	ImGui::DragFloat2("", internalSize);
 	ImGui::Unindent();
+	delete[] internalSize;
 
 	Component::getDebugInfo(string);
 }

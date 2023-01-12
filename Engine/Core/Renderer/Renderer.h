@@ -5,6 +5,7 @@
 #include "Core/GameObject.h"
 #include "Core/Components/Camera.h"
 #include "Core/Components/Light.h"
+#include "glm/fwd.hpp"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 #include "Util/SingletonTemplate.h"
@@ -28,10 +29,12 @@ class Renderer : public SingletonTemplate<Renderer>
 		{defaultSortingLayer, new SortingLayer(defaultSortingLayer, 0)}
 	};
 	
+	void createVBOs();
+	void setupCommonShader(const std::string& name, glm::ivec2 value, glm::mat4 projection);
+	unsigned int quadVAO;
+	
 	friend class Lighting;
 	friend class ImGuiHandler;
-	void createVBOs();
-	unsigned int quadVAO;
 public:
 	static GLFWwindow* getWindow() { return Instance()->window; }
 	static glm::vec2 getWindowSize() { return Instance()->windowSize; }
