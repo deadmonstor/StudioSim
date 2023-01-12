@@ -1,6 +1,7 @@
 ﻿#include "Engine.h"
 #include <Windows.h>
 #include "AudioEngine.h"
+#include "Core/Components/TextRenderer.h"
 #include "Input.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
@@ -13,6 +14,7 @@
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
+
 
 namespace Griddy
 {
@@ -68,6 +70,7 @@ namespace Griddy
 		AudioEngine::Instance()->init();
 		Input::Instance()->init();
 		ImGuiHandler::Instance()->init();
+		TextRenderer::Instance()->init();
 		m_Initialized = true;
 
 		glfwSetKeyCallback(Renderer::getWindow(), key_callback);
@@ -111,6 +114,8 @@ namespace Griddy
 
 		SceneManager::Instance()->render();
 		GridSystem::Instance()->render();
+
+		Griddy::Events::invoke<OnEngineRender>();
 		
 		ImGuiHandler::render();
 		glfwSwapBuffers(Renderer::getWindow());

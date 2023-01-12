@@ -9,6 +9,7 @@ class GameObject;
 NEW_EMPTY_EVENT(OnEngineStart);
 NEW_EMPTY_EVENT(OnEngineUpdate);
 NEW_EMPTY_EVENT(OnEngineStop);
+NEW_EMPTY_EVENT(OnEngineRender);
 
 enum DebugEvent
 {
