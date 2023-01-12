@@ -63,8 +63,8 @@ void TextRenderer::renderText(std::string text, float screenPosX, float screenPo
 {
 	SpriteComponent* test = new SpriteComponent();
 	test->setShader(ResourceManager::GetShader("text"));
+	ResourceManager::GetShader("text").SetVector3f(("spriteColor"), colour.x, colour.y, colour.z, true);
 	Lighting::Instance()->refreshLightData(test, LightUpdateRequest::All);
-	ResourceManager::GetShader("text").SetVector3f(("spriteColor"), colour.x, colour.y, colour.z);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -102,4 +102,5 @@ void TextRenderer::renderText(std::string text, float screenPosX, float screenPo
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_BLEND);
+	delete test;
 }

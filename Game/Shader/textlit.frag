@@ -59,5 +59,5 @@ void main()
 	}
 	
 	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(image, TexCoords).r);
-	color = vec4(Sum, 1);
+	color = sampled * vec4(Sum, 1);
 }
