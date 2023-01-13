@@ -13,6 +13,7 @@
 #include "Util/Events/EngineEvents.h"
 #include "TurnManager.h"
 #include "ScoreSystem.h"
+#include <string>
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -214,7 +215,9 @@ public:
 		TurnManager::Instance()->addToTurnQueue(testRSW);
 		//ScoreSystem score = new ScoreSystem();
 		//score.SaveScore();
-		ScoreSystem::Instance()->SaveScore();
+		ScoreSystem::Instance()->setScore(13);
+		std::string User = "LJP";
+		ScoreSystem::Instance()->SaveScore(User);
 
 		/*
 		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});

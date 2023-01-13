@@ -1,34 +1,46 @@
 #include "ScoreSystem.h"
 #include<iostream>
 #include<fstream>
-#include<string>
+
 
 ScoreSystem::ScoreSystem()
 {
 
 }
 
-void ScoreSystem::SaveScore()
+void ScoreSystem::SaveScore(std::string Username)
 {
 
-	try
-	{
-		std::ofstream fw("Game\\", std::ofstream::out);
+	//std::fstream newfile;
+	std::fstream file;
 
-		if (fw.is_open())
-		{
-			fw << "This is writing to a file";
-			fw.close();
-		}
-		else std::cout << "Problem with Opening file";
-	}
-	catch(const char& msg)
+	file.open("Score.txt", std::ios::app);
+	if (file)
 	{
-		std::cerr << msg << std::endl;
-	}
-	std::cout << "\nDone";
-	std::getchar();
+		//std::cout << "File Exists";
+		//file.open
+		//file.open("Score.txt", std::ios::app);
+		file << Username << "-" << currentScore << "\n";
+		file.close();
 
+	}
+	else
+	{
+		//file.close();
+		std::cout << "File Doesn't Exist";
+		file.open("Score.txt", std::ios::out);
+		file << Username << "-" << currentScore << "\n";
+		file.close();
+	}
+
+
+}
+
+void ScoreSystem::ReadScores()
+{
+	std::fstream newfile;
+	newfile.open("Score.txt", std::ios::in);
+	newfile.close();
 }
 //Sprites\\Zombie\\
 

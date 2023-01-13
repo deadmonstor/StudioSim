@@ -1,18 +1,21 @@
 #pragma once
 #include "Core/Component.h"
 #include "Util/SingletonTemplate.h"
+#include<string>
 
 class ScoreSystem : public SingletonTemplate<ScoreSystem> //public Component 
 {
 public:
-	void setScore(float scoreToSet) { currentScore = scoreToSet; }
+	void setScore(int scoreToSet) { currentScore = scoreToSet; }
+	void addScore(int scoreToSet) { currentScore += scoreToSet; }
 	float getScore() { return currentScore; }
-
-	void SaveScore();
 	ScoreSystem();
 
+	void SaveScore(std::string Username);
+	void ReadScores();
+
 private:
-	float currentScore;
+	int currentScore;
 
 };
 
