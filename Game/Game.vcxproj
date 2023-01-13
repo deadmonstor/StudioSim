@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="Components\FireballComponent.h" />
     <ClInclude Include="MainGame.h" />
+    <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
     <ClInclude Include="TurnComponent.h" />
@@ -21,6 +22,7 @@
   <ItemGroup>
     <ClCompile Include="Components\FireballComponent.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="TurnComponent.cpp" />
     <ClCompile Include="TurnManager.cpp" />
     <ClCompile Include="System\Inventory.cpp" />

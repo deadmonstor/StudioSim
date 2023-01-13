@@ -12,6 +12,7 @@
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "TurnManager.h"
+#include "ScoreSystem.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -211,15 +212,26 @@ public:
 
 		TurnManager::Instance()->addToTurnQueue(testRST);
 		TurnManager::Instance()->addToTurnQueue(testRSW);
+		//ScoreSystem score = new ScoreSystem();
+		//score.SaveScore();
+		ScoreSystem::Instance()->SaveScore();
 
-		////Player Idle Anim
-		//auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
-		//testPlayerIdle->getTransform()->SetScale(glm::vec2(256, 256));
+		/*
+		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
+		test->getTransform()->setSize(glm::vec2(96, 48));
+		
+		auto cam = test->addComponent<Camera>();
+		Renderer::Instance()->setCamera(cam);
+*/
 
-		//const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
-		//sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.1f);
-		//sprite->setColor(glm::vec3(1, 1, 1));
-		//sprite->setLit(false);
+		//Player Idle Anim
+		auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
+		testPlayerIdle->getTransform()->setSize(glm::vec2(256, 256));
+
+		const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
+		sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setLit(false);
 
 
 		CreateFireball(glm::vec2{ 1000, 500 });
