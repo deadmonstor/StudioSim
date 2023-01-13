@@ -38,7 +38,7 @@ void ScoreSystem::SaveScore(std::string Username)
 
 void ScoreSystem::ReadScores()
 {
-	std::fstream newfile;
+ 	std::fstream newfile;
 	newfile.open("Score.txt", std::ios::in);
 	newfile.close();
 }
