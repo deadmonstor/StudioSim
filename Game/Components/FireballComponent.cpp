@@ -29,7 +29,7 @@ void FireballComponent::update()
 	Component::update();
 
 	// move the fireball to the right
-	getOwner()->getTransform()->SetPosition(getOwner()->getTransform()->GetPosition() + glm::vec2{ 200.0f, 0.0f } * static_cast<float>(Time::getDeltaTime()));
+	getOwner()->getTransform()->setPosition(getOwner()->getTransform()->getPosition() + glm::vec2{ 200.0f, 0.0f } * static_cast<float>(Time::getDeltaTime()));
 }
 
 void FireballComponent::lateUpdate()

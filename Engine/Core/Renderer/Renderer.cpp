@@ -72,6 +72,15 @@ glm::vec2 Renderer::getCameraPos() const
 	return mainCam->getOwner()->getTransform()->position - getWindowSize() / 2.f;
 }
 
+void Renderer::setupCommonShader(const std::string& name, const glm::ivec2 value, const glm::mat4 projection)
+{
+	ResourceManager::GetShader(name).SetInteger("image", 0, true);
+	ResourceManager::GetShader(name).SetInteger("normals", 1);
+	ResourceManager::GetShader(name).SetVector2f("Resolution", {value.x, value.y}, true);
+	ResourceManager::GetShader(name).SetVector4f("AmbientColor", Lighting::Instance()->getAmbientColor(), true);
+	ResourceManager::GetShader(name).SetMatrix4("projection", glm::mat4(projection), true);
+}
+
 void Renderer::setWindowSize(const glm::ivec2 value)
 {
 	if (window == nullptr)
@@ -81,15 +90,28 @@ void Renderer::setWindowSize(const glm::ivec2 value)
 	}
 	
 	windowSize = value;
-	
-	const glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(value.x), 
-											static_cast<float>(value.y), 0.0f, -1.0f, 1.0f);
 
-	ResourceManager::GetShader("sprite").Use().SetMatrix4("projection", projection);
-	ResourceManager::GetShader("sprite").SetVector2f("Resolution", {value.x, value.y});
-	ResourceManager::GetShader("spriteunlit").Use().SetMatrix4("projection", projection);
+	ResourceManager::LoadShader("Shader/sprite.vs", "Shader/sprite.frag", nullptr, "sprite");
+	ResourceManager::LoadShader("Shader/textlit.vs", "Shader/textlit.frag", nullptr, "text");
+	ResourceManager::LoadShader("Shader/textunlit.vs", "Shader/textunlit.frag", nullptr, "textunlit");
+	ResourceManager::LoadShader("Shader/spriteunlit.vs", "Shader/spriteunlit.frag", nullptr, "spriteunlit");
+
+	resetShaders();
 	
 	glfwSetWindowSize(window, value.x, value.y);
+}
+
+void Renderer::resetShaders()
+{
+	glm::vec2 value = getWindowSize();
+	
+	const glm::mat4 projection = glm::ortho(0.0f, value.x, 
+											value.y, 0.0f, -1.0f, 1.0f);
+	
+	setupCommonShader("sprite", value, projection);
+	setupCommonShader("spriteunlit", value, projection);
+	setupCommonShader("text", value, projection);
+	setupCommonShader("textunlit", value, projection);
 }
 
 bool Renderer::createWindow(const std::string &windowName)
@@ -107,7 +129,7 @@ bool Renderer::createWindow(const std::string &windowName)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	window = glfwCreateWindow(1, 1, windowName.c_str(), nullptr, nullptr);
+	window = glfwCreateWindow(1920, 1080, windowName.c_str(), nullptr, nullptr);
 	if (window == nullptr)
 	{
 		LOG_ERROR("Failed to create GLFW window");
@@ -121,14 +143,8 @@ bool Renderer::createWindow(const std::string &windowName)
 		LOG_ERROR("Failed to initialize GLAD");
 		return false;
 	}
-	
-	ResourceManager::LoadShader("Shader/sprite.vs", "Shader/sprite.frag", nullptr, "sprite");
-	ResourceManager::GetShader("sprite").SetInteger("image", 0, true);
-	ResourceManager::GetShader("sprite").SetInteger("normals", 1);
-	ResourceManager::GetShader("sprite").SetVector4f("AmbientColor", {0.6f, 0.6f, 1.0f, 0.1f});
-	
-	ResourceManager::LoadShader("Shader/spriteunlit.vs", "Shader/spriteunlit.frag", nullptr, "spriteunlit");
-	ResourceManager::GetShader("spriteunlit").SetInteger("image", 0, true);
+
+	setWindowSize({1920, 1080});
 	
 	return true;
 }
@@ -151,7 +167,7 @@ void Renderer::render()
 	for (SpriteComponent* spriteRenderer : spriteRenderQueue)
 	{
 		const Transform* transform = spriteRenderer->getOwner()->getTransform();
-		renderSprite(spriteRenderer, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
+		renderSprite(spriteRenderer, transform->getPosition(), transform->GetScale(), transform->GetRotation());
 	}
 	
 	glDisable(GL_BLEND);
@@ -166,7 +182,6 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 
-	spriteRenderer->getShader().Use();
 	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);
 	auto model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(position, 0.0f));  
@@ -176,7 +191,6 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
 
 	model = glm::scale(model, glm::vec3(size, 1.0f)); 
-  
 	spriteRenderer->getShader().SetMatrix4("model", model, true);
 
 	glActiveTexture(GL_TEXTURE1);
@@ -184,7 +198,6 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	
 	glActiveTexture(GL_TEXTURE0);
 	spriteRenderer->getTexture().Bind();
-
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);

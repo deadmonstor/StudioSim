@@ -22,12 +22,12 @@ void Lighting::removeFromLightQueue(const OnLightComponentRemoved* event)
 
 static std::vector<LightName> lightIDToName {}; 
 
-void Lighting::doLight(SpriteComponent* spriteRenderer,
-						int& i,
-						const glm::vec2& position,
-						const glm::vec4& lightColorBase,
-						const glm::vec3& falloff,
-						const LightUpdateRequest lightUpdateRequest) const
+void Lighting::doLight(const SpriteComponent* spriteRenderer,
+                       int& i,
+                       const glm::vec2& position,
+                       const glm::vec4& lightColorBase,
+                       const glm::vec3& falloff,
+                       const LightUpdateRequest lightUpdateRequest) const
 {
 	const auto windowSize = Renderer::getWindowSize();
 	
@@ -101,7 +101,7 @@ void Lighting::refreshLightData(SpriteComponent* spriteRenderer, const LightUpda
 	
 	for (const Light* light : lightRenderQueue)
 	{
-		auto lightPosition = light->getOwner()->getTransform()->GetPosition();
+		auto lightPosition = light->getOwner()->getTransform()->getPosition();
 		
 		doLight(spriteRenderer,
 			i,

@@ -17,5 +17,6 @@ public:
 	
 	Texture();
 	void Generate(GLint width, GLint height, const unsigned char* data);
+	void GenerateFont(GLint width, GLint height, const unsigned char* data);
 	void Bind() const;
 };

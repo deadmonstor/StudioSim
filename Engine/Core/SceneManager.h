@@ -22,12 +22,14 @@ public:
 	void render() const;
 	void deleteAllPendingObjects() const;
 
-	Scene* currentScene;
 	void onSceneChanged(const OnSceneChangeRequested* event);
 	bool isShuttingDown() const { return shuttingDown; }
 	bool isLoadingScene() const { return loadingScene; }
+
+	Scene* getScene() const { return currentScene; }
 private:
-	friend class ImGuiHandler;
+	Scene* currentScene;
 	bool shuttingDown = false;
 	bool loadingScene = false;
+	friend class ImGuiHandler;
 };
