@@ -1,9 +1,9 @@
 ﻿#include "MainGame.h"
 #include <Util/Logger.h>
+#include "Inventory.h"
 #include "TestGameplaySystem.h"
 #include "Core/Renderer/Renderer.h"
 #include "Util/Events/Events.h"
-#include "Inventory.h"
 
 int main(int, char**)
 {

@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\AudioEngine.h" />
     <ClInclude Include="Core\Component.h" />
     <ClInclude Include="Core\Components\AnimatedSpriteRenderer.h" />
     <ClInclude Include="Core\Components\Camera.h" />
@@ -21,6 +22,7 @@
     <ClInclude Include="Core\GameObject.h" />
     <ClInclude Include="Core\Grid\GridSystem.h" />
     <ClInclude Include="Core\Grid\Tile.h" />
+    <ClInclude Include="Core\PhysicsSystem.h" />
     <ClInclude Include="Core\Renderer\Lighting.h" />
     <ClInclude Include="Core\Renderer\Renderer.h" />
     <ClInclude Include="Core\Renderer\ResourceManager.h" />
@@ -29,7 +31,6 @@
     <ClInclude Include="Core\Renderer\Texture.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
-    <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Library\Aixlog.hpp" />
@@ -470,7 +471,6 @@
     <ClInclude Include="Library\imgui\imstb_rectpack.h" />
     <ClInclude Include="Library\imgui\imstb_textedit.h" />
     <ClInclude Include="Library\imgui\imstb_truetype.h" />
-    <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="Util\Events\Events.h" />
     <ClInclude Include="Util\Events\FunctionHandler.h" />
     <ClInclude Include="Util\Events\EngineEvents.h" />
@@ -481,6 +481,7 @@
     <ClInclude Include="Util\Time.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\AudioEngine.cpp" />
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Components\AnimatedSpriteRenderer.cpp" />
     <ClCompile Include="Core\Components\Light.cpp" />
@@ -490,13 +491,13 @@
     <ClCompile Include="Core\GameObject.cpp" />
     <ClCompile Include="Core\Grid\GridSystem.cpp" />
     <ClCompile Include="Core\Grid\Tile.cpp" />
+    <ClCompile Include="Core\PhysicsSystem.cpp" />
     <ClCompile Include="Core\Renderer\Lighting.cpp" />
     <ClCompile Include="Core\Renderer\Renderer.cpp" />
     <ClCompile Include="Core\Renderer\ResourceManager.cpp" />
     <ClCompile Include="Core\Renderer\Shader.cpp" />
     <ClCompile Include="Core\Renderer\Texture.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
-    <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Library\glm\detail\glm.cpp" />
@@ -507,7 +508,6 @@
     <ClCompile Include="Library\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Library\imgui\imgui_tables.cpp" />
     <ClCompile Include="Library\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="Util\ImGuiHandler.cpp" />
     <ClCompile Include="Util\Time.cpp" />
   </ItemGroup>
