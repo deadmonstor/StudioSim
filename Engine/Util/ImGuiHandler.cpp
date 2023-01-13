@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
+#include "Core/Renderer/Lighting.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Events/EngineEvents.h"
@@ -70,7 +71,7 @@ void ImGuiHandler::ImGUIGameObjects() const
 {
 	ImGui::Text("GameObjects:");
 
-	for (const std::vector<GameObject*>* gameObjectsList = &SceneManager::Instance()->currentScene->gameObjects;
+	for (const std::vector<GameObject*>* gameObjectsList = &SceneManager::Instance()->getScene()->gameObjects;
 		const auto& curGameObject : *gameObjectsList)
 	{
 		if (ImGui::TreeNode(curGameObject->getName().c_str()))
@@ -122,13 +123,17 @@ static bool showDebugLog;
 static bool showDebugImage;
 static bool showDebugGameObjects;
 static bool showDebugLayers;
+static bool showDebugInventory;
+static bool showDebugLighting;
 
 static std::map<std::string, bool*> showDebugComponents
 {
 	{"Debug Log", &showDebugLog},
 	{"Debug Image", &showDebugImage},
 	{"Debug Game Objects", &showDebugGameObjects},
-	{"Debug Layers", &showDebugLayers}
+	{"Debug Layers", &showDebugLayers},
+	{"Debug Inventory", &showDebugInventory},
+	{"Debug Lighting", &showDebugLighting}
 };
 
 static std::map<std::string, DebugEvent> debugSettings
@@ -146,6 +151,7 @@ static std::map<std::string, std::string> debugScenes
 {
 	{"Debug Rendering", "renderScene"},
 	{"Debug Scene", "debugScene"},
+	{"Debug Inventory", "testInventory"},
 };
 
 void ImGuiHandler::update()
@@ -239,7 +245,7 @@ void ImGuiHandler::update()
 		if (ImGui::Begin("Image Window", &showDebugImage))
 		{
 			const auto dice = ResourceManager::GetTexture("engine");
-			ImGui::Image((void *)(intptr_t)dice.ID, ImVec2((float)dice.Width * 5, (float)dice.Height * 5));
+			ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(dice.ID)), ImVec2(static_cast<float>(dice.Width) * 5, static_cast<float>(dice.Height) * 5));
 		}
 		ImGui::End();
 	}
@@ -268,7 +274,41 @@ void ImGuiHandler::update()
 		}
 		ImGui::End();
 	}
+
+	if (showDebugInventory)
+	{
+		if (ImGui::Begin("Inventory Window", &showDebugInventory))
+		{
+			
+		}
+
+		ImGui::End();
+	}
+
+	if (showDebugLighting)
+	{
+		if (ImGui::Begin("Lighting Window", &showDebugLighting))
+		{
+			const glm::vec4 ambientLighting = Lighting::Instance()->getAmbientColor();
+			const auto debugAmbientLighting = new float[4] {ambientLighting.r, ambientLighting.g, ambientLighting.b, ambientLighting.a};
+			ImGui::ColorEdit4("AmbientLighting", debugAmbientLighting);
+
+			if (abs(ambientLighting.r - debugAmbientLighting[0]) > 0.01f ||
+				abs(ambientLighting.g - debugAmbientLighting[1]) > 0.01f ||
+				abs(ambientLighting.b - debugAmbientLighting[2]) > 0.01f ||
+				abs(ambientLighting.a - debugAmbientLighting[3]) > 0.01f)
+			{
+				Lighting::Instance()->setAmbientColor(glm::vec4(debugAmbientLighting[0], debugAmbientLighting[1], debugAmbientLighting[2], debugAmbientLighting[3]));
+				Renderer::Instance()->resetShaders();
+			}
+
+			delete[] debugAmbientLighting;
+		}
+
+		ImGui::End();
+	}
 }
+
 void ImGuiHandler::render()
 {
 #if (NDEBUG)

@@ -19,4 +19,7 @@ public:
 private:
 	glm::vec4 color = glm::vec4 {1.0f, 0.75f, 0.3f, 1.0f};
 	glm::vec3 falloff = glm::vec3 {1.0f, 4.0f, 25.0f};
+
+	float debugColor[4] = {1.0f, 0.75f, 0.3f, 1.0f};
+	float debugFalloff[3] = {1.0f, 4.0f, 25.0f};
 };
