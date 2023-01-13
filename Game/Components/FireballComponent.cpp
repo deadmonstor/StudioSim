@@ -21,7 +21,8 @@ void FireballComponent::start()
 	getOwner()->getComponent<AnimatedSpriteRenderer>()->setSortingLayer(Renderer::getDefaultSortingLayer());
 	getOwner()->addComponent<Light>();
 
-	Griddy::Events::subscribe(this, &FireballComponent::onAnimationEnded);
+	if (onAnimationEndedEventID == -1)
+		onAnimationEndedEventID = Griddy::Events::subscribe(this, &FireballComponent::onAnimationEnded);
 }
 
 void FireballComponent::update()
@@ -35,6 +36,14 @@ void FireballComponent::update()
 void FireballComponent::lateUpdate()
 {
 	Component::lateUpdate();
+}
+
+void FireballComponent::destroy()
+{
+	if (onAnimationEndedEventID != -1)
+		Griddy::Events::unsubscribe(this, &FireballComponent::onAnimationEnded, onAnimationEndedEventID);
+	
+	Component::destroy();
 }
 
 void FireballComponent::onAnimationEnded(OnAnimationEnded* event)

@@ -38,7 +38,7 @@ namespace Griddy
 		{
 			const EventList* list = internalEvents[typeid(EventType)];
 
-			if (list == nullptr)
+			if (list == nullptr || list->size() == 0)
 				return;
 
 			for (const auto [id, function_base] : *list)

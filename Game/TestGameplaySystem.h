@@ -112,8 +112,6 @@ public:
 		sprite->setColor(glm::vec3(1,1,1));
 		sprite->setTexture(ResourceManager::GetTexture("rock"));
 
-		
-
 		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->setSize(glm::vec2(96, 48));
 		
@@ -221,8 +219,7 @@ public:
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
 
-
-		CreateFireball(glm::vec2{ 1000, 500 });
+		//CreateFireball(glm::vec2{ 1000, 500 });
 	}
 
 	void TestInventory(const OnSceneChanged* event)

@@ -74,13 +74,19 @@ GameObject* SceneManager::createGameObject(const std::string name, const glm::ve
 
 void SceneManager::destroyGameObject(GameObject* gameObject) const
 {
-	gameObject->beingDeleted = true;
-	gameObject->destroy();
-
 	if constexpr (_DEBUG_ECS)
 	{
 		LOG_INFO("Removing game object " + gameObject->getName());
+		if (gameObject->isBeingDeleted())
+		{
+			DebugBreak();
+			LOG_INFO("");
+		}
 	}
+	
+	gameObject->beingDeleted = true;
+	gameObject->destroy();
+
 }
 
 void SceneManager::update() const
