@@ -63,10 +63,9 @@ GameObject* SceneManager::createGameObject(const std::string name, const glm::ve
 		LOG_ERROR("Somehow we have more than 100000 gameobjects, lets stop");
 	}
 
-	if constexpr (_DEBUG_ECS)
-	{
+	#ifdef _DEBUG_ECS
 		LOG_INFO("Created game object " + name);
-	}
+	#endif
 	
 	created->isInitialized = true;
 	return created;
@@ -74,15 +73,13 @@ GameObject* SceneManager::createGameObject(const std::string name, const glm::ve
 
 void SceneManager::destroyGameObject(GameObject* gameObject) const
 {
-	if constexpr (_DEBUG_ECS)
-	{
+	#ifdef _DEBUG_ECS
 		LOG_INFO("Removing game object " + gameObject->getName());
 		if (gameObject->isBeingDeleted())
 		{
 			DebugBreak();
-			LOG_INFO("");
 		}
-	}
+	#endif
 	
 	gameObject->beingDeleted = true;
 	gameObject->destroy();

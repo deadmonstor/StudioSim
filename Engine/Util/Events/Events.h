@@ -38,12 +38,14 @@ namespace Griddy
 		{
 			const EventList* list = internalEvents[typeid(EventType)];
 
-			if (list == nullptr || list->size() == 0)
+			if (list == nullptr || !list)
 				return;
 
-			for (const auto [id, function_base] : *list)
+			for (const auto t : *list)
 			{
-				FunctionBase *handler = function_base;
+				int8_t id = t.first;
+				FunctionBase* handler = t.second;
+				
 				if (!handler)
 				{
 					continue;

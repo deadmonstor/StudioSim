@@ -15,8 +15,6 @@ AnimatedSpriteRenderer::AnimatedSpriteRenderer(std::vector<Texture> textureList,
 	debugUpdateEverXMS = updateEveryXMS;
 	debugLastUpdate = 0;
 	debugTextureList = this->textureList.size();
-	
-	doSpriteUpdate();
 }
 
 void AnimatedSpriteRenderer::doTextureUpdate()
@@ -27,6 +25,10 @@ void AnimatedSpriteRenderer::doTextureUpdate()
 }
 bool AnimatedSpriteRenderer::doSpriteUpdate()
 {
+	LOG_INFO(this->getOwner()->isBeingDeleted());
+	if (this->getOwner()->isBeingDeleted())
+		return true;
+	
 	if (lastUpdate > Time::getTime() - updateEveryXMS)
 		return true;
 
@@ -41,7 +43,9 @@ bool AnimatedSpriteRenderer::doSpriteUpdate()
 		currentIndex = 0;
 		debugCurIndex = currentIndex;
 		doTextureUpdate();
-		Griddy::Events::invoke<OnAnimationEnded>(this);
+		LOG_INFO("Updating");
+		//Griddy::Events::invoke<OnAnimationEnded>(this);
+		SceneManager::Instance()->destroyGameObject(this->getOwner());
 		if (getOwner() == nullptr || getOwner()->isBeingDeleted()) return true;
 	}
 
