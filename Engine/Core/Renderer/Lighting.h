@@ -33,10 +33,8 @@ public:
 	             const glm::vec3& falloff,
 	             LightUpdateRequest lightUpdateRequest) const;
 	void refreshLightData(SpriteComponent* spriteRenderer, LightUpdateRequest lightUpdateRequest) const;
-
-	
-
 	void onDebugEvent(const OnDebugEventChanged* event);
+
 	[[nodiscard]] const glm::vec4& getAmbientColor() const { return ambientColor; }
 	void setAmbientColor(const glm::vec4& _ambientColor) { this->ambientColor = _ambientColor; }
 private:

@@ -129,7 +129,7 @@ bool Renderer::createWindow(const std::string &windowName)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	window = glfwCreateWindow(1, 1, windowName.c_str(), nullptr, nullptr);
+	window = glfwCreateWindow(1920, 1080, windowName.c_str(), nullptr, nullptr);
 	if (window == nullptr)
 	{
 		LOG_ERROR("Failed to create GLFW window");
@@ -143,6 +143,8 @@ bool Renderer::createWindow(const std::string &windowName)
 		LOG_ERROR("Failed to initialize GLAD");
 		return false;
 	}
+
+	setWindowSize({1920, 1080});
 	
 	return true;
 }
@@ -165,7 +167,7 @@ void Renderer::render()
 	for (SpriteComponent* spriteRenderer : spriteRenderQueue)
 	{
 		const Transform* transform = spriteRenderer->getOwner()->getTransform();
-		renderSprite(spriteRenderer, transform->GetPosition(), transform->GetScale(), transform->GetRotation());
+		renderSprite(spriteRenderer, transform->getPosition(), transform->GetScale(), transform->GetRotation());
 	}
 	
 	glDisable(GL_BLEND);

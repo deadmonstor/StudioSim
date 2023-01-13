@@ -69,9 +69,9 @@ namespace Griddy
 		Lighting::Instance()->init();
 		AudioEngine::Instance()->init();
 		Input::Instance()->init();
-		ImGuiHandler::Instance()->init();
 		TextRenderer::Instance()->init();
 		m_Initialized = true;
+		ImGuiHandler::Instance()->init();
 
 		glfwSetKeyCallback(Renderer::getWindow(), key_callback);
 		glfwSetMouseButtonCallback(Renderer::getWindow(), mouse_callback);

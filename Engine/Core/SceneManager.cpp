@@ -52,7 +52,7 @@ GameObject* SceneManager::createGameObject(const std::string name, const glm::ve
 	created->name = name;
 	
 	created->addComponent(created->transform);
-	created->transform->SetPosition(position);
+	created->transform->setPosition(position);
 	created->start();
 	
 	currentScene->gameObjects.push_back(created);
