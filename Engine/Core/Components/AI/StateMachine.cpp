@@ -3,15 +3,32 @@
 
 void StateMachine::destroy()
 {
+	if (eventResponseID != -1)
+	{
+		Griddy::Events::unsubscribe(this, &StateMachine::EventResponse, eventResponseID);
+		eventResponseID = -1;
+	}
+	
+	if (onTransitionReceivedID != -1)
+	{
+		Griddy::Events::unsubscribe(this, &StateMachine::OnTransitionReceived, onTransitionReceivedID);
+		onTransitionReceivedID = -1;
+	}
+	
 	CleanUp();
 }
 
 void StateMachine::start()
-{ 
-	Griddy::Events::subscribe(this, &StateMachine::EventResponse);
-	Griddy::Events::subscribe(this, &StateMachine::OnTransitionReceived);
+{
+	if (eventResponseID == -1)
+		eventResponseID = Griddy::Events::subscribe(this, &StateMachine::EventResponse);
+	
+	if (onTransitionReceivedID == -1)
+		onTransitionReceivedID = Griddy::Events::subscribe(this, &StateMachine::OnTransitionReceived);
+	
 	baseState = new Behaviour();
 	currentState = baseState;
+
 	if (currentState->GetInitValue() == false)
 	{
 		currentState->start();
@@ -39,6 +56,7 @@ void StateMachine::ChangeState(Behaviour* behaviourParam)
 { 
 	currentState->destroy();
 	delete currentState;
+	currentState = nullptr;
 	currentState = behaviourParam;
 	if (currentState->GetInitValue() == false)
 	{
@@ -55,11 +73,11 @@ void StateMachine::ResetToBase()
 //Sends the event to read by the current state
 void StateMachine::EventResponse(const BehaviourEvent* event)
 {
-	if (event->targetBehaviour == this) {
+	if (event->targetBehaviour == this)
+	{
 		LOG_INFO("State Machine receives event");
 		Griddy::Events::invoke<BehaviourEvent>(currentState, event);
 	}
-	
 }
 
 //Checks the transition against the current state.
@@ -77,12 +95,16 @@ void StateMachine::CleanUp()
 	{
 		baseState->destroy();
 		delete baseState;
+		baseState = nullptr;
 	}
-	else {
+	else if (baseState != nullptr)
+	{
 		baseState->destroy();
 		delete baseState;
+		baseState = nullptr;
 		currentState->destroy();
 		delete currentState;
+		currentState = nullptr;
 	}
 
 }

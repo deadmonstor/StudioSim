@@ -30,6 +30,11 @@ public:
 		{
 			sprites.erase(it);
 		}
+
+		if (sm != nullptr && gameObject == sm->getOwner())
+		{
+			sm = nullptr;
+		}
 	}
 	void TestFunc(const OnSceneChanged* event)
 	{

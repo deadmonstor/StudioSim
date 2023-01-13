@@ -12,6 +12,21 @@ void Behaviour::EventResponse(const BehaviourEvent* event)
 
 void Behaviour::start()
 {
-	Griddy::Events::subscribe(this, &Behaviour::EventResponse);
+	if (eventResponseID == -1)
+		eventResponseID = Griddy::Events::subscribe(this, &Behaviour::EventResponse);
+	
 	initialized = true;
+
+	Component::start();
+}
+
+void Behaviour::destroy()
+{
+	if (eventResponseID != -1)
+	{
+		Griddy::Events::unsubscribe(this, &Behaviour::EventResponse, eventResponseID);
+		eventResponseID = -1;
+	}
+	
+	Component::destroy();
 }

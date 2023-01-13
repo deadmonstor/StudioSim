@@ -18,6 +18,12 @@ namespace Griddy
 			Instance()->invokeInternal(new T(args...));
 		}
 
+		template<typename T, typename... Args>
+		static void invokeWithoutCleanup(Args... args)
+		{
+			Instance()->invokeInternal(new T(args...), true);
+		}
+
 		template<class T, class EventType>
 		static int8_t subscribe(T* instance, void (T::*func)(EventType*))
 		{
@@ -34,7 +40,7 @@ namespace Griddy
 		std::map<std::type_index, EventList*> internalEvents;
 
 		template<typename EventType>
-		void invokeInternal(EventType *event)
+		void invokeInternal(EventType *event, bool withoutCleanup = false)
 		{
 			const EventList* list = internalEvents[typeid(EventType)];
 
@@ -43,8 +49,8 @@ namespace Griddy
 
 			for (const auto [id, function_base] : *list)
 			{
-				FunctionBase *handler = function_base;
-				if (!handler)
+				FunctionBase* handler = function_base;
+				if (handler == nullptr)
 				{
 					continue;
 				}
@@ -52,7 +58,8 @@ namespace Griddy
 				handler->invoke(event);
 			}
 
-			delete event;
+			if (!withoutCleanup)
+				delete event;
 		}
 
 		template<class T, class EventType>
@@ -66,8 +73,8 @@ namespace Griddy
 				internalEvents[typeid(EventType)] = list;
 			}
 
-			// TODO: Check if this is slow? 
 			int8_t nextID = 0;
+			// TODO: Check if this is slow? 
 			for (const auto [i, it] : *list)
 			{
 				if (i > nextID)
@@ -75,9 +82,10 @@ namespace Griddy
 					nextID = i;
 				}
 			}
-			
-			list->insert({nextID + 1, new FunctionHandler<T, EventType>(instance, func)});
-			return nextID + 1;
+
+			nextID = nextID + 1;
+			list->insert({nextID, new FunctionHandler<T, EventType>(instance, func)});
+			return nextID;
 		}
 
 		template<class T, class EventType>
@@ -98,6 +106,7 @@ namespace Griddy
 			else
 			{
 				LOG_ERROR("Event not found");
+				abort();
 			}
 		}
 	};

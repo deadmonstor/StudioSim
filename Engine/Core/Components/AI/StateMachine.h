@@ -10,10 +10,12 @@ class StateMachine : public Behaviour
 protected:
 
 	//The base state that the state machine can return into.
-	Behaviour* baseState;
-	Behaviour* currentState;
+	Behaviour* baseState = nullptr;
+	Behaviour* currentState = nullptr;
+	int8_t eventResponseID = -1;
+	int8_t onTransitionReceivedID = -1;
 
-	//Public Methods
+//Public Methods
 public:
 
 	void destroy() override;
