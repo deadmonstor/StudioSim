@@ -16,6 +16,8 @@ void StateMachine::destroy()
 	}
 	
 	CleanUp();
+
+	Component::destroy();
 }
 
 void StateMachine::start()
@@ -33,6 +35,8 @@ void StateMachine::start()
 	{
 		currentState->start();
 	}
+
+	Component::start();
 }
 
 void StateMachine::update() 
@@ -91,13 +95,15 @@ void StateMachine::OnTransitionReceived(const StateTransition* event)
 
 void StateMachine::CleanUp()
 {
+	LOG_INFO("Cleaning state machine.");
 	if (baseState == currentState)
 	{
 		baseState->destroy();
 		delete baseState;
 		baseState = nullptr;
+		currentState = nullptr;
 	}
-	else if (baseState != nullptr)
+	else
 	{
 		baseState->destroy();
 		delete baseState;

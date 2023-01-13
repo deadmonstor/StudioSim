@@ -32,9 +32,11 @@ public:
 	//Sets the behaviour to the state machine's base state.
 	virtual void ResetToBase();
 
+protected:
+	//Sends an event to be evaluated by the current behaviour
 	void EventResponse(const BehaviourEvent* event) override;
 
-	//Checks the transition against the current state.
+	//Receives an event with a new state to transition into
 	virtual void OnTransitionReceived(const StateTransition* event);
 
 	void CleanUp();
