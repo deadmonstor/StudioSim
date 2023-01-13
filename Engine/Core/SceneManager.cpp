@@ -32,6 +32,7 @@ bool SceneManager::changeScene(const std::string& scene)
 	shuttingDown = false;
 	LOG_INFO("Changed scene to " + scene);
 	currentScene = new Scene();
+	currentScene->name = scene;
 
 	Griddy::Events::invoke<OnSceneChanged>(scene);
 	loadingScene = false;
@@ -52,7 +53,7 @@ GameObject* SceneManager::createGameObject(const std::string name, const glm::ve
 	created->name = name;
 	
 	created->addComponent(created->transform);
-	created->transform->SetPosition(position);
+	created->transform->setPosition(position);
 	created->start();
 	
 	currentScene->gameObjects.push_back(created);

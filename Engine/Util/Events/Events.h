@@ -51,6 +51,8 @@ namespace Griddy
 				
 				handler->invoke(event);
 			}
+
+			delete event;
 		}
 
 		template<class T, class EventType>

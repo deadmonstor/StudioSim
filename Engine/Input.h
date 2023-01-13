@@ -110,7 +110,7 @@ public:
 		{
 			if (const auto owner = camera->getOwner(); owner != nullptr)
 			{
-				const glm::vec2 camPos = owner->getTransform()->GetPosition();
+				const glm::vec2 camPos = owner->getTransform()->getPosition();
 				x += camPos.x - windowSize.x / 2.0f;
 				y += camPos.y - windowSize.y / 2.0f;
 			}
