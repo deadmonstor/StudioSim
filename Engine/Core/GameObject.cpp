@@ -10,6 +10,11 @@ GameObject::~GameObject()
 {
 	for (const Component* curComponent : components)
 	{
+		if constexpr (_DEBUG_ECS)
+		{
+			LOG_INFO("Deleting component " + curComponent->getName() + " for gameobject " + getName());
+		}
+		
 		delete curComponent;
 		curComponent = nullptr;
 	}
@@ -21,6 +26,11 @@ void GameObject::destroy()
 
 	for (Component* curComponent : components)
 	{
+		if constexpr (_DEBUG_ECS)
+		{
+			LOG_INFO("Destroying component " + curComponent->getName() + " for gameobject " + getName());
+		}
+		
 		curComponent->destroy();
 	}
 

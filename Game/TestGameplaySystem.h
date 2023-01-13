@@ -79,8 +79,8 @@ public:
 
 		test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->setSize(glm::vec2(96, 48));
-		
-		auto cam = test->addComponent<Camera>();
+
+		const auto cam = test->addComponent<Camera>();
 		Renderer::Instance()->setCamera(cam);
 		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
 		sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
@@ -213,13 +213,13 @@ public:
 		TurnManager::Instance()->addToTurnQueue(testRSW);
 
 		////Player Idle Anim
-		//auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
-		//testPlayerIdle->getTransform()->SetScale(glm::vec2(256, 256));
+		auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
+		testPlayerIdle->getTransform()->setSize(glm::vec2(256, 256));
 
-		//const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
-		//sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.1f);
-		//sprite->setColor(glm::vec3(1, 1, 1));
-		//sprite->setLit(false);
+		const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
+		sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
+		sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setLit(false);
 
 
 		CreateFireball(glm::vec2{ 1000, 500 });

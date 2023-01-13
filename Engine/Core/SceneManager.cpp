@@ -26,6 +26,7 @@ bool SceneManager::changeScene(const std::string& scene)
 	loadingScene = true;
 	if (currentScene != nullptr)
 	{
+		LOG_INFO("Destroy current scene " + currentScene->name);
 		destroyScene(currentScene);
 	}
 
@@ -62,6 +63,11 @@ GameObject* SceneManager::createGameObject(const std::string name, const glm::ve
 		LOG_ERROR("Somehow we have more than 100000 gameobjects, lets stop");
 	}
 
+	if constexpr (_DEBUG_ECS)
+	{
+		LOG_INFO("Created game object " + name);
+	}
+	
 	created->isInitialized = true;
 	return created;
 }
@@ -70,6 +76,11 @@ void SceneManager::destroyGameObject(GameObject* gameObject) const
 {
 	gameObject->beingDeleted = true;
 	gameObject->destroy();
+
+	if constexpr (_DEBUG_ECS)
+	{
+		LOG_INFO("Removing game object " + gameObject->getName());
+	}
 }
 
 void SceneManager::update() const

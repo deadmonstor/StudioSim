@@ -11,11 +11,13 @@ private:
 	double debugTextureList = 0;
 public:
 	AnimatedSpriteRenderer(std::vector<Texture> textureList, double updateEveryXMS);
+	void doTextureUpdate();
 	bool doSpriteUpdate();
 
 	std::vector<Texture> textureList;
 
 	void update() override;
+	void lateUpdate() override;
 	void getDebugInfo(std::string*) override;
 	unsigned long long currentIndex = 0;
 
