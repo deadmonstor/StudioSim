@@ -7,6 +7,7 @@
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
+#include "System/Inventory.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
@@ -219,6 +220,52 @@ public:
 		CreateFireball(glm::vec2{ 1000, 500 });
 	}
 
+	void TestInventory(const OnSceneChanged* event)
+	{
+		// TODO: Enum this or something its kinda bad to do this
+		if (event->key != "testInventory")
+			return;
+
+		Inventory myInventory(50); // Holds 10 items
+	
+		Item sword;
+		sword.name = "Bandit sword";
+		sword.type = "Weapon";
+		sword.itemDescription = "A common sword";
+		sword.equipSlot = "Hand";
+		sword.isEquipped = false;
+		sword.atk = 10;
+		sword.crit = 2;
+		myInventory.add_item(sword);
+
+		Item armour;
+		armour.name = "Bandit armor";
+		armour.type = "Armour";
+		armour.equipSlot = "Chest";
+		armour.isEquipped = false;
+		armour.def = 15;
+		myInventory.add_item(armour);
+
+		Item spell;
+		spell.name = "Fireball";
+		spell.type = "Spell";
+		spell.equipSlot = "Spells";
+		spell.isEquipped = false;
+		spell.spellAtk = 20;
+		spell.manaCost = 10;
+		spell.coolDown = 4; //Secods
+		spell.effectDuration = 3; //Seconds
+		myInventory.add_item(spell);
+
+		myInventory.draw_inventory();
+		myInventory.equip_item("Bandit sword");
+		myInventory.draw_inventory();
+	
+		myInventory.equip_item("Fireball");
+		myInventory.unequip_item("Bandit sword");
+		myInventory.draw_inventory();
+	}
+	
 	glm::fvec2 direction = glm::fvec2(0, 0);
 	void TestFuncUpdate(OnEngineUpdate*)
 	{
@@ -233,6 +280,9 @@ public:
 
 	void testRender(OnEngineRender*)
 	{
+		if (SceneManager::Instance()->getScene()->name != "testInventory")
+			return;
+		
 		TextRenderer::Instance()->renderText("abcdefghijklmnopqrstuvwsyz", 500, 500, 1, glm::vec3(1, 1, 1));
 	}
 	

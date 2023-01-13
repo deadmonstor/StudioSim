@@ -70,7 +70,7 @@ void ImGuiHandler::ImGUIGameObjects() const
 {
 	ImGui::Text("GameObjects:");
 
-	for (const std::vector<GameObject*>* gameObjectsList = &SceneManager::Instance()->currentScene->gameObjects;
+	for (const std::vector<GameObject*>* gameObjectsList = &SceneManager::Instance()->getScene()->gameObjects;
 		const auto& curGameObject : *gameObjectsList)
 	{
 		if (ImGui::TreeNode(curGameObject->getName().c_str()))
@@ -150,6 +150,7 @@ static std::map<std::string, std::string> debugScenes
 {
 	{"Debug Rendering", "renderScene"},
 	{"Debug Scene", "debugScene"},
+	{"Debug Inventory", "testInventory"},
 };
 
 void ImGuiHandler::update()

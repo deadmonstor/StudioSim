@@ -32,6 +32,7 @@ bool SceneManager::changeScene(const std::string& scene)
 	shuttingDown = false;
 	LOG_INFO("Changed scene to " + scene);
 	currentScene = new Scene();
+	currentScene->name = scene;
 
 	Griddy::Events::invoke<OnSceneChanged>(scene);
 	loadingScene = false;
