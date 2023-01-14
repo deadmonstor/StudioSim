@@ -23,11 +23,13 @@ void AnimatedSpriteRenderer::doTextureUpdate()
 	lastUpdate = Time::getTime();
 	debugLastUpdate = lastUpdate;
 }
+
 bool AnimatedSpriteRenderer::doSpriteUpdate()
 {
 	if (this->getOwner()->isBeingDeleted())
 		return true;
-	
+
+	// TODO: When we are really lagging this should "skip" frames
 	if (lastUpdate > Time::getTime() - updateEveryXMS)
 		return true;
 
@@ -43,7 +45,6 @@ bool AnimatedSpriteRenderer::doSpriteUpdate()
 		debugCurIndex = currentIndex;
 		doTextureUpdate();
 		Griddy::Events::invoke<OnAnimationEnded>(this);
-		if (getOwner() == nullptr || getOwner()->isBeingDeleted()) return true;
 	}
 
 	doTextureUpdate();
@@ -52,8 +53,8 @@ bool AnimatedSpriteRenderer::doSpriteUpdate()
 
 void AnimatedSpriteRenderer::update()
 {
-	if (doSpriteUpdate()) return;
 	SpriteComponent::update();
+	doSpriteUpdate();
 }
 
 void AnimatedSpriteRenderer::lateUpdate()
@@ -67,6 +68,8 @@ void AnimatedSpriteRenderer::lateUpdate()
 
 	if (updateEveryXMS != 0.0)
 		updateEveryXMS = debugUpdateEverXMS;
+
+	SpriteComponent::lateUpdate();
 }
 
 void AnimatedSpriteRenderer::getDebugInfo(std::string* string)

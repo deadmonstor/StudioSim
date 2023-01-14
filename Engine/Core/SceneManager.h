@@ -18,7 +18,7 @@ public:
 
 	bool init();
 	void update() const;
-	void lateUpdate() const;
+	void lateUpdate();
 	void render() const;
 	void deleteAllPendingObjects() const;
 
@@ -28,6 +28,10 @@ public:
 
 	Scene* getScene() const { return currentScene; }
 private:
+	std::list<GameObject*> pendingObjects;
+	void addGameObject(GameObject* gameObject);
+	void addPendingObjects();
+	
 	Scene* currentScene;
 	bool shuttingDown = false;
 	bool loadingScene = false;

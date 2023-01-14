@@ -19,6 +19,7 @@ void SceneManager::destroyScene(const Scene* scene)
 		destroyGameObject(object);
 	}
 
+	addPendingObjects();
 	Renderer::Instance()->setCamera(nullptr);
 	deleteAllPendingObjects();
 }
@@ -52,6 +53,8 @@ bool SceneManager::init()
 
 GameObject* SceneManager::createGameObject(const std::string name, const glm::vec2 position)
 {
+	// TODO: This should 100% be world space not whatever is here
+	
 	const auto created = new GameObject();
 	created->transform = new Transform();
 	created->transform->setName("Transform");
@@ -59,36 +62,53 @@ GameObject* SceneManager::createGameObject(const std::string name, const glm::ve
 	
 	created->addComponent(created->transform);
 	created->transform->setPosition(position);
-	created->start();
 	
-	currentScene->gameObjects.push_back(created);
-	if (currentScene->gameObjects.size() > 100000)
-	{
-		LOG_ERROR("Somehow we have more than 100000 gameobjects, lets stop");
-	}
-
+	pendingObjects.push_back(created);
+	
 	#ifdef _DEBUG_ECS
 		LOG_INFO("Created game object " + name);
 	#endif
 	
-	created->isInitialized = true;
 	return created;
+}
+
+void SceneManager::addPendingObjects()
+{
+	for (const auto object : pendingObjects)
+	{
+		addGameObject(object);
+	}
+	
+	pendingObjects.clear();
+}
+
+void SceneManager::addGameObject(GameObject* gameObject)
+{
+	currentScene->gameObjects.push_back(gameObject);
+	gameObject->isInitialized = true;
+	gameObject->start();
+	
+	if (currentScene->gameObjects.size() > 100000)
+	{
+		#ifdef _DEBUG_ECS
+			LOG_ERROR("Somehow we have more than 100000 gameobjects, lets stop");
+		#endif
+	}
 }
 
 void SceneManager::destroyGameObject(GameObject* gameObject) const
 {
+	if (gameObject->isBeingDeleted())
+	{
+		return;
+	}
+
 	#ifdef _DEBUG_ECS
 		LOG_INFO("Removing game object " + gameObject->getName());
-
-		if (gameObject->isBeingDeleted())
-		{
-			DebugBreak();
-		}
 	#endif
 	
 	gameObject->beingDeleted = true;
 	gameObject->destroy();
-
 }
 
 void SceneManager::update() const
@@ -128,14 +148,16 @@ void SceneManager::deleteAllPendingObjects() const
 	#endif
 }
 
-void SceneManager::lateUpdate() const
+void SceneManager::lateUpdate()
 {
 	for (auto i : currentScene->gameObjects)
 	{
 		i->lateUpdate();
 	}
 
+	Renderer::Instance()->sortRenderQueue();
 	deleteAllPendingObjects();
+	addPendingObjects();
 }
 
 

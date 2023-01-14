@@ -103,12 +103,6 @@ namespace Griddy
 		ImGuiHandler::Instance()->update();
 	}
 
-	void Engine::lateUpdate()
-	{
-		SceneManager::Instance()->lateUpdate();
-		
-		Events::unsubscribeQueueFunc();
-	}
 
 	void Engine::render()
 	{
@@ -123,6 +117,13 @@ namespace Griddy
 		glfwSwapBuffers(Renderer::getWindow());
 	}
 
+	void Engine::lateUpdate()
+	{
+		SceneManager::Instance()->lateUpdate();
+		
+		Events::unsubscribeQueueFunc();
+	}
+	
 	void Engine::cleanup()
 	{
 		Renderer::Instance()->cleanup();

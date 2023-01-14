@@ -37,6 +37,7 @@ void GameObject::destroy()
 
 void GameObject::start()
 {
+	if (isBeingDeleted()) return;
 	for (Component* curComponent : components)
 	{
 		if (isBeingDeleted()) return;
@@ -46,6 +47,7 @@ void GameObject::start()
 
 void GameObject::update()
 {
+	if (isBeingDeleted()) return;
 	for (Component* curComponent : components)
 	{
 		if (isBeingDeleted()) return;
@@ -55,6 +57,7 @@ void GameObject::update()
 
 void GameObject::lateUpdate()
 {
+	if (isBeingDeleted()) return;
 	for (Component* curComponent : components)
 	{
 		if (isBeingDeleted()) return;

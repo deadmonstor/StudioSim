@@ -4,7 +4,7 @@
 
 class FireballComponent : public Component
 {
-	int8_t onAnimationEndedEventID = -1;
+	int32_t onAnimationEndedEventID = -1;
 public:
 	void start() override;
 	void update() override;

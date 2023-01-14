@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <map>
+#include <ranges>
 #include <typeindex>
 #include "FunctionHandler.h"
 #include "../Logger.h"
@@ -11,7 +12,7 @@ namespace Griddy
 	{
 	public:
 		
-		typedef std::map<int8_t, FunctionBase*> EventList;
+		typedef std::map<int32_t, FunctionBase*> EventList;
 
 		template<typename T, typename... Args>
 		static void invoke(Args... args)
@@ -20,13 +21,13 @@ namespace Griddy
 		}
 
 		template<class T, class EventType>
-		static int8_t subscribe(T* instance, void (T::*func)(EventType*))
+		static int32_t subscribe(T* instance, void (T::*func)(EventType*))
 		{
 			return Instance()->subscribeInternal(instance, func);
 		}
 
 		template<class T, class EventType>
-		static void unsubscribe(T* instance, void (T::*func)(EventType*), const int8_t id)
+		static void unsubscribe(T* instance, void (T::*func)(EventType*), const int32_t id)
 		{
 			Instance()->unsubscribeInternalQueue(instance, func, id);
 		}
@@ -46,7 +47,6 @@ namespace Griddy
 		{
 			return std::ranges::find(blacklist, name) != blacklist.end();
 		}
-
 #endif
 
 		template<typename EventType>
@@ -72,11 +72,11 @@ namespace Griddy
 			
 			for (const auto t : *list)
 			{
-				int8_t id = t.first;
 				FunctionBase* handler = t.second;
 				
 				if (!handler)
 				{
+					DebugBreak();
 					continue;
 				}
 				
@@ -85,12 +85,24 @@ namespace Griddy
 
 			delete event;
 		}
+		
+		struct UnsubscribeData
+		{
+			UnsubscribeData(const std::type_index& type, int32_t id)
+				: type(type),
+				  id(id) {}
 
+			std::type_index type;
+			int32_t id;
+		};
+
+		inline static std::vector<UnsubscribeData> reuseIDQueue = std::vector<UnsubscribeData>();
+		
 		template<class T, class EventType>
-		int8_t subscribeInternal(T* instance, void (T::*func)(EventType*))
+		int32_t subscribeInternal(T* instance, void (T::*func)(EventType*))
 		{
 			EventList* list = internalEvents[typeid(EventType)];
-
+			
 			if (list == nullptr)
 			{
 				list = new EventList();
@@ -98,33 +110,37 @@ namespace Griddy
 			}
 
 			// TODO: Check if this is slow? 
-			int8_t nextID = 0;
-			for (const auto [i, it] : *list)
+			int32_t nextID = 0;
+			for (auto it = reuseIDQueue.begin(); it != reuseIDQueue.end(); ++it)
 			{
-				if (i > nextID)
+				if (it->type == typeid(EventType))
 				{
-					nextID = i;
+					nextID = it->id;
+					reuseIDQueue.erase(it);
+					break;
 				}
 			}
 
+			if (nextID == 0)
+			{
+				for (const auto i : *list | std::views::keys)
+				{
+					if (i > nextID)
+					{
+						nextID = i;
+					}
+				}
+				
+				nextID = nextID + 1;
+			}
+
 #ifdef _DEBUG_ECS
-			if (!isBlacklistedLog(typeid(EventType).name()))
-				LOG_INFO("Subscribing to event: " + std::string(typeid(EventType).name()) + " with ID: " + std::to_string(nextID + 1));
+			LOG_INFO("Subscribing to event: " + std::string(typeid(EventType).name()) + " with ID: " + std::to_string(nextID));
 #endif
 			
-			list->insert({nextID + 1, new FunctionHandler<T, EventType>(instance, func)});
-			return nextID + 1;
+			list->insert({nextID, new FunctionHandler<T, EventType>(instance, func)});
+			return nextID;
 		}
-
-		struct UnsubscribeData
-		{
-			UnsubscribeData(const std::type_index& type, int8_t id)
-				: type(type),
-				  id(id) {}
-
-			std::type_index type;
-			int8_t id;
-		};
 		
 		inline static std::vector<UnsubscribeData> unsubscribeQueue = std::vector<UnsubscribeData>();
 
@@ -135,10 +151,11 @@ namespace Griddy
 				unsubscribeInternal(data.type, data.id);
 			}
 
+			reuseIDQueue.append_range(unsubscribeQueue);
 			unsubscribeQueue.clear();
 		}
 
-		void unsubscribeInternal(const std::type_index type, const int8_t id)
+		void unsubscribeInternal(const std::type_index type, const int32_t id)
 		{
 			EventList* list = internalEvents[type];
 
@@ -164,7 +181,7 @@ namespace Griddy
 		}
 
 		template<class T, class EventType>
-		static void unsubscribeInternalQueue(T*, void (T::*)(EventType*), const int8_t id)
+		static void unsubscribeInternalQueue(T*, void (T::*)(EventType*), const int32_t id)
 		{
 			unsubscribeQueue.push_back(UnsubscribeData(typeid(EventType), id));
 		}
