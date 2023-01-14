@@ -8,6 +8,10 @@
 
 void SceneManager::destroyScene(const Scene* scene)
 {
+	#ifdef _DEBUG_ECS
+		LOG_INFO("destroyScene() ");
+	#endif
+	
 	shuttingDown = true;
 
 	for(const auto gameObjects = scene->gameObjects; const auto object : gameObjects)
@@ -75,6 +79,7 @@ void SceneManager::destroyGameObject(GameObject* gameObject) const
 {
 	#ifdef _DEBUG_ECS
 		LOG_INFO("Removing game object " + gameObject->getName());
+
 		if (gameObject->isBeingDeleted())
 		{
 			DebugBreak();
@@ -96,10 +101,18 @@ void SceneManager::update() const
 
 void SceneManager::deleteAllPendingObjects() const
 {
+	#ifdef _DEBUG_ECS
+		bool hasDeletedSomething = false;
+	#endif
+	
 	for(auto i = currentScene->gameObjects.begin(); i != currentScene->gameObjects.end();)
 	{
 		if ((*i)->beingDeleted)
 		{
+			#ifdef _DEBUG_ECS
+				hasDeletedSomething = true;
+			#endif
+			
 			delete *i;
 			i = currentScene->gameObjects.erase(i);
 		}
@@ -108,6 +121,11 @@ void SceneManager::deleteAllPendingObjects() const
 			++i;
 		}
 	}
+
+	#ifdef _DEBUG_ECS
+		if (hasDeletedSomething)
+			LOG_INFO("deleteAllPendingObjects() ");
+	#endif
 }
 
 void SceneManager::lateUpdate() const

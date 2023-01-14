@@ -33,8 +33,6 @@ void GameObject::destroy()
 		
 		curComponent->destroy();
 	}
-
-	transform = nullptr;
 }
 
 void GameObject::start()

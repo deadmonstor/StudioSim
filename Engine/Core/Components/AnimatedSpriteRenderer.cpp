@@ -25,7 +25,6 @@ void AnimatedSpriteRenderer::doTextureUpdate()
 }
 bool AnimatedSpriteRenderer::doSpriteUpdate()
 {
-	LOG_INFO(this->getOwner()->isBeingDeleted());
 	if (this->getOwner()->isBeingDeleted())
 		return true;
 	
@@ -43,9 +42,7 @@ bool AnimatedSpriteRenderer::doSpriteUpdate()
 		currentIndex = 0;
 		debugCurIndex = currentIndex;
 		doTextureUpdate();
-		LOG_INFO("Updating");
-		//Griddy::Events::invoke<OnAnimationEnded>(this);
-		SceneManager::Instance()->destroyGameObject(this->getOwner());
+		Griddy::Events::invoke<OnAnimationEnded>(this);
 		if (getOwner() == nullptr || getOwner()->isBeingDeleted()) return true;
 	}
 
