@@ -116,7 +116,6 @@ namespace Griddy
 				internalEvents[typeid(EventType)] = list;
 			}
 
-			int8_t nextID = 0;
 			// TODO: Check if this is slow? 
 			int32_t nextID = 0;
 			for (auto it = reuseIDQueue.begin(); it != reuseIDQueue.end(); ++it)
