@@ -1,6 +1,7 @@
 #include "AnimatedSpriteRenderer.h"
 
 #include "Core/GameObject.h"
+#include "glm/common.hpp"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
@@ -14,12 +15,21 @@ AnimatedSpriteRenderer::AnimatedSpriteRenderer(std::vector<Texture> textureList,
 	debugUpdateEverXMS = updateEveryXMS;
 	debugLastUpdate = 0;
 	debugTextureList = this->textureList.size();
-	
-	doSpriteUpdate();
+}
+
+void AnimatedSpriteRenderer::doTextureUpdate()
+{
+	setTexture(textureList[currentIndex]);
+	lastUpdate = Time::getTime();
+	debugLastUpdate = lastUpdate;
 }
 
 bool AnimatedSpriteRenderer::doSpriteUpdate()
 {
+	if (this->getOwner()->isBeingDeleted())
+		return true;
+
+	// TODO: When we are really lagging this should "skip" frames
 	if (lastUpdate > Time::getTime() - updateEveryXMS)
 		return true;
 
@@ -27,26 +37,39 @@ bool AnimatedSpriteRenderer::doSpriteUpdate()
 		return true;
 
 	currentIndex++;
+	debugCurIndex = currentIndex;
 
 	if (textureList.size() <= currentIndex)
 	{
 		currentIndex = 0;
+		debugCurIndex = currentIndex;
+		doTextureUpdate();
 		Griddy::Events::invoke<OnAnimationEnded>(this);
-		if (getOwner() == nullptr || getOwner()->isBeingDeleted()) return true;
 	}
 
-	setTexture(textureList[currentIndex]);
-	lastUpdate = Time::getTime();
+	doTextureUpdate();
 	return false;
 }
 
 void AnimatedSpriteRenderer::update()
 {
-	if (doSpriteUpdate()) return;
 	SpriteComponent::update();
+	doSpriteUpdate();
+}
+
+void AnimatedSpriteRenderer::lateUpdate()
+{
+	if (debugCurIndex != currentIndex)
+	{
+		currentIndex = glm::clamp(debugCurIndex, 0, static_cast<int>(textureList.size()) - 1);
+		debugCurIndex = currentIndex;
+		doTextureUpdate();
+	}
 
 	if (updateEveryXMS != 0.0)
 		updateEveryXMS = debugUpdateEverXMS;
+
+	SpriteComponent::lateUpdate();
 }
 
 void AnimatedSpriteRenderer::getDebugInfo(std::string* string)

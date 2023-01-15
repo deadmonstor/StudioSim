@@ -216,7 +216,6 @@ void Renderer::addToRenderQueue(const OnSpriteRendererComponentStarted* event)
 	event->spriteRenderer->getShader().SetVector3f("spriteColor", event->spriteRenderer->getColor(), true);
 	
 	spriteRenderQueue.push_back(event->spriteRenderer);
-	sortRenderQueue();
 	Lighting::Instance()->refreshLightData(event->spriteRenderer, LightUpdateRequest::All);
 }
 
