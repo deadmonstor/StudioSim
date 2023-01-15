@@ -10,6 +10,10 @@ GameObject::~GameObject()
 {
 	for (const Component* curComponent : components)
 	{
+		#ifdef _DEBUG_ECS
+			LOG_INFO("Deleting component " + curComponent->getName() + " for gameobject " + getName());
+		#endif
+		
 		delete curComponent;
 		curComponent = nullptr;
 	}
@@ -21,14 +25,19 @@ void GameObject::destroy()
 
 	for (Component* curComponent : components)
 	{
+		#ifdef _DEBUG_ECS
+		{
+			LOG_INFO("Destroying component " + curComponent->getName() + " for gameobject " + getName());
+		}
+		#endif
+		
 		curComponent->destroy();
 	}
-
-	transform = nullptr;
 }
 
 void GameObject::start()
 {
+	if (isBeingDeleted()) return;
 	for (Component* curComponent : components)
 	{
 		if (isBeingDeleted()) return;
@@ -38,6 +47,7 @@ void GameObject::start()
 
 void GameObject::update()
 {
+	if (isBeingDeleted()) return;
 	for (Component* curComponent : components)
 	{
 		if (isBeingDeleted()) return;
@@ -47,6 +57,7 @@ void GameObject::update()
 
 void GameObject::lateUpdate()
 {
+	if (isBeingDeleted()) return;
 	for (Component* curComponent : components)
 	{
 		if (isBeingDeleted()) return;

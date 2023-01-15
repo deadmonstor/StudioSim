@@ -3,4 +3,5 @@
 
 class Camera final : public Component
 {
+    void destroy() override;
 };

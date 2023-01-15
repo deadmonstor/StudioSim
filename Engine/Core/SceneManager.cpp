@@ -8,6 +8,10 @@
 
 void SceneManager::destroyScene(const Scene* scene)
 {
+	#ifdef _DEBUG_ECS
+		LOG_INFO("destroyScene() ");
+	#endif
+	
 	shuttingDown = true;
 
 	for(const auto gameObjects = scene->gameObjects; const auto object : gameObjects)
@@ -15,6 +19,7 @@ void SceneManager::destroyScene(const Scene* scene)
 		destroyGameObject(object);
 	}
 
+	addPendingObjects();
 	Renderer::Instance()->setCamera(nullptr);
 	deleteAllPendingObjects();
 }
@@ -26,6 +31,7 @@ bool SceneManager::changeScene(const std::string& scene)
 	loadingScene = true;
 	if (currentScene != nullptr)
 	{
+		LOG_INFO("Destroy current scene " + currentScene->name);
 		destroyScene(currentScene);
 	}
 
@@ -47,6 +53,8 @@ bool SceneManager::init()
 
 GameObject* SceneManager::createGameObject(const std::string name, const glm::vec2 position)
 {
+	// TODO: This should 100% be world space not whatever is here
+	
 	const auto created = new GameObject();
 	created->transform = new Transform();
 	created->transform->setName("Transform");
@@ -54,20 +62,51 @@ GameObject* SceneManager::createGameObject(const std::string name, const glm::ve
 	
 	created->addComponent(created->transform);
 	created->transform->setPosition(position);
-	created->start();
 	
-	currentScene->gameObjects.push_back(created);
+	pendingObjects.push_back(created);
+	
+	#ifdef _DEBUG_ECS
+		LOG_INFO("Created game object " + name);
+	#endif
+	
+	return created;
+}
+
+void SceneManager::addPendingObjects()
+{
+	for (const auto object : pendingObjects)
+	{
+		addGameObject(object);
+	}
+	
+	pendingObjects.clear();
+}
+
+void SceneManager::addGameObject(GameObject* gameObject)
+{
+	currentScene->gameObjects.push_back(gameObject);
+	gameObject->isInitialized = true;
+	gameObject->start();
+	
 	if (currentScene->gameObjects.size() > 100000)
 	{
-		LOG_ERROR("Somehow we have more than 100000 gameobjects, lets stop");
+		#ifdef _DEBUG_ECS
+			LOG_ERROR("Somehow we have more than 100000 gameobjects, lets stop");
+		#endif
 	}
-
-	created->isInitialized = true;
-	return created;
 }
 
 void SceneManager::destroyGameObject(GameObject* gameObject) const
 {
+	if (gameObject->isBeingDeleted())
+	{
+		return;
+	}
+
+	#ifdef _DEBUG_ECS
+		LOG_INFO("Removing game object " + gameObject->getName());
+	#endif
+	
 	gameObject->beingDeleted = true;
 	gameObject->destroy();
 }
@@ -82,10 +121,18 @@ void SceneManager::update() const
 
 void SceneManager::deleteAllPendingObjects() const
 {
+	#ifdef _DEBUG_ECS
+		bool hasDeletedSomething = false;
+	#endif
+	
 	for(auto i = currentScene->gameObjects.begin(); i != currentScene->gameObjects.end();)
 	{
 		if ((*i)->beingDeleted)
 		{
+			#ifdef _DEBUG_ECS
+				hasDeletedSomething = true;
+			#endif
+			
 			delete *i;
 			i = currentScene->gameObjects.erase(i);
 		}
@@ -94,16 +141,23 @@ void SceneManager::deleteAllPendingObjects() const
 			++i;
 		}
 	}
+
+	#ifdef _DEBUG_ECS
+		if (hasDeletedSomething)
+			LOG_INFO("deleteAllPendingObjects() ");
+	#endif
 }
 
-void SceneManager::lateUpdate() const
+void SceneManager::lateUpdate()
 {
 	for (auto i : currentScene->gameObjects)
 	{
 		i->lateUpdate();
 	}
 
+	Renderer::Instance()->sortRenderQueue();
 	deleteAllPendingObjects();
+	addPendingObjects();
 }
 
 
