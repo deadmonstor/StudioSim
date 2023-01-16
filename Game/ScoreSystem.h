@@ -25,16 +25,10 @@ private:
 	int currentScore;
 	void SortScores();
 	void UpdateScoreFile();
+	void RenderTopScores();
 
 	std::fstream file;
 
 	FileData m_FileData[13];
 
 };
-
-/*#include "Util/SingletonTemplate.h"
-#include "Util/Events/EngineEvents.h"
-#include <queue>
-
-
-class TurnManager : public SingletonTemplate<TurnManager>*/

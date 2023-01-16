@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include "Core/Components/TextRenderer.h"
 
 ScoreSystem::ScoreSystem()
 {
@@ -53,7 +54,6 @@ void ScoreSystem::ReadScores()
 
 }
 
-
 void ScoreSystem::SortScores()
 {
 	for (int i = 11; i > 0; i--)
@@ -80,4 +80,9 @@ void ScoreSystem::UpdateScoreFile()
 	}
 	file.close();
 	
+}
+
+void ScoreSystem::RenderTopScores()
+{
+	//TextRenderer::Instance()->renderText("", 500, 500, 1, glm::vec3(1, 1, 1));
 }
