@@ -30,7 +30,7 @@ void ScoreSystem::SaveScore(std::string Username)
 
 }
 
-void ScoreSystem::ReadScores()
+void ScoreSystem::ReadScores(bool FromMainMenu)
 {
 	file.open("Score.txt");
 	std::string line, m_Name;
@@ -48,10 +48,11 @@ void ScoreSystem::ReadScores()
 		}
 	}
 	file.close();
-	SortScores();
-	std::cout << m_FileData[0].Score << std::endl;
-	UpdateScoreFile();
-
+	if (!FromMainMenu)
+	{
+		SortScores();
+		UpdateScoreFile();
+	}
 }
 
 void ScoreSystem::SortScores()
@@ -84,5 +85,10 @@ void ScoreSystem::UpdateScoreFile()
 
 void ScoreSystem::RenderTopScores()
 {
+	for (int i = 0; i < 10; i++)
+	{
+		TextRenderer::Instance()->renderText(m_FileData[i].Name, 200, i * 100 - 300, 1, glm::vec3(1, 1, 1));
+		TextRenderer::Instance()->renderText(std::to_string(m_FileData[i].Score), 500, i * 100 - 300, 1, glm::vec3(1, 1, 1));
+	}
 	//TextRenderer::Instance()->renderText("", 500, 500, 1, glm::vec3(1, 1, 1));
 }

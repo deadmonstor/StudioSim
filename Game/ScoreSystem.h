@@ -19,13 +19,13 @@ public:
 	ScoreSystem();
 
 	void SaveScore(std::string Username);
-	void ReadScores();
+	void ReadScores(bool FromMainMenu);
+	void RenderTopScores();
 
 private:
 	int currentScore;
 	void SortScores();
 	void UpdateScoreFile();
-	void RenderTopScores();
 
 	std::fstream file;
 

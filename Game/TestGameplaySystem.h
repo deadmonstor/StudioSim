@@ -220,15 +220,20 @@ public:
 			std::string User = "LJP";
 			ScoreSystem::Instance()->SaveScore(User);
 
-			//ScoreSystem::Instance()->setScore(26);
-			//User = "JAG";
-			//ScoreSystem::Instance()->SaveScore(User);
 			m_count++;
 		}
 		
 		if (m_count == 1)
 		{
-			ScoreSystem::Instance()->ReadScores();
+			ScoreSystem::Instance()->ReadScores(false);
+			m_count++;
+		}
+
+		if (m_count == 2)
+		{
+			ScoreSystem::Instance()->RenderTopScores();
+			/*	ScoreSystem::Instance()->ReadScores();
+		ScoreSystem::Instance()->RenderTopScores();*/
 		}
 
 		/*
@@ -248,7 +253,7 @@ public:
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
 
-
+		
 		CreateFireball(glm::vec2{ 1000, 500 });
 	}
 
@@ -315,7 +320,7 @@ public:
 		if (SceneManager::Instance()->getScene()->name != "testInventory")
 			return;
 		
-		TextRenderer::Instance()->renderText("abcdefghijklmnopqrstuvwsyz", 500, 500, 1, glm::vec3(1, 1, 1));
+			TextRenderer::Instance()->renderText("abcdefghijklmnopqrstuvwsyz", 500, 500, 1, glm::vec3(1, 1, 1));
 	}
 	
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)
