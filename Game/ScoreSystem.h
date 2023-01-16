@@ -2,6 +2,13 @@
 #include "Core/Component.h"
 #include "Util/SingletonTemplate.h"
 #include<string>
+#include <fstream>
+
+struct FileData
+{
+	std::string Name;
+	int Score;
+};
 
 class ScoreSystem : public SingletonTemplate<ScoreSystem> //public Component 
 {
@@ -16,6 +23,12 @@ public:
 
 private:
 	int currentScore;
+	void SortScores();
+	void UpdateScoreFile();
+
+	std::fstream file;
+
+	FileData m_FileData[13];
 
 };
 

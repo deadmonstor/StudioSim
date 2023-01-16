@@ -151,7 +151,7 @@ namespace Griddy
 				unsubscribeInternal(data.type, data.id);
 			}
 
-			reuseIDQueue.append_range(unsubscribeQueue);
+			//reuseIDQueue.append_range(unsubscribeQueue);
 			unsubscribeQueue.clear();
 		}
 

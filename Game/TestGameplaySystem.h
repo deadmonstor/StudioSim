@@ -213,9 +213,23 @@ public:
 		TurnManager::Instance()->addToTurnQueue(testRSW);
 		//ScoreSystem score = new ScoreSystem();
 		//score.SaveScore();
-		ScoreSystem::Instance()->setScore(13);
-		std::string User = "LJP";
-		ScoreSystem::Instance()->SaveScore(User);
+		int m_count = 0;
+		if (m_count == 0)
+		{
+			ScoreSystem::Instance()->setScore(110);
+			std::string User = "LJP";
+			ScoreSystem::Instance()->SaveScore(User);
+
+			//ScoreSystem::Instance()->setScore(26);
+			//User = "JAG";
+			//ScoreSystem::Instance()->SaveScore(User);
+			m_count++;
+		}
+		
+		if (m_count == 1)
+		{
+			ScoreSystem::Instance()->ReadScores();
+		}
 
 		/*
 		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
