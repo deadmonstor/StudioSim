@@ -71,8 +71,11 @@ public:
 				const std::string strs(std::to_string(key));
 				LOG_INFO("Mouse-Down: " + strs);
 
-				const glm::vec2 mousePos = getMousePosition();
+				glm::vec2 mousePos = getMousePosition();
 				LOG_INFO("Mouse Position: " + std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
+				
+				mousePos = getMousePositionScreenSpace();
+				LOG_INFO("Mouse Position Screen Space: " + std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
 			}
 		}
 		else if (action == GLFW_RELEASE)
@@ -84,8 +87,11 @@ public:
 				const std::string strs(std::to_string(key));
 				LOG_INFO("Mouse-Down: " + strs);
 
-				const glm::vec2 mousePos = getMousePosition();
+				glm::vec2 mousePos = getMousePosition();
 				LOG_INFO("Mouse Position: " + std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
+				
+				mousePos = getMousePositionScreenSpace();
+				LOG_INFO("Mouse Position Screen Space: " + std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
 			}
 		}
 	}
@@ -130,14 +136,19 @@ public:
 		double x, y;
 		glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 
-		glm::vec2 screenSize = Renderer::getWindowSize();
+		const glm::vec2 screenSize = Renderer::getWindowSize();
+		glm::vec2 pos = Renderer::Instance()->getCameraPos();
 
 		const glm::vec3 win(x,y,0);
 		const glm::vec4 viewport(0, 0, screenSize.x, screenSize.y);
 
 		const glm::vec3 mousePos = unProject(win, glm::mat4(1.0f), glm::mat4(1.0f), viewport);
+
+		// TODO: This math is most likely wrong, its off by a little bit
+		pos.x += screenSize.x / 2.0f * mousePos.x + screenSize.x / 2.0f;
+		pos.y += screenSize.y / 2.0f * mousePos.y + screenSize.y / 2.0f;
 		
-		return {mousePos.x, -mousePos.y};
+		return {pos.x, pos.y};
 	}
 
 

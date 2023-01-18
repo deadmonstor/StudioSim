@@ -7,6 +7,9 @@
 
 void TextRenderer::init()
 {
+	internalSpriteComponent = new SpriteComponent();
+	internalSpriteComponent->setShader(ResourceManager::GetShader("text"));
+	
 	glGenVertexArrays(1, &this->VAO);
 	glGenBuffers(1, &this->VBO);
 	glBindVertexArray(this->VAO);
@@ -59,13 +62,10 @@ void TextRenderer::init()
 	FT_Done_FreeType(ft);
 }
 
-void TextRenderer::renderText(std::string text, float screenPosX, float screenPosY, float scale, glm::vec3 colour)
+void TextRenderer::renderText(std::string text, float screenPosX, const float screenPosY, const float scale, const glm::vec3 colour)
 {
-	// TODO: Remove this
-	SpriteComponent* test = new SpriteComponent();
-	test->setShader(ResourceManager::GetShader("text"));
-	ResourceManager::GetShader("text").SetVector3f(("spriteColor"), colour.x, colour.y, colour.z, true);
-	Lighting::Instance()->refreshLightData(test, LightUpdateRequest::All);
+	internalSpriteComponent->getShader().SetVector3f("spriteColor", colour.x, colour.y, colour.z, true);
+	Lighting::Instance()->refreshLightData(internalSpriteComponent, LightUpdateRequest::All);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -75,13 +75,13 @@ void TextRenderer::renderText(std::string text, float screenPosX, float screenPo
 	for (std::string::const_iterator c = text.begin(); c != text.end(); ++c)
 	{
 		const auto [texture, Size, Bearing, Advance] = Chars[*c];
-		float xPosition = screenPosX + Bearing.x * scale;
-		float yPosition = screenPosY + (Size.y - Bearing.y) * scale;
+		const float xPosition = screenPosX + Bearing.x * scale;
+		const float yPosition = screenPosY + (Size.y - Bearing.y) * scale;
 
-		float width = Size.x * scale;
-		float  height = Size.y * scale;
+		const float width = Size.x * scale;
+		const float height = Size.y * scale;
 
-		float vertices[6][4] =
+		const float vertices[6][4] =
 		{
 			{xPosition, yPosition - height, 0.0f, 0.0f},
 			{xPosition, yPosition, 0.0f, 1.0f},
@@ -103,5 +103,4 @@ void TextRenderer::renderText(std::string text, float screenPosX, float screenPo
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_BLEND);
-	delete test;
 }
