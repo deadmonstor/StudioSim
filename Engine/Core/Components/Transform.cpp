@@ -36,14 +36,24 @@ void Transform::getDebugInfo(std::string* string)
 
 glm::vec2 Transform::getPosition() const
 {
-	const glm::vec2 camPos = Renderer::Instance()->getCameraPos();
-	return position - camPos;
+	return position;
+}
+
+glm::vec2 Transform::getScreenSpacePosition() const
+{
+	const glm::vec2 screenSize = Renderer::getWindowSize();
+	glm::vec2 pos = Renderer::Instance()->getCameraPos();
+
+	// convert world space xy to screen space xy
+	pos.x = (position.x - pos.x) * 1 + screenSize.x / 2;
+	pos.y = (position.y - pos.y) * -1 + screenSize.y / 2;
+	
+	return pos;
 }
 
 void Transform::setPosition(const glm::vec2 inPosition)
 {
-	const glm::vec2 camPos = Renderer::Instance()->getCameraPos();
-	this->position = inPosition + camPos;
+	this->position = inPosition;
 
 	debugPosition[0] = inPosition.x;
 	debugPosition[1] = inPosition.y;
