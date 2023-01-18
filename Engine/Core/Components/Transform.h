@@ -22,6 +22,7 @@ public:
 	void destroy() override;
 
 	[[nodiscard]] glm::vec2 getPosition() const;
+	[[nodiscard]] glm::vec2 getScreenSpacePosition() const;
 	[[nodiscard]] glm::vec2 GetScale() const { return size; }
 	[[nodiscard]] float GetRotation() const { return rotation; }
 };

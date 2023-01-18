@@ -2,6 +2,7 @@
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
 #include "Core/Renderer/Renderer.h"
+#include "glm/ext/matrix_projection.hpp"
 #include "Library/glfw3.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
@@ -101,23 +102,44 @@ public:
 		
 		double x, y;
 		glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
-		
-		const glm::vec2 windowSize = Renderer::getWindowSize();
-		x = std::clamp(x, 0.0, static_cast<double>(windowSize.x));
-		y = std::clamp(y, 0.0, static_cast<double>(windowSize.y));
 
-		if (const auto camera = Renderer::Instance()->getCamera(); camera != nullptr)
-		{
-			if (const auto owner = camera->getOwner(); owner != nullptr)
-			{
-				const glm::vec2 camPos = owner->getTransform()->getPosition();
-				x += camPos.x - windowSize.x / 2.0f;
-				y += camPos.y - windowSize.y / 2.0f;
-			}
-		}
+	    glm::vec2 screenSize = Renderer::getWindowSize();
+
+		const glm::vec3 win(x,y,0);
+		const glm::vec4 viewport(0, 0, screenSize.x, screenSize.y);
+
+		const glm::vec3 mousePos = unProject(win, glm::mat4(1.0f), glm::mat4(1.0f), viewport);
+
+		GLfloat worldSpacex = mousePos.x;
+		GLfloat worldSpacey = -mousePos.y;
+
+		worldSpacex = worldSpacex * (screenSize.x / 2.0f);
+		worldSpacey = worldSpacey * (screenSize.y / 2.0f);
+
+		worldSpacex += Renderer::Instance()->getCameraPos().x;
+		worldSpacey += Renderer::Instance()->getCameraPos().y;
 		
-		return {x, y};
+		return {worldSpacex, worldSpacey};
 	}
+
+	static glm::vec2 getMousePositionScreenSpace()
+	{
+		if (SceneManager::Instance()->isShuttingDown())
+			return glm::vec2(0.0f);
+		
+		double x, y;
+		glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
+
+		glm::vec2 screenSize = Renderer::getWindowSize();
+
+		const glm::vec3 win(x,y,0);
+		const glm::vec4 viewport(0, 0, screenSize.x, screenSize.y);
+
+		const glm::vec3 mousePos = unProject(win, glm::mat4(1.0f), glm::mat4(1.0f), viewport);
+		
+		return {mousePos.x, -mousePos.y};
+	}
+
 
 	static std::string getKeyName(const int key, const int scancode)
 	{

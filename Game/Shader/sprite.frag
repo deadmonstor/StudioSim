@@ -31,7 +31,7 @@ void main()
 		
 		//The delta position of light
 		vec3 LightDir = vec3(LightPos.xy - (gl_FragCoord.xy / Resolution.xy), LightPos.z);
-
+		
 		//Correct for aspect ratio
 		LightDir.x *= Resolution.x / Resolution.y;
 
