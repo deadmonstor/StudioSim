@@ -23,5 +23,10 @@ public:
 
 	//Store all of the current channels
 	std::map<int, FMOD::Channel *> currentChannels;
+
+	//Channel Stuff
+	FMOD::ChannelGroup* masterChannel;
+	FMOD::ChannelGroup* audioEffectsChannel;
+	FMOD::ChannelGroup* backgroundMusicChannel;
 };
 

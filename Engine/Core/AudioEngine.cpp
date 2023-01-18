@@ -39,6 +39,16 @@ bool AudioEngine::init()
 		return false;
 	}
 
+	//Set Channel Groups
+	fmodResult = fmodSystem->getMasterChannelGroup(&masterChannel);
+	if (!checkResult(fmodResult, "Failed to get master channel"))
+	{
+		return false;
+	}
+	//Add audio channel groups
+	masterChannel->addGroup(audioEffectsChannel);
+	masterChannel->addGroup(backgroundMusicChannel);
+
 	Griddy::Events::subscribe(this, &AudioEngine::onDebugEvent);
 
 	return true;
