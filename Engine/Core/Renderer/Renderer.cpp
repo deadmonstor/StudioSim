@@ -178,14 +178,9 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	if (mainCam == nullptr)
 		return;
 
-	const glm::vec2 cameraPos = getCameraPos();
-	
-	if (position.x + size.x < cameraPos.x - mainCam->getSize() * 2 ||
-		position.x > cameraPos.x + mainCam->getSize() * 2 ||
-		position.y + size.y < cameraPos.y - mainCam->getSize() * 2 ||
-		position.y > cameraPos.y + mainCam->getSize() * 2)
+	if (!mainCam->isInFrustum(position, size))
 		return;
-	
+
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 
 	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);

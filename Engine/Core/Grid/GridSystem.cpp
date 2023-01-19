@@ -1,46 +1,57 @@
 ﻿#include <glad/glad.h>
 #include "GridSystem.h"
-
 #include <regex>
-
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Util/Logger.h"
 #include "Util/Events/Events.h"
 
+void GridSystem::clearGrid(const int id)
+{
+	if (gridLayers[id])
+	{
+		//TODO this is probably a mem leak, fix it later
+		gridLayers[id]->internalMap.clear();
+	}
+	else
+	{
+		gridLayers[id] = new GridLayer();
+	}
+	
+	for(int x = 0; x < gridSize.x; x++)
+	{
+		for(int y = 0; y < gridSize.y; y++)
+		{
+			GridHolder* grid_holder = gridLayers[id]->internalMap[x][y] = new GridHolder();
+			grid_holder->isOccupied = false;
+
+			const auto tile = new Tile(Texture());
+			tile->setSortingLayer(orderSortingMap.at(id));
+			tile->createBuffers();
+
+			gridLayers[id]->internalMap[x][y]->tile = tile;
+		}
+	}
+}
+
 void GridSystem::init(const glm::fvec2 _tileSize, const glm::ivec2 _gridSize)
 {
 	tileSize = _tileSize;
 	gridSize = _gridSize;
-	
-	for(int x = 0; x < gridSize.x; x++)
-		for(int y = 0; y < gridSize.y; y++)
-		{
-			GridHolder* grid_holder = internalMap[x][y] = new GridHolder();
-			grid_holder->isOccupied = false;
-
-			Tile* tile = new Tile(Texture());
-			tile->setSortingLayer(Renderer::getSortingLayer("background"));
-			tile->createBuffers();
-
-			internalMap[x][y]->tile = tile;
-		}
 
 	// subscribe to the event
 	Griddy::Events::subscribe(this, &GridSystem::onDebugEvent);
 }
 
-void GridSystem::render()
+void GridSystem::renderInternal(const int id)
 {
-	if (!shouldRender || internalMap.empty()) return;
+	if (!gridLayers.contains(id)) return;
 	
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	auto internalMap = gridLayers[id]->internalMap;
+	if (internalMap.empty()) return;
 	
 	for(auto [x, pointer] : internalMap)
 	{
-		const auto windowSize = Renderer::getWindowSize();
-		
 		const float tileWidth = tileSize.x;
 		const float tileHeight = tileSize.y;
 		
@@ -56,11 +67,24 @@ void GridSystem::render()
 			holder->tile->update();
 			
 			Renderer::Instance()->renderSprite(holder->tile,
-				pos - windowSize / 2.0f,
-				{tileWidth, tileHeight},
-				0
+			                                   pos,
+			                                   {tileWidth, tileHeight},
+			                                   0
 			);
 		}
+	}
+}
+
+void GridSystem::render()
+{
+	if (!shouldRender) return;
+	
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	for (const auto& id : gridLayers | std::views::keys)
+	{
+		renderInternal(id);
 	}
 
 	glDisable(GL_BLEND);
@@ -72,13 +96,15 @@ void GridSystem::onDebugEvent(const OnDebugEventChanged* event)
 		shouldRender = !shouldRender;
 }
 
-Tile* GridSystem::getTile(const glm::ivec2& _pos)
+Tile* GridSystem::getTile(const int id, const glm::ivec2& _pos)
 {
-	return internalMap[_pos.x][_pos.y]->tile;
+	return gridLayers[id]->internalMap[_pos.x][_pos.y]->tile;
 }
 
-void GridSystem::loadFromFile(const std::string& fileName)
+void GridSystem::loadFromFile(const int mapID, const std::string& fileName)
 {
+	clearGrid(mapID);
+	
 	std::ifstream file(fileName);
 	if (!file.is_open())
 	{
@@ -105,8 +131,7 @@ void GridSystem::loadFromFile(const std::string& fileName)
 	char id;
 	std::string curNumber;
 	int x = 0, y = gridSize.y - 1;
-
-	// while loop popping off the first character of the string
+	
 	while (!output.empty())
 	{
 		id = output.front();
@@ -118,10 +143,14 @@ void GridSystem::loadFromFile(const std::string& fileName)
 		if (id == ',')
 		{
 			int i = std::stoi(curNumber);
-			internalMap[x][y]->tile->SetTexture(textureMap[i]);
+			GridLayer* layer = gridLayers[mapID];
+			GridHolder* grid_holder = layer->internalMap[x][y];
 
-			// TODO: Don't hardcode this
-			internalMap[x][y]->isOccupied = i != 0;
+			if (Texture texture = gridLayers[mapID]->textureMap[i]; texture.Height != 0 && texture.Width != 0)
+				grid_holder->tile->SetTexture(texture);
+
+			grid_holder->isOccupied = std::ranges::find(layer->emptyTiles, i) == layer->emptyTiles.end();
+			grid_holder->isWall =std::ranges::find(layer->wallIDs, i) != layer->wallIDs.end();
 			
 			x += 1;
 			if (x >= gridSize.x)
@@ -137,4 +166,28 @@ void GridSystem::loadFromFile(const std::string& fileName)
 			curNumber += id;
 		}
 	}
+}
+
+void GridSystem::setTextureMap(const int id, const std::map<int, Texture>& textureMap)
+{
+	if (!this->gridLayers.contains(id))
+		this->gridLayers[id] = new GridLayer();
+		
+	this->gridLayers[id]->textureMap = textureMap;
+}
+
+void GridSystem::setWallIDs(const int id, const std::vector<int>& wallIDs)
+{
+	if (!this->gridLayers.contains(id))
+		this->gridLayers[id] = new GridLayer();
+		
+	this->gridLayers[id]->wallIDs = wallIDs;
+}
+
+void GridSystem::setEmptyTileIDs(const int id, const std::vector<int>& emptyTileIDs)
+{
+	if (!this->gridLayers.contains(id))
+		this->gridLayers[id] = new GridLayer();
+		
+	this->gridLayers[id]->emptyTiles = emptyTileIDs;
 }

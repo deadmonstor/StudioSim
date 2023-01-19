@@ -15,6 +15,7 @@ public:
     void update() override;
     void destroy() override;
     void getDebugInfo(std::string*) override;
+    bool isInFrustum(glm::vec2 pos, glm::vec2 size);
 private:
     glm::mat4 viewProjectionMatrix = {};
     glm::mat4 projectionMatrix = {};

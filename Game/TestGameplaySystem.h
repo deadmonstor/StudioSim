@@ -102,14 +102,28 @@ public:
 		// TODO: Enum this or something its kinda bad to do this
 		if (event->key != "debugScene")
 			return;
-		
-		GridSystem::Instance()->init(glm::vec2(48, 48), glm::vec2(70, 70));
-		GridSystem::Instance()->setTextureMap(std::map<int, Texture>
+
+		auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
+		auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);
+		auto enemySortingLayer = Renderer::addSortingLayer("Top Grid", 1);
+
+		GridSystem* grid_system = GridSystem::Instance();
+		grid_system->init(glm::vec2(48, 48), glm::vec2(70, 70));
+		grid_system->setOrderMap(
 		{
-			{0, ResourceManager::GetTexture("tile0")},
-			{1, ResourceManager::GetTexture("tile25")},
-			{2, ResourceManager::GetTexture("tile218")},
-			{3, ResourceManager::GetTexture("tile2")},
+			{0, backgroundSortingLayer},
+			{1, middleSortingLayer},
+			{2, enemySortingLayer},
+		});
+		
+		grid_system->setEmptyTileIDs(0, std::vector<int>{0});
+		// TODO: Fill these out lol
+		grid_system->setWallIDs(0, std::vector<int>{});
+		grid_system->setTextureMap(0, std::map<int, Texture>
+		{
+			{ 1, ResourceManager::GetTexture("tile25")},
+			{ 2, ResourceManager::GetTexture("tile218")},
+			{ 3, ResourceManager::GetTexture("tile2")},
 			{ 4, ResourceManager::GetTexture("tile4") },
 			{ 5, ResourceManager::GetTexture("tile50") },
 			{ 6, ResourceManager::GetTexture("tile28") },
@@ -118,10 +132,28 @@ public:
 			{ 9, ResourceManager::GetTexture("tile26") },
 			{ 10, ResourceManager::GetTexture("tile57") },
 			{ 11, ResourceManager::GetTexture("tile242") }
-
 		});
 		
-		GridSystem::Instance()->loadFromFile("Grid/test2.txt");
+		grid_system->loadFromFile(0, "Grid/test2.txt");
+		
+		grid_system->setEmptyTileIDs(1, std::vector<int>{});
+		grid_system->setWallIDs(1, std::vector<int>{});
+		grid_system->setTextureMap(1, std::map<int, Texture>
+		{
+			{ 1, ResourceManager::GetTexture("tile223")},
+			{ 2, ResourceManager::GetTexture("tile223")},
+			{ 3, ResourceManager::GetTexture("tile223")},
+			{ 4, ResourceManager::GetTexture("tile223") },
+			{ 5, ResourceManager::GetTexture("tile223") },
+			{ 6, ResourceManager::GetTexture("tile223") },
+			{ 7, ResourceManager::GetTexture("tile223") },
+			{ 8, ResourceManager::GetTexture("tile223") },
+			{ 9, ResourceManager::GetTexture("tile223") },
+			{ 10, ResourceManager::GetTexture("tile223") },
+			{ 11, ResourceManager::GetTexture("tile223") }
+		});
+		
+		grid_system->loadFromFile(1, "Grid/test2.txt");
 
 		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->setSize(glm::vec2(96, 48));
