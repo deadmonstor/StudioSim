@@ -231,7 +231,7 @@ public:
 
 		//CreateFireball(glm::vec2{ 1000, 500 });
 	}
-
+	
 	void TestInventory(const OnSceneChanged* event)
 	{
 		// TODO: Enum this or something its kinda bad to do this
@@ -301,11 +301,14 @@ public:
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)
 	{
 		const glm::vec2 mousePos = Input::getMousePosition();
-		
+		if (sm != nullptr)
+		{
+			std::type_index type = typeid(OnMouseDown);
+			Griddy::Events::invoke<BehaviourEvent>(sm, mouseDownEvent, type);
+		}
 		if (mouseDownEvent->key == GLFW_MOUSE_BUTTON_3)
 		{
 			CreateFireball(mousePos);
-			Griddy::Events::invoke<BehaviourEvent>(sm, mouseDownEvent);
 		}
 			
 	}
