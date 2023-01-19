@@ -220,7 +220,8 @@ public:
 		////Player Idle Anim
 		auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{0, 0});
 		testPlayerIdle->getTransform()->setSize(glm::vec2(40, 40));
-		testPlayerIdle->addComponent<Light>();
+		Light* playerLight = testPlayerIdle->addComponent<Light>();
+		playerLight->setFalloff({1, 1, 5});
 		auto cam = testPlayerIdle->addComponent<Camera>();
 		Renderer::Instance()->setCamera(cam);
 		
