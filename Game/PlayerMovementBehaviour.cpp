@@ -8,7 +8,26 @@ void PlayerMovementBehaviour::Act()
 
 void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 {
+	OnKeyDown* eventCasted = (OnKeyDown*)event;
 
+	if (eventCasted->key == GLFW_KEY_W)
+	{
+		moveDir.y += 1;
+	}
+	else if (eventCasted->key == GLFW_KEY_S)
+	{
+		moveDir.y -= 1;
+	}
+	else if (eventCasted->key == GLFW_KEY_A)
+	{
+		moveDir.x -= 1;
+	}
+	else if (eventCasted->key == GLFW_KEY_D)
+	{
+		moveDir.x += 1;
+	}
+
+	Act();
 }
 
 FunctionMap PlayerMovementBehaviour::CreateFunctionMap()
@@ -31,20 +50,20 @@ FunctionMap PlayerMovementBehaviour::CreateFunctionMap()
 //	//call act at the end
 //	OnKeyDown* eventCasted = (OnKeyDown*)event;
 //
-//	if (eventCasted->key == GLFW_KEY_W)
-//	{
-//		moveDir.y += 1;
-//	}
-//	else if (eventCasted->key == GLFW_KEY_S)
-//	{
-//		moveDir.y -= 1;
-//	}
-//	else if (eventCasted->key == GLFW_KEY_A)
-//	{
-//		moveDir.x -= 1;
-//	}
-//	else if (eventCasted->key == GLFW_KEY_D)
-//	{
-//		moveDir.x += 1;
-//	}
+	/*if (eventCasted->key == GLFW_KEY_W)
+	{
+		moveDir.y += 1;
+	}
+	else if (eventCasted->key == GLFW_KEY_S)
+	{
+		moveDir.y -= 1;
+	}
+	else if (eventCasted->key == GLFW_KEY_A)
+	{
+		moveDir.x -= 1;
+	}
+	else if (eventCasted->key == GLFW_KEY_D)
+	{
+		moveDir.x += 1;
+	}*/
 //}
