@@ -103,7 +103,7 @@ public:
 		if (event->key != "debugScene")
 			return;
 		
-		GridSystem::Instance()->init(glm::vec2(48, 48), glm::vec2(100, 100));
+		GridSystem::Instance()->init(glm::vec2(48, 48), glm::vec2(70, 70));
 		GridSystem::Instance()->setTextureMap(std::map<int, Texture>
 		{
 			{0, ResourceManager::GetTexture("tile0")},
@@ -114,8 +114,10 @@ public:
 			{ 5, ResourceManager::GetTexture("tile50") },
 			{ 6, ResourceManager::GetTexture("tile28") },
 			{ 7, ResourceManager::GetTexture("tile51") },
+			{ 8, ResourceManager::GetTexture("tile204") },
 			{ 9, ResourceManager::GetTexture("tile26") },
-			{ 11, ResourceManager::GetTexture("tile11") }
+			{ 10, ResourceManager::GetTexture("tile57") },
+			{ 11, ResourceManager::GetTexture("tile242") }
 
 		});
 		
