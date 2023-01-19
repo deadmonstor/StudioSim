@@ -44,6 +44,7 @@ int main(int, char**)
 	
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestMouseDown);
 	Griddy::Events::subscribe(PlayerController::Instance(), &PlayerController::onKeyDown);
+	Griddy::Events::subscribe(PlayerController::Instance(), &PlayerController::onKeyUp);
 
 	MainGame::Instance()->run();
 	return 0;

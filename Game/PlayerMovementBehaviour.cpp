@@ -5,7 +5,7 @@ void PlayerMovementBehaviour::Act()
 {
 	//move player
 	glm::vec2 currentPosition = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
-	PlayerController::Instance()->playerPTR->getTransform()->setPosition(currentPosition + moveDir * glm::vec2{10, 10});
+	PlayerController::Instance()->playerPTR->getTransform()->setPosition(currentPosition + moveDir * glm::vec2{5, 5});
 
 }
 
