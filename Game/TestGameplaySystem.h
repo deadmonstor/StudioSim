@@ -229,7 +229,7 @@ public:
 
 		Inventory myInventory(50); // Holds 10 items
 	
-		Item sword;
+		Weapon sword;
 		sword.name = "Bandit sword";
 		sword.type = "Weapon";
 		sword.itemDescription = "A common sword";
@@ -237,17 +237,17 @@ public:
 		sword.isEquipped = false;
 		sword.atk = 10;
 		sword.crit = 2;
-		myInventory.add_item(sword);
+		myInventory.add_item(&sword);
 
-		Item armour;
+		Armour armour;
 		armour.name = "Bandit armor";
 		armour.type = "Armour";
 		armour.equipSlot = "Chest";
 		armour.isEquipped = false;
 		armour.def = 15;
-		myInventory.add_item(armour);
+		myInventory.add_item(&armour);
 
-		Item spell;
+		Spell spell;
 		spell.name = "Fireball";
 		spell.type = "Spell";
 		spell.equipSlot = "Spells";
@@ -256,7 +256,15 @@ public:
 		spell.manaCost = 10;
 		spell.coolDown = 4; //Secods
 		spell.effectDuration = 3; //Seconds
-		myInventory.add_item(spell);
+		myInventory.add_item(&spell);
+
+		Item potion;
+		potion.name = "Health potion";
+		potion.type = "Potion";
+		potion.isUsable = true;
+		potion.isEquipped = false;
+		myInventory.add_item(&potion);
+
 
 		myInventory.draw_inventory();
 		myInventory.equip_item("Bandit sword");
@@ -264,6 +272,9 @@ public:
 	
 		myInventory.equip_item("Fireball");
 		myInventory.unequip_item("Bandit sword");
+		myInventory.remove_item(&spell);
+
+		myInventory.use_item("Health potion");
 		myInventory.draw_inventory();
 	}
 	

@@ -11,14 +11,41 @@ struct Item
 	std::string itemDescription;
 	std::string equipSlot;
 	std::string rarity;
+	bool isUsable;
 	bool isEquipped;
+	virtual ~Item() {}; // added virtual destructor
+};
+
+struct Weapon : Item
+{
 	int atk; // Added on to health and strength
-	int def; // Added on to agility and crit 
-	int manaCost;// Added on to intelligence and spell power
-	int coolDown;
-	int effectDuration;
-	int spellAtk;  
+	int getAtk() { return atk; }
+
 	int crit;
+	int getCrit() { return crit; };
+
+
+};
+
+struct Spell : Item
+{
+	int manaCost;// Added on to intelligence and spell power
+	int getManaCost() { return manaCost; }
+
+	int coolDown;
+	int getCoolDown() { return coolDown; }
+
+	int effectDuration;
+	int getEffectDuration() { return effectDuration; }
+
+	int spellAtk;
+	int getSpellAtk() { return spellAtk; }
+};
+
+struct Armour : Item
+{
+	int def;  // Added on to agility and crit
+	int getDef() { return def; }
 };
 
 class Inventory
@@ -26,13 +53,14 @@ class Inventory
 private:
 	int max_items;
 public:
-	Inventory(int max);
-	std::vector<Item> items;
-	std::vector<std::string> equipSlot;
-	bool add_item(Item item);
-	bool remove_item(std::string item_name);
+	Inventory(int max)
+	{
+		this->max_items = max;
+	}
+	std::vector<Item*> items;
+	bool add_item(Item* item);
+	bool remove_item(Item* item);
 	void draw_inventory();
-	void draw_inventory_imgui();
 	void use_item(std::string item_name);
 	void equip_item(std::string item_name);
 	void unequip_item(std::string item_name);
