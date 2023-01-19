@@ -1,14 +1,12 @@
 ﻿#pragma once
-#include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/SpriteComponent.h"
 
-class Tile final : public AnimatedSpriteRenderer
+class Tile final : public SpriteComponent
 {
 public:
-	Tile(const std::vector<Texture> &_textureList, const double _updateEveryXMS) :
-		AnimatedSpriteRenderer(_textureList, _updateEveryXMS)
+	Tile(const Texture& _texture)
 	{
-		
+		SetTexture(_texture);
 	}
 	
 	void SetTexture(const Texture& texture);

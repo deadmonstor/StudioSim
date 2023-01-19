@@ -9,6 +9,7 @@ class Texture;
 struct GridHolder
 {
 	Tile* tile;
+	bool isOccupied;
 };
 
 class GridSystem : public SingletonTemplate<GridSystem>

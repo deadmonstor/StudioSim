@@ -14,12 +14,14 @@ void GridSystem::init(const glm::fvec2 _tileSize, const glm::ivec2 _gridSize)
 	for(int x = 0; x < gridSize.x; x++)
 		for(int y = 0; y < gridSize.y; y++)
 		{
-			std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Hurt");
+			GridHolder* grid_holder = internalMap[x][y] = new GridHolder();
+			grid_holder->isOccupied = false;
 
-			internalMap[x][y] = new GridHolder();
-			internalMap[x][y]->tile = new Tile(textureList, 0.075f);
-			internalMap[x][y]->tile->setSortingLayer(Renderer::getSortingLayer("background"));
-			internalMap[x][y]->tile->createBuffers();
+			Tile* tile = new Tile(Texture());
+			tile->setSortingLayer(Renderer::getSortingLayer("background"));
+			tile->createBuffers();
+
+			internalMap[x][y]->tile = tile;
 		}
 
 	// subscribe to the event
@@ -46,8 +48,10 @@ void GridSystem::render()
 		{
 			const float tileY = y * tileHeight;
 			const auto pos = glm::vec2{tileX, tileY};
+
+			if (!holder->isOccupied) continue;
 			
-			internalMap[x][y]->tile->update();
+			holder->tile->update();
 			
 			Renderer::Instance()->renderSprite(holder->tile,
 				pos - windowSize / 2.0f,
@@ -88,11 +92,10 @@ void GridSystem::loadFromFile(const std::string& fileName)
 			continue;
 
 		int id = static_cast<int>(c) - 48;
-		internalMap[x][y]->tile->textureList =
-			std::vector
-		{
-			textureMap[id],
-		};
+		internalMap[x][y]->tile->SetTexture(textureMap[id]);
+
+		// TODO: Don't hardcode this
+		internalMap[x][y]->isOccupied = id != 0;
 		
 		x += 1;
 		if (x >= gridSize.x)
