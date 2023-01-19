@@ -6,6 +6,7 @@
 #include FT_FREETYPE_H
 
 
+class SpriteComponent;
 
 class TextRenderer : public SingletonTemplate<TextRenderer>
 {
@@ -16,6 +17,7 @@ public:
 private:
 	FT_Library ft;
 	FT_Face face;
+	SpriteComponent* internalSpriteComponent;
 
 	struct Char
 	{

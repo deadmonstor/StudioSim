@@ -39,11 +39,10 @@ public:
 			return;
 
 		GameObject* test = SceneManager::Instance()->createGameObject("Background", glm::vec2{-(1920 / 2), -(1080 / 2)});
-		test->getTransform()->setSize(glm::vec2(1920 * 1.3, 1080 * 1.3));
+		test->getTransform()->setSize(glm::vec2(1920 * 2, 1080 * 2));
 		SpriteComponent* sprite = test->addComponent<SpriteComponent>();
 		sprite->setTexture(ResourceManager::GetTexture("background"));
 		sprite->setColor(glm::vec3(1, 1, 1));
-		sprites.push_back(sprite);
 		
 		auto sortingLayer = Renderer::addSortingLayer("background", -2);
 		sprite->setSortingLayer(sortingLayer);
@@ -65,7 +64,7 @@ public:
 		{
 			// Get random position
 			float x = 400 - rand() % 1920;
-			float yy = 400 - rand() % 1080;
+			float yy = 400 - y;
 			
 			test = SceneManager::Instance()->createGameObject("Test-" + std::to_string(y), glm::vec2 { x, yy });
 			test->getTransform()->setSize(glm::vec2(100,100));
@@ -92,8 +91,8 @@ public:
 	
 	void CreateFireball(glm::vec2 mousePos)
 	{
-		mousePos.x = mousePos.x - 24;
-		mousePos.y = mousePos.y - 24;
+		mousePos.x = mousePos.x;
+		mousePos.y = mousePos.y;
 		
 		auto* fireball = SceneManager::Instance()->createGameObject("TestFireball", mousePos);
 		fireball->getTransform()->setSize(glm::vec2(48, 48));
@@ -334,11 +333,11 @@ public:
 	{
 		if (keyDown->key == GLFW_KEY_W)
 		{
-			direction.y -= 1;
+			direction.y += 1;
 		}
 		else if (keyDown->key == GLFW_KEY_S)
 		{
-			direction.y += 1;
+			direction.y -= 1;
 		}
 		else if (keyDown->key == GLFW_KEY_A)
 		{
@@ -349,15 +348,16 @@ public:
 			direction.x += 1;
 		}
 	}
+	
 	void testKeyUp(const OnKeyUp* keyUp)
 	{
 		if (keyUp->key == GLFW_KEY_W)
 		{
-			direction.y += 1;
+			direction.y -= 1;
 		}
 		else if (keyUp->key == GLFW_KEY_S)
 		{
-			direction.y -= 1;
+			direction.y += 1;
 		}
 		else if (keyUp->key == GLFW_KEY_A)
 		{
@@ -368,6 +368,7 @@ public:
 			direction.x -= 1;
 		}
 	}
+	
 	void testDropCallback(const OnFileDropCallback* dropCallback)
 	{
 		LOG_INFO(dropCallback->count);
