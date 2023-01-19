@@ -106,9 +106,16 @@ public:
 		GridSystem::Instance()->init(glm::vec2(48, 48), glm::vec2(100, 100));
 		GridSystem::Instance()->setTextureMap(std::map<int, Texture>
 		{
+			{0, ResourceManager::GetTexture("tile0")},
 			{1, ResourceManager::GetTexture("tile25")},
 			{2, ResourceManager::GetTexture("tile218")},
-			{3, ResourceManager::GetTexture("tile0")}
+			{3, ResourceManager::GetTexture("tile2")},
+			{ 4, ResourceManager::GetTexture("tile4") },
+			{ 5, ResourceManager::GetTexture("tile50") },
+			{ 6, ResourceManager::GetTexture("tile28") },
+			{ 7, ResourceManager::GetTexture("tile51") },
+			{ 9, ResourceManager::GetTexture("tile26") }
+
 		});
 		
 		GridSystem::Instance()->loadFromFile("Grid/test2.txt");
