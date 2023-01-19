@@ -210,13 +210,15 @@ public:
 		TurnManager::Instance()->addToTurnQueue(testRSW);
 
 		////Player Idle Anim
-		auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
-		testPlayerIdle->getTransform()->setSize(glm::vec2(256, 256));
+		//auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
+		//testPlayerIdle->getTransform()->setSize(glm::vec2(256, 256));
 
-		const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
-		sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
+		//const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
+		//sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
+		//sprite->setColor(glm::vec3(1, 1, 1));
+		//sprite->setLit(false);
+
+		
 
 		//CreateFireball(glm::vec2{ 1000, 500 });
 	}
