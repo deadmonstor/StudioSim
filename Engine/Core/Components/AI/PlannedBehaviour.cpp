@@ -4,7 +4,7 @@ void PlannedBehaviour::destroy()
 {
 	if (eventResponseID != -1)
 	{
-		Griddy::Events::unsubscribe(this, &PlannedBehaviour::EventResponse, eventResponseID);
+		Griddy::Events::unsubscribe((Behaviour*)this, &Behaviour::EventResponse, eventResponseID);
 		eventResponseID = -1;
 	}
 
@@ -16,8 +16,8 @@ void PlannedBehaviour::destroy()
 void PlannedBehaviour::start()
 {
 	if (eventResponseID == -1)
-		eventResponseID = Griddy::Events::subscribe(this, &PlannedBehaviour::EventResponse);
-
+		eventResponseID = Griddy::Events::subscribe((Behaviour*)this, &Behaviour::EventResponse);
+	map = CreateFunctionMap();
 	GenerateBehaviourList();
 
 	GenerateEffects();
@@ -25,17 +25,6 @@ void PlannedBehaviour::start()
 	initialized = true;
 
 	Component::start();
-}
-
-//Read an event to find changes in planning or invoke state transitions.
-void PlannedBehaviour::EventResponse(const BehaviourEvent* event)
-{
-	if (event->targetBehaviour == this)
-	{
-		LOG_INFO("PlannedBehaviour receives event");
-		//find change in behaviour, or invoke an event with state transition
-		//continue here....
-	}
 }
 
 //performs planning and chooses the action with the highest fitness
