@@ -106,10 +106,13 @@ namespace Griddy
 
 	void Engine::render()
 	{
-		Renderer::Instance()->render();
-
-		SceneManager::Instance()->render();
+		glClearColor(0, 0, 0, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		
 		GridSystem::Instance()->render();
+
+		Renderer::Instance()->render();
+		SceneManager::Instance()->render();
 
 		Events::invoke<OnEngineRender>();
 		

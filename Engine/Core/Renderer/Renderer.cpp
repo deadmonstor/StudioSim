@@ -161,8 +161,6 @@ void Renderer::cleanup() const
 
 void Renderer::render()
 {
-	glClearColor(0, 0, 0, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -177,10 +175,16 @@ void Renderer::render()
 
 void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation) const
 {
-	/*if (position.x + size.x < 0 || position.x > windowSize.x || position.y + size.y < 0 || position.y > windowSize.y)
-	{
+	if (mainCam == nullptr)
 		return;
-	}*/
+
+	const glm::vec2 cameraPos = getCameraPos();
+	
+	if (position.x + size.x < cameraPos.x - mainCam->getSize() * 2 ||
+		position.x > cameraPos.x + mainCam->getSize() * 2 ||
+		position.y + size.y < cameraPos.y - mainCam->getSize() * 2 ||
+		position.y > cameraPos.y + mainCam->getSize() * 2)
+		return;
 	
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 

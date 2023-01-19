@@ -16,5 +16,5 @@ void TurnManager::addToTurnQueue(GameObject* object)
 
 void TurnManager::onUpdate(OnEngineUpdate* event)
 {
-	LOG_INFO("TEST");
+	//LOG_INFO("TEST");
 }

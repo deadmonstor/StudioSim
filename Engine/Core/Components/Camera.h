@@ -18,5 +18,5 @@ private:
     glm::mat4 viewProjectionMatrix = {};
     glm::mat4 projectionMatrix = {};
     glm::mat4 viewMatrix = {};
-    unsigned int size = 600;
+    unsigned int size = 400;
 };

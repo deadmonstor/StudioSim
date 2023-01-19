@@ -18,6 +18,7 @@ void GridSystem::init(const glm::fvec2 _tileSize, const glm::ivec2 _gridSize)
 
 			internalMap[x][y] = new GridHolder();
 			internalMap[x][y]->tile = new Tile(textureList, 0.075f);
+			internalMap[x][y]->tile->setSortingLayer(Renderer::getSortingLayer("background"));
 			internalMap[x][y]->tile->createBuffers();
 		}
 
@@ -36,9 +37,6 @@ void GridSystem::render()
 	{
 		const auto windowSize = Renderer::getWindowSize();
 		
-		const float cameraX = Renderer::Instance()->getCameraPos().x;
-		const float cameraY = Renderer::Instance()->getCameraPos().y;
-		
 		const float tileWidth = tileSize.x;
 		const float tileHeight = tileSize.y;
 		
@@ -47,7 +45,7 @@ void GridSystem::render()
 		for(auto [y, holder] : pointer)
 		{
 			const float tileY = y * tileHeight;
-			const auto pos = glm::vec2{tileX - cameraX, tileY - cameraY};
+			const auto pos = glm::vec2{tileX, tileY};
 			
 			internalMap[x][y]->tile->update();
 			
@@ -71,4 +69,36 @@ void GridSystem::onDebugEvent(const OnDebugEventChanged* event)
 Tile* GridSystem::getTile(const glm::ivec2& _pos)
 {
 	return internalMap[_pos.x][_pos.y]->tile;
+}
+
+void GridSystem::loadFromFile(const std::string& fileName)
+{
+	std::ifstream file(fileName);
+	if (!file.is_open())
+	{
+		LOG_ERROR("Failed to open file: " + fileName);
+		return;
+	}
+	
+	char c;
+	int x = 0, y = gridSize.y - 1;
+	while (file.get(c))
+	{
+		if (c == 'ÿ' || c == 'þ' || c == '\\0' || std::isblank(c) || !std::isdigit(c))
+			continue;
+
+		int id = static_cast<int>(c) - 48;
+		internalMap[x][y]->tile->textureList =
+			std::vector
+		{
+			textureMap[id],
+		};
+		
+		x += 1;
+		if (x >= gridSize.x)
+		{
+			x = 0;
+			y -= 1;
+		}
+	}
 }
