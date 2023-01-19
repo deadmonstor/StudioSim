@@ -1,21 +1,18 @@
 #include "Behaviour.h"
 
-void Behaviour::EventResponse(const BehaviourEvent* event)
+void Behaviour::EventResponse(BehaviourEvent* event)
 {
-	if (event->targetBehaviour == this)
+	
+	//find change in behaviour, or invoke an event with state transition.
+	//This would be handled in the mapped functions.
+
+	if (map.contains(event->type))
 	{
-		//find change in behaviour, or invoke an event with state transition.
-		//This would be handled in the mapped functions.
-
-		if (map.contains(event->type))
-		{
-			map[event->type](this, event);
-		}
-		else 
-		{
-			LOG_ERROR("Map doesn't have type");
-		}
-
+		map[event->type](this, event->readEvent);
+	}
+	else 
+	{
+		LOG_ERROR("Map doesn't have type");
 	}
 }
 

@@ -8,7 +8,7 @@
 #include <Util/Events/EngineEvents.h>
 
 //Type definition for a map that attaches functions to particular types.
-typedef std::map<std::type_index, std::function<void(Behaviour* pointer, const Griddy::Event*)>> FunctionMap;
+typedef std::map<std::type_index, std::function<void(Behaviour* pointer, Griddy::Event*)>> FunctionMap;
 
 //Interface defining AI behaviours. Derive this interface into unique game behaviours.
 class Behaviour : public Component
@@ -25,7 +25,7 @@ public:
 
 	//Function defining a single-shot behaviour
 	virtual void Act() {}
-	virtual void EventResponse(const BehaviourEvent* event);
+	virtual void EventResponse(BehaviourEvent* event);
 
 
 

@@ -9,9 +9,9 @@ void PlayerMovementBehaviour::Act()
 
 }
 
-void PlayerMovementBehaviour::onKeyDownResponse(const Griddy::Event* event)
+void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 {
-	OnKeyDown* eventCasted = (OnKeyDown*)event;
+	auto* eventCasted = static_cast<OnKeyDown*>(event);
 
 	if (eventCasted->key == GLFW_KEY_W)
 	{
@@ -34,9 +34,9 @@ void PlayerMovementBehaviour::onKeyDownResponse(const Griddy::Event* event)
 	Act();
 }
 
-void PlayerMovementBehaviour::onKeyUpResponse(const Griddy::Event* event)
+void PlayerMovementBehaviour::onKeyUpResponse(Griddy::Event* event)
 {
-	OnKeyUp* eventCasted = (OnKeyUp*)event;
+	auto eventCasted = static_cast<OnKeyUp*>(event);
 
 	if (eventCasted->key == GLFW_KEY_W)
 	{
@@ -60,14 +60,14 @@ FunctionMap PlayerMovementBehaviour::CreateFunctionMap()
 {
 	FunctionMap map = {};
 	map[typeid(OnKeyDown)] =
-		[](Behaviour* pointer, const Griddy::Event* event)
+		[](Behaviour* pointer, Griddy::Event* event)
 	{
-		((PlayerMovementBehaviour*)pointer)->onKeyDownResponse(event);
+		dynamic_cast<PlayerMovementBehaviour*>(pointer)->onKeyDownResponse(event);
 	};
 	map[typeid(OnKeyUp)] =
-		[](Behaviour* pointer, const Griddy::Event* event)
+		[](Behaviour* pointer, Griddy::Event* event)
 	{
-		((PlayerMovementBehaviour*)pointer)->onKeyUpResponse(event);
+		dynamic_cast<PlayerMovementBehaviour*>(pointer)->onKeyUpResponse(event);
 	};
 
 	return map;

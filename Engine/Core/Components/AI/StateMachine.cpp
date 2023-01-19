@@ -74,12 +74,12 @@ void StateMachine::ResetToBase()
 }
 
 //Sends the event to read by the current state
-void StateMachine::EventResponse(const BehaviourEvent* event)
+void StateMachine::EventResponse(BehaviourEvent* event)
 {
 	if (event->targetBehaviour == this)
 	{
 		LOG_INFO("State Machine receives event");
-		Griddy::Events::invoke<BehaviourEvent>(currentState, event, event->type);
+		currentState->EventResponse(event);
 	}
 }
 
