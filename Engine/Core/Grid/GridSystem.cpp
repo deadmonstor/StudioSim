@@ -88,10 +88,26 @@ void GridSystem::loadFromFile(const std::string& fileName)
 	int x = 0, y = gridSize.y - 1;
 	while (file.get(c))
 	{
+		if (x >= gridSize.x || y < 0) break;
+		
 		if (c == 'ÿ' || c == 'þ' || c == '\\0' || std::isblank(c) || !std::isdigit(c))
 			continue;
 
+		if (c == '8')
+			DebugBreak();
+		
 		int id = static_cast<int>(c) - 48;
+		if (file.get(c))
+		{
+			if (c == '8')
+				DebugBreak();
+			
+			if (c != 'ÿ' && c != 'þ' && c != '\\0' && !std::isblank(c) && std::isdigit(c))
+			{
+				id += static_cast<int>(c) - 48;
+			}
+		}
+		
 		internalMap[x][y]->tile->SetTexture(textureMap[id]);
 
 		// TODO: Don't hardcode this

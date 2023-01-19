@@ -114,7 +114,8 @@ public:
 			{ 5, ResourceManager::GetTexture("tile50") },
 			{ 6, ResourceManager::GetTexture("tile28") },
 			{ 7, ResourceManager::GetTexture("tile51") },
-			{ 9, ResourceManager::GetTexture("tile26") }
+			{ 9, ResourceManager::GetTexture("tile26") },
+			{ 11, ResourceManager::GetTexture("tile11") }
 
 		});
 		
