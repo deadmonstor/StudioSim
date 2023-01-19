@@ -6,7 +6,7 @@ void PlayerMovementBehaviour::Act()
 	//move player
 }
 
-void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
+void PlayerMovementBehaviour::onKeyDownResponse(const Griddy::Event* event)
 {
 	OnKeyDown* eventCasted = (OnKeyDown*)event;
 
@@ -34,7 +34,7 @@ FunctionMap PlayerMovementBehaviour::CreateFunctionMap()
 {
 	FunctionMap map = {};
 	map[typeid(OnKeyDown)] =
-		[](Behaviour* pointer, Griddy::Event* event)
+		[](Behaviour* pointer, const Griddy::Event* event)
 	{
 		((PlayerMovementBehaviour*)pointer)->onKeyDownResponse(event);
 	};

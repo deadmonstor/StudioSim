@@ -39,9 +39,6 @@ public:
     void update() override {}
     void lateUpdate() override{}
 
-    //Read an event to find changes in planning or invoke state transitions.
-    void EventResponse(const BehaviourEvent* event) override;
-
     //performs planning and chooses the action with the highest fitness
     void Act() override;
 
@@ -54,6 +51,8 @@ public:
     virtual void ActionAnalysis();
 
 protected:
+    FunctionMap CreateFunctionMap() override;
+
     //Create the list of available behaviours
     virtual void GenerateBehaviourList();
 
