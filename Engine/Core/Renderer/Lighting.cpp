@@ -66,8 +66,7 @@ void Lighting::doLight(const SpriteComponent* spriteRenderer,
 	}
 
 	spriteRenderer->getShader().Use();
-
-	spriteRenderer->getShader().SetVector2f("cameraPos", Renderer::Instance()->getCameraPos());
+	spriteRenderer->getShader().SetVector2f("cameraPos", Renderer::Instance()->getCameraPos(), true);
 	
 	// TODO: Turn this to screen space
 	if (showMouseLight || static_cast<bool>(lightUpdateRequest & LightUpdateRequest::Position))

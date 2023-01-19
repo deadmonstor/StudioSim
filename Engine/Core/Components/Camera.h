@@ -14,9 +14,11 @@ public:
     void start() override;
     void update() override;
     void destroy() override;
+    void getDebugInfo(std::string*) override;
 private:
     glm::mat4 viewProjectionMatrix = {};
     glm::mat4 projectionMatrix = {};
     glm::mat4 viewMatrix = {};
     unsigned int size = 400;
+    int debugSize = 400;
 };

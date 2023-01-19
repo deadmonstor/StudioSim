@@ -44,3 +44,19 @@ void Camera::destroy()
         
     Component::destroy();
 }
+
+void Camera::getDebugInfo(std::string* string)
+{
+    ImGui::Indent();
+    ImGui::InputInt("Size", &debugSize);
+
+    if (debugSize != getSize())
+    {
+        setSize(debugSize);
+        screenSizeChanged();
+    }
+
+    ImGui::Unindent();
+
+    Component::getDebugInfo(string);
+}
