@@ -6,9 +6,15 @@ void Behaviour::EventResponse(BehaviourEvent* event)
 	//find change in behaviour, or invoke an event with state transition.
 	//This would be handled in the mapped functions.
 
-	if (map.contains(event->type))
-	{
-		map[event->type](this, event->readEvent);
+		if (map.contains(event->type))
+		{
+			map[event->type](this, event->readEvent);
+		}
+		else 
+		{
+			LOG_ERROR("Map doesn't have type");
+		}
+
 	}
 	else 
 	{
