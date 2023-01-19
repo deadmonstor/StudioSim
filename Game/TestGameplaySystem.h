@@ -13,6 +13,7 @@
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "TurnManager.h"
+#include "PlayerController.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -119,7 +120,7 @@ public:
 		sprite->setColor(glm::vec3(1,1,1));
 		sprite->setTexture(ResourceManager::GetTexture("rock"));
 
-		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
+		/*auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->setSize(glm::vec2(96, 48));
 		
 		auto cam = test->addComponent<Camera>();
@@ -129,7 +130,7 @@ public:
 		sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
-		sprites.push_back(sprite);
+		sprites.push_back(sprite);*/
 		
 		//Slime Hurt Anim
 		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
@@ -225,7 +226,7 @@ public:
 		//sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
 		//sprite->setColor(glm::vec3(1, 1, 1));
 		//sprite->setLit(false);
-
+		PlayerController::Instance()->createPlayer();
 		
 
 		//CreateFireball(glm::vec2{ 1000, 500 });

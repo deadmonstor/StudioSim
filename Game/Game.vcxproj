@@ -18,6 +18,8 @@
     <ClInclude Include="Components\FireballComponent.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="PlayerFSM.h" />
+    <ClInclude Include="PlayerMovementBehaviour.h" />
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
     <ClInclude Include="TurnComponent.h" />
@@ -27,6 +29,8 @@
     <ClCompile Include="Components\FireballComponent.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="PlayerFSM.cpp" />
+    <ClCompile Include="PlayerMovementBehaviour.cpp" />
     <ClCompile Include="TurnComponent.cpp" />
     <ClCompile Include="TurnManager.cpp" />
     <ClCompile Include="System\Inventory.cpp" />
