@@ -39,7 +39,7 @@ public:
 	void setAmbientColor(const glm::vec4& _ambientColor) { this->ambientColor = _ambientColor; }
 private:
 	std::list<Light*> lightRenderQueue;
-	glm::vec4 ambientColor = {1.0f, 0.6f, 0.2f, 0.5f};
+	glm::vec4 ambientColor = {0.0f, 0.0f, 0.0f, 1.0f};
 	bool showMouseLight = false;
 	bool debugLightColor = false;
 };
