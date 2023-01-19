@@ -66,7 +66,10 @@ void Lighting::doLight(const SpriteComponent* spriteRenderer,
 	}
 
 	spriteRenderer->getShader().Use();
+
+	spriteRenderer->getShader().SetVector2f("cameraPos", Renderer::Instance()->getCameraPos());
 	
+	// TODO: Turn this to screen space
 	if (showMouseLight || static_cast<bool>(lightUpdateRequest & LightUpdateRequest::Position))
 		spriteRenderer->getShader().SetVector3f(lightIDToName[i].pos, glm::vec3(lightPos, 0.1f));
 	
@@ -94,14 +97,14 @@ void Lighting::refreshLightData(SpriteComponent* spriteRenderer, const LightUpda
 	{
 		doLight(spriteRenderer,
 			i,
-			Input::getMousePosition(),
+			Input::getMousePositionScreenSpace(),
 			{1.0f, 0.75f, 0.3f, 1.0f},
 			{0.4f, 3.0f, 20.0f}, lightUpdateRequest);	
 	}
 	
 	for (const Light* light : lightRenderQueue)
 	{
-		auto lightPosition = light->getOwner()->getTransform()->getPosition();
+		auto lightPosition = light->getOwner()->getTransform()->getScreenSpacePosition();
 		
 		doLight(spriteRenderer,
 			i,

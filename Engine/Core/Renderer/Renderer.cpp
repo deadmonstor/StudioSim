@@ -41,14 +41,14 @@ void Renderer::createVBOs()
 {
 	unsigned int VBO;
 	constexpr float vertices[] =
-	{
-		0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 0.0f, 
-    
-		0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f
+{
+		0.0f, 1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 1.0f, 1.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+
+		0.0f, 1.0f, 0.0f, 0.0f,
+		1.0f, 1.0f, 1.0f, 0.0f,
+		1.0f, 0.0f, 1.0f, 1.0f
 	};
 
 	glGenVertexArrays(1, &this->quadVAO);
@@ -69,16 +69,15 @@ glm::vec2 Renderer::getCameraPos() const
 	if (mainCam == nullptr  || mainCam->getOwner() == nullptr || !mainCam->getOwner()->isValidTransform() )
 		return {0, 0};
 		
-	return mainCam->getOwner()->getTransform()->position - getWindowSize() / 2.f;
+	return mainCam->getOwner()->getTransform()->position;
 }
 
-void Renderer::setupCommonShader(const std::string& name, const glm::ivec2 value, const glm::mat4 projection)
+void Renderer::setupCommonShader(const std::string& name, const glm::ivec2 value, const glm::mat4 projection, const glm::mat4 view)
 {
 	ResourceManager::GetShader(name).SetInteger("image", 0, true);
-	ResourceManager::GetShader(name).SetInteger("normals", 1);
 	ResourceManager::GetShader(name).SetVector2f("Resolution", {value.x, value.y}, true);
 	ResourceManager::GetShader(name).SetVector4f("AmbientColor", Lighting::Instance()->getAmbientColor(), true);
-	ResourceManager::GetShader(name).SetMatrix4("projection", glm::mat4(projection), true);
+	ResourceManager::GetShader(name).SetMatrix4("uProjectionMatrix", projection, true);
 }
 
 void Renderer::setWindowSize(const glm::ivec2 value)
@@ -97,21 +96,24 @@ void Renderer::setWindowSize(const glm::ivec2 value)
 	ResourceManager::LoadShader("Shader/spriteunlit.vs", "Shader/spriteunlit.frag", nullptr, "spriteunlit");
 
 	resetShaders();
-	
 	glfwSetWindowSize(window, value.x, value.y);
 }
 
 void Renderer::resetShaders()
 {
-	glm::vec2 value = getWindowSize();
+	if (mainCam == nullptr)
+		return;
+
+	mainCam->screenSizeChanged();
 	
-	const glm::mat4 projection = glm::ortho(0.0f, value.x, 
-											value.y, 0.0f, -1.0f, 1.0f);
+	const glm::mat4 projectionMatrix = mainCam->getProjectMatrix();
+	const glm::mat4 viewProjectionMatrix = mainCam->getViewProjectMatrix();
+	const glm::vec2 value = getWindowSize();
 	
-	setupCommonShader("sprite", value, projection);
-	setupCommonShader("spriteunlit", value, projection);
-	setupCommonShader("text", value, projection);
-	setupCommonShader("textunlit", value, projection);
+	setupCommonShader("sprite", value, projectionMatrix, viewProjectionMatrix);
+	setupCommonShader("spriteunlit", value, projectionMatrix, viewProjectionMatrix);
+	setupCommonShader("text", value, projectionMatrix, viewProjectionMatrix);
+	setupCommonShader("textunlit", value, projectionMatrix, viewProjectionMatrix);
 }
 
 bool Renderer::createWindow(const std::string &windowName)
@@ -175,10 +177,10 @@ void Renderer::render()
 
 void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation) const
 {
-	if (position.x + size.x < 0 || position.x > windowSize.x || position.y + size.y < 0 || position.y > windowSize.y)
+	/*if (position.x + size.x < 0 || position.x > windowSize.x || position.y + size.y < 0 || position.y > windowSize.y)
 	{
 		return;
-	}
+	}*/
 	
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 
@@ -191,10 +193,8 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
 
 	model = glm::scale(model, glm::vec3(size, 1.0f)); 
-	spriteRenderer->getShader().SetMatrix4("model", model, true);
-
-	glActiveTexture(GL_TEXTURE1);
-	spriteRenderer->getNormals().Bind();
+	spriteRenderer->getShader().SetMatrix4("uModelMatrix", model, true);
+	spriteRenderer->getShader().SetMatrix4("uProjectionMatrix", mainCam->getViewProjectMatrix(), true);
 	
 	glActiveTexture(GL_TEXTURE0);
 	spriteRenderer->getTexture().Bind();
