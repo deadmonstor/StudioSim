@@ -1,6 +1,6 @@
 #pragma once
 #include "Core/Components/AI/Behaviour.h"
-#include <queue>
+#include <map>
 
 //Pair of fitness value and behaviour
 typedef std::pair<int, Behaviour*> FitAction;
@@ -11,12 +11,8 @@ class PlannedBehaviour :
 //Internal struct defining effects on the fitness of available behaviours
     struct Effect
     {
-        Effect(std::string nameParam) : name(nameParam) {}
-        //Name of the effect
-        std::string name;
-
         //Each element contains effect value and the targeted behaviour
-        std::vector<FitAction> influencedActions;
+        std::unordered_map<std::string, FitAction> influencedActions;
 
         bool active = false;
     };
@@ -24,12 +20,12 @@ class PlannedBehaviour :
 
 //Properties:
 protected:
-    //List of behaviours this planner can use, with their fitness values
-    std::vector<FitAction> availableActions;
+    //Dictionary of behaviours this planner can use, with their fitness values. Map is searched by name string
+    std::unordered_map<std::string, FitAction> availableActions;
 
-    //List of effects which affect the fitness of behaviours
-    std::vector<Effect> effects;
-    
+    //Dictionary of effects which affect the fitness of behaviours. Searched by name.
+    std::unordered_map<std::string, Effect> effects;
+   
     
 //Methods
 public:
@@ -51,7 +47,6 @@ public:
     virtual void ActionAnalysis();
 
 protected:
-    FunctionMap CreateFunctionMap() override;
 
     //Create the list of available behaviours
     virtual void GenerateBehaviourList();

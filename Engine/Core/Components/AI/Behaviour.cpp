@@ -9,7 +9,7 @@ void Behaviour::EventResponse(const BehaviourEvent* event)
 
 		if (map.contains(event->type))
 		{
-			map[event->type](this, event);
+			map[event->type](this, event->readEvent);
 		}
 		else 
 		{

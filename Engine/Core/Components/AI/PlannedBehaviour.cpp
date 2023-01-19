@@ -17,7 +17,6 @@ void PlannedBehaviour::start()
 {
 	if (eventResponseID == -1)
 		eventResponseID = Griddy::Events::subscribe((Behaviour*)this, &Behaviour::EventResponse);
-	map = CreateFunctionMap();
 	GenerateBehaviourList();
 
 	GenerateEffects();
@@ -30,28 +29,28 @@ void PlannedBehaviour::start()
 //performs planning and chooses the action with the highest fitness
 void PlannedBehaviour::Act()
 {
-	//for the moment, planning happens in one go, but it'd be more effective to splice it over time
+	//planning happens in one go, but it'd be more effective to splice it over time
 	WorldAnalysis();
 	ActionAnalysis();
-	int fitIndex = -1;
-	int highestFitness = 0;
-	for (int i = 0; i < availableActions.size(); i++)
+	std::string fitName;
+	int highestFitness = -1;
+	for (auto& action : availableActions)
 	{
-		if (availableActions[i].first > highestFitness)
+		if (action.second.first > highestFitness)
 		{
-			highestFitness = availableActions[i].first;
-			fitIndex = i;
+			highestFitness = action.second.first;
+			fitName = action.first;
 		}
 	}
-	if (fitIndex > 0)
+	if (!fitName.empty())
 	{
-		availableActions[fitIndex].second->Act();
+		availableActions[fitName].second->Act();
 	}
 
 	//reset fitness values
 	for (auto i : availableActions)
 	{
-		i.first = 0;
+		i.second.first = 0;
 	}
 }
 
@@ -66,11 +65,11 @@ void PlannedBehaviour::WorldAnalysis()
 	if (distance <= 5)
 	{
 		//changes the example effect to active, and changes the influence
-		effects[0].active = true;
-		effects[0].influencedActions[0].first = 5 - distance;
+		effects["ExampleEffect"].active = true;
+		effects["ExampleEffect"].influencedActions["ExampleAction"].first = 5 - distance;
 	}
 	else {
-		effects[0].active = false;
+		effects["ExampleEffect"].active = false;
 	}
 	//now the influence grows the smaller "distance" is, but the effect is turned off if its larger than 5
 
@@ -79,20 +78,14 @@ void PlannedBehaviour::WorldAnalysis()
 //examines effects to find fitness values of available behaviours
 void PlannedBehaviour::ActionAnalysis()
 {
-	//A LOT OF LOOPS. Need to work on this. Could be optimized with hash lookups?
 
 	//for each effect, add its influence on available actions. 
-	for (auto effect : effects)
+	for (auto& effect : effects)
 	{
-		for (auto influence : effect.influencedActions)
+		for (auto& influence : effect.second.influencedActions)
 		{
-			for (auto action : availableActions)
-			{
-				if (action.second == influence.second)
-				{
-					action.first += influence.first;
-				}
-			}
+			//add the influence value to the fitness value
+			availableActions[influence.first].first += influence.second.first;
 		}
 	}
 }
@@ -101,25 +94,22 @@ void PlannedBehaviour::ActionAnalysis()
 void PlannedBehaviour::GenerateBehaviourList()
 {
 	//Example behaviour inserted into action list
-	availableActions.push_back(std::make_pair(0, new Behaviour()));
+	availableActions["ExampleAction"] = std::make_pair(0, new Behaviour());
 
-
-	//initializes the behaviours
-	for (auto i : availableActions)
+	//example behaviour initializer
+	if (availableActions["ExampleAction"].second->GetInitValue() == false)
 	{
-		if (i.second->GetInitValue() == false)
-		{
-			i.second->start();
-		}
+		availableActions["ExampleAction"].second->start();
 	}
 }
 
 //Create the list of possible effects
 void PlannedBehaviour::GenerateEffects()
 {
-	Effect e = Effect("example");
-	FitAction influence = std::make_pair(1, availableActions[0].second);
-	e.influencedActions.push_back(influence);
+	//"example" effect is created with an "exampleAction" behaviour as one of its influenced actions.
+	effects["ExampleEffect"] = Effect();
+	FitAction influence = std::make_pair(0, availableActions["ExampleAction"].second);
+	effects["ExampleEffect"].influencedActions["ExampleAction"] = influence;
 }
 
 
@@ -131,8 +121,8 @@ void PlannedBehaviour::CleanUp()
 	//delete behaviour pointers
 	for (auto i : availableActions)
 	{
-		i.second->destroy();
-		delete i.second;
+		i.second.second->destroy();
+		delete i.second.second;
 	}
 	availableActions.clear();
 }
