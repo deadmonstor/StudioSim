@@ -149,9 +149,9 @@ namespace Griddy
 			for (const auto& data : unsubscribeQueue)
 			{
 				unsubscribeInternal(data.type, data.id);
+				reuseIDQueue.push_back(data);
 			}
-
-			reuseIDQueue.append_range(unsubscribeQueue);
+			
 			unsubscribeQueue.clear();
 		}
 
