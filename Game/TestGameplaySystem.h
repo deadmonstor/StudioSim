@@ -215,9 +215,9 @@ public:
 		int m_count = 0;
 		if (m_count == 0)
 		{
-			ScoreSystem::Instance()->setScore(110);
+			ScoreSystem::Instance()->setScore(75);
 			std::string User = "LJP";
-			ScoreSystem::Instance()->SaveScore(User);
+			//ScoreSystem::Instance()->SaveScore(User);
 
 			m_count++;
 		}
