@@ -10,9 +10,9 @@ class Behaviour;
 class BehaviourEvent : public Griddy::Event
 {
 public:
-	explicit BehaviourEvent(Behaviour* targetBehaviourParam, const Griddy::Event* readEventParam, std::type_index typeParam)
+	explicit BehaviourEvent(Behaviour* targetBehaviourParam, Griddy::Event* readEventParam, std::type_index typeParam)
 		: targetBehaviour(targetBehaviourParam), readEvent(readEventParam), type(typeParam) { }
-	const Griddy::Event* readEvent;
+	Griddy::Event* readEvent;
 	std::type_index type;
 	Behaviour* targetBehaviour;
 };

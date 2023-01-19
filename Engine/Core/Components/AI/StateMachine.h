@@ -34,7 +34,7 @@ public:
 
 protected:
 	//Sends an event to be evaluated by the current behaviour
-	void EventResponse(const BehaviourEvent* event) override;
+	void EventResponse(BehaviourEvent* event) override;
 
 	//Receives an event with a new state to transition into
 	virtual void OnTransitionReceived(const StateTransition* event);

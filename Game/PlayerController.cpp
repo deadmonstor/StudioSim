@@ -1,4 +1,5 @@
 #include "PlayerController.h"
+#include "PlayerFSM.h"
 
 PlayerController::PlayerController()
 {
@@ -22,4 +23,12 @@ void PlayerController::createPlayer()
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
 	//find the input and send it to the state machine
+	std::type_index eventType = typeid(OnKeyDown);
+	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyDown(keyDown->key, keyDown->scancode), eventType);
+}
+
+void PlayerController::onKeyUp(const OnKeyUp* keyUp)
+{
+	std::type_index eventType = typeid(OnKeyUp);
+	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyUp(keyUp->key, keyUp->scancode), eventType);
 }

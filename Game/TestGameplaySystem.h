@@ -304,7 +304,7 @@ public:
 		if (sm != nullptr)
 		{
 			std::type_index type = typeid(OnMouseDown);
-			Griddy::Events::invoke<BehaviourEvent>(sm, mouseDownEvent, type);
+			Griddy::Events::invoke<BehaviourEvent>(sm, new OnMouseDown(mouseDownEvent->key, mouseDownEvent->action), type);
 		}
 		if (mouseDownEvent->key == GLFW_MOUSE_BUTTON_3)
 		{
