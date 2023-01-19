@@ -30,7 +30,7 @@ class Renderer : public SingletonTemplate<Renderer>
 	};
 	
 	void createVBOs();
-	void setupCommonShader(const std::string& name, glm::ivec2 value, glm::mat4 projection);
+	void setupCommonShader(const std::string& name, glm::ivec2 value, glm::mat4 projection, glm::mat4 view);
 	unsigned int quadVAO;
 	
 	friend class Lighting;
@@ -38,10 +38,20 @@ class Renderer : public SingletonTemplate<Renderer>
 public:
 	static GLFWwindow* getWindow() { return Instance()->window; }
 	static glm::vec2 getWindowSize() { return Instance()->windowSize; }
-
+	
+	[[nodiscard]] glm::mat4 getCameraViewMatrix() const { return mainCam->getViewProjectMatrix(); }
+	[[nodiscard]] unsigned int getCameraSize() const { return mainCam->getSize(); }
 	[[nodiscard]] glm::vec2 getCameraPos() const;
-	void setCamera(Camera* cam) { mainCam = cam; }
 	[[nodiscard]] Camera* getCamera() const { return mainCam; }
+	void setCamera(Camera* cam)
+	{
+		mainCam = cam;
+
+		if (mainCam)
+		{
+			resetShaders();
+		}
+	}
 	
 	void setWindowSize(glm::ivec2);
 	void resetShaders();
