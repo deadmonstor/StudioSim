@@ -4,9 +4,10 @@
 #include "Core/Components/Transform.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Util/Events/EngineEvents.h"
-#include "PlayerFSM.h"
 #include "Core/Components/Camera.h"
+#include "Core/GameObject.h"
 
+class PlayerFSM;
 class PlayerController : public SingletonTemplate<PlayerController>
 {
 public:
@@ -14,9 +15,8 @@ public:
 
 	void createPlayer();
 	void onKeyDown(const OnKeyDown* keyDown);
-	//onKeyUp
+	void onKeyUp(const OnKeyUp* keyUp);
 
-private:
 	SpriteComponent* playerSprite;
 	GameObject* playerPTR;
 	PlayerFSM* playerFSM;
