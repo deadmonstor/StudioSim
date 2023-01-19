@@ -1,6 +1,8 @@
 ﻿#include <glad/glad.h>
 #include "GridSystem.h"
 
+#include <regex>
+
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Util/Logger.h"
@@ -83,41 +85,56 @@ void GridSystem::loadFromFile(const std::string& fileName)
 		LOG_ERROR("Failed to open file: " + fileName);
 		return;
 	}
+
+	std::stringstream buffer;
+	buffer << file.rdbuf();
 	
-	char c;
+	std::string input = buffer.str();
+	std::string output;
+	std::regex const tab(R"(\t|\n)");
+
+	std::regex_replace(back_inserter(output), std::begin(input), std::end(input), tab, ",");
+
+	input = output;
+	std::regex const remove(R"(\0)");
+	std::regex_replace(back_inserter(output), std::begin(input), std::end(input), remove, "");
+
+	output.pop_back();
+	output.erase(0, 2);
+	
+	char id;
+	std::string curNumber;
 	int x = 0, y = gridSize.y - 1;
-	while (file.get(c))
+
+	// while loop popping off the first character of the string
+	while (!output.empty())
 	{
-		if (x >= gridSize.x || y < 0) break;
+		id = output.front();
+		output.erase(0, 1);
 		
-		if (c == 'ÿ' || c == 'þ' || c == '\\0' || std::isblank(c) || !std::isdigit(c))
-			continue;
+		if (id == '\0') continue;
+		if (x >= gridSize.x || y < 0) continue;
 
-		if (c == '8')
-			DebugBreak();
-		
-		int id = static_cast<int>(c) - 48;
-		if (file.get(c))
+		if (id == ',')
 		{
-			if (c == '8')
-				DebugBreak();
+			int i = std::stoi(curNumber);
+			internalMap[x][y]->tile->SetTexture(textureMap[i]);
+
+			// TODO: Don't hardcode this
+			internalMap[x][y]->isOccupied = i != 0;
 			
-			if (c != 'ÿ' && c != 'þ' && c != '\\0' && !std::isblank(c) && std::isdigit(c))
+			x += 1;
+			if (x >= gridSize.x)
 			{
-				id += static_cast<int>(c) - 48;
+				x = 0;
+				y -= 1;
 			}
-		}
-		
-		internalMap[x][y]->tile->SetTexture(textureMap[id]);
 
-		// TODO: Don't hardcode this
-		internalMap[x][y]->isOccupied = id != 0;
-		
-		x += 1;
-		if (x >= gridSize.x)
+			curNumber = "";
+		}
+		else
 		{
-			x = 0;
-			y -= 1;
+			curNumber += id;
 		}
 	}
 }
