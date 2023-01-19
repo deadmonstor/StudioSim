@@ -29,23 +29,25 @@ class GridSystem : public SingletonTemplate<GridSystem>
 	bool shouldRender = true;
 	friend class ImGuiHandler;
 	
-public:
 	glm::fvec2 tileSize { 0,0 };
 	glm::ivec2 gridSize { 0,0 };
+public:
 
-	void clearGrid(int id);
+	void render();
 	void renderInternal(int id);
-	void loadFromFile(int id, const std::string& fileName);
 	
 	void setTextureMap(int id, const std::map<int, Texture>& textureMap);
 	void setWallIDs(int id, const std::vector<int>& wallIDs);
 	void setEmptyTileIDs(int id, const std::vector<int>& emptyTileIDs);
-
 	void setOrderMap(const std::map<int, SortingLayer&>& _sortingMap) { this->orderSortingMap = _sortingMap; }
+
 	std::map<int, SortingLayer&>& getOrderMap() { return this->orderSortingMap; }
 
-	Tile* getTile(int id, const glm::ivec2& _pos);
 	void init(glm::fvec2 _tileSize, glm::ivec2 _gridSize);
-	void render();
+	void clearGrid(int id);
+	void loadFromFile(int id, const std::string& fileName);
 	void onDebugEvent(const OnDebugEventChanged*);
+	
+	Tile* getTile(int id, const glm::ivec2& _pos);
+	std::vector<std::pair<glm::vec2, Tile*>> getNeighbours(int id, glm::vec2 pos);
 };

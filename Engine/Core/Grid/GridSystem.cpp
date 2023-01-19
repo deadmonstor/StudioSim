@@ -101,6 +101,29 @@ Tile* GridSystem::getTile(const int id, const glm::ivec2& _pos)
 	return gridLayers[id]->internalMap[_pos.x][_pos.y]->tile;
 }
 
+std::vector<std::pair<glm::vec2, Tile*>> GridSystem::getNeighbours(const int id, const glm::vec2 pos)
+{
+	auto& internalMap = gridLayers[id]->internalMap;
+	std::vector<std::pair<glm::vec2, Tile*>> neighbours;
+	
+	for(int x = -1; x < 2; x++)
+	{
+		for(int y = -1; y < 2; y++)
+		{
+			if (x == 0 && y == 0) continue;
+			
+			glm::vec2 neighbour = pos + glm::vec2(x, y);
+			if (neighbour.x < 0 || neighbour.y < 0) continue;
+			if (neighbour.x >= gridSize.x || neighbour.y >= gridSize.y) continue;
+			
+			Tile* tile = internalMap[neighbour.x][neighbour.y]->tile;
+			neighbours.push_back({neighbour, tile});
+		}
+	}
+	
+	return neighbours;
+}
+
 void GridSystem::loadFromFile(const int mapID, const std::string& fileName)
 {
 	clearGrid(mapID);
@@ -191,3 +214,5 @@ void GridSystem::setEmptyTileIDs(const int id, const std::vector<int>& emptyTile
 		
 	this->gridLayers[id]->emptyTiles = emptyTileIDs;
 }
+
+// get neighbours
