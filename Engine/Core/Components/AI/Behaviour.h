@@ -5,21 +5,28 @@
 #include "Util/Events/AIEvents.h"
 
 #include <map>
+#include <Util/Events/EngineEvents.h>
+
+//Type definition for a map that attaches functions to particular types.
+typedef std::map<std::type_index, void (Behaviour::*)(const Griddy::Event*)> FunctionMap;
 
 //Interface defining AI behaviours. Derive this interface into unique game behaviours.
 class Behaviour : public Component
 {
+
+//Properties
 protected:
 	bool initialized = false;
 	int8_t eventResponseID = -1;
-	//Public Methods
+	FunctionMap map;
+
+//Public Methods
 public:
-	/*space for expansion : insert Entry() and Exit() functions which can
-	 perform actions */
 
 	//Function defining a single-shot behaviour
 	virtual void Act() {}
 	virtual void EventResponse(const BehaviourEvent* event);
+
 
 
 	void start() override;
@@ -28,4 +35,21 @@ public:
 	void destroy() override;
 
 	bool GetInitValue() { return initialized; }
+
+//Protected Methods
+protected:
+	//Initializes a map which assigns a function to a particular event type. Override this in child behaviours.
+	virtual FunctionMap CreateFunctionMap()
+	{
+		return
+		{
+			{typeid(OnMouseDown), &Behaviour::ExampleMappedFunction}
+		};
+	};
+private:
+	void ExampleMappedFunction(const Griddy::Event* event)
+	{
+		OnMouseDown* eventCasted = (OnMouseDown*)event;
+		//do something with the converted event
+	}
 };

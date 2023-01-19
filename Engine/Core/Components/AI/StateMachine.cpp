@@ -35,7 +35,6 @@ void StateMachine::start()
 	{
 		currentState->start();
 	}
-
 	Component::start();
 }
 
@@ -80,7 +79,7 @@ void StateMachine::EventResponse(const BehaviourEvent* event)
 	if (event->targetBehaviour == this)
 	{
 		LOG_INFO("State Machine receives event");
-		Griddy::Events::invoke<BehaviourEvent>(currentState, event);
+		Griddy::Events::invoke<BehaviourEvent>(currentState, event, event->type);
 	}
 }
 
