@@ -1,6 +1,8 @@
 ﻿#include <glad/glad.h>
 #include "GridSystem.h"
 #include <regex>
+
+#include "Core/Renderer/Lighting.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Util/Logger.h"
@@ -26,8 +28,9 @@ void GridSystem::clearGrid(const int id)
 			grid_holder->isOccupied = false;
 
 			const auto tile = new Tile(Texture());
-			tile->setSortingLayer(orderSortingMap.at(id));
 			tile->createBuffers();
+			tile->setSortingLayer(orderSortingMap.at(id));
+			tile->setLit(true);
 
 			gridLayers[id]->internalMap[x][y]->tile = tile;
 		}

@@ -1,5 +1,6 @@
 #include "SpriteComponent.h"
 
+#include "Core/Renderer/Lighting.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Util/Events/Events.h"
 #include "Util/Events/RenderEvents.h"
@@ -24,7 +25,7 @@ void SpriteComponent::start()
 void SpriteComponent::createBuffers()
 {
 	if (shader.ID == 0)
-		shader = ResourceManager::GetShader("sprite");
+		setShader(ResourceManager::GetShader("sprite"));
 }
 
 void SpriteComponent::update()
@@ -74,7 +75,9 @@ void SpriteComponent::setColor(const glm::vec3 color)
 	debugColor[0] = color.r;
 	debugColor[1] = color.g;
 	debugColor[2] = color.b;
+	
 	shader.SetVector3f("spriteColor", color, true);
+	Lighting::Instance()->refreshLightData(this, LightUpdateRequest::All);
 }
 
 Shader SpriteComponent::getShader() const
@@ -85,6 +88,8 @@ Shader SpriteComponent::getShader() const
 void SpriteComponent::setShader(const Shader shader)
 {
 	this->shader = shader;
+	
+	Lighting::Instance()->refreshLightData(this, LightUpdateRequest::All);
 }
 
 void SpriteComponent::setLit(const bool lit)

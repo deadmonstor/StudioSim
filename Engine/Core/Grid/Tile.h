@@ -4,7 +4,7 @@
 class Tile final : public SpriteComponent
 {
 public:
-	Tile(const Texture& _texture)
+	Tile(const Texture& _texture) : SpriteComponent()
 	{
 		SetTexture(_texture);
 	}
