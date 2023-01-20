@@ -6,10 +6,9 @@
 class PlayerMovementBehaviour : public Behaviour
 {
 public:
-	glm::vec2 moveDir;
-	glm::vec2 origPos;
-	glm::vec2 targetPos;
-
+	glm::fvec2 moveDir;
+	glm::fvec2 origPos = {30, 20};
+	bool canMove = true;
 private:
 	void Act() override;
 	void onKeyDownResponse(Griddy::Event*);

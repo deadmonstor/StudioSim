@@ -1,5 +1,6 @@
 #include "PlayerController.h"
 #include "PlayerFSM.h"
+#include "Core/Grid/GridSystem.h"
 
 PlayerController::PlayerController()
 {
@@ -7,16 +8,20 @@ PlayerController::PlayerController()
 
 void PlayerController::createPlayer()
 {
-	playerPTR = SceneManager::Instance()->createGameObject("Player", glm::vec2{ 600,600 });
+
+	glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
+	playerPTR = SceneManager::Instance()->createGameObject("Player", glm::vec2{ 30, 20 } * tileSize);
 	playerPTR->getTransform()->setSize(glm::vec2{ 32,32 });
 
 	const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
 	playerSprite = playerPTR->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
 	playerSprite->setColor(glm::vec3(1, 1, 1));
 	playerSprite->setLit(false);
+	playerSprite->setPivot(Pivot::BottomCenter);
 
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
+	playerPTR->addComponent<Light>();
 	Renderer::Instance()->setCamera(cameraComponent);
 }
 

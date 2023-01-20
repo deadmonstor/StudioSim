@@ -178,7 +178,7 @@ public:
 		testHurt->getTransform()->setSize(glm::vec2(96, 48));
 
 		const std::vector textureListHurt = ResourceManager::GetTexturesContaining("Blue-Slime-Hurt");
-		sprite = testHurt->addComponent<AnimatedSpriteRenderer>(textureListHurt, 0.05f);
+		auto sprite = testHurt->addComponent<AnimatedSpriteRenderer>(textureListHurt, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
 

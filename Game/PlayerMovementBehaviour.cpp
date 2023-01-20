@@ -1,18 +1,32 @@
 #include "PlayerMovementBehaviour.h"
 #include <Util/Events/EngineEvents.h>
+#include <Core/Grid/GridSystem.h>
 
 void PlayerMovementBehaviour::Act()
 {
 	//move player
-	glm::vec2 currentPosition = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
-	PlayerController::Instance()->playerPTR->getTransform()->setPosition(currentPosition + moveDir * glm::vec2{10, 10});
+	if (canMove)
+	{
+		GridHolder* curTileHolder = GridSystem::Instance()->getGridHolder(0, origPos + moveDir);
+		glm::fvec2 gridSize = GridSystem::Instance()->getTileSize();
 
+		if (curTileHolder->tile != nullptr && !curTileHolder->isWall)
+		{
+			PlayerController::Instance()->playerPTR->getTransform()->
+				setPosition(gridSize * (origPos + moveDir));
+
+			origPos += moveDir;
+		}
+
+		canMove = false;
+	}
+	
 }
 
 void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 {
-	auto* eventCasted = static_cast<OnKeyDown*>(event);
-
+	OnKeyDown* eventCasted = static_cast<OnKeyDown*>(event);
+	
 	if (eventCasted->key == GLFW_KEY_W)
 	{
 		moveDir.y += 1;
@@ -30,14 +44,15 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 		moveDir.x += 1;
 	}
 
-	//if tile is moveable
 	Act();
+	//if tile is moveable
+	
 }
 
 void PlayerMovementBehaviour::onKeyUpResponse(Griddy::Event* event)
 {
-	auto eventCasted = static_cast<OnKeyUp*>(event);
-
+	OnKeyUp* eventCasted = static_cast<OnKeyUp*>(event);
+	
 	if (eventCasted->key == GLFW_KEY_W)
 	{
 		moveDir.y -= 1;
@@ -54,6 +69,8 @@ void PlayerMovementBehaviour::onKeyUpResponse(Griddy::Event* event)
 	{
 		moveDir.x -= 1;
 	}
+
+	canMove = true;
 }
 
 FunctionMap PlayerMovementBehaviour::CreateFunctionMap()

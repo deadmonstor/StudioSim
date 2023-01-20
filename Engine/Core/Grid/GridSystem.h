@@ -42,6 +42,9 @@ public:
 	void setOrderMap(const std::map<int, SortingLayer&>& _sortingMap) { this->orderSortingMap = _sortingMap; }
 
 	std::map<int, SortingLayer&>& getOrderMap() { return this->orderSortingMap; }
+	glm::ivec2 getGridSize() { return gridSize; }
+	glm::fvec2 getTileSize() { return tileSize; }
+	GridHolder* getGridHolder(const int id, const glm::ivec2& _pos);
 
 	void init(glm::fvec2 _tileSize, glm::ivec2 _gridSize);
 	void clearGrid(int id);
