@@ -1,6 +1,7 @@
 #include "PlayerMovementBehaviour.h"
 #include <Util/Events/EngineEvents.h>
 #include <Core/Grid/GridSystem.h>
+#include "PlayerAttackBehaviour.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 {
@@ -33,6 +34,12 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 {
 	OnKeyDown* eventCasted = static_cast<OnKeyDown*>(event);
 	
+	if (eventCasted->key == GLFW_KEY_Q)
+	{
+		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerAttackBehaviour());
+		return;
+	}
+
 	if (eventCasted->key == GLFW_KEY_W)
 	{
 		moveDir.y += 1;
