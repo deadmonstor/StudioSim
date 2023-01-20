@@ -1,17 +1,25 @@
 #include "PlayerMovementBehaviour.h"
 #include <Util/Events/EngineEvents.h>
+#include <Core/Grid/GridSystem.h>
 
 void PlayerMovementBehaviour::Act()
 {
 	//move player
-	glm::vec2 currentPosition = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
-	PlayerController::Instance()->playerPTR->getTransform()->setPosition(currentPosition + moveDir * glm::vec2{5, 5});
+	GridHolder* curTileHolder = GridSystem::Instance()->getGridHolder(0, origPos + moveDir);
+	glm::fvec2 gridSize = GridSystem::Instance()->getTileSize();
 
+	if (curTileHolder->tile != nullptr && !curTileHolder->isWall)
+	{
+		PlayerController::Instance()->playerPTR->getTransform()->
+			setPosition(gridSize * (origPos + moveDir));
+
+		origPos += moveDir;
+	}
 }
 
 void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 {
-	auto* eventCasted = static_cast<OnKeyDown*>(event);
+	OnKeyDown* eventCasted = static_cast<OnKeyDown*>(event);
 
 	if (eventCasted->key == GLFW_KEY_W)
 	{
@@ -36,7 +44,7 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 
 void PlayerMovementBehaviour::onKeyUpResponse(Griddy::Event* event)
 {
-	auto eventCasted = static_cast<OnKeyUp*>(event);
+	OnKeyUp* eventCasted = static_cast<OnKeyUp*>(event);
 
 	if (eventCasted->key == GLFW_KEY_W)
 	{

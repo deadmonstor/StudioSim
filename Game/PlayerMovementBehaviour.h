@@ -6,8 +6,8 @@
 class PlayerMovementBehaviour : public Behaviour
 {
 public:
-	glm::vec2 moveDir;
-	glm::vec2 origPos;
+	glm::fvec2 moveDir;
+	glm::fvec2 origPos = {0, 0};
 	glm::vec2 targetPos;
 
 private:
