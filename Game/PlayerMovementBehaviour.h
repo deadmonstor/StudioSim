@@ -15,7 +15,6 @@ private:
 	void Act() override;
 	void onKeyDownResponse(Griddy::Event*);
 	void onKeyUpResponse(Griddy::Event*);
-
 protected:
 	FunctionMap CreateFunctionMap() override;
 
