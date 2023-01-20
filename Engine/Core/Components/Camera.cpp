@@ -44,3 +44,53 @@ void Camera::destroy()
         
     Component::destroy();
 }
+
+void Camera::getDebugInfo(std::string* string)
+{
+    ImGui::Indent();
+    ImGui::InputInt("Size", &debugSize);
+
+    if (debugSize != getSize())
+    {
+        setSize(debugSize);
+        screenSizeChanged();
+    }
+
+    ImGui::Unindent();
+
+    Component::getDebugInfo(string);
+}
+
+bool Camera::isInFrustum(const glm::vec2 pos, const glm::vec2 size)
+{
+    const glm::vec2 halfSize = size;
+    const glm::vec2 min = pos;
+    const glm::vec2 max = pos + halfSize;
+
+    const glm::vec4 corners[4] =
+    {
+        glm::vec4(min.x, min.y, 0.0f, 1.0f),
+        glm::vec4(max.x, min.y, 0.0f, 1.0f),
+        glm::vec4(min.x, max.y, 0.0f, 1.0f),
+        glm::vec4(max.x, max.y, 0.0f, 1.0f)
+    };
+    
+    bool isAllCornersNotIn = true;
+    for (const glm::vec4& corner : corners)
+    {
+        const glm::vec4 transformed = viewProjectionMatrix * corner;
+
+        if (transformed.x < -transformed.w || transformed.x > transformed.w ||
+            transformed.y < -transformed.w || transformed.y > transformed.w)
+        {
+            // not in
+        }
+        else
+        {
+            isAllCornersNotIn = false;
+            break;
+        }
+    }
+
+    return !isAllCornersNotIn;
+}
