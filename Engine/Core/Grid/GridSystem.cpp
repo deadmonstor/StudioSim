@@ -103,7 +103,7 @@ void GridSystem::onDebugEvent(const OnDebugEventChanged* event)
 
 GridHolder* GridSystem::getGridHolder(const int id, const glm::ivec2& _pos)
 {
-	if (pos.x < 0 || pos.x > gridSize.x || pos.y < 0 || pos.y > gridSize.y)
+	if (_pos.x < 0 || _pos.x > gridSize.x || _pos.y < 0 || _pos.y > gridSize.y)
 		return nullptr;
 
 	return gridLayers[id]->internalMap[_pos.x][_pos.y];
@@ -111,7 +111,7 @@ GridHolder* GridSystem::getGridHolder(const int id, const glm::ivec2& _pos)
 
 Tile* GridSystem::getTile(const int id, const glm::ivec2& _pos)
 {
-	if (pos.x < 0 || pos.x > gridSize.x || pos.y < 0 || pos.y > gridSize.y)
+	if (_pos.x < 0 || _pos.x > gridSize.x || _pos.y < 0 || _pos.y > gridSize.y)
 		return nullptr;
 
 	return gridLayers[id]->internalMap[_pos.x][_pos.y]->tile;

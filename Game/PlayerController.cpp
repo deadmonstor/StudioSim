@@ -1,5 +1,6 @@
 #include "PlayerController.h"
 #include "PlayerFSM.h"
+#include "Core/Grid/GridSystem.h"
 
 PlayerController::PlayerController()
 {
@@ -7,7 +8,9 @@ PlayerController::PlayerController()
 
 void PlayerController::createPlayer()
 {
-	playerPTR = SceneManager::Instance()->createGameObject("Player", glm::vec2{ 3000, 3000 });
+
+	glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
+	playerPTR = SceneManager::Instance()->createGameObject("Player", glm::vec2{ 30, 20 } * tileSize);
 	playerPTR->getTransform()->setSize(glm::vec2{ 32,32 });
 
 	const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
