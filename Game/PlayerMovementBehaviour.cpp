@@ -2,6 +2,12 @@
 #include <Util/Events/EngineEvents.h>
 #include <Core/Grid/GridSystem.h>
 
+PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
+{
+	isInFSM = isInFSMParam;
+	map = CreateFunctionMap();
+}
+
 void PlayerMovementBehaviour::Act()
 {
 	//move player

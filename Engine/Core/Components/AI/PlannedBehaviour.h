@@ -58,6 +58,22 @@ protected:
     //Removes leftover data making the component ready to delete.
     void CleanUp();
 
-    void EventResponse(BehaviourEvent* event) override;
+    FunctionMap CreateFunctionMap() override
+    {
+        FunctionMap map = {};
+        map[typeid(OnMouseDown)] =
+            [](Behaviour* pointer, Griddy::Event* event)
+        {
+            dynamic_cast<PlannedBehaviour*>(pointer)->ExampleMappedFunction(event);
+        };
+        return map;
+    }
+
+private:
+    void ExampleMappedFunction(Griddy::Event* event)
+    {
+        OnMouseDown* eventCasted = (OnMouseDown*)event;
+        //do something with the converted event
+    }
 };
 

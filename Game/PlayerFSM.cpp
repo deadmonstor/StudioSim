@@ -3,7 +3,7 @@
 void PlayerFSM::start()
 {
 	StateMachine::start();
-	baseState = new PlayerMovementBehaviour();
+	baseState = new PlayerMovementBehaviour(true);
 	currentState = baseState;
 	currentState->start();
 }
