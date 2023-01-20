@@ -143,14 +143,14 @@ public:
 			{ 1, ResourceManager::GetTexture("tile223")},
 			{ 2, ResourceManager::GetTexture("tile223")},
 			{ 3, ResourceManager::GetTexture("tile223")},
-			{ 4, ResourceManager::GetTexture("tile223") },
-			{ 5, ResourceManager::GetTexture("tile223") },
-			{ 6, ResourceManager::GetTexture("tile223") },
-			{ 7, ResourceManager::GetTexture("tile223") },
-			{ 8, ResourceManager::GetTexture("tile223") },
-			{ 9, ResourceManager::GetTexture("tile223") },
-			{ 10, ResourceManager::GetTexture("tile223") },
-			{ 11, ResourceManager::GetTexture("tile223") }
+			{ 4, ResourceManager::GetTexture("tile223")},
+			{ 5, ResourceManager::GetTexture("tile223")},
+			{ 6, ResourceManager::GetTexture("tile223")},
+			{ 7, ResourceManager::GetTexture("tile223")},
+			{ 8, ResourceManager::GetTexture("tile223")},
+			{ 9, ResourceManager::GetTexture("tile223")},
+			{ 10, ResourceManager::GetTexture("tile223")},
+			{ 11, ResourceManager::GetTexture("tile223")}
 		});
 		
 		grid_system->loadFromFile(1, "Grid/test2.txt");

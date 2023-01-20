@@ -66,6 +66,8 @@ void GridSystem::renderInternal(const int id)
 			const auto pos = glm::vec2{tileX, tileY};
 
 			if (!holder->isOccupied) continue;
+			if (holder->tile->getTexture().Height == 0 && holder->tile->getTexture().Width == 0)
+				continue;
 			
 			holder->tile->update();
 			

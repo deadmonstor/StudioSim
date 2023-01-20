@@ -20,6 +20,6 @@ private:
     glm::mat4 viewProjectionMatrix = {};
     glm::mat4 projectionMatrix = {};
     glm::mat4 viewMatrix = {};
-    unsigned int size = 400;
-    int debugSize = 400;
+    unsigned int size = 300;
+    int debugSize = 300;
 };
