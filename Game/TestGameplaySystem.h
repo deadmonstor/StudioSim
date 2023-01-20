@@ -118,7 +118,7 @@ public:
 		
 		grid_system->setEmptyTileIDs(0, std::vector<int>{0});
 		// TODO: Fill these out lol
-		grid_system->setWallIDs(0, std::vector<int>{});
+		grid_system->setWallIDs(0, std::vector<int>{1,9,3,4,5,6});
 		grid_system->setTextureMap(0, std::map<int, Texture>
 		{
 			{ 1, ResourceManager::GetTexture("tile25")},
@@ -140,20 +140,20 @@ public:
 		grid_system->setWallIDs(1, std::vector<int>{});
 		grid_system->setTextureMap(1, std::map<int, Texture>
 		{
-			{ 1, ResourceManager::GetTexture("tile223")},
-			{ 2, ResourceManager::GetTexture("tile223")},
-			{ 3, ResourceManager::GetTexture("tile223")},
-			{ 4, ResourceManager::GetTexture("tile223")},
-			{ 5, ResourceManager::GetTexture("tile223")},
-			{ 6, ResourceManager::GetTexture("tile223")},
-			{ 7, ResourceManager::GetTexture("tile223")},
-			{ 8, ResourceManager::GetTexture("tile223")},
-			{ 9, ResourceManager::GetTexture("tile223")},
-			{ 10, ResourceManager::GetTexture("tile223")},
-			{ 11, ResourceManager::GetTexture("tile223")}
+			{ 21, ResourceManager::GetTexture("tile12")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
+			{ 22, ResourceManager::GetTexture("tile36")},//tile111 skulls
+			{ 23, ResourceManager::GetTexture("tile11")},//tile223 rocks
+			{ 24, ResourceManager::GetTexture("tile35")}, //Pillars : 20 44 68, 21 45 69, 22 46 70,
+			{ 25, ResourceManager::GetTexture("tile13")}, //104 105
+			{ 26, ResourceManager::GetTexture("tile37")},
+			{ 27, ResourceManager::GetTexture("tile111")},
+			{ 28, ResourceManager::GetTexture("tile223")},
+			{ 29, ResourceManager::GetTexture("tile20")},
+			{ 30, ResourceManager::GetTexture("tile44")},
+			{ 31, ResourceManager::GetTexture("tile68")}
 		});
 		
-		grid_system->loadFromFile(1, "Grid/test2.txt");
+		grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
 
 		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->setSize(glm::vec2(96, 48));
