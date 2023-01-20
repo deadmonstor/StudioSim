@@ -160,13 +160,19 @@ public:
 			{ 29, ResourceManager::GetTexture("tile20")},
 			{ 30, ResourceManager::GetTexture("tile44")},
 			{ 31, ResourceManager::GetTexture("tile68")},
-			{ 32, ResourceManager::GetTexture("tile129") },	//vases
+			{ 32, ResourceManager::GetTexture("tile129")},	//vases
 			{ 33, ResourceManager::GetTexture("tile153")},	//vases
 			{ 34, ResourceManager::GetTexture("tile57") }, //lattice
 			{ 35, ResourceManager::GetTexture("tile127") },
 			{ 36, ResourceManager::GetTexture("tile151") },
 			{ 37, ResourceManager::GetTexture("tile131") },
-			{ 38, ResourceManager::GetTexture("tile155") }
+			{ 38, ResourceManager::GetTexture("tile155") },
+			{ 39, ResourceManager::GetTexture("tile288") },
+			{ 40, ResourceManager::GetTexture("tile289") },
+			{ 41, ResourceManager::GetTexture("tile132") },
+			{ 42, ResourceManager::GetTexture("tile133") },
+			{ 43, ResourceManager::GetTexture("tile156") },
+			{ 44, ResourceManager::GetTexture("tile157") }
 		});
 		
 		grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
