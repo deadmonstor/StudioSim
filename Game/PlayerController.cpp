@@ -17,7 +17,7 @@ void PlayerController::createPlayer()
 	playerSprite = playerPTR->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
 	playerSprite->setColor(glm::vec3(1, 1, 1));
 	playerSprite->setLit(false);
-	playerSprite->setPivot(Pivot::BottomCenter);
+	playerSprite->setPivot(Pivot::TopRight);
 
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();

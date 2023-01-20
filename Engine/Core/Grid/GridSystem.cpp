@@ -31,6 +31,7 @@ void GridSystem::clearGrid(const int id)
 			tile->createBuffers();
 			tile->setSortingLayer(orderSortingMap.at(id));
 			tile->setLit(true);
+			tile->setPivot(Pivot::Center);
 
 			gridLayers[id]->internalMap[x][y]->tile = tile;
 		}
@@ -138,7 +139,7 @@ std::vector<std::pair<glm::vec2, Tile*>> GridSystem::getNeighbours(const int id,
 			if (neighbour.x >= gridSize.x || neighbour.y >= gridSize.y) continue;
 			
 			Tile* tile = internalMap[neighbour.x][neighbour.y]->tile;
-			neighbours.push_back({neighbour, tile});
+			neighbours.emplace_back(neighbour, tile);
 		}
 	}
 	

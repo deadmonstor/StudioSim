@@ -15,9 +15,6 @@ void SpriteComponent::start()
 {
 	Component::start();
 	createBuffers();
-
-	setColor({1, 1, 1});
-	setPivot(Pivot::BottomLeft);
 	
 	Griddy::Events::invoke<OnSpriteRendererComponentStarted>(this);
 }

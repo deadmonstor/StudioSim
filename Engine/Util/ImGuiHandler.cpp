@@ -48,7 +48,7 @@ void ImGuiHandler::ImGUIGridSystem() const
 					
 						if (ImGui::TreeNode(yString.c_str()))
 						{
-							if (Tile* tile = gridHolder->tile)
+							if (Tile* tile = gridHolder->tile; tile != nullptr && tile->getTexture().Height != 0 && tile->getTexture().Width != 0)
 							{
 								auto* tileString = new std::string("");
 								tile->getDebugInfo(tileString);
@@ -60,6 +60,7 @@ void ImGuiHandler::ImGUIGridSystem() const
 							{
 								ImGui::Text("Tile: NULL");
 							}
+							
 							ImGui::TreePop();
 						}
 					}

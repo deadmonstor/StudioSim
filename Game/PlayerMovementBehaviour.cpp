@@ -20,7 +20,7 @@ void PlayerMovementBehaviour::Act()
 		if (curTileHolder->tile != nullptr && !curTileHolder->isWall)
 		{
 			PlayerController::Instance()->playerPTR->getTransform()->
-				setPosition(gridSize * (origPos + moveDir));
+				setPosition(gridSize * (origPos + moveDir) + (gridSize / 2.0f));
 
 			origPos += moveDir;
 		}
