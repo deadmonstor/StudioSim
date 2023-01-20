@@ -28,7 +28,7 @@ void StateMachine::start()
 	if (onTransitionReceivedID == -1)
 		onTransitionReceivedID = Griddy::Events::subscribe(this, &StateMachine::OnTransitionReceived);
 	
-	baseState = new Behaviour();
+	baseState = new Behaviour(true);
 	currentState = baseState;
 
 	if (currentState->GetInitValue() == false)
@@ -79,6 +79,7 @@ void StateMachine::EventResponse(BehaviourEvent* event)
 	if (event->targetBehaviour == this)
 	{
 		LOG_INFO("State Machine receives event");
+		event->targetBehaviour = currentState;
 		currentState->EventResponse(event);
 	}
 }

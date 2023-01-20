@@ -29,7 +29,8 @@ protected:
     
 //Methods
 public:
-
+    PlannedBehaviour() { isInFSM = false; /*map = CreateFunctionMap()*/ }
+    PlannedBehaviour(bool isInFSMParam);
     void destroy() override;
     void start() override;
     void update() override {}
@@ -56,5 +57,7 @@ protected:
 
     //Removes leftover data making the component ready to delete.
     void CleanUp();
+
+    void EventResponse(BehaviourEvent* event) override;
 };
 

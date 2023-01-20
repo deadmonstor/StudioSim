@@ -2,6 +2,7 @@
 
 
 #include "Core/Components/AI/Behaviour.h"
+#include "Core/Components/AI//PlannedBehaviour.h"
 
 //Class interface used for Behaviour Selection based on FSMTransition Events. Derive this class into unique AI state machines for the games.
 class StateMachine : public Behaviour

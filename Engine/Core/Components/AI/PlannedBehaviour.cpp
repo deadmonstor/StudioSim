@@ -1,10 +1,16 @@
 #include "PlannedBehaviour.h"
 
+PlannedBehaviour::PlannedBehaviour(bool isInFSMParam)
+{
+	isInFSM = isInFSMParam;
+	//map = CreateFunctionMap();
+}
+
 void PlannedBehaviour::destroy()
 {
 	if (eventResponseID != -1)
 	{
-		Griddy::Events::unsubscribe((Behaviour*)this, &Behaviour::EventResponse, eventResponseID);
+		Griddy::Events::unsubscribe(this, &PlannedBehaviour::EventResponse, eventResponseID);
 		eventResponseID = -1;
 	}
 
@@ -15,8 +21,12 @@ void PlannedBehaviour::destroy()
 
 void PlannedBehaviour::start()
 {
-	if (eventResponseID == -1)
-		eventResponseID = Griddy::Events::subscribe((Behaviour*)this, &Behaviour::EventResponse);
+	if (!isInFSM)
+	{
+		if (eventResponseID == -1)
+			eventResponseID = Griddy::Events::subscribe(this, &PlannedBehaviour::EventResponse);
+	}
+	
 	GenerateBehaviourList();
 
 	GenerateEffects();
@@ -34,6 +44,8 @@ void PlannedBehaviour::Act()
 	ActionAnalysis();
 	std::string fitName;
 	int highestFitness = -1;
+
+	//Find action with highest fitness
 	for (auto& action : availableActions)
 	{
 		if (action.second.first > highestFitness)
@@ -42,6 +54,7 @@ void PlannedBehaviour::Act()
 			fitName = action.first;
 		}
 	}
+	//If the action was found, act the action
 	if (!fitName.empty())
 	{
 		availableActions[fitName].second->Act();
@@ -125,4 +138,12 @@ void PlannedBehaviour::CleanUp()
 		delete i.second.second;
 	}
 	availableActions.clear();
+}
+
+void PlannedBehaviour::EventResponse(BehaviourEvent* event)
+{
+	if (event->targetBehaviour == this)
+	{
+		Act();
+	}
 }

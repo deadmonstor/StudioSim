@@ -19,10 +19,12 @@ protected:
 	bool initialized = false;
 	int8_t eventResponseID = -1;
 	FunctionMap map;
+	bool isInFSM = false;
 
 //Public Methods
 public:
-
+	Behaviour() : isInFSM(false) { map = CreateFunctionMap(); }
+	Behaviour(bool isInFSMParam);
 	//Function defining a single-shot behaviour
 	virtual void Act() {}
 	virtual void EventResponse(BehaviourEvent* event);
