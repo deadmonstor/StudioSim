@@ -1,20 +1,27 @@
 ﻿#pragma once
 #include <Core/Renderer/texture.h>
 #include "Core/Component.h"
+#include "Core/Pivot.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/Shader.h"
 #include "Core/Renderer/SortingLayer.h"
 
+class Pivot;
+
 class SpriteComponent : public Component
 {
 	glm::vec3 color = glm::vec3(1.0f);
-	float debugColor[3] = {1, 1, 1};
+	glm::vec2 pivot;
+
 	Shader shader;
 	Texture texture;
 	Texture normals;
 
 	int sortingOrder = 0;
 	SortingLayer sortingLayer = Renderer::getDefaultSortingLayer();
+
+	float debugColor[3] = {1, 1, 1};
+	int debugPivotIndex = -1;
 public:
 
 	void start() override;
@@ -26,6 +33,13 @@ public:
 
 	void setColor(glm::vec3 color);
 	glm::vec3 getColor() const { return color; }
+
+	const glm::vec2& getPivot() const { return pivot; }
+	void setPivot(const glm::vec2 _pivot)
+	{
+		this->pivot = _pivot;
+		debugPivotIndex = Pivot::getIDFromPivot(pivot);
+	}
 
 	Shader getShader() const;
 	void setShader(Shader shader);

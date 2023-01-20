@@ -1,5 +1,6 @@
 #include "SpriteComponent.h"
 
+#include "Core/Renderer/Lighting.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Util/Events/Events.h"
 #include "Util/Events/RenderEvents.h"
@@ -16,6 +17,7 @@ void SpriteComponent::start()
 	createBuffers();
 
 	setColor({1, 1, 1});
+	setPivot(Pivot::BottomLeft);
 	
 	Griddy::Events::invoke<OnSpriteRendererComponentStarted>(this);
 }
@@ -23,7 +25,7 @@ void SpriteComponent::start()
 void SpriteComponent::createBuffers()
 {
 	if (shader.ID == 0)
-		shader = ResourceManager::GetShader("sprite");
+		setShader(ResourceManager::GetShader("sprite"));
 }
 
 void SpriteComponent::update()
@@ -32,6 +34,14 @@ void SpriteComponent::update()
 
 	if (debugColor[0] != color.r || debugColor[1] != color.g || debugColor[2] != color.b)
 		setColor({ debugColor[0], debugColor[1], debugColor[2]});
+
+	if (debugPivotIndex != -1)
+	{
+		if (Pivot::IDtoPivot[debugPivotIndex] != getPivot())
+		{
+			setPivot(Pivot::IDtoPivot[debugPivotIndex]);
+		}
+	}
 }
 
 void SpriteComponent::lateUpdate()
@@ -43,7 +53,7 @@ void SpriteComponent::getDebugInfo(std::string* string)
 {
 	ImGui::Indent();
 	ImGui::ColorEdit3("Color: ", debugColor);
-
+	ImGui::Combo("Pivot", &debugPivotIndex, Pivot::names, 9);
 	ImGui::TextUnformatted("TextureID: ");
 	auto id = new int(texture.ID);
 	ImGui::InputInt("", id);
@@ -65,7 +75,9 @@ void SpriteComponent::setColor(const glm::vec3 color)
 	debugColor[0] = color.r;
 	debugColor[1] = color.g;
 	debugColor[2] = color.b;
+	
 	shader.SetVector3f("spriteColor", color, true);
+	Lighting::Instance()->refreshLightData(this, LightUpdateRequest::All);
 }
 
 Shader SpriteComponent::getShader() const
@@ -76,6 +88,8 @@ Shader SpriteComponent::getShader() const
 void SpriteComponent::setShader(const Shader shader)
 {
 	this->shader = shader;
+	
+	Lighting::Instance()->refreshLightData(this, LightUpdateRequest::All);
 }
 
 void SpriteComponent::setLit(const bool lit)

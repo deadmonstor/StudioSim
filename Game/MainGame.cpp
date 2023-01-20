@@ -28,6 +28,7 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\Red-Slash-Wide\\", "Red-Slash-Wide", 6);
 	ResourceManager::LoadTextureArray("Sprites\\Red-Slash-Thin\\", "RedSlashThin", 6);
 	ResourceManager::LoadTextureArray("Sprites\\player\\", "hero", 5);
+	ResourceManager::LoadTextureArray("Sprites\\TileMap\\", "tile", 288);
 	ResourceManager::LoadTexture("Sprites\\rock.png", "rock");
 	ResourceManager::LoadTexture("Sprites\\background.png", "background");
 	ResourceManager::LoadTexture("Sprites\\UE.png", "troll");
@@ -43,7 +44,8 @@ int main(int, char**)
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testRender);
 	
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestMouseDown);
-
+	Griddy::Events::subscribe(PlayerController::Instance(), &PlayerController::onKeyDown);
+	Griddy::Events::subscribe(PlayerController::Instance(), &PlayerController::onKeyUp);
 
 	MainGame::Instance()->run();
 	return 0;

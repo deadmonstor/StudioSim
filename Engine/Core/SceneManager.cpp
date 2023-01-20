@@ -48,13 +48,11 @@ bool SceneManager::changeScene(const std::string& scene)
 bool SceneManager::init()
 {
 	Griddy::Events::subscribe(this, &SceneManager::onSceneChanged);
-	return changeScene("renderScene");
+	return changeScene("debugScene");
 }
 
 GameObject* SceneManager::createGameObject(const std::string name, const glm::vec2 position)
 {
-	// TODO: This should 100% be world space not whatever is here
-	
 	const auto created = new GameObject();
 	created->transform = new Transform();
 	created->transform->setName("Transform");
