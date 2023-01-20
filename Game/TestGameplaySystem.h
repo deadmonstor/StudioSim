@@ -160,8 +160,8 @@ public:
 			{ 29, ResourceManager::GetTexture("tile20")},
 			{ 30, ResourceManager::GetTexture("tile44")},
 			{ 31, ResourceManager::GetTexture("tile68")},
-			{ 32, ResourceManager::GetTexture("tile129") }//vases
-			{ 33, ResourceManager::GetTexture("tile153")}//vases
+			//{ 32, ResourceManager::GetTexture("tile129") },//vases
+			//{ 33, ResourceManager::GetTexture("tile153")},//vases
 			{ 35, ResourceManager::GetTexture("tile127") },
 			{ 36, ResourceManager::GetTexture("tile151") }
 		});
