@@ -159,7 +159,9 @@ public:
 			{ 28, ResourceManager::GetTexture("tile223")},
 			{ 29, ResourceManager::GetTexture("tile20")},
 			{ 30, ResourceManager::GetTexture("tile44")},
-			{ 31, ResourceManager::GetTexture("tile68")}
+			{ 31, ResourceManager::GetTexture("tile68")},
+			{ 35, ResourceManager::GetTexture("tile44")},
+			{ 36, ResourceManager::GetTexture("tile68") }
 		});
 		
 		grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
