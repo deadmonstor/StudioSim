@@ -228,7 +228,6 @@ void Renderer::removeFromRenderQueue(const OnSpriteRendererComponentRemoved* eve
 
 void Renderer::sortRenderQueue()
 {
-	// BUG : Is this slow?
 	std::sort(spriteRenderQueue.begin(), spriteRenderQueue.begin() + static_cast<long long>(spriteRenderQueue.size()),
 	[this](const SpriteComponent* x, const SpriteComponent* y) noexcept -> bool
 	{
@@ -236,6 +235,7 @@ void Renderer::sortRenderQueue()
 		{
 			return x->getSortingOrder() < y->getSortingOrder();
 		}
+		
 		return x->getSortingLayer().getOrder() < y->getSortingLayer().getOrder();
 	});
 }

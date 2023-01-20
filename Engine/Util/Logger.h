@@ -27,7 +27,6 @@ namespace Griddy
 				std::make_shared<SinkCallback>(Severity::trace, 
 				[](const Metadata& metadata, const std::string& internalMessage)
 				{
-					// TODO: Fix this its way to hacky for me to release
 					std::ostringstream ss;
 					const auto log = std::make_shared<SinkCout>(Severity::trace, "%H:%M.%S [#severity] [#file | Function: #function | Line: #line] #message");
 					log->log(ss, metadata, internalMessage);

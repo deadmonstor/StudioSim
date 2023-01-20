@@ -19,6 +19,7 @@ void FireballComponent::start()
 	getOwner()->addComponent<AnimatedSpriteRenderer>(textureListFireball, 0.1f);
 	getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
 	getOwner()->getComponent<AnimatedSpriteRenderer>()->setSortingLayer(Renderer::getDefaultSortingLayer());
+	getOwner()->getComponent<AnimatedSpriteRenderer>()->setPivot(Pivot::Center);
 	getOwner()->addComponent<Light>();
 
 	if (onAnimationEndedEventID == -1)
