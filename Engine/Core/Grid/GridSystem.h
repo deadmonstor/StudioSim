@@ -6,7 +6,7 @@
 #include "Util/Events/EngineEvents.h"
 
 class Texture;
-struct GridHolder
+struct TileHolder
 {
 	Tile* tile;
 	bool isOccupied;
@@ -15,7 +15,7 @@ struct GridHolder
 
 struct GridLayer
 {
-	std::map<int, std::map<int, GridHolder*>> internalMap = {};
+	std::map<int, std::map<int, TileHolder*>> internalMap = {};
 	std::map<int, Texture> textureMap = {};
 	
 	std::vector<int> wallIDs = {};
@@ -44,7 +44,8 @@ public:
 	std::map<int, SortingLayer&>& getOrderMap() { return this->orderSortingMap; }
 	glm::ivec2 getGridSize() { return gridSize; }
 	glm::fvec2 getTileSize() { return tileSize; }
-	GridHolder* getGridHolder(const int id, const glm::ivec2& _pos);
+	TileHolder* getTileHolder(const int id, const glm::ivec2& _pos);
+	GridLayer* GetGridLayer(const int id);
 
 	void init(glm::fvec2 _tileSize, glm::ivec2 _gridSize);
 	void clearGrid(int id);
@@ -53,4 +54,5 @@ public:
 	
 	Tile* getTile(int id, const glm::ivec2& _pos);
 	std::vector<std::pair<glm::vec2, Tile*>> getNeighbours(int id, glm::vec2 pos);
+
 };

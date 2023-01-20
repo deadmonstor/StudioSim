@@ -6,6 +6,7 @@ void StateMachine::destroy()
 	if (eventResponseID != -1)
 	{
 		Griddy::Events::unsubscribe(this, &StateMachine::EventResponse, eventResponseID);
+
 		eventResponseID = -1;
 	}
 	
@@ -22,8 +23,9 @@ void StateMachine::destroy()
 
 void StateMachine::start()
 {
-	if (eventResponseID == -1)
+	if (eventResponseID == -1) {
 		eventResponseID = Griddy::Events::subscribe(this, &StateMachine::EventResponse);
+	}
 	
 	if (onTransitionReceivedID == -1)
 		onTransitionReceivedID = Griddy::Events::subscribe(this, &StateMachine::OnTransitionReceived);
@@ -83,6 +85,8 @@ void StateMachine::EventResponse(BehaviourEvent* event)
 		currentState->EventResponse(event);
 	}
 }
+
+
 
 //Checks the transition against the current state.
 void StateMachine::OnTransitionReceived(const StateTransition* event)
