@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Components\AI\Behaviour.h" />
     <ClInclude Include="Core\AudioEngine.h" />
     <ClInclude Include="Core\Component.h" />
     <ClInclude Include="Core\Components\AnimatedSpriteRenderer.h" />
@@ -476,6 +477,8 @@
     <ClInclude Include="Library\imgui\imstb_rectpack.h" />
     <ClInclude Include="Library\imgui\imstb_textedit.h" />
     <ClInclude Include="Library\imgui\imstb_truetype.h" />
+    <ClInclude Include="Core\Components\AI\StateMachine.h" />
+    <ClInclude Include="Core\Components\AI\PlannedBehaviour.h" />
     <ClInclude Include="Util\Events\Events.h" />
     <ClInclude Include="Util\Events\FunctionHandler.h" />
     <ClInclude Include="Util\Events\EngineEvents.h" />
@@ -486,6 +489,7 @@
     <ClInclude Include="Util\Time.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Components\AI\Behaviour.cpp" />
     <ClCompile Include="Core\AudioEngine.cpp" />
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Components\AnimatedSpriteRenderer.cpp" />
@@ -514,6 +518,8 @@
     <ClCompile Include="Library\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Library\imgui\imgui_tables.cpp" />
     <ClCompile Include="Library\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Core\Components\AI\StateMachine.cpp" />
+    <ClCompile Include="Core\Components\AI\PlannedBehaviour.cpp" />
     <ClCompile Include="Util\ImGuiHandler.cpp" />
     <ClCompile Include="Util\Time.cpp" />
   </ItemGroup>

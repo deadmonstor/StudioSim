@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Input.h"
 #include "Components/FireballComponent.h"
+#include "Core/Components/AI/StateMachine.h"
 #include "Core/SceneManager.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/TextRenderer.h"
@@ -12,9 +13,11 @@
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "TurnManager.h"
+#include "PlayerController.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
+	StateMachine* sm;
 public:
 	std::list<SpriteComponent*> sprites;
 	void testGameObjectDestroy(const OnGameObjectRemoved* event)
@@ -28,6 +31,11 @@ public:
 		if (it != sprites.end())
 		{
 			sprites.erase(it);
+		}
+
+		if (sm != nullptr && gameObject == sm->getOwner())
+		{
+			sm = nullptr;
 		}
 	}
 	void TestFunc(const OnSceneChanged* event)
@@ -95,6 +103,7 @@ public:
 		auto* fireball = SceneManager::Instance()->createGameObject("TestFireball", mousePos);
 		fireball->getTransform()->setSize(glm::vec2(48, 48));
 		fireball->addComponent<FireballComponent>();
+		sm = fireball->addComponent<StateMachine>();
 	}
 	
 	void TestFuncLewis(const OnSceneChanged* event) 
@@ -155,13 +164,14 @@ public:
 		
 		grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
 
-		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
+		/*auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->setSize(glm::vec2(96, 48));
 
 		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
 		auto sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
+		sprites.push_back(sprite);*/
 		
 		//Slime Hurt Anim
 		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
@@ -250,23 +260,19 @@ public:
 		TurnManager::Instance()->addToTurnQueue(testRSW);
 
 		////Player Idle Anim
-		auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{820, 540});
-		testPlayerIdle->getTransform()->setSize(glm::vec2(40, 40));
-		Light* playerLight = testPlayerIdle->addComponent<Light>();
-		playerLight->setFalloff({1, 1, 5});
-		auto cam = testPlayerIdle->addComponent<Camera>();
-		Renderer::Instance()->setCamera(cam);
+		//auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
+		//testPlayerIdle->getTransform()->setSize(glm::vec2(256, 256));
+
+		//const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
+		//sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
+		//sprite->setColor(glm::vec3(1, 1, 1));
+		//sprite->setLit(false);
+		PlayerController::Instance()->createPlayer();
 		
-		const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
-		sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(true);
-		sprite->setPivot(Pivot::BottomCenter);
-		sprites.push_back(sprite);
-		
+
 		//CreateFireball(glm::vec2{ 1000, 500 });
 	}
-
+	
 	void TestInventory(const OnSceneChanged* event)
 	{
 		// TODO: Enum this or something its kinda bad to do this
@@ -336,9 +342,16 @@ public:
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)
 	{
 		const glm::vec2 mousePos = Input::getMousePosition();
-		
+		if (sm != nullptr)
+		{
+			std::type_index type = typeid(OnMouseDown);
+			Griddy::Events::invoke<BehaviourEvent>(sm, new OnMouseDown(mouseDownEvent->key, mouseDownEvent->action), type);
+		}
 		if (mouseDownEvent->key == GLFW_MOUSE_BUTTON_3)
+		{
 			CreateFireball(mousePos);
+		}
+			
 	}
 	void testKeyDown(const OnKeyDown* keyDown)
 	{
