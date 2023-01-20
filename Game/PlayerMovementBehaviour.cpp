@@ -3,9 +3,17 @@
 #include <Core/Grid/GridSystem.h>
 #include "PlayerAttackBehaviour.h"
 
+PlayerMovementBehaviour::PlayerMovementBehaviour()
+{
+	isInFSM = false; 
+	map = CreateFunctionMap(); 
+	origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
+}
+
 PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
+	origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition())/GridSystem::Instance()->getTileSize();
 	map = CreateFunctionMap();
 }
 
@@ -22,7 +30,7 @@ void PlayerMovementBehaviour::Act()
 			PlayerController::Instance()->playerPTR->getTransform()->
 				setPosition(gridSize * (origPos + moveDir) + (gridSize / 2.0f));
 
-			origPos += moveDir;
+			origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
 		}
 
 		canMove = false;
@@ -36,28 +44,32 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 	
 	if (eventCasted->key == GLFW_KEY_Q)
 	{
-		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerAttackBehaviour());
+		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerAttackBehaviour(true));
 		return;
 	}
 
 	if (eventCasted->key == GLFW_KEY_W)
 	{
 		moveDir.y += 1;
+		Act();
 	}
 	else if (eventCasted->key == GLFW_KEY_S)
 	{
 		moveDir.y -= 1;
+		Act();
 	}
 	else if (eventCasted->key == GLFW_KEY_A)
 	{
 		moveDir.x -= 1;
+		Act();
 	}
 	else if (eventCasted->key == GLFW_KEY_D)
 	{
 		moveDir.x += 1;
+		Act();
 	}
 
-	Act();
+	
 	//if tile is moveable
 	
 }
