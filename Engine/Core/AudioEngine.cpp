@@ -39,12 +39,26 @@ bool AudioEngine::init()
 		return false;
 	}
 
-	//Set Channel Groups
+	//Set Master Group
 	fmodResult = fmodSystem->getMasterChannelGroup(&masterChannel);
 	if (!checkResult(fmodResult, "Failed to get master channel"))
 	{
 		return false;
 	}
+
+	//Create groups
+	fmodResult = fmodSystem->createChannelGroup("audioSFX",  &audioEffectsChannel);
+	if (!checkResult(fmodResult, "Failed to create audioSFX channel"))
+	{
+		return false;
+	}
+
+	fmodResult = fmodSystem->createChannelGroup("backgroundMusic", &backgroundMusicChannel);
+	if (!checkResult(fmodResult, "Failed to create backgroundMusic channel"))
+	{
+		return false;
+	}
+
 	//Add audio channel groups
 	masterChannel->addGroup(audioEffectsChannel);
 	masterChannel->addGroup(backgroundMusicChannel);
