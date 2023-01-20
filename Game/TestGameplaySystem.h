@@ -162,7 +162,7 @@ public:
 			{ 31, ResourceManager::GetTexture("tile68")},
 			{ 32, ResourceManager::GetTexture("tile129") },	//vases
 			{ 33, ResourceManager::GetTexture("tile153")},	//vases
-			{ 34, ResourceManager::GetTexture("tile57") },
+			{ 34, ResourceManager::GetTexture("tile57") }, //lattice
 			{ 35, ResourceManager::GetTexture("tile127") },
 			{ 36, ResourceManager::GetTexture("tile151") },
 			{ 37, ResourceManager::GetTexture("tile131") },
