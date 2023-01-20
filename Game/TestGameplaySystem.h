@@ -250,7 +250,7 @@ public:
 		TurnManager::Instance()->addToTurnQueue(testRSW);
 
 		////Player Idle Anim
-		auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{0, 0});
+		auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{820, 540});
 		testPlayerIdle->getTransform()->setSize(glm::vec2(40, 40));
 		Light* playerLight = testPlayerIdle->addComponent<Light>();
 		playerLight->setFalloff({1, 1, 5});
@@ -260,7 +260,7 @@ public:
 		const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
 		sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
 		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
+		sprite->setLit(true);
 		sprite->setPivot(Pivot::BottomCenter);
 		sprites.push_back(sprite);
 		

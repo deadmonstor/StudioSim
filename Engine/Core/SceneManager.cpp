@@ -48,7 +48,7 @@ bool SceneManager::changeScene(const std::string& scene)
 bool SceneManager::init()
 {
 	Griddy::Events::subscribe(this, &SceneManager::onSceneChanged);
-	return changeScene("renderScene");
+	return changeScene("debugScene");
 }
 
 GameObject* SceneManager::createGameObject(const std::string name, const glm::vec2 position)
