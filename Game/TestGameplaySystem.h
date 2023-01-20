@@ -261,8 +261,9 @@ public:
 		sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
+		sprite->setPivot(Pivot::BottomCenter);
 		sprites.push_back(sprite);
-
+		
 		//CreateFireball(glm::vec2{ 1000, 500 });
 	}
 

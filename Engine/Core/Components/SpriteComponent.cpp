@@ -16,6 +16,7 @@ void SpriteComponent::start()
 	createBuffers();
 
 	setColor({1, 1, 1});
+	setPivot(Pivot::BottomLeft);
 	
 	Griddy::Events::invoke<OnSpriteRendererComponentStarted>(this);
 }
@@ -32,6 +33,14 @@ void SpriteComponent::update()
 
 	if (debugColor[0] != color.r || debugColor[1] != color.g || debugColor[2] != color.b)
 		setColor({ debugColor[0], debugColor[1], debugColor[2]});
+
+	if (debugPivotIndex != -1)
+	{
+		if (Pivot::IDtoPivot[debugPivotIndex] != getPivot())
+		{
+			setPivot(Pivot::IDtoPivot[debugPivotIndex]);
+		}
+	}
 }
 
 void SpriteComponent::lateUpdate()
@@ -43,7 +52,7 @@ void SpriteComponent::getDebugInfo(std::string* string)
 {
 	ImGui::Indent();
 	ImGui::ColorEdit3("Color: ", debugColor);
-
+	ImGui::Combo("Pivot", &debugPivotIndex, Pivot::names, 9);
 	ImGui::TextUnformatted("TextureID: ");
 	auto id = new int(texture.ID);
 	ImGui::InputInt("", id);

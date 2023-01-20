@@ -181,11 +181,13 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	if (!mainCam->isInFrustum(position, size))
 		return;
 
+	const glm::vec2 pivot = spriteRenderer->getPivot();
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 
 	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);
 	auto model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(position, 0.0f));  
+	model = glm::translate(model, glm::vec3(-pivot.x * size.x, -pivot.y * size.y, 0.0f));  
 
 	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); 
 	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); 

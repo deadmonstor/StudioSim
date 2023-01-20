@@ -27,6 +27,7 @@
     <ClInclude Include="Core\Grid\GridSystem.h" />
     <ClInclude Include="Core\Grid\Tile.h" />
     <ClInclude Include="Core\PhysicsSystem.h" />
+    <ClInclude Include="Core\Pivot.h" />
     <ClInclude Include="Core\Renderer\Lighting.h" />
     <ClInclude Include="Core\Renderer\Renderer.h" />
     <ClInclude Include="Core\Renderer\ResourceManager.h" />
