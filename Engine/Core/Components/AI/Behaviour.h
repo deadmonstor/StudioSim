@@ -43,13 +43,16 @@ protected:
 	//Initializes a map which assigns a function to a particular event type. Override this in child behaviours.
 	virtual FunctionMap CreateFunctionMap()
 	{
-		return
+		FunctionMap map = {};
+		map[typeid(OnMouseDown)] =
+			[](Behaviour* pointer, Griddy::Event* event)
 		{
-			{typeid(OnMouseDown), [](Behaviour* pointer, const Griddy::Event* event) { pointer->ExampleMappedFunction(event); }}
+			dynamic_cast<Behaviour*>(pointer)->ExampleMappedFunction(event);
 		};
+		return map;
 	};
 private:
-	void ExampleMappedFunction(const Griddy::Event* event)
+	void ExampleMappedFunction(Griddy::Event* event)
 	{
 		OnMouseDown* eventCasted = (OnMouseDown*)event;
 		//do something with the converted event

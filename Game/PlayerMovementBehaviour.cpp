@@ -2,12 +2,18 @@
 #include <Util/Events/EngineEvents.h>
 #include <Core/Grid/GridSystem.h>
 
+PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
+{
+	isInFSM = isInFSMParam;
+	map = CreateFunctionMap();
+}
+
 void PlayerMovementBehaviour::Act()
 {
 	//move player
 	if (canMove)
 	{
-		GridHolder* curTileHolder = GridSystem::Instance()->getGridHolder(0, origPos + moveDir);
+		TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
 		glm::fvec2 gridSize = GridSystem::Instance()->getTileSize();
 
 		if (curTileHolder->tile != nullptr && !curTileHolder->isWall)
