@@ -14,7 +14,7 @@ void PlayerAttackBehaviour::Act()
 {
 	
 	currentPlayerPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
-	GridHolder* curTileHolder = GridSystem::Instance()->getGridHolder(0, currentPlayerPos + moveDir);
+	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, currentPlayerPos + moveDir);
 	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
 	
 	if (curTileHolder->tile != nullptr && !curTileHolder->isWall)
