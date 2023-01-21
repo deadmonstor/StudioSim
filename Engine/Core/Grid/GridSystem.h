@@ -2,6 +2,7 @@
 #include <map>
 
 #include "Tile.h"
+#include "Core/Renderer/Lighting.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
 
@@ -51,6 +52,7 @@ public:
 	void clearGrid(int id);
 	void loadFromFile(int id, const std::string& fileName);
 	void onDebugEvent(const OnDebugEventChanged*);
+	void refreshLightData(LightUpdateRequest lightUpdateRequest);
 	
 	Tile* getTile(int id, const glm::ivec2& _pos);
 	std::vector<std::pair<glm::vec2, Tile*>> getNeighbours(int id, glm::vec2 pos);

@@ -71,7 +71,6 @@ void GridSystem::renderInternal(const int id)
 				continue;
 			
 			holder->tile->update();
-			
 			Renderer::Instance()->renderSprite(holder->tile,
 			                                   pos,
 			                                   {tileWidth, tileHeight},
@@ -100,6 +99,28 @@ void GridSystem::onDebugEvent(const OnDebugEventChanged* event)
 {
 	if (event->key == DebugRenderGrid)
 		shouldRender = !shouldRender;
+}
+
+void GridSystem::refreshLightData(const LightUpdateRequest lightUpdateRequest)
+{
+	for (const auto& id : gridLayers | std::views::keys)
+	{
+		auto internalMap = gridLayers[id]->internalMap;
+		if (internalMap.empty()) return;
+		
+		for(auto [x, pointer] : internalMap)
+		{
+			for(auto [y, holder] : pointer)
+			{
+				if (!holder->isOccupied) continue;
+				if (holder->tile->getTexture().Height == 0 && holder->tile->getTexture().Width == 0)
+					continue;
+
+				// TODO: This is really bad, can we only do this when they are in the view of the camera or something?
+				Lighting::Instance()->refreshLightData(holder->tile, lightUpdateRequest);
+			}
+		}
+	}
 }
 
 TileHolder* GridSystem::getTileHolder(const int id, const glm::ivec2& _pos)
@@ -192,7 +213,9 @@ void GridSystem::loadFromFile(const int mapID, const std::string& fileName)
 			TileHolder* grid_holder = layer->internalMap[x][y];
 
 			if (Texture texture = gridLayers[mapID]->textureMap[i]; texture.Height != 0 && texture.Width != 0)
+			{
 				grid_holder->tile->SetTexture(texture);
+			}
 
 			grid_holder->isOccupied = std::ranges::find(layer->emptyTiles, i) == layer->emptyTiles.end();
 			grid_holder->isWall =std::ranges::find(layer->wallIDs, i) != layer->wallIDs.end();
@@ -236,5 +259,3 @@ void GridSystem::setEmptyTileIDs(const int id, const std::vector<int>& emptyTile
 		
 	this->gridLayers[id]->emptyTiles = emptyTileIDs;
 }
-
-// get neighbours
