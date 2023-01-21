@@ -2,7 +2,7 @@
 #include "Renderer.h"
 #include <Windows.h>
 
-#include "Input.h"
+#include "Core/Input.h"
 #include "Lighting.h"
 #include "ResourceManager.h"
 #include "SortingLayer.h"

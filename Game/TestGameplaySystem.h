@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "Input.h"
+#include "Core/Input.h"
 #include "Components/FireballComponent.h"
 #include "Core/Components/AI/StateMachine.h"
 #include "Core/SceneManager.h"

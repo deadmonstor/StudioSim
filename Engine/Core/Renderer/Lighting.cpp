@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "Input.h"
+#include "Core/Input.h"
 #include "Renderer.h"
 #include "Core/Components/SpriteComponent.h"
 #include "glm/common.hpp"
