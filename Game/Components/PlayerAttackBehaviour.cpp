@@ -11,6 +11,8 @@ PlayerAttackBehaviour::PlayerAttackBehaviour(bool isInFSMParam)
 	
 }
 
+
+
 void PlayerAttackBehaviour::Act()
 {
 	if(canAttack)
@@ -25,14 +27,9 @@ void PlayerAttackBehaviour::Act()
 			{
 				case Dagger:
 				{
-					GameObject* slash = SceneManager::Instance()->createGameObject("Slash", (tileSize * (currentPlayerPos + attackDir)));
-					slash->getTransform()->setSize(glm::vec2(48, 48));
-					AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
-					slashSprite->setPivot(Pivot::Center);
-					slash->addComponent<DestroyAfterAnimation>();
+					createSlashGameObject((tileSize * (currentPlayerPos + attackDir)));
 					break;
 				}
-
 				case Sword:
 				{
 					if (attackDir == glm::fvec2{ 0,1 } || attackDir == glm::fvec2{ 0,-1 })
@@ -44,11 +41,7 @@ void PlayerAttackBehaviour::Act()
 						attackPositions.assign_range(attackPosSword);
 						for (glm::fvec2 attackPos : attackPositions)
 						{
-							GameObject* slash = SceneManager::Instance()->createGameObject("Slash", attackPos);
-							slash->getTransform()->setSize(glm::vec2(48, 48));
-							AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
-							slashSprite->setPivot(Pivot::Center);
-							slash->addComponent<DestroyAfterAnimation>();
+							createSlashGameObject(attackPos);
 						}
 					}
 					else
@@ -60,11 +53,7 @@ void PlayerAttackBehaviour::Act()
 						attackPositions.assign_range(attackPosSword);
 						for (glm::fvec2 attackPos : attackPositions)
 						{
-							GameObject* slash = SceneManager::Instance()->createGameObject("Slash", attackPos);
-							slash->getTransform()->setSize(glm::vec2(48, 48));
-							AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
-							slashSprite->setPivot(Pivot::Center);
-							slash->addComponent<DestroyAfterAnimation>();
+							createSlashGameObject(attackPos);
 						}
 					}
 					break;
@@ -77,15 +66,10 @@ void PlayerAttackBehaviour::Act()
 					attackPositions.assign_range(attackPosAxe);
 					for (glm::fvec2 attackPos : attackPositions)
 					{
-						GameObject* slash = SceneManager::Instance()->createGameObject("Slash", attackPos);
-						slash->getTransform()->setSize(glm::vec2(48, 48));
-						AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
-						slashSprite->setPivot(Pivot::Center);
-						slash->addComponent<DestroyAfterAnimation>();
+						createSlashGameObject(attackPos);
 					}
 					break;
 				}
-
 				case Hammer:
 				{
 					glm::fvec2 firstTileinAttackDir = (tileSize * (currentPlayerPos + attackDir));
@@ -100,11 +84,7 @@ void PlayerAttackBehaviour::Act()
 
 						for (glm::fvec2 attackPos : attackPositions)
 						{
-							GameObject* slash = SceneManager::Instance()->createGameObject("Slash", attackPos);
-							slash->getTransform()->setSize(glm::vec2(48, 48));
-							AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
-							slashSprite->setPivot(Pivot::Center);
-							slash->addComponent<DestroyAfterAnimation>();
+							createSlashGameObject(attackPos);
 						}
 					}
 					else
@@ -117,11 +97,7 @@ void PlayerAttackBehaviour::Act()
 
 						for (glm::fvec2 attackPos : attackPositions)
 						{
-							GameObject* slash = SceneManager::Instance()->createGameObject("Slash", attackPos);
-							slash->getTransform()->setSize(glm::vec2(48, 48));
-							AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
-							slashSprite->setPivot(Pivot::Center);
-							slash->addComponent<DestroyAfterAnimation>();
+							createSlashGameObject(attackPos);
 						}
 					}
 					break;
@@ -209,6 +185,15 @@ void PlayerAttackBehaviour::onKeyUpResponse(Griddy::Event* event)
 	}*/
 
 	canAttack = true;
+}
+
+void PlayerAttackBehaviour::createSlashGameObject(glm::fvec2 pos)
+{
+	GameObject* slash = SceneManager::Instance()->createGameObject("Slash", pos);
+	slash->getTransform()->setSize(glm::vec2(48, 48));
+	AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
+	slashSprite->setPivot(Pivot::Center);
+	slash->addComponent<DestroyAfterAnimation>();
 }
 
 FunctionMap PlayerAttackBehaviour::CreateFunctionMap()
