@@ -1,6 +1,8 @@
 #pragma once
 #include "Core\Components\AI\Behaviour.h"
 #include "PlayerController.h"
+#include "Core/Renderer/ResourceManager.h"
+#include "glm/fwd.hpp"
 
 
 enum Weapon

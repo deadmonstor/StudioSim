@@ -1,6 +1,9 @@
 #include "PlayerController.h"
 #include "PlayerFSM.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
+#include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
+#include "Core/Renderer/ResourceManager.h"
 
 PlayerController::PlayerController()
 {
@@ -8,8 +11,7 @@ PlayerController::PlayerController()
 
 void PlayerController::createPlayer()
 {
-
-	glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
+	const glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
 	playerPTR = SceneManager::Instance()->createGameObject("Player", glm::vec2{ 30, 20 } * tileSize);
 	playerPTR->getTransform()->setSize(glm::vec2{ 32,32 });
 

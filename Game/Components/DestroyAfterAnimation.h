@@ -12,5 +12,5 @@ class DestroyAfterAnimation : public Component
 public:
 	virtual void start() override;
 	virtual void destroy() override;
-	void onAnimationEnded(OnAnimationEnded* event);
+	void onAnimationEnded(const OnAnimationEnded* event);
 };

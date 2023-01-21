@@ -12,8 +12,8 @@
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
-#include "TurnManager.h"
-#include "PlayerController.h"
+#include "Components/TurnManager.h"
+#include "Components/PlayerController.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {

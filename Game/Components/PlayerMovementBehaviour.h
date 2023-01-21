@@ -1,13 +1,13 @@
 #pragma once
-#include "Core\Components\AI\Behaviour.h"
-#include <Library/glm/ext/vector_float2.hpp>
 #include "PlayerController.h"
+#include "Core/Components/AI/Behaviour.h"
+#include "glm/fwd.hpp"
 
 class PlayerMovementBehaviour : public Behaviour
 {
 public:
 	PlayerMovementBehaviour();
-	PlayerMovementBehaviour(bool isInFSMParam);
+	explicit PlayerMovementBehaviour(bool isInFSMParam);
 	glm::fvec2 moveDir;
 	glm::fvec2 origPos;
 	bool canMove = true;

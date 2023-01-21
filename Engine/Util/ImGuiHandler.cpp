@@ -355,6 +355,10 @@ void ImGuiHandler::cleanup()
 
 void ImGuiHandler::onKeyDown(const int key, const int scancode, const int action, const int mods)
 {
+#if (NDEBUG)
+	return;
+#endif
+
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		Griddy::Events::invoke<OnDebugEventChanged>(DebugPauseGame);

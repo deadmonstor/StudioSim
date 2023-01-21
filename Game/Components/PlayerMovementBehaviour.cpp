@@ -1,7 +1,8 @@
 #include "PlayerMovementBehaviour.h"
-#include <Util/Events/EngineEvents.h>
 #include <Core/Grid/GridSystem.h>
+#include <Util/Events/EngineEvents.h>
 #include "PlayerAttackBehaviour.h"
+#include "Core/Components/Transform.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour()
 {
@@ -24,12 +25,11 @@ void PlayerMovementBehaviour::Act()
 	{
 		TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
 		glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
-
-
+		
 		if (curTileHolder->tile != nullptr && !curTileHolder->isWall)
 		{
 			PlayerController::Instance()->playerPTR->getTransform()->
-				setPosition(gridSize * (origPos + moveDir));
+				setPosition(tileSize * (origPos + moveDir));
 
 			origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
 		}

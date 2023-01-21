@@ -1,6 +1,6 @@
 #pragma once
-#include "Core/Components/AI/StateMachine.h"
 #include "PlayerMovementBehaviour.h"
+#include "Core/Components/AI/StateMachine.h"
 
 class PlayerFSM : public StateMachine
 {

@@ -14,7 +14,7 @@ void DestroyAfterAnimation::destroy()
 		Griddy::Events::unsubscribe(this, &DestroyAfterAnimation::onAnimationEnded, onAnimationEndedEventID);
 }
 
-void DestroyAfterAnimation::onAnimationEnded(OnAnimationEnded* event)
+void DestroyAfterAnimation::onAnimationEnded(const OnAnimationEnded* event)
 {
 	if (event->animatedSpriteRenderer->getOwner() == getOwner())
 	{
