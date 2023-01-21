@@ -22,8 +22,10 @@ void PlayerMovementBehaviour::Act()
 	//move player
 	if (canMove)
 	{
-		GridHolder* curTileHolder = GridSystem::Instance()->getGridHolder(0, origPos + moveDir);
+
+		TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
 		glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
+
 
 		if (curTileHolder->tile != nullptr && !curTileHolder->isWall)
 		{

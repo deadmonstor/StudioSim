@@ -479,6 +479,7 @@
     <ClInclude Include="Library\imgui\imstb_truetype.h" />
     <ClInclude Include="Core\Components\AI\StateMachine.h" />
     <ClInclude Include="Core\Components\AI\PlannedBehaviour.h" />
+    <ClInclude Include="Core\Grid\PathfindingMachine.h" />
     <ClInclude Include="Util\Events\Events.h" />
     <ClInclude Include="Util\Events\FunctionHandler.h" />
     <ClInclude Include="Util\Events\EngineEvents.h" />
@@ -520,6 +521,7 @@
     <ClCompile Include="Library\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Core\Components\AI\StateMachine.cpp" />
     <ClCompile Include="Core\Components\AI\PlannedBehaviour.cpp" />
+    <ClCompile Include="Core\Grid\PathfindingMachine.cpp" />
     <ClCompile Include="Util\ImGuiHandler.cpp" />
     <ClCompile Include="Util\Time.cpp" />
   </ItemGroup>

@@ -24,7 +24,7 @@ void GridSystem::clearGrid(const int id)
 	{
 		for(int y = 0; y < gridSize.y; y++)
 		{
-			GridHolder* grid_holder = gridLayers[id]->internalMap[x][y] = new GridHolder();
+			TileHolder* grid_holder = gridLayers[id]->internalMap[x][y] = new TileHolder();
 			grid_holder->isOccupied = false;
 
 			const auto tile = new Tile(Texture());
@@ -101,12 +101,17 @@ void GridSystem::onDebugEvent(const OnDebugEventChanged* event)
 		shouldRender = !shouldRender;
 }
 
-GridHolder* GridSystem::getGridHolder(const int id, const glm::ivec2& _pos)
+TileHolder* GridSystem::getTileHolder(const int id, const glm::ivec2& _pos)
 {
 	if (_pos.x < 0 || _pos.x > gridSize.x || _pos.y < 0 || _pos.y > gridSize.y)
 		return nullptr;
 
 	return gridLayers[id]->internalMap[_pos.x][_pos.y];
+}
+
+GridLayer* GridSystem::GetGridLayer(const int id)
+{
+	return gridLayers[id];
 }
 
 Tile* GridSystem::getTile(const int id, const glm::ivec2& _pos)
@@ -183,7 +188,7 @@ void GridSystem::loadFromFile(const int mapID, const std::string& fileName)
 		{
 			int i = std::stoi(curNumber);
 			GridLayer* layer = gridLayers[mapID];
-			GridHolder* grid_holder = layer->internalMap[x][y];
+			TileHolder* grid_holder = layer->internalMap[x][y];
 
 			if (Texture texture = gridLayers[mapID]->textureMap[i]; texture.Height != 0 && texture.Width != 0)
 				grid_holder->tile->SetTexture(texture);

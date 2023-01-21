@@ -21,7 +21,8 @@ void PlayerController::createPlayer()
 
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
-	playerPTR->addComponent<Light>();
+	Light* light = playerPTR->addComponent<Light>();
+	light->setFalloff({0.75f, 0.75f, 10.0f});
 	Renderer::Instance()->setCamera(cameraComponent);
 }
 
