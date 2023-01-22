@@ -25,9 +25,11 @@ public:
 	Weapon weaponClassEquipped;
 	bool canAttack;
 private:
+	
 	void Act() override;
 	void onKeyDownResponse(Griddy::Event*);
 	void onKeyUpResponse(Griddy::Event*);
+	void createSlashGameObject(glm::fvec2 pos);
 	
 
 protected:

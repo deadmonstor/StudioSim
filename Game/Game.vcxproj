@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
+    <ClInclude Include="Components\EnemyTest.h" />
     <ClInclude Include="Components\FireballComponent.h" />
     <ClInclude Include="Components\PlayerAttackBehaviour.h" />
     <ClInclude Include="Components\PlayerController.h" />
@@ -29,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Components\DestroyAfterAnimation.cpp" />
+    <ClCompile Include="Components\EnemyTest.cpp" />
     <ClCompile Include="Components\FireballComponent.cpp" />
     <ClCompile Include="Components\PlayerAttackBehaviour.cpp" />
     <ClCompile Include="Components\PlayerController.cpp" />
