@@ -24,6 +24,7 @@
     <ClInclude Include="Core\Components\SpriteComponent.h" />
     <ClInclude Include="Core\Components\TextRenderer.h" />
     <ClInclude Include="Core\Components\Transform.h" />
+    <ClInclude Include="Core\Components\Health.h" />
     <ClInclude Include="Core\GameObject.h" />
     <ClInclude Include="Core\Grid\GridSystem.h" />
     <ClInclude Include="Core\Grid\Tile.h" />
@@ -495,6 +496,7 @@
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Components\AnimatedSpriteRenderer.cpp" />
     <ClCompile Include="Core\Components\Camera.cpp" />
+    <ClCompile Include="Core\Components\Health.cpp" />
     <ClCompile Include="Core\Components\Light.cpp" />
     <ClCompile Include="Core\Components\SpriteComponent.cpp" />
     <ClCompile Include="Core\Components\TextRenderer.cpp" />

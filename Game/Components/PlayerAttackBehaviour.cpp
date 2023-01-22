@@ -1,8 +1,11 @@
 #include "PlayerAttackBehaviour.h"
-#include "PlayerMovementBehaviour.h"
-#include "Core/Grid/GridSystem.h"
+
+#include <Core/Components/Health.h>
 #include "DestroyAfterAnimation.h"
+#include "PlayerMovementBehaviour.h"
+#include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
+#include "Core/Grid/GridSystem.h"
 
 PlayerAttackBehaviour::PlayerAttackBehaviour(bool isInFSMParam)
 {
@@ -10,8 +13,6 @@ PlayerAttackBehaviour::PlayerAttackBehaviour(bool isInFSMParam)
 	map = CreateFunctionMap();
 	
 }
-
-
 
 void PlayerAttackBehaviour::Act()
 {
@@ -27,16 +28,16 @@ void PlayerAttackBehaviour::Act()
 			{
 				case Dagger:
 				{
-					createSlashGameObject((tileSize * (currentPlayerPos + attackDir)));
+					createSlashGameObject(currentPlayerPos + attackDir);
 					break;
 				}
 				case Sword:
 				{
 					if (attackDir == glm::fvec2{ 0,1 } || attackDir == glm::fvec2{ 0,-1 })
 					{
-						std::vector<glm::fvec2> attackPosSword = { (tileSize * (currentPlayerPos + attackDir)),
-							(tileSize * (currentPlayerPos + attackDir + glm::fvec2(-1, 0))) ,
-							(tileSize * (currentPlayerPos + attackDir + glm::fvec2(1, 0))) };
+						std::vector<glm::fvec2> attackPosSword = { (currentPlayerPos + attackDir),
+							(currentPlayerPos + attackDir + glm::fvec2(-1, 0)) ,
+							(currentPlayerPos + attackDir + glm::fvec2(1, 0)) };
 
 						attackPositions.assign_range(attackPosSword);
 						for (glm::fvec2 attackPos : attackPositions)
@@ -46,9 +47,9 @@ void PlayerAttackBehaviour::Act()
 					}
 					else
 					{
-						std::vector<glm::fvec2> attackPosSword = { (tileSize * (currentPlayerPos + attackDir)),
-							(tileSize * (currentPlayerPos + attackDir + glm::fvec2(0, 1))) ,
-							(tileSize * (currentPlayerPos + attackDir + glm::fvec2(0, -1))) };
+						std::vector<glm::fvec2> attackPosSword = { (currentPlayerPos + attackDir),
+							(currentPlayerPos + attackDir + glm::fvec2(0, 1)) ,
+							(currentPlayerPos + attackDir + glm::fvec2(0, -1)) };
 
 						attackPositions.assign_range(attackPosSword);
 						for (glm::fvec2 attackPos : attackPositions)
@@ -60,8 +61,8 @@ void PlayerAttackBehaviour::Act()
 				}
 				case Axe:
 				{
-					std::vector<glm::fvec2> attackPosAxe = { (tileSize * (currentPlayerPos + attackDir)),
-						(tileSize * (currentPlayerPos + attackDir + attackDir)) };
+					std::vector<glm::fvec2> attackPosAxe = { (currentPlayerPos + attackDir),
+						(currentPlayerPos + attackDir + attackDir) };
 
 					attackPositions.assign_range(attackPosAxe);
 					for (glm::fvec2 attackPos : attackPositions)
@@ -72,13 +73,13 @@ void PlayerAttackBehaviour::Act()
 				}
 				case Hammer:
 				{
-					glm::fvec2 firstTileinAttackDir = (tileSize * (currentPlayerPos + attackDir));
-					glm::fvec2 secondTileinAttackDir = (tileSize * (currentPlayerPos + attackDir + attackDir));
+					glm::fvec2 firstTileinAttackDir = (currentPlayerPos + attackDir);
+					glm::fvec2 secondTileinAttackDir = (currentPlayerPos + attackDir + attackDir);
 					if (attackDir == glm::fvec2{ 0,1 } || attackDir == glm::fvec2{ 0,-1 })
 					{
-						std::vector<glm::fvec2> attackPosHammer = { firstTileinAttackDir, firstTileinAttackDir + (tileSize * glm::fvec2(1, 0)),
-						firstTileinAttackDir + (tileSize * glm::fvec2(-1, 0)), secondTileinAttackDir, secondTileinAttackDir + (tileSize * glm::fvec2(1, 0)),
-						secondTileinAttackDir + (tileSize * glm::fvec2(-1, 0)) };
+						std::vector<glm::fvec2> attackPosHammer = { firstTileinAttackDir, firstTileinAttackDir + glm::fvec2(1, 0),
+						firstTileinAttackDir + glm::fvec2(-1, 0), secondTileinAttackDir, secondTileinAttackDir + glm::fvec2(1, 0),
+						secondTileinAttackDir + glm::fvec2(-1, 0) };
 
 						attackPositions.assign_range(attackPosHammer);
 
@@ -89,9 +90,9 @@ void PlayerAttackBehaviour::Act()
 					}
 					else
 					{
-						std::vector<glm::fvec2> attackPosHammer = { firstTileinAttackDir, firstTileinAttackDir + (tileSize * glm::fvec2(0, 1)),
-						firstTileinAttackDir + (tileSize * glm::fvec2(0, -1)), secondTileinAttackDir, secondTileinAttackDir + (tileSize * glm::fvec2(0, 1)),
-						secondTileinAttackDir + (tileSize * glm::fvec2(0, -1)) };
+						std::vector<glm::fvec2> attackPosHammer = { firstTileinAttackDir, firstTileinAttackDir + glm::fvec2(0, 1),
+						firstTileinAttackDir + glm::fvec2(0, -1), secondTileinAttackDir, secondTileinAttackDir + glm::fvec2(0, 1),
+						secondTileinAttackDir + glm::fvec2(0, -1) };
 
 						attackPositions.assign_range(attackPosHammer);
 
@@ -187,9 +188,27 @@ void PlayerAttackBehaviour::onKeyUpResponse(Griddy::Event* event)
 	canAttack = true;
 }
 
-void PlayerAttackBehaviour::createSlashGameObject(glm::fvec2 pos)
+void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 {
-	GameObject* slash = SceneManager::Instance()->createGameObject("Slash", pos);
+	const TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, pos);
+	GameObject* gameObject = curTileHolder->gameObjectSatOnTile;
+	
+	if (gameObject != nullptr)
+	{
+		if (gameObject->hasComponent(typeid(Health)))
+		{
+			auto* health = gameObject->getComponent<Health>();
+			health->setHealth(health->getHealth() - 50);
+
+			// TODO: This is probably shitty 
+			if (gameObject->isBeingDeleted())
+				GridSystem::Instance()->resetSatOnTile(0, pos);
+		}
+	}
+
+	// get world position from grid position
+	const glm::fvec2 worldPos = GridSystem::Instance()->getWorldPosition(pos);
+	GameObject* slash = SceneManager::Instance()->createGameObject("Slash", worldPos);
 	slash->getTransform()->setSize(glm::vec2(48, 48));
 	AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
 	slashSprite->setPivot(Pivot::Center);

@@ -10,7 +10,9 @@ class Texture;
 struct TileHolder
 {
 	Tile* tile;
-	bool isOccupied;
+	GameObject* gameObjectSatOnTile;
+
+	bool isSpawned;
 	bool isWall;
 };
 
@@ -45,8 +47,8 @@ public:
 	std::map<int, SortingLayer&>& getOrderMap() { return this->orderSortingMap; }
 	glm::ivec2 getGridSize() { return gridSize; }
 	glm::fvec2 getTileSize() { return tileSize; }
-	TileHolder* getTileHolder(const int id, const glm::ivec2& _pos);
-	GridLayer* GetGridLayer(const int id);
+	TileHolder* getTileHolder(int id, const glm::ivec2& _pos);
+	GridLayer* GetGridLayer(int id);
 
 	void init(glm::fvec2 _tileSize, glm::ivec2 _gridSize);
 	void clearGrid(int id);
@@ -56,5 +58,9 @@ public:
 	
 	Tile* getTile(int id, const glm::ivec2& _pos);
 	std::vector<std::pair<glm::vec2, Tile*>> getNeighbours(int id, glm::vec2 pos);
+	glm::vec2 getTilePosition(glm::vec2 vec) const;
+	glm::vec2 getWorldPosition(glm::vec2 vec) const;
+	void setSatOnTile(int id, glm::vec2 vec, GameObject* enemy);
+	void resetSatOnTile(int id, glm::vec2 vec);
 
 };

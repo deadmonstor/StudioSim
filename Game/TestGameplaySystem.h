@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Components/EnemyTest.h"
 #include "Core/Input.h"
 #include "Components/FireballComponent.h"
 #include "Core/Components/AI/StateMachine.h"
@@ -105,6 +106,17 @@ public:
 		fireball->addComponent<FireballComponent>();
 		sm = fireball->addComponent<StateMachine>();
 	}
+
+	void createEnemy(const glm::vec2 pos)
+	{
+		const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
+		
+		auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy", tileWorldSpace);
+		enemy->getTransform()->setSize(glm::vec2(48, 24));
+		enemy->addComponent<EnemyTest>();
+
+		GridSystem::Instance()->setSatOnTile(0, pos, enemy);
+	}
 	
 	void TestFuncLewis(const OnSceneChanged* event) 
 	{
@@ -185,6 +197,13 @@ public:
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
 		sprites.push_back(sprite);*/
+
+		createEnemy(glm::vec2(20, 20));
+		createEnemy(glm::vec2(20, 21));
+		createEnemy(glm::vec2(20, 22));
+		createEnemy(glm::vec2(20, 23));
+		createEnemy(glm::vec2(20, 24));
+		createEnemy(glm::vec2(20, 25));
 		
 		//Slime Hurt Anim
 		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
