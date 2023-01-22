@@ -130,7 +130,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\Engine\;$(SolutionDir)\Library\fModLib\x64;$(SolutionDir)\Engine\Library;%(AdditionalLibraryDirectories);$(SolutionDir)\Library\glfw-3.3.8.bin.WIN64\lib-vc2022</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

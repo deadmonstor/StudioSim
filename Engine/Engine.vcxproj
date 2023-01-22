@@ -604,7 +604,7 @@ copy "$(SolutionDir)Engine\Library\fmodL.dll" "$(OutDir)"
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
-	  <AdditionalIncludeDirectories>$(SolutionDir)\Engine\Library\;$(SolutionDir)\Engine\;%(AdditionalLibraryDirectories);$(SolutionDir)\Library\glfw-3.3.8.bin.WIN64\lib-vc2022;C:\Users\p015844j\Documents\GitHub\StudioSim\Library\FreeType</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Engine\Library\;$(SolutionDir)\Engine\;%(AdditionalLibraryDirectories);$(SolutionDir)\Library\glfw-3.3.8.bin.WIN64\lib-vc2022;C:\Users\p015844j\Documents\GitHub\StudioSim\Library\FreeType</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -625,8 +625,8 @@ copy "$(SolutionDir)Engine\Library\fmodL.dll" "$(OutDir)"
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-     <AdditionalIncludeDirectories>$(SolutionDir)\Engine\Library\;$(SolutionDir)\Engine\;%(AdditionalLibraryDirectories);$(SolutionDir)\Library\glfw-3.3.8.bin.WIN64\lib-vc2022</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Engine\Library\;$(SolutionDir)\Engine\;%(AdditionalLibraryDirectories);$(SolutionDir)\Library\glfw-3.3.8.bin.WIN64\lib-vc2022</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -634,7 +634,7 @@ copy "$(SolutionDir)Engine\Library\fmodL.dll" "$(OutDir)"
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-	    <PostBuildEvent>
+    <PostBuildEvent>
       <Command>copy "$(SolutionDir)Engine\Library\fmod.dll" "$(OutDir)"
 copy "$(SolutionDir)Engine\Library\fmodL.dll" "$(OutDir)"
 
