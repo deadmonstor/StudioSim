@@ -26,9 +26,6 @@ void AnimatedSpriteRenderer::doTextureUpdate()
 
 bool AnimatedSpriteRenderer::doSpriteUpdate()
 {
-	if (this->getOwner()->isBeingDeleted())
-		return true;
-
 	// TODO: When we are really lagging this should "skip" frames
 	if (lastUpdate > Time::getTime() - updateEveryXMS)
 		return true;

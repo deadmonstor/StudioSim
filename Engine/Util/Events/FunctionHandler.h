@@ -28,7 +28,8 @@ namespace Griddy
 
 		void call(Event *event) override
 		{
-			(instance->*func)(static_cast<EventType*>(event));
+			EventType* eventCasted = static_cast<EventType*>(event);
+			(instance->*func)(eventCasted);
 		}
 	private:
 		T* instance;

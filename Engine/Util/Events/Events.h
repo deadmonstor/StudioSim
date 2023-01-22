@@ -20,6 +20,12 @@ namespace Griddy
 			Instance()->invokeInternal(new T(args...));
 		}
 
+		template<typename T, typename... Args>
+		static void invokeWithoutCleanup(Args... args)
+		{
+			Instance()->invokeInternal(new T(args...), true);
+		}
+
 		template<class T, class EventType>
 		static int32_t subscribe(T* instance, void (T::*func)(EventType*))
 		{
@@ -50,7 +56,7 @@ namespace Griddy
 #endif
 
 		template<typename EventType>
-		void invokeInternal(EventType *event)
+		void invokeInternal(EventType *event, bool withoutCleanup = false)
 		{
 			const EventList* list = internalEvents[typeid(EventType)];
 
@@ -83,7 +89,8 @@ namespace Griddy
 				handler->invoke(event);
 			}
 
-			delete event;
+			if (!withoutCleanup)
+				delete event;
 		}
 		
 		struct UnsubscribeData
@@ -108,8 +115,7 @@ namespace Griddy
 				list = new EventList();
 				internalEvents[typeid(EventType)] = list;
 			}
-
-			// TODO: Check if this is slow? 
+			
 			int32_t nextID = 0;
 			for (auto it = reuseIDQueue.begin(); it != reuseIDQueue.end(); ++it)
 			{
@@ -177,6 +183,7 @@ namespace Griddy
 			else
 			{
 				LOG_ERROR("Event not found");
+				abort();
 			}
 		}
 

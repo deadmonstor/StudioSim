@@ -2,7 +2,7 @@
 #include "Renderer.h"
 #include <Windows.h>
 
-#include "Input.h"
+#include "Core/Input.h"
 #include "Lighting.h"
 #include "ResourceManager.h"
 #include "SortingLayer.h"
@@ -161,8 +161,6 @@ void Renderer::cleanup() const
 
 void Renderer::render()
 {
-	glClearColor(0, 0, 0, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -177,16 +175,19 @@ void Renderer::render()
 
 void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation) const
 {
-	/*if (position.x + size.x < 0 || position.x > windowSize.x || position.y + size.y < 0 || position.y > windowSize.y)
-	{
+	if (mainCam == nullptr)
 		return;
-	}*/
-	
+
+	if (!mainCam->isInFrustum(position, size))
+		return;
+
+	const glm::vec2 pivot = spriteRenderer->getPivot();
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 
 	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);
 	auto model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(position, 0.0f));  
+	model = glm::translate(model, glm::vec3(pivot.x * size.x, pivot.y * size.y, 0.0f));  
 
 	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); 
 	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); 
@@ -227,7 +228,6 @@ void Renderer::removeFromRenderQueue(const OnSpriteRendererComponentRemoved* eve
 
 void Renderer::sortRenderQueue()
 {
-	// BUG : Is this slow?
 	std::sort(spriteRenderQueue.begin(), spriteRenderQueue.begin() + static_cast<long long>(spriteRenderQueue.size()),
 	[this](const SpriteComponent* x, const SpriteComponent* y) noexcept -> bool
 	{
@@ -235,6 +235,7 @@ void Renderer::sortRenderQueue()
 		{
 			return x->getSortingOrder() < y->getSortingOrder();
 		}
+		
 		return x->getSortingLayer().getOrder() < y->getSortingLayer().getOrder();
 	});
 }
