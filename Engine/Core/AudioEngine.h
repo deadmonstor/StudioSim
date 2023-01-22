@@ -29,13 +29,13 @@ public:
 	FMOD_VECTOR listenerPosition = {0, 0, 0};
 
 	//Store all of the current channels
-	std::unordered_map<int, FMOD::Channel *> currentChannels;
+	std::map<int, FMOD::Channel *> currentChannels;
 
 	//FMod Channel Groups
-	std::unordered_map<std::string, FMOD::ChannelGroup*> channelGroups;
+	std::map<std::string, FMOD::ChannelGroup*> channelGroups;
 
 	//Store reverb zones
-	std::unordered_map<const int, FMOD::Reverb3D*> reverbZones;
+	std::map<const int, FMOD::Reverb3D*> reverbZones;
 	bool createReverbZone(const int zone);
 	bool setReverbPos(const int zone, const float posX, const float posY, const float minX, const float minY);
 	bool deleteReverbZone(const int zone);
