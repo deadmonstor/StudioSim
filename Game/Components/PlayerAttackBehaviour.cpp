@@ -1,5 +1,4 @@
 #include "PlayerAttackBehaviour.h"
-
 #include <Core/Components/Health.h>
 #include "DestroyAfterAnimation.h"
 #include "PlayerMovementBehaviour.h"
@@ -22,13 +21,16 @@ void PlayerAttackBehaviour::Act()
 		TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, currentPlayerPos + attackDir);
 		glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
 
-		if (curTileHolder->tile != nullptr && !curTileHolder->isWall)
+		if (curTileHolder->tile != nullptr)
 		{
 			switch (weaponClassEquipped)
 			{
 				case Dagger:
 				{
-					createSlashGameObject(currentPlayerPos + attackDir);
+					if (!curTileHolder->isWall)
+					{
+						createSlashGameObject(currentPlayerPos + attackDir);
+					}
 					break;
 				}
 				case Sword:
@@ -42,7 +44,11 @@ void PlayerAttackBehaviour::Act()
 						attackPositions.assign_range(attackPosSword);
 						for (glm::fvec2 attackPos : attackPositions)
 						{
-							createSlashGameObject(attackPos);
+							TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
+							if(!attackTile->isWall)
+							{
+								createSlashGameObject(attackPos);
+							}
 						}
 					}
 					else
@@ -54,7 +60,11 @@ void PlayerAttackBehaviour::Act()
 						attackPositions.assign_range(attackPosSword);
 						for (glm::fvec2 attackPos : attackPositions)
 						{
-							createSlashGameObject(attackPos);
+							TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
+							if (!attackTile->isWall)
+							{
+								createSlashGameObject(attackPos);
+							}
 						}
 					}
 					break;
@@ -67,7 +77,11 @@ void PlayerAttackBehaviour::Act()
 					attackPositions.assign_range(attackPosAxe);
 					for (glm::fvec2 attackPos : attackPositions)
 					{
-						createSlashGameObject(attackPos);
+						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
+						if (!attackTile->isWall)
+						{
+							createSlashGameObject(attackPos);
+						}
 					}
 					break;
 				}
@@ -85,7 +99,11 @@ void PlayerAttackBehaviour::Act()
 
 						for (glm::fvec2 attackPos : attackPositions)
 						{
-							createSlashGameObject(attackPos);
+							TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
+							if (!attackTile->isWall)
+							{
+								createSlashGameObject(attackPos);
+							}
 						}
 					}
 					else
@@ -98,7 +116,11 @@ void PlayerAttackBehaviour::Act()
 
 						for (glm::fvec2 attackPos : attackPositions)
 						{
-							createSlashGameObject(attackPos);
+							TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
+							if (!attackTile->isWall)
+							{
+								createSlashGameObject(attackPos);
+							}
 						}
 					}
 					break;
