@@ -13,14 +13,10 @@
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
-<<<<<<< HEAD
-#include "TurnManager.h"
 #include "ScoreSystem.h"
 #include <string>
-=======
 #include "Components/TurnManager.h"
 #include "Components/PlayerController.h"
->>>>>>> main
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -305,7 +301,6 @@ public:
 			std::string User = "LJP";
 			//ScoreSystem::Instance()->SaveScore(User);
 
-<<<<<<< HEAD
 			m_count++;
 		}
 		
@@ -333,11 +328,6 @@ public:
 		//Player Idle Anim
 		auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
 		testPlayerIdle->getTransform()->setSize(glm::vec2(256, 256));
-=======
-		////Player Idle Anim
-		//auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
-		//testPlayerIdle->getTransform()->setSize(glm::vec2(256, 256));
->>>>>>> main
 
 		//const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
 		//sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
