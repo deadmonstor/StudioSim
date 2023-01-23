@@ -16,7 +16,7 @@ enum Weapon
 class PlayerAttackBehaviour : public Behaviour
 {
 public:
-	PlayerAttackBehaviour() { isInFSM = false; map = CreateFunctionMap(); }
+	PlayerAttackBehaviour();
 	PlayerAttackBehaviour(bool isInFSMParam);
 	glm::fvec2 attackDir;
 	glm::fvec2 currentPlayerPos;
