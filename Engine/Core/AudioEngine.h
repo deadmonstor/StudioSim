@@ -4,6 +4,13 @@
 #include "Util/Logger.h"
 #include "Util/Events/EngineEvents.h"
 
+enum class AudioType
+{
+	SoundEffect = 1,
+	BackgroundMusic = 2
+};
+DEFINE_ENUM_FLAG_OPERATORS(AudioType);
+
 class AudioEngine : public SingletonTemplate<AudioEngine>
 {
 public:
@@ -11,7 +18,7 @@ public:
 	void update();
 	bool checkResult(FMOD_RESULT fmodResult, std::string area);
 	bool loadSound(const char* path, FMOD_MODE fMode);
-	bool playSound(const char *path, bool isPaused, float volume, float positionX, float positionY);
+	bool playSound(const char *path, bool isPaused, float volume, float positionX, float positionY, AudioType audioType);
 	void onDebugEvent(const OnDebugEventChanged* event);
 	void updateListenerPositon(float positionX, float positionY);
 	FMOD::System *fmodSystem = NULL;
@@ -23,6 +30,15 @@ public:
 
 	//Store all of the current channels
 	std::map<int, FMOD::Channel *> currentChannels;
+
+	//FMod Channel Groups
+	std::map<std::string, FMOD::ChannelGroup*> channelGroups;
+
+	//Store reverb zones
+	std::map<const int, FMOD::Reverb3D*> reverbZones;
+	bool createReverbZone(const int zone);
+	bool setReverbPos(const int zone, const float posX, const float posY, const float minX, const float minY);
+	bool deleteReverbZone(const int zone);
 
 	//Channel Stuff
 	FMOD::ChannelGroup* masterChannel;

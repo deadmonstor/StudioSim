@@ -45,6 +45,7 @@ bool AudioEngine::init()
 	{
 		return false;
 	}
+	channelGroups["Master Channel"] = masterChannel;
 
 	//Create groups
 	fmodResult = fmodSystem->createChannelGroup("audioSFX",  &audioEffectsChannel);
@@ -52,12 +53,14 @@ bool AudioEngine::init()
 	{
 		return false;
 	}
+	channelGroups["Audio SFX"] = audioEffectsChannel;
 
 	fmodResult = fmodSystem->createChannelGroup("backgroundMusic", &backgroundMusicChannel);
 	if (!checkResult(fmodResult, "Failed to create backgroundMusic channel"))
 	{
 		return false;
 	}
+	channelGroups["Background Effects"] = backgroundMusicChannel;
 
 	//Add audio channel groups
 	masterChannel->addGroup(audioEffectsChannel);
@@ -113,7 +116,7 @@ bool AudioEngine::loadSound(const char *path, const FMOD_MODE fMode)
 	return true;
 }
 
-bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float positionX, float positionY)
+bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float positionX, float positionY, AudioType audioType)
 {
 	//Debug
 	FMOD_RESULT fmodResult;
@@ -150,6 +153,15 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 	{
 		return false;
 	}
+
+	if (audioType == AudioType::SoundEffect)
+	{
+		fmodChannel->setChannelGroup(channelGroups["Audio SFX"]);
+	}
+	else
+	{
+		fmodChannel->setChannelGroup(channelGroups["Background Music"]);
+	}
 	return true;
 }
 
@@ -158,9 +170,9 @@ void AudioEngine::onDebugEvent(const OnDebugEventChanged* event)
 	if (event->key == DebugPlaySound)
 	{
 		Instance()->loadSound("Sounds\\griddy.mp3", FMOD_3D);
-		Instance()->playSound("Sounds\\griddy.mp3", false, 0.1f, 0, 0);
+		Instance()->playSound("Sounds\\griddy.mp3", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 
-		Instance()->loadSound("Sounds\\doneit.mp3", FMOD_3D);
+		//Instance()->loadSound("Sounds\\doneit.mp3", FMOD_3D);
 		//Instance()->playSound("Sounds\\doneit.mp3", false, 0.1f, 10, 10);
 	}
 }
@@ -170,6 +182,35 @@ void AudioEngine::updateListenerPositon(float positionX, float positionY)
 	listenerPosition = {positionX, positionY, 0};
 }
 
+bool AudioEngine::createReverbZone(const int zone)
+{
+	//Debug
+	FMOD_RESULT fmodResult;
 
+	FMOD::Reverb3D* newReverbZone;
+	fmodResult = fmodSystem->createReverb3D(&newReverbZone);
+	if (!checkResult(fmodResult, "Create Reverb Zone"))
+	{
+		return false;
+	}
 
+	FMOD_REVERB_PROPERTIES prop2 = FMOD_PRESET_CONCERTHALL;
+	newReverbZone->setProperties(&prop2);
+	reverbZones[zone] = newReverbZone;
+	reverbZones[zone]->setActive(true);
+	return true;
+}
 
+bool AudioEngine::setReverbPos(const int zone, const float posX, const float posY, const float minX, const float minY)
+{
+	reverbZones[zone]->set3DAttributes(new FMOD_VECTOR{ posX, posY, 0} , minX, minY);
+	return true;
+}
+
+bool AudioEngine::deleteReverbZone(const int zone)
+{
+	reverbZones[zone]->setActive(false);
+	reverbZones[zone]->release();
+	reverbZones.erase(zone);
+	return true;
+}
