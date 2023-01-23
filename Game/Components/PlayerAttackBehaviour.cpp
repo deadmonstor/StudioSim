@@ -5,12 +5,20 @@
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
+#include "Core/AudioEngine.h"
+
+PlayerAttackBehaviour::PlayerAttackBehaviour()
+{
+	isInFSM = false; 
+	map = CreateFunctionMap();
+	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
+}
 
 PlayerAttackBehaviour::PlayerAttackBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
 	map = CreateFunctionMap();
-	
+	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
 }
 
 void PlayerAttackBehaviour::Act()
@@ -28,6 +36,7 @@ void PlayerAttackBehaviour::Act()
 				if (!curTileHolder->isWall)
 				{
 					createSlashGameObject(currentPlayerPos + attackDir);
+					
 				}
 				break;
 			}
@@ -245,6 +254,7 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 	AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
 	slashSprite->setPivot(Pivot::Center);
 	slash->addComponent<DestroyAfterAnimation>();
+	AudioEngine::Instance()->playSound("Sounds\\AirSlash.wav", false, 0.3f, 0, 0);
 }
 
 FunctionMap PlayerAttackBehaviour::CreateFunctionMap()

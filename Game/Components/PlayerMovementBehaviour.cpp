@@ -3,18 +3,21 @@
 #include <Util/Events/EngineEvents.h>
 #include "PlayerAttackBehaviour.h"
 #include "Core/Components/Transform.h"
+#include "Core/AudioEngine.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour()
 {
 	isInFSM = false; 
 	map = CreateFunctionMap(); 
 	origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
+	AudioEngine::Instance()->loadSound("Sounds\\step.wav", FMOD_3D);
 }
 
 PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
 	origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition())/GridSystem::Instance()->getTileSize();
+	AudioEngine::Instance()->loadSound("Sounds\\step.wav", FMOD_3D);
 	map = CreateFunctionMap();
 }
 
@@ -31,6 +34,7 @@ void PlayerMovementBehaviour::Act()
 			setPosition(tileSize * (origPos + moveDir));
 
 		origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
+		AudioEngine::Instance()->playSound("Sounds\\step.wav", false, 0.1f, 0, 0);
 	}
 
 	canMove = false;
