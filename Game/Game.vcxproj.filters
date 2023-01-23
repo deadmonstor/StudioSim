@@ -21,12 +21,6 @@
     <ClCompile Include="Components\FireballComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TurnComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TurnManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="System\Inventory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -49,6 +43,12 @@
 >>>>>>> main
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\TurnComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\TurnManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h">
@@ -58,12 +58,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\FireballComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TurnComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TurnManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\FireballComponent.h">
@@ -89,6 +83,12 @@
     </ClInclude>
     <ClInclude Include="Components\PlayerMovementBehaviour.h">
 >>>>>>> main
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\TurnComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\TurnManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

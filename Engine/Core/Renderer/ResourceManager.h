@@ -14,6 +14,7 @@ class ResourceManager
 public:
 
 	static Shader    LoadShader(const char *vShaderFile, const char *fShaderFile, const char *gShaderFile, std::string name);
+	static bool		 HasShader(std::string name);
 	static Shader    GetShader(std::string name);
 
 	static Texture            LoadTexture(const char *file, std::string name);

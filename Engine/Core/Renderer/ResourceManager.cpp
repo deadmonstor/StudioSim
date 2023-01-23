@@ -19,12 +19,24 @@ std::map<std::string, FMOD::Sound*>     ResourceManager::Sounds;
 
 Shader ResourceManager::LoadShader(const char *vShaderFile, const char *fShaderFile, const char *gShaderFile, std::string name)
 {
+    LOG_INFO("Loading shader: " + name);
+    
     Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
     return Shaders[name];
 }
 
+bool ResourceManager::HasShader(const std::string name)
+{
+    return Shaders.contains(name);
+}
+
 Shader ResourceManager::GetShader(const std::string name)
 {
+    if (!HasShader(name))
+    {
+        LOG_ERROR("ERROR::SHADER: Failed to find shader with name: " + name);
+    }
+    
     return Shaders[name];
 }
 
@@ -58,6 +70,11 @@ std::list<Texture> ResourceManager::LoadTextureArray(const char* folder,
 
 Texture ResourceManager::GetTexture(std::string name)
 {
+    if (!Textures.contains(name))
+    {
+        LOG_ERROR("ERROR::TEXTURE: Failed to find texture with name: " + name);
+    }
+    
     return Textures[name];
 }
 
@@ -69,7 +86,12 @@ void ResourceManager::LoadSound(const char *path, FMOD_MODE fMode, FMOD::System 
 }
 
 FMOD::Sound *ResourceManager::GetSound(const char *path) 
-{ 
+{
+    if (!Sounds.contains(path))
+    {
+        LOG_ERROR("ERROR::SOUND: Failed to find sound with path: " + std::string(path));
+    }
+    
     return Sounds[path];
 }
 
@@ -169,7 +191,6 @@ Texture ResourceManager::loadTextureFromFile(const char *file)
     int width, height, nrChannels;
     unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
 
-    // TODO: Check if this is correct
     if (nrChannels == 4)
     {
         texture.Internal_Format = GL_RGBA;
@@ -179,13 +200,14 @@ Texture ResourceManager::loadTextureFromFile(const char *file)
     if (!stbi_failure_reason())
     {
         texture.Generate(width, height, data);
-        stbi_image_free(data);
     }
     else
     {
         LOG_ERROR("ERROR::TEXTURE: Failed to load texture " + std::string(file));
         LOG_ERROR(stbi_failure_reason());
     }
+
+    stbi_image_free(data);
     
     return texture;
 }

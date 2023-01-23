@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
+    <ClInclude Include="Components\EnemyTest.h" />
     <ClInclude Include="Components\FireballComponent.h" />
     <ClInclude Include="Components\PlayerAttackBehaviour.h" />
     <ClInclude Include="Components\PlayerController.h" />
@@ -30,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Components\DestroyAfterAnimation.cpp" />
+    <ClCompile Include="Components\EnemyTest.cpp" />
     <ClCompile Include="Components\FireballComponent.cpp" />
     <ClCompile Include="Components\PlayerAttackBehaviour.cpp" />
     <ClCompile Include="Components\PlayerController.cpp" />
@@ -137,7 +139,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\Engine\;$(SolutionDir)\Library\fModLib\x64;$(SolutionDir)\Engine\Library;%(AdditionalLibraryDirectories);$(SolutionDir)\Library\glfw-3.3.8.bin.WIN64\lib-vc2022</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
