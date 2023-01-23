@@ -158,7 +158,6 @@ static std::map<std::string, std::string> debugScenes
 {
 	{"Debug Rendering", "renderScene"},
 	{"Debug Scene", "debugScene"},
-	{"Debug Inventory", "testInventory"},
 };
 
 void ImGuiHandler::update()
