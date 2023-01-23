@@ -240,7 +240,7 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 	{
 		if (gameObject->hasComponent(typeid(Health)))
 		{
-			AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.3f, 0, 0);
+			AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 0, 0);
 
 			auto* health = gameObject->getComponent<Health>();
 			health->setHealth(health->getHealth() - 50);
