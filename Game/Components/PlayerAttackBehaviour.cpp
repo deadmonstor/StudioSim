@@ -12,6 +12,7 @@ PlayerAttackBehaviour::PlayerAttackBehaviour()
 	isInFSM = false; 
 	map = CreateFunctionMap();
 	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 PlayerAttackBehaviour::PlayerAttackBehaviour(bool isInFSMParam)
@@ -19,6 +20,7 @@ PlayerAttackBehaviour::PlayerAttackBehaviour(bool isInFSMParam)
 	isInFSM = isInFSMParam;
 	map = CreateFunctionMap();
 	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 void PlayerAttackBehaviour::Act()
@@ -238,6 +240,8 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 	{
 		if (gameObject->hasComponent(typeid(Health)))
 		{
+			AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.3f, 0, 0);
+
 			auto* health = gameObject->getComponent<Health>();
 			health->setHealth(health->getHealth() - 50);
 
