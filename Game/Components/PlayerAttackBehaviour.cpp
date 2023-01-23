@@ -15,66 +15,47 @@ PlayerAttackBehaviour::PlayerAttackBehaviour(bool isInFSMParam)
 
 void PlayerAttackBehaviour::Act()
 {
-	if(canAttack)
+	currentPlayerPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
+	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, currentPlayerPos + attackDir);
+	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
+
+	if (curTileHolder->tile != nullptr)
 	{
-		currentPlayerPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
-		TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, currentPlayerPos + attackDir);
-		glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
-
-		if (curTileHolder->tile != nullptr)
+		switch (weaponClassEquipped)
 		{
-			switch (weaponClassEquipped)
+			case Dagger:
 			{
-				case Dagger:
+				if (!curTileHolder->isWall)
 				{
-					if (!curTileHolder->isWall)
-					{
-						createSlashGameObject(currentPlayerPos + attackDir);
-					}
-					break;
+					createSlashGameObject(currentPlayerPos + attackDir);
 				}
-				case Sword:
+				break;
+			}
+			case Sword:
+			{
+				if (attackDir == glm::fvec2{ 0,1 } || attackDir == glm::fvec2{ 0,-1 })
 				{
-					if (attackDir == glm::fvec2{ 0,1 } || attackDir == glm::fvec2{ 0,-1 })
-					{
-						std::vector<glm::fvec2> attackPosSword = { (currentPlayerPos + attackDir),
-							(currentPlayerPos + attackDir + glm::fvec2(-1, 0)) ,
-							(currentPlayerPos + attackDir + glm::fvec2(1, 0)) };
+					std::vector<glm::fvec2> attackPosSword = { (currentPlayerPos + attackDir),
+						(currentPlayerPos + attackDir + glm::fvec2(-1, 0)) ,
+						(currentPlayerPos + attackDir + glm::fvec2(1, 0)) };
 
-						attackPositions.assign_range(attackPosSword);
-						for (glm::fvec2 attackPos : attackPositions)
+					attackPositions.assign_range(attackPosSword);
+					for (glm::fvec2 attackPos : attackPositions)
+					{
+						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
+						if(!attackTile->isWall && attackTile->isSpawned)
 						{
-							TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-							if(!attackTile->isWall && attackTile->isSpawned)
-							{
-								createSlashGameObject(attackPos);
-							}
+							createSlashGameObject(attackPos);
 						}
 					}
-					else
-					{
-						std::vector<glm::fvec2> attackPosSword = { (currentPlayerPos + attackDir),
-							(currentPlayerPos + attackDir + glm::fvec2(0, 1)) ,
-							(currentPlayerPos + attackDir + glm::fvec2(0, -1)) };
-
-						attackPositions.assign_range(attackPosSword);
-						for (glm::fvec2 attackPos : attackPositions)
-						{
-							TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-							if (!attackTile->isWall && attackTile->isSpawned)
-							{
-								createSlashGameObject(attackPos);
-							}
-						}
-					}
-					break;
 				}
-				case Axe:
+				else
 				{
-					std::vector<glm::fvec2> attackPosAxe = { (currentPlayerPos + attackDir),
-						(currentPlayerPos + attackDir + attackDir) };
+					std::vector<glm::fvec2> attackPosSword = { (currentPlayerPos + attackDir),
+						(currentPlayerPos + attackDir + glm::fvec2(0, 1)) ,
+						(currentPlayerPos + attackDir + glm::fvec2(0, -1)) };
 
-					attackPositions.assign_range(attackPosAxe);
+					attackPositions.assign_range(attackPosSword);
 					for (glm::fvec2 attackPos : attackPositions)
 					{
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
@@ -83,55 +64,72 @@ void PlayerAttackBehaviour::Act()
 							createSlashGameObject(attackPos);
 						}
 					}
-					break;
 				}
-				case Hammer:
+				break;
+			}
+			case Axe:
+			{
+				std::vector<glm::fvec2> attackPosAxe = { (currentPlayerPos + attackDir),
+					(currentPlayerPos + attackDir + attackDir) };
+
+				attackPositions.assign_range(attackPosAxe);
+				for (glm::fvec2 attackPos : attackPositions)
 				{
-					glm::fvec2 firstTileinAttackDir = (currentPlayerPos + attackDir);
-					glm::fvec2 secondTileinAttackDir = (currentPlayerPos + attackDir + attackDir);
-					if (attackDir == glm::fvec2{ 0,1 } || attackDir == glm::fvec2{ 0,-1 })
+					TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
+					if (!attackTile->isWall && attackTile->isSpawned)
 					{
-						std::vector<glm::fvec2> attackPosHammer = { firstTileinAttackDir, firstTileinAttackDir + glm::fvec2(1, 0),
-						firstTileinAttackDir + glm::fvec2(-1, 0), secondTileinAttackDir, secondTileinAttackDir + glm::fvec2(1, 0),
-						secondTileinAttackDir + glm::fvec2(-1, 0) };
-
-						attackPositions.assign_range(attackPosHammer);
-
-						for (glm::fvec2 attackPos : attackPositions)
-						{
-							TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-							if (!attackTile->isWall && attackTile->isSpawned)
-							{
-								createSlashGameObject(attackPos);
-							}
-						}
+						createSlashGameObject(attackPos);
 					}
-					else
-					{
-						std::vector<glm::fvec2> attackPosHammer = { firstTileinAttackDir, firstTileinAttackDir + glm::fvec2(0, 1),
-						firstTileinAttackDir + glm::fvec2(0, -1), secondTileinAttackDir, secondTileinAttackDir + glm::fvec2(0, 1),
-						secondTileinAttackDir + glm::fvec2(0, -1) };
-
-						attackPositions.assign_range(attackPosHammer);
-
-						for (glm::fvec2 attackPos : attackPositions)
-						{
-							TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-							if (!attackTile->isWall && attackTile->isSpawned)
-							{
-								createSlashGameObject(attackPos);
-							}
-						}
-					}
-					break;
 				}
+				break;
+			}
+			case Hammer:
+			{
+				glm::fvec2 firstTileinAttackDir = (currentPlayerPos + attackDir);
+				glm::fvec2 secondTileinAttackDir = (currentPlayerPos + attackDir + attackDir);
+				if (attackDir == glm::fvec2{ 0,1 } || attackDir == glm::fvec2{ 0,-1 })
+				{
+					std::vector<glm::fvec2> attackPosHammer = { firstTileinAttackDir, firstTileinAttackDir + glm::fvec2(1, 0),
+					firstTileinAttackDir + glm::fvec2(-1, 0), secondTileinAttackDir, secondTileinAttackDir + glm::fvec2(1, 0),
+					secondTileinAttackDir + glm::fvec2(-1, 0) };
 
+					attackPositions.assign_range(attackPosHammer);
+
+					for (glm::fvec2 attackPos : attackPositions)
+					{
+						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
+						if (!attackTile->isWall && attackTile->isSpawned)
+						{
+							createSlashGameObject(attackPos);
+						}
+					}
+				}
+				else
+				{
+					std::vector<glm::fvec2> attackPosHammer = { firstTileinAttackDir, firstTileinAttackDir + glm::fvec2(0, 1),
+					firstTileinAttackDir + glm::fvec2(0, -1), secondTileinAttackDir, secondTileinAttackDir + glm::fvec2(0, 1),
+					secondTileinAttackDir + glm::fvec2(0, -1) };
+
+					attackPositions.assign_range(attackPosHammer);
+
+					for (glm::fvec2 attackPos : attackPositions)
+					{
+						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
+						if (!attackTile->isWall && attackTile->isSpawned)
+						{
+							createSlashGameObject(attackPos);
+						}
+					}
+				}
+				break;
 			}
 
-			attackPositions.clear();
 		}
-		canAttack = false;
+
+		attackPositions.clear();
 	}
+	canAttack = false;
+	
 	
 }
 
@@ -165,22 +163,34 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 	if (eventCasted->key == GLFW_KEY_W)
 	{
 		attackDir.y += 1;
-		Act();
+		if (canAttack)
+		{
+			Act();
+		}
 	}
 	else if (eventCasted->key == GLFW_KEY_S)
 	{
 		attackDir.y -= 1;
-		Act();
+		if (canAttack)
+		{
+			Act();
+		}
 	}
 	else if (eventCasted->key == GLFW_KEY_A)
 	{
 		attackDir.x -= 1;
-		Act();
+		if (canAttack)
+		{
+			Act();
+		}
 	}
 	else if (eventCasted->key == GLFW_KEY_D)
 	{
 		attackDir.x += 1;
-		Act();
+		if (canAttack)
+		{
+			Act();
+		}
 	}
 
 	attackDir = glm::fvec2(0, 0);

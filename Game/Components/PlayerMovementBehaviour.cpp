@@ -21,21 +21,20 @@ PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 void PlayerMovementBehaviour::Act()
 {
 	//move player
-	if (canMove)
-	{
-		TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
-		glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
+	
+	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
+	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
 		
-		if (curTileHolder->tile != nullptr && !curTileHolder->isWall)
-		{
-			PlayerController::Instance()->playerPTR->getTransform()->
-				setPosition(tileSize * (origPos + moveDir));
+	if (curTileHolder->tile != nullptr && !curTileHolder->isWall)
+	{
+		PlayerController::Instance()->playerPTR->getTransform()->
+			setPosition(tileSize * (origPos + moveDir));
 
-			origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
-		}
-
-		canMove = false;
+		origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
 	}
+
+	canMove = false;
+	
 	
 }
 
@@ -52,32 +51,44 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 	if (eventCasted->key == GLFW_KEY_W)
 	{
 		moveDir.y += 1;
-		Act();
+		if (canMove)
+		{
+			Act();
+		}
 	}
 	else if (eventCasted->key == GLFW_KEY_S)
 	{
 		moveDir.y -= 1;
-		Act();
+		if (canMove)
+		{
+			Act();
+		}
 	}
 	else if (eventCasted->key == GLFW_KEY_A)
 	{
 		moveDir.x -= 1;
-		Act();
+		if (canMove)
+		{
+			Act();
+		}
 	}
 	else if (eventCasted->key == GLFW_KEY_D)
 	{
 		moveDir.x += 1;
-		Act();
+		if (canMove)
+		{
+			Act();
+		}
 	}
 
-	
+	moveDir = glm::fvec2(0, 0);
 	//if tile is moveable
 	
 }
 
 void PlayerMovementBehaviour::onKeyUpResponse(Griddy::Event* event)
 {
-	OnKeyUp* eventCasted = static_cast<OnKeyUp*>(event);
+	/*OnKeyUp* eventCasted = static_cast<OnKeyUp*>(event);
 	
 	if (eventCasted->key == GLFW_KEY_W)
 	{
@@ -94,7 +105,7 @@ void PlayerMovementBehaviour::onKeyUpResponse(Griddy::Event* event)
 	else if (eventCasted->key == GLFW_KEY_D)
 	{
 		moveDir.x -= 1;
-	}
+	}*/
 
 	canMove = true;
 }
