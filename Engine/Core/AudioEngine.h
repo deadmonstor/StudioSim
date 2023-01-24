@@ -33,8 +33,17 @@ public:
 
 	//FMod Channel Groups
 	std::map<std::string, FMOD::ChannelGroup*> channelGroups;
+	bool stopChannelGroup(std::string channelGroupName);
+	bool setPauseChannelGroup(std::string channelGroupName, bool pause);
+	bool setModeChannelGroup(std::string channelGroupName, FMOD_MODE modes);
+	bool setPitchChannelGroup(std::string channelGroupName, float pitch);
+	bool setVolumeChannelGroup(std::string channelGroupName, float volume);
+	bool setMuteChannelGroup(std::string channelGroupName, bool mute);
+	bool set3DAttributeChannelGroup(std::string channelGroupName, FMOD_VECTOR pos, FMOD_VECTOR vel);
+	bool setMinMaxChannelGroup(std::string channelGroupName, float min, float max);
+	int getNumberOfChannelsInGroup(std::string channelGroupName);
 
-	//Store reverb zones
+	//Reverb zones
 	std::map<const int, FMOD::Reverb3D*> reverbZones;
 	bool createReverbZone(const int zone);
 	bool setReverbPos(const int zone, const float posX, const float posY, const float minX, const float minY);
