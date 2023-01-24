@@ -23,6 +23,17 @@ PlayerAttackBehaviour::PlayerAttackBehaviour(bool isInFSMParam)
 	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
+void PlayerAttackBehaviour::AttackOnMovement(glm::fvec2 dir)
+{
+	attackDir = dir;
+	if (canAttack)
+	{
+		Act();
+	}
+	attackDir = glm::fvec2(0, 0);
+	/*Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerMovementBehaviour(true));*/
+}
+
 void PlayerAttackBehaviour::Act()
 {
 	currentPlayerPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
@@ -174,36 +185,25 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 	if (eventCasted->key == GLFW_KEY_W)
 	{
 		attackDir.y += 1;
-		if (canAttack)
-		{
-			Act();
-		}
 	}
 	else if (eventCasted->key == GLFW_KEY_S)
 	{
 		attackDir.y -= 1;
-		if (canAttack)
-		{
-			Act();
-		}
 	}
 	else if (eventCasted->key == GLFW_KEY_A)
 	{
 		attackDir.x -= 1;
-		if (canAttack)
-		{
-			Act();
-		}
 	}
 	else if (eventCasted->key == GLFW_KEY_D)
 	{
 		attackDir.x += 1;
-		if (canAttack)
-		{
-			Act();
-		}
 	}
 
+	if (canAttack && (eventCasted->key == GLFW_KEY_W || eventCasted->key == GLFW_KEY_S ||
+		eventCasted->key == GLFW_KEY_A || eventCasted->key == GLFW_KEY_D))
+	{
+		Act();
+	}
 	attackDir = glm::fvec2(0, 0);
 }
 
