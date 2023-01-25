@@ -21,12 +21,13 @@ public:
 	static std::list<Texture> LoadTextureArray(const char* folder, const std::string& name, int numTextures);
 
 	static Texture              GetTexture(std::string name);
+	static std::vector<Texture> GetTexturesContaining(std::string name);
+	
 	// load a sound using the passed in fmod system
 	static void LoadSound(const char *path, FMOD_MODE fMode, FMOD::System *fmodSystem);
-	// retrive a stored sound to play in the audio engine
+	static bool HasSound(const char* path);
+	// retrieve a stored sound to play in the audio engine
 	static FMOD::Sound *GetSound(const char *path);
-	static std::vector<Texture> GetTexturesContaining(std::string name);
-
 	static void Clear();
 private:
 	ResourceManager() = default;
