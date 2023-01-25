@@ -23,9 +23,9 @@ public:
 	std::list<glm::fvec2> attackPositions;
 	const std::vector<Texture> textureListRST = ResourceManager::GetTexturesContaining("RedSlashThin");
 	Weapon weaponClassEquipped;
-	bool canAttack;
+	bool canAttack = true;
+	void AttackOnMovement(glm::fvec2 dir);
 private:
-	
 	void Act() override;
 	void onKeyDownResponse(Griddy::Event*);
 	void onKeyUpResponse(Griddy::Event*);
