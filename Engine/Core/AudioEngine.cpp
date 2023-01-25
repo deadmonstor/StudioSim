@@ -214,3 +214,60 @@ bool AudioEngine::deleteReverbZone(const int zone)
 	reverbZones.erase(zone);
 	return true;
 }
+
+
+//Channel Group Functions
+bool AudioEngine::stopChannelGroup(std::string channelGroupName)
+{
+	channelGroups[channelGroupName]->stop();
+	return true;
+}
+
+bool AudioEngine::setPauseChannelGroup(std::string channelGroupName, bool pause)
+{
+	channelGroups[channelGroupName]->setPaused(pause);
+	return true;
+}
+
+bool AudioEngine::setModeChannelGroup(std::string channelGroupName, FMOD_MODE modes)
+{
+	channelGroups[channelGroupName]->setMode(modes);
+	return true;
+}
+
+bool AudioEngine::setPitchChannelGroup(std::string channelGroupName, float pitch)
+{
+	channelGroups[channelGroupName]->setPitch(pitch);
+	return true;
+}
+
+bool AudioEngine::setVolumeChannelGroup(std::string channelGroupName, float volume)
+{
+	channelGroups[channelGroupName]->setVolume(volume);
+	return true;
+}
+
+bool AudioEngine::setMuteChannelGroup(std::string channelGroupName, bool mute)
+{
+	channelGroups[channelGroupName]->setMute(mute);
+	return true;
+}
+
+bool AudioEngine::set3DAttributeChannelGroup(std::string channelGroupName, FMOD_VECTOR pos, FMOD_VECTOR vel)
+{
+	channelGroups[channelGroupName]->set3DAttributes(&pos, &vel);
+	return true;
+}
+
+bool AudioEngine::setMinMaxChannelGroup(std::string channelGroupName, float min, float max)
+{
+	channelGroups[channelGroupName]->set3DMinMaxDistance(min, max);
+	return true;
+}
+
+int AudioEngine::getNumberOfChannelsInGroup(std::string channelGroupName)
+{
+	int channels;
+	channelGroups[channelGroupName]->getNumChannels(&channels);
+	return channels;
+}
