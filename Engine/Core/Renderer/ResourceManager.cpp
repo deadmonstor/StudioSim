@@ -85,9 +85,14 @@ void ResourceManager::LoadSound(const char *path, FMOD_MODE fMode, FMOD::System 
 	Sounds[path] = fmodSound;
 }
 
+bool ResourceManager::HasSound(const char *path) 
+{
+    return Sounds.contains(path);
+}
+
 FMOD::Sound *ResourceManager::GetSound(const char *path) 
 {
-    if (!Sounds.contains(path))
+    if (!HasSound(path))
     {
         LOG_ERROR("ERROR::SOUND: Failed to find sound with path: " + std::string(path));
     }
