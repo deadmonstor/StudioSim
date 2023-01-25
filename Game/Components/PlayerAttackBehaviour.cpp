@@ -23,6 +23,17 @@ PlayerAttackBehaviour::PlayerAttackBehaviour(bool isInFSMParam)
 	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
+void PlayerAttackBehaviour::AttackOnMovement(glm::fvec2 dir)
+{
+	attackDir = dir;
+	if (canAttack)
+	{
+		Act();
+	}
+	attackDir = glm::fvec2(0, 0);
+	/*Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerMovementBehaviour(true));*/
+}
+
 void PlayerAttackBehaviour::Act()
 {
 	currentPlayerPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
@@ -174,36 +185,25 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 	if (eventCasted->key == GLFW_KEY_W)
 	{
 		attackDir.y += 1;
-		if (canAttack)
-		{
-			Act();
-		}
 	}
 	else if (eventCasted->key == GLFW_KEY_S)
 	{
 		attackDir.y -= 1;
-		if (canAttack)
-		{
-			Act();
-		}
 	}
 	else if (eventCasted->key == GLFW_KEY_A)
 	{
 		attackDir.x -= 1;
-		if (canAttack)
-		{
-			Act();
-		}
 	}
 	else if (eventCasted->key == GLFW_KEY_D)
 	{
 		attackDir.x += 1;
-		if (canAttack)
-		{
-			Act();
-		}
 	}
 
+	if (canAttack && (eventCasted->key == GLFW_KEY_W || eventCasted->key == GLFW_KEY_S ||
+		eventCasted->key == GLFW_KEY_A || eventCasted->key == GLFW_KEY_D))
+	{
+		Act();
+	}
 	attackDir = glm::fvec2(0, 0);
 }
 
@@ -240,7 +240,7 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 	{
 		if (gameObject->hasComponent(typeid(Health)))
 		{
-			AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 0, 0);
+			AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 
 			auto* health = gameObject->getComponent<Health>();
 			health->setHealth(health->getHealth() - 50);
@@ -258,7 +258,8 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 	AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
 	slashSprite->setPivot(Pivot::Center);
 	slash->addComponent<DestroyAfterAnimation>();
-	AudioEngine::Instance()->playSound("Sounds\\AirSlash.wav", false, 0.3f, 0, 0);
+	
+	AudioEngine::Instance()->playSound("Sounds\\AirSlash.wav", false, 0.3f, 0, 0, AudioType::SoundEffect);
 }
 
 FunctionMap PlayerAttackBehaviour::CreateFunctionMap()

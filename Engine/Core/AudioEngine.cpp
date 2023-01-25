@@ -106,7 +106,7 @@ bool AudioEngine::checkResult(FMOD_RESULT fmodResult, std::string area)
 bool AudioEngine::loadSound(const char *path, const FMOD_MODE fMode) 
 { 
 	//Check if sound exists
-	if (ResourceManager::GetSound(path) != nullptr) 
+	if (ResourceManager::HasSound(path)) 
 	{
 		LOG_ERROR("Trying to load already loaded sound");
 		return false;
