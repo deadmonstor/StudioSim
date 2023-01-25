@@ -75,6 +75,12 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 	
 }
 
+void PlayerController::onKeyHold(const OnKeyRepeat* keyHold)
+{
+	std::type_index eventType = typeid(OnKeyRepeat);
+	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyRepeat(keyHold->key, keyHold->scancode), eventType);
+}
+
 void PlayerController::onKeyUp(const OnKeyUp* keyUp)
 {
 	const std::type_index eventType = typeid(OnKeyUp);

@@ -11,7 +11,7 @@ PlayerMovementBehaviour::PlayerMovementBehaviour()
 	isInFSM = false; 
 	map = CreateFunctionMap(); 
 	origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
-	AudioEngine::Instance()->loadSound("Sounds\\step.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
 	attackBehaviour = new PlayerAttackBehaviour();
 }
 
@@ -19,7 +19,7 @@ PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
 	origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition())/GridSystem::Instance()->getTileSize();
-	AudioEngine::Instance()->loadSound("Sounds\\step.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
 	map = CreateFunctionMap();
 	attackBehaviour = new PlayerAttackBehaviour();
 }
@@ -37,6 +37,7 @@ void PlayerMovementBehaviour::Act()
 		if (gameObjectOnTile != nullptr && gameObjectOnTile->hasComponent(typeid(Health)))
 		{
 			attackBehaviour->AttackOnMovement(moveDir);
+			canAttackWhileMoving = false;
 		}
 		else
 		{
@@ -87,6 +88,38 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 	
 }
 
+void PlayerMovementBehaviour::onKeyHoldResponse(Griddy::Event* event)
+{
+	OnKeyRepeat* eventCasted = static_cast<OnKeyRepeat*>(event);
+	canMove = true;
+
+	if (eventCasted->key == GLFW_KEY_W)
+	{
+		moveDir.y += 1;
+	}
+	else if (eventCasted->key == GLFW_KEY_S)
+	{
+		moveDir.y -= 1;
+	}
+	else if (eventCasted->key == GLFW_KEY_A)
+	{
+		moveDir.x -= 1;
+	}
+	else if (eventCasted->key == GLFW_KEY_D)
+	{
+		moveDir.x += 1;
+	}
+
+	if (canMove && canAttackWhileMoving)
+	{
+		Act();
+	}
+	
+	moveDir = glm::fvec2(0, 0);
+	
+	
+}
+
 void PlayerMovementBehaviour::onKeyUpResponse(Griddy::Event* event)
 {
 	/*OnKeyUp* eventCasted = static_cast<OnKeyUp*>(event);
@@ -109,6 +142,7 @@ void PlayerMovementBehaviour::onKeyUpResponse(Griddy::Event* event)
 	}*/
 	canMove = true;
 	attackBehaviour->canAttack = true;
+	canAttackWhileMoving = true;
 }
 
 FunctionMap PlayerMovementBehaviour::CreateFunctionMap()
@@ -123,6 +157,11 @@ FunctionMap PlayerMovementBehaviour::CreateFunctionMap()
 		[](Behaviour* pointer, Griddy::Event* event)
 	{
 		dynamic_cast<PlayerMovementBehaviour*>(pointer)->onKeyUpResponse(event);
+	};
+	map[typeid(OnKeyRepeat)] =
+		[](Behaviour* pointer, Griddy::Event* event)
+	{
+		dynamic_cast<PlayerMovementBehaviour*>(pointer)->onKeyHoldResponse(event);
 	};
 
 	return map;
