@@ -43,15 +43,15 @@ public:
 	bool setMinMaxChannelGroup(std::string channelGroupName, float min, float max);
 	int getNumberOfChannelsInGroup(std::string channelGroupName);
 
+	//Channel Stuff
+	FMOD::ChannelGroup* masterChannel;
+	FMOD::ChannelGroup* audioEffectsChannel;
+	FMOD::ChannelGroup* backgroundMusicChannel;
+
 	//Reverb zones
 	std::map<const int, FMOD::Reverb3D*> reverbZones;
 	bool createReverbZone(const int zone);
 	bool setReverbPos(const int zone, const float posX, const float posY, const float minX, const float minY);
 	bool deleteReverbZone(const int zone);
-
-	//Channel Stuff
-	FMOD::ChannelGroup* masterChannel;
-	FMOD::ChannelGroup* audioEffectsChannel;
-	FMOD::ChannelGroup* backgroundMusicChannel;
 };
 

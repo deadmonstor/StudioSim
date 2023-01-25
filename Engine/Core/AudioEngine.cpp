@@ -160,6 +160,8 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 	}
 	else
 	{
+		//Loop(0 - Oneshot, 1 - Loop Once and Stop, -1 - Loop Forever
+		fmodChannel->setLoopCount(-1);
 		fmodChannel->setChannelGroup(channelGroups["Background Music"]);
 	}
 	return true;
