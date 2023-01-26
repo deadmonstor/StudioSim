@@ -71,7 +71,7 @@ void PlayerAttackBehaviour::Act()
 					{
 						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if(!attackTile->isWall && isWallTile)
+						if(!attackTile->isWall && !isWallTile)
 						{
 							createSlashGameObject(attackPos);
 						}
