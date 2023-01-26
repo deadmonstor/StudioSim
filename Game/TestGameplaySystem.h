@@ -193,6 +193,17 @@ public:
 		
 		grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
 
+		grid_system->setEmptyTileIDs(2, std::vector<int>{});
+		grid_system->setWallIDs(2, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
+		grid_system->setTextureMap(2, std::map<int, Texture>
+		{
+			{ 91, ResourceManager::GetTexture("tile61")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
+			{ 92, ResourceManager::GetTexture("tile47") },
+			{ 93, ResourceManager::GetTexture("tile169") }
+		});
+
+		grid_system->loadFromFile(2, "Grid/LevelDesignSP.txt");
+
 		/*auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->setSize(glm::vec2(96, 48));
 
