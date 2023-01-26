@@ -47,11 +47,12 @@ void PlayerMovementBehaviour::Act()
 			origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
 		
 			AudioEngine::Instance()->playSound("Sounds\\step.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
+			TurnManager::Instance()->EndTurn();
 		}
 	}
+	
 	canMove = false;
 	attackBehaviour->canAttack = true;
-	TurnManager::Instance()->EndTurn();
 }
 
 void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -81,7 +82,7 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 		moveDir.x += 1;
 	}
 
-	if (canMove)
+	if (canMove && moveDir != glm::fvec2(0, 0))
 	{
 		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) == false)
 			return;
