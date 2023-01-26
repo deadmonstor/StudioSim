@@ -9,7 +9,7 @@ uniform mat4 uModelMatrix;
 void main()
 {
     TexCoords = vertex.zw;
-    vec4 finalPos = uProjectionMatrix * uModelMatrix * vec4(vertex.xy, 0.0, 1.0);
+    vec4 finalPos = uProjectionMatrix * vec4(vertex.xy, 0.0, 1.0);
 
     gl_Position = finalPos;
 }

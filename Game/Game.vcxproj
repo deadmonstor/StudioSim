@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\ButtonComponent.h" />
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
     <ClInclude Include="Components\EnemyTest.h" />
     <ClInclude Include="Components\FireballComponent.h" />
@@ -30,6 +31,7 @@
     <ClInclude Include="TestGameplaySystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\ButtonComponent.cpp" />
     <ClCompile Include="Components\DestroyAfterAnimation.cpp" />
     <ClCompile Include="Components\EnemyTest.cpp" />
     <ClCompile Include="Components\FireballComponent.cpp" />
