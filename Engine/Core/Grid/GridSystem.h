@@ -55,6 +55,5 @@ public:
 	
 	Tile* getTile(int id, const glm::ivec2& _pos);
 	std::vector<std::pair<glm::vec2, Tile*>> getNeighbours(int id, glm::vec2 pos);
-	std::vector<std::pair<glm::vec2, TileHolder*>> getNeighbours(int id, TileHolder* tile);
 
 };
