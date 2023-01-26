@@ -9,6 +9,7 @@
 class Texture;
 struct TileHolder
 {
+	glm::vec2 position;
 	Tile* tile;
 	GameObject* gameObjectSatOnTile;
 

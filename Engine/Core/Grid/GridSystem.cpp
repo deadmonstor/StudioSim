@@ -25,6 +25,7 @@ void GridSystem::clearGrid(const int id)
 		for(int y = 0; y < gridSize.y; y++)
 		{
 			TileHolder* grid_holder = gridLayers[id]->internalMap[x][y] = new TileHolder();
+			grid_holder->position = glm::vec2(x, y);
 			grid_holder->isSpawned = false;
 
 			const auto tile = new Tile(Texture());

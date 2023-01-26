@@ -23,4 +23,3 @@ public:
 	PlayerStats* playerStats{};
 	Inventory* myInventory{};
 };
-
