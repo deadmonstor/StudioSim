@@ -7,6 +7,7 @@ TurnManager::TurnManager()
 {
 	Griddy::Events::subscribe(this, &TurnManager::onUpdate);
 	Griddy::Events::subscribe(this, &TurnManager::onGameObjectRemoved);
+	Griddy::Events::subscribe(this, &TurnManager::onSceneChanged);
 }
 
 void TurnManager::addToTurnQueue(GameObject* object)
@@ -23,10 +24,15 @@ void TurnManager::onUpdate(OnEngineUpdate* event)
 
 void TurnManager::onGameObjectRemoved(const OnGameObjectRemoved* event)
 {
-	if (event->gameObject == m_CurrentTurnObject)
+	if (event->gameObject == m_CurrentTurnObject && !SceneManager::Instance()->isLoadingScene())
 	{
 		EndTurn();
 	}
+}
+
+void TurnManager::onSceneChanged(OnSceneChanged* scene)
+{
+	CanMakeATurn = std::queue<GameObject*>();
 }
 
 void TurnManager::NextTurn()

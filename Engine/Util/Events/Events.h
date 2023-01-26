@@ -58,6 +58,14 @@ namespace Griddy
 		template<typename EventType>
 		void invokeInternal(EventType *event, bool withoutCleanup = false)
 		{
+			if (!internalEvents.contains(typeid(EventType)))
+			{
+				if (!withoutCleanup)
+					delete event;
+				
+				return;
+			}
+			
 			const EventList* list = internalEvents[typeid(EventType)];
 
 			if (list == nullptr || !list || list->empty())
@@ -67,7 +75,9 @@ namespace Griddy
 					LOG_INFO("Invoking event: " + std::string(typeid(EventType).name()) + " with 0 subscribers");
 #endif
 				
-				delete event;
+				if (!withoutCleanup)
+					delete event;
+				
 				return;
 			}
 
