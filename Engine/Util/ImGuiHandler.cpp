@@ -1,6 +1,7 @@
 ﻿#include "ImGuiHandler.h"
 
 #include "Engine.h"
+#include "../../Game/Components/TurnManager.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/Lighting.h"
@@ -265,6 +266,12 @@ void ImGuiHandler::update()
 			if (ImGui::TreeNode("GridSystem"))
 			{
 				ImGUIGridSystem();
+				ImGui::TreePop();
+			}
+
+			if (ImGui::TreeNode("Turn Manager"))
+			{
+				TurnManager::Instance()->debugString();
 				ImGui::TreePop();
 			}
 		

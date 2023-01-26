@@ -20,8 +20,11 @@ protected:
 private:
 	std::queue<class GameObject*> CanMakeATurn;
 	void NextTurn();
+	void debugString();
 
 	GameObject* m_CurrentTurnObject;
+
+	friend class ImGuiHandler;
 };
 
 class onStartTurn : public Griddy::Event
