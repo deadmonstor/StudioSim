@@ -6,6 +6,7 @@
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/AudioEngine.h"
+#include "TurnManager.h"
 
 PlayerAttackBehaviour::PlayerAttackBehaviour()
 {
@@ -152,7 +153,7 @@ void PlayerAttackBehaviour::Act()
 	}
 	canAttack = false;
 	
-	
+	TurnManager::Instance()->EndTurn();
 }
 
 void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)

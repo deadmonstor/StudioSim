@@ -5,6 +5,7 @@
 #include "Core/Components/Transform.h"
 #include "Core/AudioEngine.h"
 #include <Core/Components/Health.h>
+#include "TurnManager.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour()
 {
@@ -50,6 +51,7 @@ void PlayerMovementBehaviour::Act()
 	}
 	canMove = false;
 	attackBehaviour->canAttack = true;
+	TurnManager::Instance()->EndTurn();
 }
 
 void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
