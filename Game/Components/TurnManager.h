@@ -10,15 +10,17 @@ class TurnManager : public SingletonTemplate<TurnManager>
 public:
 	void addToTurnQueue(class GameObject* object);
 	void onUpdate(OnEngineUpdate* event);
+	void onGameObjectRemoved(const OnGameObjectRemoved* event);
 	TurnManager();
 	void StartTurnSystem();
 	void EndTurn();
+	bool isCurrentTurnObject(const GameObject* object);
 protected:
 
 private:
 	std::queue<class GameObject*> CanMakeATurn;
 	void NextTurn();
-	
+
 	GameObject* m_CurrentTurnObject;
 };
 

@@ -77,7 +77,6 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 	//find the input and send it to the state machine
 	const std::type_index eventType = typeid(OnKeyDown);
 	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyDown(keyDown->key, keyDown->scancode), eventType);
-	
 }
 
 void PlayerController::onKeyHold(const OnKeyRepeat* keyHold)

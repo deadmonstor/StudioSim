@@ -6,8 +6,7 @@
 TurnManager::TurnManager()
 {
 	Griddy::Events::subscribe(this, &TurnManager::onUpdate);
-	//Griddy::Event()
-		//Griddy::Event
+	Griddy::Events::subscribe(this, &TurnManager::onGameObjectRemoved);
 }
 
 void TurnManager::addToTurnQueue(GameObject* object)
@@ -22,11 +21,35 @@ void TurnManager::onUpdate(OnEngineUpdate* event)
 	//LOG_INFO("TEST");
 }
 
+void TurnManager::onGameObjectRemoved(const OnGameObjectRemoved* event)
+{
+	if (event->gameObject == m_CurrentTurnObject)
+	{
+		EndTurn();
+	}
+}
+
 void TurnManager::NextTurn()
 {
+	if (CanMakeATurn.empty())
+		return;
+	
 	m_CurrentTurnObject = CanMakeATurn.front();
 	CanMakeATurn.pop();
-	Griddy::Events::invoke<onStartTurn>(m_CurrentTurnObject);
+
+	if (m_CurrentTurnObject != nullptr && !m_CurrentTurnObject->isBeingDeleted())
+	{
+		Griddy::Events::invoke<onStartTurn>(m_CurrentTurnObject);
+	}
+	else
+	{
+		NextTurn();
+	}
+}
+
+bool TurnManager::isCurrentTurnObject(const GameObject* object)
+{
+	return m_CurrentTurnObject == object;
 }
 
 void TurnManager::EndTurn()
