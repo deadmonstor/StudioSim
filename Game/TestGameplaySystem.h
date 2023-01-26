@@ -17,6 +17,7 @@
 #include <string>
 #include "Components/TurnManager.h"
 #include "Components/PlayerController.h"
+#include "UIManager.h"
 #include "Components/ButtonComponent.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
@@ -291,6 +292,19 @@ public:
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
 
+
+		//Button Stuff
+		ButtonComponent* testButton = new ButtonComponent(Texture());
+		testButton->createBuffers();
+		testButton->setSortingOrder(1);
+		testButton->setLit(false);
+		testButton->setPivot(Pivot::Center);
+		testButton->SetTexture(ResourceManager::GetTexture("face"));
+		testButton->SetShader(ResourceManager::GetShader("spriteunlit"));
+		testButton->setPos(glm::vec2{ 0,0});
+		testButton->setSize(glm::vec2{ 500, 500 });
+		UIManager::Instance()->addButtonToUI("testButton", testButton);
+
 		TurnManager::Instance()->addToTurnQueue(testRST);
 		TurnManager::Instance()->addToTurnQueue(testRSW);
 		//ScoreSystem score = new ScoreSystem();
@@ -353,7 +367,7 @@ public:
 
 	void testRender(OnEngineRender*)
 	{
-		//TextRenderer::Instance()->renderText("abcdefghijklmnopqrstuvwsyz", -200, 0, 1, glm::vec3(1, 1, 1));
+		TextRenderer::Instance()->renderText("abcdefghijklmnopqrstuvwsyz", 500, 500, 1, glm::vec3(1, 1, 1));
 	}
 	
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)
