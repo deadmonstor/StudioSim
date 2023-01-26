@@ -6,6 +6,7 @@
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "TurnManager.h"
+#include "Core//Grid//PathfindingMachine.h"
 
 PlayerController::PlayerController()
 {
@@ -84,6 +85,14 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		
 		myInventory->add_item(spell);
 		myInventory->equip_item("Bandit sword");
+	}
+	if (keyDown->key == GLFW_KEY_P)
+	{
+		//Testing pathfinding
+		glm::vec2 gridSize = GridSystem::Instance()->getGridSize();
+		glm::vec2 start = playerPTR->getTransform()->getPosition();
+		glm::vec2 goal = start + glm::vec2(-3 * gridSize.x, 6 * gridSize.y);
+		PathfindingMachine::Instance()->FindPath(start, goal);
 	}
 	
 	//find the input and send it to the state machine
