@@ -11,8 +11,12 @@ void EnemyTest::start()
 	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
 	auto sprite = getOwner()->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 	sprite->setColor(glm::vec3(1, 1, 1));
-	sprite->setLit(false);
+	sprite->setLit(true);
 	sprite->setPivot(Pivot::Center);
+
+	Light* light = getOwner()->addComponent<Light>();
+	light->setFalloff({2.75f, 2.75f, 55.0f});
+	light->setColor({1.0f, 1.0f, 1.0f, 0.25f});
 	
 	Component::start();
 }

@@ -8,7 +8,7 @@
 void TextRenderer::init()
 {
 	internalSpriteComponent = new SpriteComponent();
-	internalSpriteComponent->setShader(ResourceManager::GetShader("text"));
+	internalSpriteComponent->setShader(ResourceManager::GetShader("textunlit"));
 	
 	glGenVertexArrays(1, &this->VAO);
 	glGenBuffers(1, &this->VBO);
@@ -76,20 +76,20 @@ void TextRenderer::renderText(std::string text, float screenPosX, const float sc
 	{
 		const auto [texture, Size, Bearing, Advance] = Chars[*c];
 		const float xPosition = screenPosX + Bearing.x * scale;
-		const float yPosition = screenPosY + (Size.y - Bearing.y) * scale;
+		const float yPosition = screenPosY - (Size.y - Bearing.y) * scale;
 
 		const float width = Size.x * scale;
 		const float height = Size.y * scale;
 
 		const float vertices[6][4] =
 		{
-			{xPosition, yPosition - height, 0.0f, 0.0f},
+			{xPosition, yPosition + height, 0.0f, 0.0f},
 			{xPosition, yPosition, 0.0f, 1.0f},
 			{xPosition + width, yPosition, 1.0f, 1.0f},
 
-			{xPosition, yPosition - height, 0.0f, 0.0f},
+			{xPosition, yPosition + height, 0.0f, 0.0f},
 			{xPosition + width, yPosition, 1.0f, 1.0f},
-			{xPosition + width, yPosition - height, 1.0f, 0.0f},
+			{xPosition + width, yPosition + height, 1.0f, 0.0f}
 		};
 
 		texture->Bind();

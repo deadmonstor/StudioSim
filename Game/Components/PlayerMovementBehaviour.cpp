@@ -31,8 +31,9 @@ void PlayerMovementBehaviour::Act()
 	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
 	GameObject* gameObjectOnTile = curTileHolder->gameObjectSatOnTile;
 	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
+	const bool isWallTile = GridSystem::Instance()->isWallTile(origPos + moveDir);
 		
-	if (curTileHolder->tile != nullptr && !curTileHolder->isWall)
+	if (curTileHolder->tile != nullptr && !isWallTile)
 	{
 		if (gameObjectOnTile != nullptr && gameObjectOnTile->hasComponent(typeid(Health)))
 		{
@@ -45,7 +46,8 @@ void PlayerMovementBehaviour::Act()
 				setPosition(tileSize * (origPos + moveDir));
 
 			origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
-			AudioEngine::Instance()->playSound("Sounds\\softStep.wav", false, 0.7f, 0, 0, AudioType::SoundEffect);
+		
+			AudioEngine::Instance()->playSound("Sounds\\step.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 		}
 	}
 	canMove = false;

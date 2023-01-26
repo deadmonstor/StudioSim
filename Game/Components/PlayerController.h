@@ -3,6 +3,7 @@
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
 
+class Inventory;
 class PlayerFSM;
 class PlayerController : public SingletonTemplate<PlayerController>
 {
@@ -18,6 +19,6 @@ public:
 	GameObject* playerPTR{};
 	PlayerFSM* playerFSM{};
 	Camera* cameraComponent{};
-	
+	Inventory* myInventory{};
 };
 
