@@ -17,6 +17,7 @@
 #include <string>
 #include "Components/TurnManager.h"
 #include "Components/PlayerController.h"
+#include "Components/ButtonComponent.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
