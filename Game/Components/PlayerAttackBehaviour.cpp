@@ -61,7 +61,7 @@ void PlayerAttackBehaviour::Act()
 						(currentPlayerPos + attackDir + glm::fvec2(-1, 0)) ,
 						(currentPlayerPos + attackDir + glm::fvec2(1, 0)) };
 
-					attackPositions.assign_range(attackPosSword);
+					attackPositions.assign(attackPosSword.begin(), attackPosSword.end());
 					for (glm::fvec2 attackPos : attackPositions)
 					{
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
@@ -77,7 +77,7 @@ void PlayerAttackBehaviour::Act()
 						(currentPlayerPos + attackDir + glm::fvec2(0, 1)) ,
 						(currentPlayerPos + attackDir + glm::fvec2(0, -1)) };
 
-					attackPositions.assign_range(attackPosSword);
+					attackPositions.assign(attackPosSword.begin(), attackPosSword.end());
 					for (glm::fvec2 attackPos : attackPositions)
 					{
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
@@ -94,7 +94,7 @@ void PlayerAttackBehaviour::Act()
 				std::vector<glm::fvec2> attackPosAxe = { (currentPlayerPos + attackDir),
 					(currentPlayerPos + attackDir + attackDir) };
 
-				attackPositions.assign_range(attackPosAxe);
+				attackPositions.assign(attackPosAxe.begin(), attackPosAxe.end());
 				for (glm::fvec2 attackPos : attackPositions)
 				{
 					TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
@@ -115,7 +115,7 @@ void PlayerAttackBehaviour::Act()
 					firstTileinAttackDir + glm::fvec2(-1, 0), secondTileinAttackDir, secondTileinAttackDir + glm::fvec2(1, 0),
 					secondTileinAttackDir + glm::fvec2(-1, 0) };
 
-					attackPositions.assign_range(attackPosHammer);
+					attackPositions.assign(attackPosHammer.begin(), attackPosHammer.end());
 
 					for (glm::fvec2 attackPos : attackPositions)
 					{
@@ -132,7 +132,7 @@ void PlayerAttackBehaviour::Act()
 					firstTileinAttackDir + glm::fvec2(0, -1), secondTileinAttackDir, secondTileinAttackDir + glm::fvec2(0, 1),
 					secondTileinAttackDir + glm::fvec2(0, -1) };
 
-					attackPositions.assign_range(attackPosHammer);
+					attackPositions.assign(attackPosHammer.begin(), attackPosHammer.end());
 
 					for (glm::fvec2 attackPos : attackPositions)
 					{
