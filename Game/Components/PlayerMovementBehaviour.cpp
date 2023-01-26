@@ -53,6 +53,7 @@ void PlayerMovementBehaviour::Act()
 	
 	canMove = false;
 	attackBehaviour->canAttack = true;
+	moveDir = glm::fvec2(0, 0);
 }
 
 void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -67,31 +68,30 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 
 	if (eventCasted->key == GLFW_KEY_W)
 	{
-		moveDir.y += 1;
+		moveDir.y = 1;
 	}
 	else if (eventCasted->key == GLFW_KEY_S)
 	{
-		moveDir.y -= 1;
+		moveDir.y = -1;
 	}
 	else if (eventCasted->key == GLFW_KEY_A)
 	{
-		moveDir.x -= 1;
+		moveDir.x = -1;
 	}
 	else if (eventCasted->key == GLFW_KEY_D)
 	{
-		moveDir.x += 1;
+		moveDir.x = 1;
 	}
 
 	if (canMove && moveDir != glm::fvec2(0, 0))
 	{
-		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) == false)
-			return;
-		
-		Act();
+		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		{
+			Act();
+		}
 	}
-	moveDir = glm::fvec2(0, 0);
-	//if tile is moveable
 	
+	moveDir = glm::fvec2(0, 0);
 }
 
 void PlayerMovementBehaviour::onKeyHoldResponse(Griddy::Event* event)
@@ -101,54 +101,34 @@ void PlayerMovementBehaviour::onKeyHoldResponse(Griddy::Event* event)
 
 	if (eventCasted->key == GLFW_KEY_W)
 	{
-		moveDir.y += 1;
+		moveDir.y = 1;
 	}
 	else if (eventCasted->key == GLFW_KEY_S)
 	{
-		moveDir.y -= 1;
+		moveDir.y = -1;
 	}
 	else if (eventCasted->key == GLFW_KEY_A)
 	{
-		moveDir.x -= 1;
+		moveDir.x = -1;
 	}
 	else if (eventCasted->key == GLFW_KEY_D)
 	{
-		moveDir.x += 1;
+		moveDir.x = 1;
 	}
 
 	if (canMove && canAttackWhileMoving)
 	{
-		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) == false)
-			return;
-		
-		Act();
+		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		{
+			Act();
+		}
 	}
 	
 	moveDir = glm::fvec2(0, 0);
-	
-	
 }
 
 void PlayerMovementBehaviour::onKeyUpResponse(Griddy::Event* event)
 {
-	/*OnKeyUp* eventCasted = static_cast<OnKeyUp*>(event);
-	
-	if (eventCasted->key == GLFW_KEY_W)
-	{
-		moveDir.y -= 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_S)
-	{
-		moveDir.y += 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_A)
-	{
-		moveDir.x += 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_D)
-	{
-		moveDir.x -= 1;
-	}*/
 	canMove = true;
 	attackBehaviour->canAttack = true;
 	canAttackWhileMoving = true;

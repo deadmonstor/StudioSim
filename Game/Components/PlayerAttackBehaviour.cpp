@@ -29,14 +29,13 @@ void PlayerAttackBehaviour::AttackOnMovement(glm::fvec2 dir)
 	attackDir = dir;
 	if (canAttack)
 	{
-		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) == false)
-			return;
-			
-		Act();
+		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		{
+			Act();
+		}
 	}
 	
 	attackDir = glm::fvec2(0, 0);
-	/*Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerMovementBehaviour(true));*/
 }
 
 void PlayerAttackBehaviour::Act()
@@ -195,53 +194,35 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 
 	if (eventCasted->key == GLFW_KEY_W)
 	{
-		attackDir.y += 1;
+		attackDir.y = 1;
 	}
 	else if (eventCasted->key == GLFW_KEY_S)
 	{
-		attackDir.y -= 1;
+		attackDir.y = -1;
 	}
 	else if (eventCasted->key == GLFW_KEY_A)
 	{
-		attackDir.x -= 1;
+		attackDir.x = -1;
 	}
 	else if (eventCasted->key == GLFW_KEY_D)
 	{
-		attackDir.x += 1;
+		attackDir.x = 1;
 	}
 
 	if (canAttack && (eventCasted->key == GLFW_KEY_W || eventCasted->key == GLFW_KEY_S ||
 		eventCasted->key == GLFW_KEY_A || eventCasted->key == GLFW_KEY_D))
 	{
-		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) == false)
-			return;
-		
-		Act();
+		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		{
+			Act();
+		}
 	}
+	
 	attackDir = glm::fvec2(0, 0);
 }
 
 void PlayerAttackBehaviour::onKeyUpResponse(Griddy::Event* event)
 {
-	/*OnKeyUp* eventCasted = static_cast<OnKeyUp*>(event);
-
-	if (eventCasted->key == GLFW_KEY_W)
-	{
-		attackDir.y -= 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_S)
-	{
-		attackDir.y += 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_A)
-	{
-		attackDir.x += 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_D)
-	{
-		attackDir.x -= 1;
-	}*/
-
 	canAttack = true;
 }
 

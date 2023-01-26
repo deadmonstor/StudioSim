@@ -13,13 +13,15 @@ TurnManager::TurnManager()
 void TurnManager::addToTurnQueue(GameObject* object)
 {
 	CanMakeATurn.push(object);
-	//object->addComponent<TurnComponent>();
-	
 }
 
 void TurnManager::onUpdate(OnEngineUpdate* event)
 {
-	//LOG_INFO("TEST");
+	if (shouldGoNextTurn)
+	{
+		shouldGoNextTurn = false;
+		NextTurn();
+	}
 }
 
 void TurnManager::onGameObjectRemoved(const OnGameObjectRemoved* event)
@@ -83,7 +85,7 @@ bool TurnManager::isCurrentTurnObject(const GameObject* object)
 void TurnManager::EndTurn()
 {
 	CanMakeATurn.push(m_CurrentTurnObject);
-	NextTurn();
+	shouldGoNextTurn = true;
 }
 
 //Called when the last enemy is spawned.

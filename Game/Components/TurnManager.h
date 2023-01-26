@@ -16,10 +16,12 @@ public:
 	void StartTurnSystem();
 	void EndTurn();
 	bool isCurrentTurnObject(const GameObject* object);
+	void Update();
 protected:
 
 private:
 	std::queue<class GameObject*> CanMakeATurn;
+	bool shouldGoNextTurn = false;
 	void onSceneChanged(OnSceneChanged* scene);
 	void NextTurn();
 	void debugString();
