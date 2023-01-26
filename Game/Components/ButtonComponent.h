@@ -1,6 +1,9 @@
 #pragma once
 #include "Core/Component.h"
+#include "Core/Components/SpriteComponent.h"
+#include "Core/Renderer/Texture.h"
 #include "Util/Events/EngineEvents.h"
+#include "Util/Events/Events.h"
 
 //Example Class Replace As Parent Class Later To Create Multiple Buttons
 class ButtonComponent final : public SpriteComponent

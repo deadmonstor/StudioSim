@@ -26,7 +26,8 @@ void PlayerController::createPlayer()
 	cameraComponent = playerPTR->addComponent<Camera>();
 	myInventory = playerPTR->addComponent<Inventory>(20);
 	Light* light = playerPTR->addComponent<Light>();
-	light->setFalloff({0.75f, 0.75f, 10.0f});
+	light->setFalloff({0.75f, 0.75f, 7.5f});
+	light->setColor({1.0f, 1.0f, 1.0f, 1.0f});
 	Renderer::Instance()->setCamera(cameraComponent);
 }
 
