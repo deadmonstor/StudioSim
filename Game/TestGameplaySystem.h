@@ -301,8 +301,8 @@ public:
 		testButton->setPivot(Pivot::BottomLeft);
 		testButton->SetTexture(ResourceManager::GetTexture("face"));
 		testButton->SetShader(ResourceManager::GetShader("spriteunlit"));
-		testButton->setPos(glm::vec2{ 1000 ,800});
-		testButton->setSize(glm::vec2{ 200, 200 });
+		testButton->setPos(glm::vec2{ 1200 ,800});
+		testButton->setSize(glm::vec2{ 100, 100 });
 		UIManager::Instance()->addButtonToUI("testButton", testButton);
 
 		TurnManager::Instance()->addToTurnQueue(testRST);
