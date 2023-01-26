@@ -32,11 +32,7 @@
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
     <ClInclude Include="Components\ButtonComponent.h" />
-    <ClInclude Include="PlayerStats.h" />
-    <ClInclude Include="StatSystem.h" />
-    <ClInclude Include="SpellStats.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="Font\Pixel.ttf" />
+    <ClInclude Include="Components\StatSystem.h" />
+    <ClInclude Include="Components\Stats.h" />
   </ItemGroup>
 </Project>
