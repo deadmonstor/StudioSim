@@ -24,8 +24,9 @@ void GridSystem::clearGrid(const int id)
 	{
 		for(int y = 0; y < gridSize.y; y++)
 		{
-			TileHolder* grid_holder = gridLayers[id]->internalMap[x][y] = new TileHolder();
-			grid_holder->isOccupied = false;
+			TileHolder* tile_holder = gridLayers[id]->internalMap[x][y] = new TileHolder();
+			tile_holder->position = glm::vec2(x, y);
+			tile_holder->isOccupied = false;
 
 			const auto tile = new Tile(Texture());
 			tile->createBuffers();
@@ -146,6 +147,29 @@ std::vector<std::pair<glm::vec2, Tile*>> GridSystem::getNeighbours(const int id,
 	return neighbours;
 }
 
+std::vector<std::pair<glm::vec2, TileHolder*>> GridSystem::getNeighbours(int id, TileHolder* tile)
+{
+	auto& internalMap = gridLayers[id]->internalMap;
+	std::vector<std::pair<glm::vec2, Tile*>> neighbours;
+
+	for (int x = -1; x < 2; x++)
+	{
+		for (int y = -1; y < 2; y++)
+		{
+			if (x == 0 && y == 0) continue;
+
+			glm::vec2 neighbour = pos + glm::vec2(x, y);
+			if (neighbour.x < 0 || neighbour.y < 0) continue;
+			if (neighbour.x >= gridSize.x || neighbour.y >= gridSize.y) continue;
+
+			Tile* tile = internalMap[neighbour.x][neighbour.y]->tile;
+			neighbours.emplace_back(neighbour, tile);
+		}
+	}
+
+	return neighbours;
+}
+
 void GridSystem::loadFromFile(const int mapID, const std::string& fileName)
 {
 	clearGrid(mapID);
@@ -237,4 +261,3 @@ void GridSystem::setEmptyTileIDs(const int id, const std::vector<int>& emptyTile
 	this->gridLayers[id]->emptyTiles = emptyTileIDs;
 }
 
-// get neighbours

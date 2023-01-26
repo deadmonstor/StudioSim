@@ -19,4 +19,3 @@ public:
 	Camera* cameraComponent{};
 	
 };
-
