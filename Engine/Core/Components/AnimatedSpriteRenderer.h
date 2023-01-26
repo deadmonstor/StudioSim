@@ -4,7 +4,6 @@
 
 class AnimatedSpriteRenderer : public SpriteComponent
 {
-private:
 	int debugCurIndex = 0;
 	double debugUpdateEverXMS = 0;
 	float debugLastUpdate = 0;

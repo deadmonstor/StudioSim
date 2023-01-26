@@ -2,9 +2,10 @@
 
 #include <algorithm>
 
-#include "Input.h"
 #include "Renderer.h"
+#include "Core/Input.h"
 #include "Core/Components/SpriteComponent.h"
+#include "Core/Grid/GridSystem.h"
 #include "glm/common.hpp"
 #include "Util/Time.h"
 
@@ -65,20 +66,19 @@ void Lighting::doLight(const SpriteComponent* spriteRenderer,
 		lightIDToName.insert(lightIDToName.end(), lightNameStruct);
 	}
 
-	spriteRenderer->getShader().Use();
-
-	spriteRenderer->getShader().SetVector2f("cameraPos", Renderer::Instance()->getCameraPos());
+	Shader shader = spriteRenderer->getShader();
+	shader.Use();
+	shader.SetVector2f("cameraPos", Renderer::Instance()->getCameraPos());
 	
-	// TODO: Turn this to screen space
 	if (showMouseLight || static_cast<bool>(lightUpdateRequest & LightUpdateRequest::Position))
-		spriteRenderer->getShader().SetVector3f(lightIDToName[i].pos, glm::vec3(lightPos, 0.1f));
+		shader.SetVector3f(lightIDToName[i].pos, glm::vec3(lightPos, 0.1f));
 	
 	if (debugLightColor || static_cast<bool>(lightUpdateRequest & LightUpdateRequest::Color))
-		spriteRenderer->getShader().SetVector4f(lightIDToName[i].color, lightColor);
+		shader.SetVector4f(lightIDToName[i].color, lightColor);
 
 	if (static_cast<bool>(lightUpdateRequest & LightUpdateRequest::Falloff))
-		spriteRenderer->getShader().SetVector3f(lightIDToName[i].falloff, falloff);
-
+		shader.SetVector3f(lightIDToName[i].falloff, falloff);
+	
 	i += 1;
 }
 
@@ -88,6 +88,8 @@ void Lighting::refreshLightData(const LightUpdateRequest lightUpdateRequest) con
 	{
 		refreshLightData(spriteRenderer, lightUpdateRequest);
 	}
+
+	GridSystem::Instance()->refreshLightData(lightUpdateRequest);
 }
 
 void Lighting::refreshLightData(SpriteComponent* spriteRenderer, const LightUpdateRequest lightUpdateRequest) const

@@ -2,7 +2,7 @@
 #include "Renderer.h"
 #include <Windows.h>
 
-#include "Input.h"
+#include "Core/Input.h"
 #include "Lighting.h"
 #include "ResourceManager.h"
 #include "SortingLayer.h"
@@ -74,10 +74,15 @@ glm::vec2 Renderer::getCameraPos() const
 
 void Renderer::setupCommonShader(const std::string& name, const glm::ivec2 value, const glm::mat4 projection, const glm::mat4 view)
 {
-	ResourceManager::GetShader(name).SetInteger("image", 0, true);
-	ResourceManager::GetShader(name).SetVector2f("Resolution", {value.x, value.y}, true);
-	ResourceManager::GetShader(name).SetVector4f("AmbientColor", Lighting::Instance()->getAmbientColor(), true);
-	ResourceManager::GetShader(name).SetMatrix4("uProjectionMatrix", projection, true);
+	LOG_INFO("Setting up common shader for " + name);
+
+	Shader shader = ResourceManager::GetShader(name);
+
+	shader.Use();
+	shader.SetInteger("image", 0);
+	shader.SetVector2f("Resolution", {value.x, value.y});
+	shader.SetVector4f("AmbientColor", Lighting::Instance()->getAmbientColor());
+	shader.SetMatrix4("uProjectionMatrix", projection);
 }
 
 void Renderer::setWindowSize(const glm::ivec2 value)
@@ -89,11 +94,18 @@ void Renderer::setWindowSize(const glm::ivec2 value)
 	}
 	
 	windowSize = value;
+	
+	LOG_INFO("Window size set to " + std::to_string(value.x) + "x" + std::to_string(value.y));
 
-	ResourceManager::LoadShader("Shader/sprite.vs", "Shader/sprite.frag", nullptr, "sprite");
-	ResourceManager::LoadShader("Shader/textlit.vs", "Shader/textlit.frag", nullptr, "text");
-	ResourceManager::LoadShader("Shader/textunlit.vs", "Shader/textunlit.frag", nullptr, "textunlit");
-	ResourceManager::LoadShader("Shader/spriteunlit.vs", "Shader/spriteunlit.frag", nullptr, "spriteunlit");
+	if (!ResourceManager::HasShader("sprite"))
+		ResourceManager::LoadShader("Shader/sprite.vs", "Shader/sprite.frag", nullptr, "sprite");
+	if (!ResourceManager::HasShader("spriteunlit"))
+		ResourceManager::LoadShader("Shader/spriteunlit.vs", "Shader/spriteunlit.frag", nullptr, "spriteunlit");
+	
+	if (!ResourceManager::HasShader("text"))
+		ResourceManager::LoadShader("Shader/textlit.vs", "Shader/textlit.frag", nullptr, "text");
+	if (!ResourceManager::HasShader("textunlit"))
+		ResourceManager::LoadShader("Shader/textunlit.vs", "Shader/textunlit.frag", nullptr, "textunlit");
 
 	resetShaders();
 	glfwSetWindowSize(window, value.x, value.y);
@@ -104,6 +116,8 @@ void Renderer::resetShaders()
 	if (mainCam == nullptr)
 		return;
 
+	LOG_INFO("Resetting shaders");
+	
 	mainCam->screenSizeChanged();
 	
 	const glm::mat4 projectionMatrix = mainCam->getProjectMatrix();
@@ -161,8 +175,6 @@ void Renderer::cleanup() const
 
 void Renderer::render()
 {
-	glClearColor(0, 0, 0, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -177,16 +189,19 @@ void Renderer::render()
 
 void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation) const
 {
-	/*if (position.x + size.x < 0 || position.x > windowSize.x || position.y + size.y < 0 || position.y > windowSize.y)
-	{
+	if (mainCam == nullptr)
 		return;
-	}*/
-	
+
+	if (!mainCam->isInFrustum(position, size))
+		return;
+
+	const glm::vec2 pivot = spriteRenderer->getPivot();
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 
 	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);
 	auto model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(position, 0.0f));  
+	model = glm::translate(model, glm::vec3(-pivot.x * size.x, -pivot.y * size.y, 0.0f));  
 
 	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); 
 	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); 
@@ -227,7 +242,6 @@ void Renderer::removeFromRenderQueue(const OnSpriteRendererComponentRemoved* eve
 
 void Renderer::sortRenderQueue()
 {
-	// BUG : Is this slow?
 	std::sort(spriteRenderQueue.begin(), spriteRenderQueue.begin() + static_cast<long long>(spriteRenderQueue.size()),
 	[this](const SpriteComponent* x, const SpriteComponent* y) noexcept -> bool
 	{
@@ -235,6 +249,7 @@ void Renderer::sortRenderQueue()
 		{
 			return x->getSortingOrder() < y->getSortingOrder();
 		}
+		
 		return x->getSortingLayer().getOrder() < y->getSortingLayer().getOrder();
 	});
 }

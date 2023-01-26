@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Components\AI\Behaviour.h" />
     <ClInclude Include="Core\AudioEngine.h" />
     <ClInclude Include="Core\Component.h" />
     <ClInclude Include="Core\Components\AnimatedSpriteRenderer.h" />
@@ -23,10 +24,12 @@
     <ClInclude Include="Core\Components\SpriteComponent.h" />
     <ClInclude Include="Core\Components\TextRenderer.h" />
     <ClInclude Include="Core\Components\Transform.h" />
+    <ClInclude Include="Core\Components\Health.h" />
     <ClInclude Include="Core\GameObject.h" />
     <ClInclude Include="Core\Grid\GridSystem.h" />
     <ClInclude Include="Core\Grid\Tile.h" />
     <ClInclude Include="Core\PhysicsSystem.h" />
+    <ClInclude Include="Core\Pivot.h" />
     <ClInclude Include="Core\Renderer\Lighting.h" />
     <ClInclude Include="Core\Renderer\Renderer.h" />
     <ClInclude Include="Core\Renderer\ResourceManager.h" />
@@ -475,6 +478,9 @@
     <ClInclude Include="Library\imgui\imstb_rectpack.h" />
     <ClInclude Include="Library\imgui\imstb_textedit.h" />
     <ClInclude Include="Library\imgui\imstb_truetype.h" />
+    <ClInclude Include="Core\Components\AI\StateMachine.h" />
+    <ClInclude Include="Core\Components\AI\PlannedBehaviour.h" />
+    <ClInclude Include="Core\Grid\PathfindingMachine.h" />
     <ClInclude Include="Util\Events\Events.h" />
     <ClInclude Include="Util\Events\FunctionHandler.h" />
     <ClInclude Include="Util\Events\EngineEvents.h" />
@@ -485,10 +491,12 @@
     <ClInclude Include="Util\Time.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Components\AI\Behaviour.cpp" />
     <ClCompile Include="Core\AudioEngine.cpp" />
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Components\AnimatedSpriteRenderer.cpp" />
     <ClCompile Include="Core\Components\Camera.cpp" />
+    <ClCompile Include="Core\Components\Health.cpp" />
     <ClCompile Include="Core\Components\Light.cpp" />
     <ClCompile Include="Core\Components\SpriteComponent.cpp" />
     <ClCompile Include="Core\Components\TextRenderer.cpp" />
@@ -513,6 +521,9 @@
     <ClCompile Include="Library\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Library\imgui\imgui_tables.cpp" />
     <ClCompile Include="Library\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Core\Components\AI\StateMachine.cpp" />
+    <ClCompile Include="Core\Components\AI\PlannedBehaviour.cpp" />
+    <ClCompile Include="Core\Grid\PathfindingMachine.cpp" />
     <ClCompile Include="Util\ImGuiHandler.cpp" />
     <ClCompile Include="Util\Time.cpp" />
   </ItemGroup>
@@ -616,7 +627,7 @@ copy "$(SolutionDir)Engine\Library\fmodL.dll" "$(OutDir)"
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)\Engine\Library\;$(SolutionDir)\Engine\;%(AdditionalLibraryDirectories);$(SolutionDir)\Library\glfw-3.3.8.bin.WIN64\lib-vc2022</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -625,6 +636,12 @@ copy "$(SolutionDir)Engine\Library\fmodL.dll" "$(OutDir)"
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(SolutionDir)Engine\Library\fmod.dll" "$(OutDir)"
+copy "$(SolutionDir)Engine\Library\fmodL.dll" "$(OutDir)"
+
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
