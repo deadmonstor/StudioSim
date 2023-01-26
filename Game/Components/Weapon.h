@@ -1,14 +1,12 @@
 #pragma once
-#include "Stats.h"
-#include "glm/fwd.hpp"
 #include <list>
-#include <vector>
+#include "glm/fwd.hpp"
 
 class Weapon
 {
 
 public:
-	virtual void weaponPattern(std::list<glm::fvec2> attackPositions) {};
+	virtual void weaponPattern(std::list<glm::fvec2> attackPositions);
 
 };
 
