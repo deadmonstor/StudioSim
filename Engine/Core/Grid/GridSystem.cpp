@@ -82,8 +82,10 @@ void GridSystem::renderInternal(const int id)
 
 bool GridSystem::isWallTile(const glm::vec2 pos)
 {
-	for (const auto layer : gridLayers | std::views::values)
+	for (const auto [id, layer] : gridLayers)
 	{
+		if (!isInMap(id, pos)) continue;
+		
 		if (layer->internalMap[pos.x][pos.y]->isWall)
 		{
 			return true;
@@ -91,6 +93,14 @@ bool GridSystem::isWallTile(const glm::vec2 pos)
 	}
 
 	return false;
+}
+
+bool GridSystem::isInMap(int id, const glm::vec2 pos) const
+{
+	if (pos.x < 0 || pos.x > gridSize.x || pos.y < 0 || pos.y > gridSize.y)
+		return false;
+
+	return true;
 }
 
 void GridSystem::render()
@@ -138,8 +148,7 @@ void GridSystem::refreshLightData(const LightUpdateRequest lightUpdateRequest)
 
 TileHolder* GridSystem::getTileHolder(const int id, const glm::ivec2& _pos)
 {
-	if (_pos.x < 0 || _pos.x > gridSize.x || _pos.y < 0 || _pos.y > gridSize.y)
-		return nullptr;
+	if (!isInMap(id, _pos)) return nullptr;
 
 	return gridLayers[id]->internalMap[_pos.x][_pos.y];
 }
@@ -151,8 +160,7 @@ GridLayer* GridSystem::getGridLayer(const int id)
 
 Tile* GridSystem::getTile(const int id, const glm::ivec2& _pos)
 {
-	if (_pos.x < 0 || _pos.x > gridSize.x || _pos.y < 0 || _pos.y > gridSize.y)
-		return nullptr;
+	if (!isInMap(id, _pos)) return nullptr;
 
 	return gridLayers[id]->internalMap[_pos.x][_pos.y]->tile;
 }
@@ -182,12 +190,12 @@ std::vector<std::pair<glm::vec2, Tile*>> GridSystem::getNeighbours(const int id,
 
 glm::vec2 GridSystem::getTilePosition(const glm::vec2 vec) const
 {
-	return glm::vec2(floor(vec.x / tileSize.x), floor(vec.y / tileSize.y));
+	return {floor(vec.x / tileSize.x), floor(vec.y / tileSize.y)};
 }
 
 glm::vec2 GridSystem::getWorldPosition(const glm::vec2 vec) const
 {
-	return glm::vec2(vec.x * tileSize.x, vec.y * tileSize.y);
+	return {vec.x * tileSize.x, vec.y * tileSize.y};
 }
 
 void GridSystem::setSatOnTile(const int id, const glm::vec2 vec, GameObject* enemy)

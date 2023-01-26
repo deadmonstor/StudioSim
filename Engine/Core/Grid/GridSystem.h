@@ -50,6 +50,7 @@ public:
 	TileHolder* getTileHolder(int id, const glm::ivec2& _pos);
 	GridLayer* getGridLayer(int id);
 	bool isWallTile(const glm::vec2 pos);
+	bool isInMap(int id, const glm::vec2 pos) const;
 
 	void init(glm::fvec2 _tileSize, glm::ivec2 _gridSize);
 	void clearGrid(int id);
