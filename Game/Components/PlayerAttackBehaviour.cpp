@@ -39,6 +39,7 @@ void PlayerAttackBehaviour::Act()
 	currentPlayerPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
 	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, currentPlayerPos + attackDir);
 	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
+	const bool isWallTile = GridSystem::Instance()->isWallTile(currentPlayerPos + attackDir);
 
 	if (curTileHolder->tile != nullptr)
 	{
@@ -46,7 +47,7 @@ void PlayerAttackBehaviour::Act()
 		{
 			case Dagger:
 			{
-				if (!curTileHolder->isWall)
+				if (!isWallTile)
 				{
 					createSlashGameObject(currentPlayerPos + attackDir);
 					
@@ -64,8 +65,9 @@ void PlayerAttackBehaviour::Act()
 					attackPositions.assign(attackPosSword.begin(), attackPosSword.end());
 					for (glm::fvec2 attackPos : attackPositions)
 					{
+						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if(!attackTile->isWall && attackTile->isSpawned)
+						if(!attackTile->isWall && isWallTile)
 						{
 							createSlashGameObject(attackPos);
 						}
@@ -80,8 +82,9 @@ void PlayerAttackBehaviour::Act()
 					attackPositions.assign(attackPosSword.begin(), attackPosSword.end());
 					for (glm::fvec2 attackPos : attackPositions)
 					{
+						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if (!attackTile->isWall && attackTile->isSpawned)
+						if (!isWallTile && attackTile->isSpawned)
 						{
 							createSlashGameObject(attackPos);
 						}
@@ -97,8 +100,9 @@ void PlayerAttackBehaviour::Act()
 				attackPositions.assign(attackPosAxe.begin(), attackPosAxe.end());
 				for (glm::fvec2 attackPos : attackPositions)
 				{
+					const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 					TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-					if (!attackTile->isWall && attackTile->isSpawned)
+					if (!isWallTile && attackTile->isSpawned)
 					{
 						createSlashGameObject(attackPos);
 					}
@@ -119,8 +123,9 @@ void PlayerAttackBehaviour::Act()
 
 					for (glm::fvec2 attackPos : attackPositions)
 					{
+						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if (!attackTile->isWall && attackTile->isSpawned)
+						if (!isWallTile && attackTile->isSpawned)
 						{
 							createSlashGameObject(attackPos);
 						}
@@ -136,8 +141,9 @@ void PlayerAttackBehaviour::Act()
 
 					for (glm::fvec2 attackPos : attackPositions)
 					{
+						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if (!attackTile->isWall && attackTile->isSpawned)
+						if (!isWallTile && attackTile->isSpawned)
 						{
 							createSlashGameObject(attackPos);
 						}
