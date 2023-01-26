@@ -11,6 +11,8 @@ struct Item
 	std::string itemDescription;
 	std::string equipSlot;
 	std::string rarity;
+	int price;
+	int getPrice() { return price; }
 	bool isUsable;
 	bool isEquipped;
 	virtual ~Item() {}; // added virtual destructor

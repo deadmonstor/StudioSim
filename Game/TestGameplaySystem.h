@@ -8,6 +8,7 @@
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "System/Inventory.h"
+#include "Shop.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
@@ -227,10 +228,11 @@ public:
 		if (event->key != "testInventory")
 			return;
 
-		Inventory myInventory(50); // Holds 10 items
+		Inventory myInventory(50); // Holds 50 items
 	
 		Weapon sword;
 		sword.name = "Bandit sword";
+		sword.price = 200;
 		sword.type = "Weapon";
 		sword.itemDescription = "A common sword";
 		sword.equipSlot = "Hand";
@@ -241,7 +243,9 @@ public:
 
 		Armour armour;
 		armour.name = "Bandit armor";
+		armour.price = 120;
 		armour.type = "Armour";
+		armour.itemDescription = "A random armour";
 		armour.equipSlot = "Chest";
 		armour.isEquipped = false;
 		armour.def = 15;
@@ -249,7 +253,9 @@ public:
 
 		Spell spell;
 		spell.name = "Fireball";
+		spell.price = 400;
 		spell.type = "Spell";
+		spell.itemDescription = "Command fire and shoot a fireball ";
 		spell.equipSlot = "Spells";
 		spell.isEquipped = false;
 		spell.spellAtk = 20;
@@ -260,22 +266,26 @@ public:
 
 		Item potion;
 		potion.name = "Health potion";
+		potion.price = 50;
 		potion.type = "Potion";
 		potion.isUsable = true;
 		potion.isEquipped = false;
 		myInventory.add_item(&potion);
 
 
-		myInventory.draw_inventory();
-		myInventory.equip_item("Bandit sword");
-		myInventory.draw_inventory();
-	
-		myInventory.equip_item("Fireball");
-		myInventory.unequip_item("Bandit sword");
-		myInventory.remove_item(&spell);
+		std::cout << "There are " << myInventory.items.size() << " items left";
 
-		myInventory.use_item("Health potion");
-		myInventory.draw_inventory();
+		//Shop myShop(myInventory.items, "$", &myInventory);
+		//myInventory.draw_inventory();
+		//myInventory.equip_item("Bandit sword");
+		//myInventory.draw_inventory();
+	
+		//myInventory.equip_item("Fireball");
+		//myInventory.unequip_item("Bandit sword");
+		//myInventory.remove_item(&spell);
+
+		//myInventory.use_item("Health potion");
+		//myInventory.draw_inventory();
 	}
 	
 	glm::fvec2 direction = glm::fvec2(0, 0);
