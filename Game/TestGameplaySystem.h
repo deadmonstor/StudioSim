@@ -191,7 +191,7 @@ public:
 			{ 44, ResourceManager::GetTexture("tile157") }
 		});
 		
-		grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
+		grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");
 
 		grid_system->setEmptyTileIDs(2, std::vector<int>{});
 		grid_system->setWallIDs(2, std::vector<int>{});
