@@ -48,7 +48,8 @@ public:
 	glm::ivec2 getGridSize() { return gridSize; }
 	glm::fvec2 getTileSize() { return tileSize; }
 	TileHolder* getTileHolder(int id, const glm::ivec2& _pos);
-	GridLayer* GetGridLayer(int id);
+	GridLayer* getGridLayer(int id);
+	bool isWallTile(const glm::vec2 pos);
 
 	void init(glm::fvec2 _tileSize, glm::ivec2 _gridSize);
 	void clearGrid(int id);

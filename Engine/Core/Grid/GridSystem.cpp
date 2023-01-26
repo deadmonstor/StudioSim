@@ -80,6 +80,19 @@ void GridSystem::renderInternal(const int id)
 	}
 }
 
+bool GridSystem::isWallTile(const glm::vec2 pos)
+{
+	for (const auto layer : gridLayers | std::views::values)
+	{
+		if (layer->internalMap[pos.x][pos.y]->isWall)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void GridSystem::render()
 {
 	if (!shouldRender) return;
@@ -131,7 +144,7 @@ TileHolder* GridSystem::getTileHolder(const int id, const glm::ivec2& _pos)
 	return gridLayers[id]->internalMap[_pos.x][_pos.y];
 }
 
-GridLayer* GridSystem::GetGridLayer(const int id)
+GridLayer* GridSystem::getGridLayer(const int id)
 {
 	return gridLayers[id];
 }
