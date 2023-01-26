@@ -20,7 +20,7 @@ void ButtonComponent::onMouseDown(const OnMouseDown* event)
 	std::cout << "Button Size X: " << size.x << " Button Size Y: " << size.y << std::endl;
 	std::cout << "Mouse Pos X: " << mousePos.x << " Mouse PosY: " << mousePos.y << std::endl;
 
-	if (mousePos.x >= (pos.x - size.x * 2) && mousePos.x <= pos.x  &&
+	if (mousePos.x >= pos.x && mousePos.x <= pos.x + size.x  &&
 		mousePos.y >= pos.y && mousePos.y <= pos.y + size.y)
 	{
 		onClick();
