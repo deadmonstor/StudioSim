@@ -25,7 +25,9 @@
     <ClInclude Include="Components\TurnComponent.h" />
     <ClInclude Include="Components\TurnManager.h" />
     <ClInclude Include="MainGame.h" />
+    <ClInclude Include="Components\PlayerStats.h" />
     <ClInclude Include="ScoreSystem.h" />
+    <ClInclude Include="Components\StatSystem.h" />
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
   </ItemGroup>
@@ -38,9 +40,11 @@
     <ClCompile Include="Components\PlayerFSM.cpp" />
     <ClCompile Include="Components\PlayerMovementBehaviour.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="Components\PlayerStats.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Components\TurnComponent.cpp" />
     <ClCompile Include="Components\TurnManager.cpp" />
+    <ClCompile Include="Components\StatSystem.cpp" />
     <ClCompile Include="System\Inventory.cpp" />
   </ItemGroup>
   <ItemGroup>

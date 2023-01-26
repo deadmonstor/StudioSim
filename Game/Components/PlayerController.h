@@ -2,6 +2,7 @@
 #include "Core/Components/Camera.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
+#include "PlayerStats.h"
 
 class PlayerFSM;
 class PlayerController : public SingletonTemplate<PlayerController>
@@ -18,6 +19,6 @@ public:
 	GameObject* playerPTR{};
 	PlayerFSM* playerFSM{};
 	Camera* cameraComponent{};
-	
+	PlayerStats* playerStats{};
 };
 

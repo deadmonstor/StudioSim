@@ -23,6 +23,17 @@ void PlayerController::createPlayer()
 
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
+	
+	playerStats->strength = 1;
+	playerStats->health = 10 + (playerStats->strength * 5);
+	playerStats->attackDamage = 1;
+	playerStats->agility = 1;
+	playerStats->defence = 1;
+	playerStats->critChance = 0.0f;
+	playerStats->intelligence = 1;
+	playerStats->mana = 10;
+	playerStats->spellPower = 1;
+	playerStats->spellCooldown = 3;
 	Light* light = playerPTR->addComponent<Light>();
 	light->setFalloff({0.75f, 0.75f, 10.0f});
 	Renderer::Instance()->setCamera(cameraComponent);
