@@ -293,20 +293,6 @@ public:
 		sprite->setLit(false);
 
 
-		//Button Stuff
-		ButtonComponent* testButton = new ButtonComponent(Texture());
-		testButton->createBuffers();
-		testButton->setSortingOrder(1);
-		testButton->setLit(false);
-		testButton->setPivot(Pivot::Center);
-		testButton->SetTexture(ResourceManager::GetTexture("face"));
-		testButton->SetShader(ResourceManager::GetShader("spriteunlit"));
-		testButton->setPos(glm::vec2{ 0,0});
-		testButton->setSize(glm::vec2{ 500, 500 });
-		UIManager::Instance()->addButtonToUI("testButton", testButton);
-
-		TurnManager::Instance()->addToTurnQueue(testRST);
-		TurnManager::Instance()->addToTurnQueue(testRSW);
 		//ScoreSystem score = new ScoreSystem();
 		//score.SaveScore();
 		int m_count = 0;
@@ -351,6 +337,7 @@ public:
 		PlayerController::Instance()->createPlayer();
 		
 		CreateFireball(glm::vec2{ 1000, 500 });
+		TurnManager::Instance()->StartTurnSystem();
 	}
 	
 	glm::fvec2 direction = glm::fvec2(0, 0);

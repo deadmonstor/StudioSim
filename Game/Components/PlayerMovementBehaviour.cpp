@@ -5,6 +5,7 @@
 #include "Core/Components/Transform.h"
 #include "Core/AudioEngine.h"
 #include <Core/Components/Health.h>
+#include "TurnManager.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour()
 {
@@ -26,8 +27,6 @@ PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 
 void PlayerMovementBehaviour::Act()
 {
-	//move player
-	
 	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
 	GameObject* gameObjectOnTile = curTileHolder->gameObjectSatOnTile;
 	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
@@ -52,6 +51,7 @@ void PlayerMovementBehaviour::Act()
 	}
 	canMove = false;
 	attackBehaviour->canAttack = true;
+	TurnManager::Instance()->EndTurn();
 }
 
 void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -83,6 +83,9 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 
 	if (canMove)
 	{
+		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) == false)
+			return;
+		
 		Act();
 	}
 	moveDir = glm::fvec2(0, 0);
@@ -114,6 +117,9 @@ void PlayerMovementBehaviour::onKeyHoldResponse(Griddy::Event* event)
 
 	if (canMove && canAttackWhileMoving)
 	{
+		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) == false)
+			return;
+		
 		Act();
 	}
 	

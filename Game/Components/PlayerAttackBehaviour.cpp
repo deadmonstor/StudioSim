@@ -6,6 +6,7 @@
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/AudioEngine.h"
+#include "TurnManager.h"
 
 PlayerAttackBehaviour::PlayerAttackBehaviour()
 {
@@ -28,8 +29,12 @@ void PlayerAttackBehaviour::AttackOnMovement(glm::fvec2 dir)
 	attackDir = dir;
 	if (canAttack)
 	{
+		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) == false)
+			return;
+			
 		Act();
 	}
+	
 	attackDir = glm::fvec2(0, 0);
 	/*Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerMovementBehaviour(true));*/
 }
@@ -158,7 +163,7 @@ void PlayerAttackBehaviour::Act()
 	}
 	canAttack = false;
 	
-	
+	TurnManager::Instance()->EndTurn();
 }
 
 void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -208,6 +213,9 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 	if (canAttack && (eventCasted->key == GLFW_KEY_W || eventCasted->key == GLFW_KEY_S ||
 		eventCasted->key == GLFW_KEY_A || eventCasted->key == GLFW_KEY_D))
 	{
+		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) == false)
+			return;
+		
 		Act();
 	}
 	attackDir = glm::fvec2(0, 0);
