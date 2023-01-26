@@ -16,9 +16,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\ButtonComponent.h" />
+    <ClInclude Include="Components\CharacterStats.h" />
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
     <ClInclude Include="Components\EnemyTest.h" />
     <ClInclude Include="Components\FireballComponent.h" />
+    <ClInclude Include="Components\ItemStats.h" />
     <ClInclude Include="Components\PlayerAttackBehaviour.h" />
     <ClInclude Include="Components\PlayerController.h" />
     <ClInclude Include="Components\PlayerFSM.h" />
@@ -28,7 +30,6 @@
     <ClInclude Include="Components\TurnManager.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="ScoreSystem.h" />
-    <ClInclude Include="Components\StatSystem.h" />
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
   </ItemGroup>
