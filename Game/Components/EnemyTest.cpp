@@ -4,6 +4,7 @@
 #include "Core/GameObject.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Health.h"
+#include "Core/Components/Transform.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Util/Events/Events.h"
@@ -45,10 +46,12 @@ void EnemyTest::onTurnChanged(const onStartTurn* event)
 		// generate x,y coords in range
 		std::srand(std::time(nullptr));
 		int random_variable = std::rand() % 50;
-		
+
+		glm::vec2 pos = {std::rand() % 25, std::rand() % 25};
 		// get random tile in range
-		//GridSystem::Instance()->getTile(2, {std::rand() % 50, std::rand() % 50});
+		const auto tile = GridSystem::Instance()->getTile(0, pos);
 		// move to that tile
+		getOwner()->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
 		// end turn
 		TurnManager::Instance()->EndTurn();
 	}
