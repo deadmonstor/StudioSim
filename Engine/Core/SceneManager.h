@@ -21,6 +21,7 @@ public:
 	void lateUpdate();
 	void render() const;
 	void deleteAllPendingObjects() const;
+	void lateShutdown();
 
 	void onSceneChanged(const OnSceneChangeRequested* event);
 	bool isShuttingDown() const { return shuttingDown; }
@@ -33,6 +34,7 @@ private:
 	void addPendingObjects();
 	
 	Scene* currentScene;
+	Scene* loadNextScene;
 	bool shuttingDown = false;
 	bool loadingScene = false;
 	friend class ImGuiHandler;

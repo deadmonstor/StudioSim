@@ -7,6 +7,7 @@ TurnManager::TurnManager()
 {
 	Griddy::Events::subscribe(this, &TurnManager::onUpdate);
 	Griddy::Events::subscribe(this, &TurnManager::onGameObjectRemoved);
+	Griddy::Events::subscribe(this, &TurnManager::onSceneChanged);
 }
 
 void TurnManager::addToTurnQueue(GameObject* object)
@@ -23,10 +24,15 @@ void TurnManager::onUpdate(OnEngineUpdate* event)
 
 void TurnManager::onGameObjectRemoved(const OnGameObjectRemoved* event)
 {
-	if (event->gameObject == m_CurrentTurnObject)
+	if (event->gameObject == m_CurrentTurnObject && !SceneManager::Instance()->isLoadingScene())
 	{
 		EndTurn();
 	}
+}
+
+void TurnManager::onSceneChanged(OnSceneChanged* scene)
+{
+	CanMakeATurn = std::queue<GameObject*>();
 }
 
 void TurnManager::NextTurn()
@@ -45,6 +51,28 @@ void TurnManager::NextTurn()
 	{
 		NextTurn();
 	}
+}
+
+void TurnManager::debugString()
+{
+	ImGui::Indent();
+	
+	ImGui::Text("Current Turn Object: %s", m_CurrentTurnObject->getName().c_str());
+	ImGui::Text("CanMakeATurn: %d", CanMakeATurn.size());
+
+	if (ImGui::TreeNode("Objects: "))
+	{
+		std::queue<GameObject*> tempQueue = CanMakeATurn;
+		while (!tempQueue.empty())
+		{
+			const GameObject* object = tempQueue.front();
+			tempQueue.pop();
+			ImGui::Text("%s", object->getName().c_str());
+		}
+		ImGui::TreePop();
+	}
+	
+	ImGui::Unindent();
 }
 
 bool TurnManager::isCurrentTurnObject(const GameObject* object)

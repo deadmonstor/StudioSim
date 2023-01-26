@@ -3,6 +3,7 @@
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
 #include <queue>
+#include "Core/Scene.h"
 
 
 class TurnManager : public SingletonTemplate<TurnManager>
@@ -19,9 +20,13 @@ protected:
 
 private:
 	std::queue<class GameObject*> CanMakeATurn;
+	void onSceneChanged(OnSceneChanged* scene);
 	void NextTurn();
+	void debugString();
 
 	GameObject* m_CurrentTurnObject;
+
+	friend class ImGuiHandler;
 };
 
 class onStartTurn : public Griddy::Event
