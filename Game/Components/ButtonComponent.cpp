@@ -16,7 +16,11 @@ void ButtonComponent::onMouseDown(const OnMouseDown* event)
 {
 	//check if mouse is in bounds of button
 	const glm::vec2 mousePos = Input::getMousePosition();
-	if (mousePos.x >= pos.x && mousePos.x <= pos.x + size.x &&
+	std::cout << "Button Pos X: " << pos.x << " Button PosY: " << pos.y << std::endl;
+	std::cout << "Button Size X: " << size.x << " Button Size Y: " << size.y << std::endl;
+	std::cout << "Mouse Pos X: " << mousePos.x << " Mouse PosY: " << mousePos.y << std::endl;
+
+	if (mousePos.x >= pos.x - (size.x*2) && mousePos.x <= pos.x &&
 		mousePos.y >= pos.y && mousePos.y <= pos.y + size.y)
 	{
 		onClick();

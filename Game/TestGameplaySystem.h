@@ -298,11 +298,11 @@ public:
 		testButton->createBuffers();
 		testButton->setSortingOrder(1);
 		testButton->setLit(false);
-		testButton->setPivot(Pivot::Center);
+		testButton->setPivot(Pivot::BottomLeft);
 		testButton->SetTexture(ResourceManager::GetTexture("face"));
 		testButton->SetShader(ResourceManager::GetShader("spriteunlit"));
-		testButton->setPos(glm::vec2{ 0,0});
-		testButton->setSize(glm::vec2{ 500, 500 });
+		testButton->setPos(glm::vec2{ 1000 ,800});
+		testButton->setSize(glm::vec2{ 200, 200 });
 		UIManager::Instance()->addButtonToUI("testButton", testButton);
 
 		TurnManager::Instance()->addToTurnQueue(testRST);
