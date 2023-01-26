@@ -15,5 +15,7 @@ public:
 
 	//Continues the previously found path to a new position
 	std::deque<TileHolder*> ContinuePath(std::deque<glm::vec2> currentPath, TileHolder* end);
+
+	//breadcrumb pathfinding implementation here also
 };
 
