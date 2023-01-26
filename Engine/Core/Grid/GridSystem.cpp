@@ -199,6 +199,7 @@ std::vector<TileHolder*> GridSystem::getPathfindingNeighbours(int id, TileHolder
 		for (int y = -1; y < 2; y++)
 		{
 			if (x == 0 && y == 0) continue;
+			//If diagonal neighbour then ignore
 			if (abs(x) == abs(y)) continue;
 
 			glm::vec2 neighbour = tile->position + glm::vec2(x, y);
