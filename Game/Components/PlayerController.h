@@ -11,6 +11,7 @@ public:
 
 	void createPlayer();
 	void onKeyDown(const OnKeyDown* keyDown);
+	void onKeyHold(const OnKeyRepeat* keyHold);
 	void onKeyUp(const OnKeyUp* keyUp);
 
 	SpriteComponent* playerSprite{};
