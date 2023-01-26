@@ -19,9 +19,9 @@ void EnemyTest::start()
 	sprite->setLit(true);
 	sprite->setPivot(Pivot::Center);
 
-	Light* light = getOwner()->addComponent<Light>();
+	/*Light* light = getOwner()->addComponent<Light>();
 	light->setFalloff({2.75f, 2.75f, 55.0f});
-	light->setColor({1.0f, 1.0f, 1.0f, 0.25f});
+	light->setColor({1.0f, 1.0f, 1.0f, 0.25f});*/
 
 	TurnManager::Instance()->addToTurnQueue(getOwner());
 
@@ -51,7 +51,7 @@ void EnemyTest::onTurnChanged(const onStartTurn* event)
 		// get random tile in range
 		const auto tile = GridSystem::Instance()->getTile(0, pos);
 		// move to that tile
-		getOwner()->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
+		//getOwner()->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
 		// end turn
 		TurnManager::Instance()->EndTurn();
 	}

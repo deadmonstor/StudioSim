@@ -287,6 +287,11 @@ void GridSystem::loadFromFile(const int mapID, const std::string& fileName)
 				grid_holder->tile->SetTexture(texture);
 			}
 
+			if (std::function<void(glm::vec2)> spawnFunction = gridLayers[mapID]->spawnFunctions[i]; spawnFunction != nullptr)
+			{
+				spawnFunction({x, y});
+			}
+
 			grid_holder->isSpawned = std::ranges::find(layer->emptyTiles, i) == layer->emptyTiles.end();
 			grid_holder->isWall =std::ranges::find(layer->wallIDs, i) != layer->wallIDs.end();
 			

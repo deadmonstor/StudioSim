@@ -162,7 +162,7 @@ public:
 		grid_system->loadFromFile(0, "Grid/test2.txt");
 		
 		grid_system->setEmptyTileIDs(1, std::vector<int>{});
-		grid_system->setWallIDs(1, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
+		grid_system->setWallIDs(1, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 31, 32, 33});
 		grid_system->setTextureMap(1, std::map<int, Texture>
 		{
 			{ 21, ResourceManager::GetTexture("tile12")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
@@ -195,13 +195,23 @@ public:
 
 		grid_system->setEmptyTileIDs(2, std::vector<int>{});
 		grid_system->setWallIDs(2, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
-		grid_system->setTextureMap(2, std::map<int, Texture>
+		grid_system->setSpawnFunctionMap(2,
 		{
-			{ 91, ResourceManager::GetTexture("tile61")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
-			{ 92, ResourceManager::GetTexture("tile47") },
-			{ 93, ResourceManager::GetTexture("tile169") }
+			{ 91, [this](glm::vec2 pos)
+			{
+				PlayerController::Instance()->createPlayer();
+				PlayerController::Instance()->playerPTR->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
+			} },
+			{ 92, [this](glm::vec2 pos)
+			{
+				createEnemy(pos);
+			} },
+			{ 93, [this](glm::vec2 pos)
+			{
+				// TODO: Create a chest
+			} }
 		});
-
+		
 		grid_system->loadFromFile(2, "Grid/LevelDesignSP.txt");
 
 		/*auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
@@ -212,13 +222,6 @@ public:
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
 		sprites.push_back(sprite);*/
-
-		createEnemy(glm::vec2(20, 20));
-		createEnemy(glm::vec2(20, 21));
-		createEnemy(glm::vec2(20, 22));
-		createEnemy(glm::vec2(20, 23));
-		createEnemy(glm::vec2(20, 24));
-		createEnemy(glm::vec2(20, 25));
 		
 		//Slime Hurt Anim
 		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
@@ -345,7 +348,6 @@ public:
 		//sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
 		//sprite->setColor(glm::vec3(1, 1, 1));
 		//sprite->setLit(false);
-		PlayerController::Instance()->createPlayer();
 		
 		CreateFireball(glm::vec2{ 1000, 500 });
 		TurnManager::Instance()->StartTurnSystem();
