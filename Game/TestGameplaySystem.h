@@ -159,10 +159,10 @@ public:
 			{ 11, ResourceManager::GetTexture("tile242") }
 		});
 		
-		grid_system->loadFromFile(0, "Grid/test2.txt");
+		grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
 		
 		grid_system->setEmptyTileIDs(1, std::vector<int>{});
-		grid_system->setWallIDs(1, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 31, 32, 33});
+		grid_system->setWallIDs(1, std::vector<int>{35, 36, 41, 42, 43, 44, 31, 32, 33});
 		grid_system->setTextureMap(1, std::map<int, Texture>
 		{
 			{ 21, ResourceManager::GetTexture("tile12")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
@@ -194,7 +194,7 @@ public:
 		grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
 
 		grid_system->setEmptyTileIDs(2, std::vector<int>{});
-		grid_system->setWallIDs(2, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
+		grid_system->setWallIDs(2, std::vector<int>{});
 		grid_system->setSpawnFunctionMap(2,
 		{
 			{ 91, [this](glm::vec2 pos)
@@ -212,7 +212,7 @@ public:
 			} }
 		});
 		
-		grid_system->loadFromFile(2, "Grid/LevelDesignSP.txt");
+		grid_system->loadFromFile(2, "Grid/SecondLevelDesignSP.txt");
 
 		/*auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->setSize(glm::vec2(96, 48));
