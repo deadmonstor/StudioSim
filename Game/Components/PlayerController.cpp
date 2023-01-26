@@ -27,6 +27,7 @@ void PlayerController::createPlayer()
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
 
+	playerStats = new PlayerStats();
 	playerStats->strength = 1;
 	playerStats->health = 10 + (playerStats->strength * 5);
 	playerStats->attackDamage = 1;
