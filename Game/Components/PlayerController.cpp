@@ -37,7 +37,6 @@ void PlayerController::createPlayer()
 	playerStats->intelligence = 1;
 	playerStats->mana = 10;
 	playerStats->spellPower = 1;
-	playerStats->spellCooldown = 3;
 	
 	myInventory = playerPTR->addComponent<Inventory>(20);
 	Light* light = playerPTR->addComponent<Light>();

@@ -1,7 +1,9 @@
 #pragma once
+#include <string>
 
 struct StatSystem
 {
+    std::string name;
     int strength;
     int health;
     int attackDamage;

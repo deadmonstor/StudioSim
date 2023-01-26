@@ -23,10 +23,10 @@ struct ConsumableStats : public StatSystem
 
 struct SpellsStats : public StatSystem
 {
-    std::string spellName;
-    std::string spellDescription;
-    std::string spellType;
-
-    int spellCooldowm;
-    int spellLevel;
+	int manaCost;
+	int cooldown;
+	int spellPower;
+	int range;
+	int turnsEffected;
+	int dmgPerTurn;
 };
