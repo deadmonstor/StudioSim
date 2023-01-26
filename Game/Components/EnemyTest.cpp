@@ -47,7 +47,7 @@ void EnemyTest::onTurnChanged(const onStartTurn* event)
 		int random_variable = std::rand();
 		
 		// get random tile in range
-		GridSystem::Instance()->getTile(2, {random(0, 10), random(0, 10)}})
+		GridSystem::Instance()->getTile(2, {std::rand() % 50, std::rand() % 50});
 		// move to that tile
 		// end turn
 		TurnManager::Instance()->EndTurn();
