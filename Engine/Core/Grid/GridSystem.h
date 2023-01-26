@@ -63,7 +63,7 @@ public:
 	
 	Tile* getTile(int id, const glm::ivec2& _pos);
 	std::vector<std::pair<glm::vec2, Tile*>> getNeighbours(int id, glm::vec2 pos);
-	std::vector<TileHolder*> getNeighbours(int id, TileHolder* tile);
+	std::vector<TileHolder*> getPathfindingNeighbours(int id, TileHolder* tile);
 	glm::vec2 getTilePosition(glm::vec2 vec) const;
 	glm::vec2 getWorldPosition(glm::vec2 vec) const;
 	void setSatOnTile(int id, glm::vec2 vec, GameObject* enemy);

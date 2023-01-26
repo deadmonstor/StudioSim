@@ -1,5 +1,6 @@
 #include "PathfindingMachine.h"
 #include <stack>
+#include <chrono>
 
 std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHolder* end)
 {
@@ -14,6 +15,12 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 
 	//The path is output to this queue
 	std::deque<TileHolder*> path = std::deque<TileHolder*>();
+
+	if (end->isWall)
+	{
+		LOG_INFO("Target is an obstructed tile");
+		return path;
+	}
 
 	//Add the start node to frontier
 	frontier.push(std::make_pair(0, start));
@@ -32,7 +39,7 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			break;
 		}
 		//at the moment uses ID of 0, but make it use a flattened map later
-		std::vector<TileHolder*> neighbours = GridSystem::Instance()->getNeighbours(0, currentNode.second);
+		std::vector<TileHolder*> neighbours = GridSystem::Instance()->getPathfindingNeighbours(0, currentNode.second);
 		//Find cost map entries of the neighbours
 		for (TileHolder* neighbour : neighbours) 
 		{
@@ -80,7 +87,15 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 	{
 		LOG_INFO("Path to target was not found.");
 	}
+
 	return path;
+}
+
+std::deque<TileHolder*> PathfindingMachine::FindPath(glm::vec2 startPos, glm::vec2 endPos)
+{
+	TileHolder* tile1 = GridSystem::Instance()->getTileHolder(0, startPos / GridSystem::Instance()->getTileSize());
+	TileHolder* tile2 = GridSystem::Instance()->getTileHolder(0, endPos / GridSystem::Instance()->getTileSize());
+	return FindPath(tile1, tile2);
 }
 
 std::deque<TileHolder*> PathfindingMachine::ContinuePath(std::deque<glm::vec2> currentPath, TileHolder* end)

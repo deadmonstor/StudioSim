@@ -13,6 +13,8 @@ public:
 	//Find tile path between tile pos A and tile pos B
 	std::deque<TileHolder*> FindPath(TileHolder* start, TileHolder* end);
 
+	std::deque<TileHolder*> FindPath(glm::vec2 startPos, glm::vec2 endPos);
+
 	//Continues the previously found path to a new position
 	std::deque<TileHolder*> ContinuePath(std::deque<glm::vec2> currentPath, TileHolder* end);
 
