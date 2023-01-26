@@ -44,10 +44,10 @@ void EnemyTest::onTurnChanged(const onStartTurn* event)
 	{
 		// generate x,y coords in range
 		std::srand(std::time(nullptr));
-		int random_variable = std::rand();
+		int random_variable = std::rand() % 50;
 		
 		// get random tile in range
-		GridSystem::Instance()->getTile(2, {std::rand() % 50, std::rand() % 50});
+		//GridSystem::Instance()->getTile(2, {std::rand() % 50, std::rand() % 50});
 		// move to that tile
 		// end turn
 		TurnManager::Instance()->EndTurn();
