@@ -11,6 +11,5 @@ struct StatSystem
     int intelligence;
     int mana;
     int spellPower;
-    int spellCooldown;
 
 };
