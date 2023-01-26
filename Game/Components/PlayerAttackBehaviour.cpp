@@ -240,7 +240,7 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 	{
 		if (gameObject->hasComponent(typeid(Health)))
 		{
-			AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 0, 0);
+			AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 
 			auto* health = gameObject->getComponent<Health>();
 			health->setHealth(health->getHealth() - 50);
@@ -258,7 +258,7 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 	AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
 	slashSprite->setPivot(Pivot::Center);
 	slash->addComponent<DestroyAfterAnimation>();
-	AudioEngine::Instance()->playSound("Sounds\\AirSlash.wav", false, 0.3f, 0, 0);
+	AudioEngine::Instance()->playSound("Sounds\\AirSlash.wav", false, 0.3f, 0, 0, AudioType::SoundEffect);
 }
 
 FunctionMap PlayerAttackBehaviour::CreateFunctionMap()
