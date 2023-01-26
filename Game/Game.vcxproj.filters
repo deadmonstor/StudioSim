@@ -30,5 +30,7 @@
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
     <ClInclude Include="Components\ButtonComponent.h" />
+    <ClInclude Include="Components\StatSystem.h" />
+    <ClInclude Include="Components\Stats.h" />
   </ItemGroup>
 </Project>
