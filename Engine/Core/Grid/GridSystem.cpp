@@ -189,6 +189,28 @@ std::vector<std::pair<glm::vec2, Tile*>> GridSystem::getNeighbours(const int id,
 	return neighbours;
 }
 
+std::vector<TileHolder*> GridSystem::getNeighbours(int id, TileHolder* tile)
+{
+	auto& internalMap = gridLayers[id]->internalMap;
+	std::vector<TileHolder*> neighbours;
+
+	for (int x = -1; x < 2; x++)
+	{
+		for (int y = -1; y < 2; y++)
+		{
+			if (x == 0 && y == 0) continue;
+
+			glm::vec2 neighbour = tile->position + glm::vec2(x, y);
+			if (neighbour.x < 0 || neighbour.y < 0) continue;
+			if (neighbour.x >= gridSize.x || neighbour.y >= gridSize.y) continue;
+
+			TileHolder* tile = internalMap[neighbour.x][neighbour.y];
+			neighbours.emplace_back(tile);
+		}
+	}
+	return neighbours;
+}
+
 glm::vec2 GridSystem::getTilePosition(const glm::vec2 vec) const
 {
 	return {floor(vec.x / tileSize.x), floor(vec.y / tileSize.y)};

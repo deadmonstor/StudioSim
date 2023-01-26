@@ -29,7 +29,11 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			foundPath = true;
 			break;
 		}
-		std::vector<std::pair<glm::vec2, Tile*>> neighbours = GridSystem::getNeighbours(0, currentNode.second->position);
+		std::vector<TileHolder*> neighbours = GridSystem::Instance()->getNeighbours(0, currentNode.second);
+		
+		
+			
+		
 	}
 
 
