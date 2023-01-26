@@ -23,5 +23,10 @@ struct ConsumableStats : public StatSystem
 
 struct SpellsStats : public StatSystem
 {
-	int spellCooldown;
+    std::string spellName;
+    std::string spellDescription;
+    std::string spellType;
+
+    int spellCooldowm;
+    int spellLevel;
 };
