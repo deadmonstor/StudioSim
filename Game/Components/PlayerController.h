@@ -16,10 +16,12 @@ public:
 	void onKeyHold(const OnKeyRepeat* keyHold);
 	void onKeyUp(const OnKeyUp* keyUp);
 
+	void UpdateStats();
+
 	SpriteComponent* playerSprite{};
 	GameObject* playerPTR{};
 	PlayerFSM* playerFSM{};
 	Camera* cameraComponent{};
-	PlayerStats* playerStats{};
 	Inventory* myInventory{};
+	PlayerStats* playerStats{};
 };

@@ -28,16 +28,18 @@ void PlayerController::createPlayer()
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
 
-	playerStats = new PlayerStats();
-	playerStats->strength = 1;
-	playerStats->health = 10 + (playerStats->strength * 5);
-	playerStats->attackDamage = 1;
-	playerStats->agility = 1;
+	
+	playerStats->maxHealth = 10;
+	playerStats->currentHealth = 10;
+	playerStats->currentEXP = 0;
+	playerStats->maxEXP = 100;
+	playerStats->currentMana = 10;
+	playerStats->maxMana = 10;
+	playerStats->attack = 1;
+	playerStats->spellPower = 1;
 	playerStats->defence = 1;
 	playerStats->critChance = 0.0f;
-	playerStats->intelligence = 1;
-	playerStats->mana = 10;
-	playerStats->spellPower = 1;
+	playerStats->coinsHeld = 0;
 	
 	myInventory = playerPTR->addComponent<Inventory>(20);
 	Light* light = playerPTR->addComponent<Light>();
@@ -110,4 +112,9 @@ void PlayerController::onKeyUp(const OnKeyUp* keyUp)
 {
 	const std::type_index eventType = typeid(OnKeyUp);
 	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyUp(keyUp->key, keyUp->scancode), eventType);
+}
+
+void PlayerController::UpdateStats()
+{
+
 }
