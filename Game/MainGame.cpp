@@ -32,10 +32,10 @@ int main(int, char**)
 	ResourceManager::LoadTexture("Sprites\\rock.png", "rock");
 	ResourceManager::LoadTexture("Sprites\\background.png", "background");
 	ResourceManager::LoadTexture("Sprites\\UE.png", "troll");
-	
+	ResourceManager::LoadTexture("Sprites\\image.png", "buttonTest");
+
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFunc);
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncLewis);
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestInventory);
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncUpdate);
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testDropCallback);
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testKeyDown);
@@ -46,6 +46,7 @@ int main(int, char**)
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestMouseDown);
 	Griddy::Events::subscribe(PlayerController::Instance(), &PlayerController::onKeyDown);
 	Griddy::Events::subscribe(PlayerController::Instance(), &PlayerController::onKeyUp);
+	Griddy::Events::subscribe(PlayerController::Instance(), &PlayerController::onKeyHold);
 
 	MainGame::Instance()->run();
 	return 0;

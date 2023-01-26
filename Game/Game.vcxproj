@@ -15,7 +15,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\ButtonComponent.h" />
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
+    <ClInclude Include="Components\EnemyTest.h" />
     <ClInclude Include="Components\FireballComponent.h" />
     <ClInclude Include="Components\PlayerAttackBehaviour.h" />
     <ClInclude Include="Components\PlayerController.h" />
@@ -24,17 +26,21 @@
     <ClInclude Include="Components\TurnComponent.h" />
     <ClInclude Include="Components\TurnManager.h" />
     <ClInclude Include="MainGame.h" />
+    <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\ButtonComponent.cpp" />
     <ClCompile Include="Components\DestroyAfterAnimation.cpp" />
+    <ClCompile Include="Components\EnemyTest.cpp" />
     <ClCompile Include="Components\FireballComponent.cpp" />
     <ClCompile Include="Components\PlayerAttackBehaviour.cpp" />
     <ClCompile Include="Components\PlayerController.cpp" />
     <ClCompile Include="Components\PlayerFSM.cpp" />
     <ClCompile Include="Components\PlayerMovementBehaviour.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Components\TurnComponent.cpp" />
     <ClCompile Include="Components\TurnManager.cpp" />
     <ClCompile Include="System\Inventory.cpp" />
@@ -130,7 +136,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\Engine\;$(SolutionDir)\Library\fModLib\x64;$(SolutionDir)\Engine\Library;%(AdditionalLibraryDirectories);$(SolutionDir)\Library\glfw-3.3.8.bin.WIN64\lib-vc2022</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -80,13 +80,10 @@ void StateMachine::EventResponse(BehaviourEvent* event)
 {
 	if (event->targetBehaviour == this)
 	{
-		LOG_INFO("State Machine receives event");
 		event->targetBehaviour = currentState;
 		currentState->EventResponse(event);
 	}
 }
-
-
 
 //Checks the transition against the current state.
 void StateMachine::OnTransitionReceived(const StateTransition* event)
@@ -99,7 +96,6 @@ void StateMachine::OnTransitionReceived(const StateTransition* event)
 
 void StateMachine::CleanUp()
 {
-	LOG_INFO("Cleaning state machine.");
 	if (baseState == currentState)
 	{
 		baseState->destroy();

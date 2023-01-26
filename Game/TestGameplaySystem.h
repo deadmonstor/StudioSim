@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Components/EnemyTest.h"
 #include "Core/Input.h"
 #include "Components/FireballComponent.h"
 #include "Core/Components/AI/StateMachine.h"
@@ -12,8 +13,11 @@
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
+#include "ScoreSystem.h"
+#include <string>
 #include "Components/TurnManager.h"
 #include "Components/PlayerController.h"
+#include "Components/ButtonComponent.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -105,6 +109,17 @@ public:
 		fireball->addComponent<FireballComponent>();
 		sm = fireball->addComponent<StateMachine>();
 	}
+
+	void createEnemy(const glm::vec2 pos)
+	{
+		const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
+		
+		auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy", tileWorldSpace);
+		enemy->getTransform()->setSize(glm::vec2(48, 24));
+		enemy->addComponent<EnemyTest>();
+
+		GridSystem::Instance()->setSatOnTile(0, pos, enemy);
+	}
 	
 	void TestFuncLewis(const OnSceneChanged* event) 
 	{
@@ -146,7 +161,7 @@ public:
 		grid_system->loadFromFile(0, "Grid/test2.txt");
 		
 		grid_system->setEmptyTileIDs(1, std::vector<int>{});
-		grid_system->setWallIDs(1, std::vector<int>{});
+		grid_system->setWallIDs(1, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
 		grid_system->setTextureMap(1, std::map<int, Texture>
 		{
 			{ 21, ResourceManager::GetTexture("tile12")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
@@ -185,6 +200,13 @@ public:
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
 		sprites.push_back(sprite);*/
+
+		createEnemy(glm::vec2(20, 20));
+		createEnemy(glm::vec2(20, 21));
+		createEnemy(glm::vec2(20, 22));
+		createEnemy(glm::vec2(20, 23));
+		createEnemy(glm::vec2(20, 24));
+		createEnemy(glm::vec2(20, 25));
 		
 		//Slime Hurt Anim
 		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
@@ -271,8 +293,40 @@ public:
 
 		TurnManager::Instance()->addToTurnQueue(testRST);
 		TurnManager::Instance()->addToTurnQueue(testRSW);
+		//ScoreSystem score = new ScoreSystem();
+		//score.SaveScore();
+		int m_count = 0;
+		if (m_count == 0)
+		{
+			ScoreSystem::Instance()->setScore(75);
+			std::string User = "LJP";
+			//ScoreSystem::Instance()->SaveScore(User);
 
-		////Player Idle Anim
+			m_count++;
+		}
+		
+		if (m_count == 1)
+		{
+			ScoreSystem::Instance()->ReadScores(false);
+			m_count++;
+		}
+
+		if (m_count == 2)
+		{
+			ScoreSystem::Instance()->RenderTopScores();
+			/*	ScoreSystem::Instance()->ReadScores();
+		ScoreSystem::Instance()->RenderTopScores();*/
+		}
+
+		/*
+		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
+		test->getTransform()->setSize(glm::vec2(96, 48));
+		
+		auto cam = test->addComponent<Camera>();
+		Renderer::Instance()->setCamera(cam);
+*/
+
+		//Player Idle Anim
 		//auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
 		//testPlayerIdle->getTransform()->setSize(glm::vec2(256, 256));
 
@@ -282,54 +336,7 @@ public:
 		//sprite->setLit(false);
 		PlayerController::Instance()->createPlayer();
 		
-
-		//CreateFireball(glm::vec2{ 1000, 500 });
-	}
-	
-	void TestInventory(const OnSceneChanged* event)
-	{
-		// TODO: Enum this or something its kinda bad to do this
-		if (event->key != "testInventory")
-			return;
-
-		Inventory myInventory(50); // Holds 10 items
-	
-		Item sword;
-		sword.name = "Bandit sword";
-		sword.type = "Weapon";
-		sword.itemDescription = "A common sword";
-		sword.equipSlot = "Hand";
-		sword.isEquipped = false;
-		sword.atk = 10;
-		sword.crit = 2;
-		myInventory.add_item(sword);
-
-		Item armour;
-		armour.name = "Bandit armor";
-		armour.type = "Armour";
-		armour.equipSlot = "Chest";
-		armour.isEquipped = false;
-		armour.def = 15;
-		myInventory.add_item(armour);
-
-		Item spell;
-		spell.name = "Fireball";
-		spell.type = "Spell";
-		spell.equipSlot = "Spells";
-		spell.isEquipped = false;
-		spell.spellAtk = 20;
-		spell.manaCost = 10;
-		spell.coolDown = 4; //Secods
-		spell.effectDuration = 3; //Seconds
-		myInventory.add_item(spell);
-
-		myInventory.draw_inventory();
-		myInventory.equip_item("Bandit sword");
-		myInventory.draw_inventory();
-	
-		myInventory.equip_item("Fireball");
-		myInventory.unequip_item("Bandit sword");
-		myInventory.draw_inventory();
+		CreateFireball(glm::vec2{ 1000, 500 });
 	}
 	
 	glm::fvec2 direction = glm::fvec2(0, 0);
@@ -346,10 +353,7 @@ public:
 
 	void testRender(OnEngineRender*)
 	{
-		if (SceneManager::Instance()->getScene()->name != "testInventory")
-			return;
-		
-		TextRenderer::Instance()->renderText("abcdefghijklmnopqrstuvwsyz", 500, 500, 1, glm::vec3(1, 1, 1));
+		//TextRenderer::Instance()->renderText("abcdefghijklmnopqrstuvwsyz", -200, 0, 1, glm::vec3(1, 1, 1));
 	}
 	
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)

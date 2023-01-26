@@ -2,6 +2,7 @@
 #include <map>
 
 #include "Tile.h"
+#include "Core/Renderer/Lighting.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
 
@@ -10,7 +11,9 @@ struct TileHolder
 {
 	glm::vec2 position;
 	Tile* tile;
-	bool isOccupied;
+	GameObject* gameObjectSatOnTile;
+
+	bool isSpawned;
 	bool isWall;
 };
 
@@ -45,15 +48,22 @@ public:
 	std::map<int, SortingLayer&>& getOrderMap() { return this->orderSortingMap; }
 	glm::ivec2 getGridSize() { return gridSize; }
 	glm::fvec2 getTileSize() { return tileSize; }
-	TileHolder* getTileHolder(const int id, const glm::ivec2& _pos);
-	GridLayer* GetGridLayer(const int id);
+	TileHolder* getTileHolder(int id, const glm::ivec2& _pos);
+	GridLayer* getGridLayer(int id);
+	bool isWallTile(const glm::vec2 pos);
+	bool isInMap(int id, const glm::vec2 pos) const;
 
 	void init(glm::fvec2 _tileSize, glm::ivec2 _gridSize);
 	void clearGrid(int id);
 	void loadFromFile(int id, const std::string& fileName);
 	void onDebugEvent(const OnDebugEventChanged*);
+	void refreshLightData(LightUpdateRequest lightUpdateRequest);
 	
 	Tile* getTile(int id, const glm::ivec2& _pos);
 	std::vector<std::pair<glm::vec2, Tile*>> getNeighbours(int id, glm::vec2 pos);
+	glm::vec2 getTilePosition(glm::vec2 vec) const;
+	glm::vec2 getWorldPosition(glm::vec2 vec) const;
+	void setSatOnTile(int id, glm::vec2 vec, GameObject* enemy);
+	void resetSatOnTile(int id, glm::vec2 vec);
 
 };
