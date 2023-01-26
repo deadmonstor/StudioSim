@@ -5,6 +5,7 @@
 #include "Core/Components/Transform.h"
 #include "Core/AudioEngine.h"
 #include <Core/Components/Health.h>
+#include "TurnManager.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour()
 {
@@ -26,8 +27,6 @@ PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 
 void PlayerMovementBehaviour::Act()
 {
-	//move player
-	
 	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
 	GameObject* gameObjectOnTile = curTileHolder->gameObjectSatOnTile;
 	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
@@ -48,8 +47,10 @@ void PlayerMovementBehaviour::Act()
 			origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
 		
 			AudioEngine::Instance()->playSound("Sounds\\step.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
+			TurnManager::Instance()->EndTurn();
 		}
 	}
+	
 	canMove = false;
 	attackBehaviour->canAttack = true;
 }
@@ -81,8 +82,11 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 		moveDir.x += 1;
 	}
 
-	if (canMove)
+	if (canMove && moveDir != glm::fvec2(0, 0))
 	{
+		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) == false)
+			return;
+		
 		Act();
 	}
 	moveDir = glm::fvec2(0, 0);
@@ -114,6 +118,9 @@ void PlayerMovementBehaviour::onKeyHoldResponse(Griddy::Event* event)
 
 	if (canMove && canAttackWhileMoving)
 	{
+		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) == false)
+			return;
+		
 		Act();
 	}
 	

@@ -14,6 +14,7 @@
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
+#include "UIManager.h"
 
 
 namespace Griddy
@@ -123,6 +124,7 @@ namespace Griddy
 
 		Renderer::Instance()->render();
 		SceneManager::Instance()->render();
+		UIManager::Instance()->render();
 
 		Events::invoke<OnEngineRender>();
 		

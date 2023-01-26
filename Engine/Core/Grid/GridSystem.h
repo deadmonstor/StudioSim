@@ -21,6 +21,7 @@ struct GridLayer
 {
 	std::map<int, std::map<int, TileHolder*>> internalMap = {};
 	std::map<int, Texture> textureMap = {};
+	std::map<int, std::function<void(glm::vec2)>> spawnFunctions = {};
 	
 	std::vector<int> wallIDs = {};
 	std::vector<int> emptyTiles = {};
@@ -44,10 +45,11 @@ public:
 	void setWallIDs(int id, const std::vector<int>& wallIDs);
 	void setEmptyTileIDs(int id, const std::vector<int>& emptyTileIDs);
 	void setOrderMap(const std::map<int, SortingLayer&>& _sortingMap) { this->orderSortingMap = _sortingMap; }
+	void setSpawnFunctionMap(const int id, const std::map<int, std::function<void(glm::vec2)>>& _spawnFunction) { this->gridLayers[id]->spawnFunctions = _spawnFunction; }
 
 	std::map<int, SortingLayer&>& getOrderMap() { return this->orderSortingMap; }
-	glm::ivec2 getGridSize() { return gridSize; }
-	glm::fvec2 getTileSize() { return tileSize; }
+	glm::ivec2 getGridSize() const { return gridSize; }
+	glm::fvec2 getTileSize() const { return tileSize; }
 	TileHolder* getTileHolder(int id, const glm::ivec2& _pos);
 	GridLayer* getGridLayer(int id);
 	bool isWallTile(const glm::vec2 pos);

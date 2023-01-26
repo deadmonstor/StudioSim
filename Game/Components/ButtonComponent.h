@@ -15,19 +15,38 @@ public:
 		SetTexture(_texture);
 	}
 
+
+	void render();
 	void SetTexture(const Texture& texture);
 	void SetShader(const Shader& shader);
 
 	void onMouseDown(const OnMouseDown* event);
 	void onClick();
+
+	void setSize(const glm::vec2& buttSize)
+	{
+		size = buttSize;
+	}
+
+	glm::vec2 getSize()
+	{
+		return size;
+	}
+
+	void setPos(const glm::vec2& buttPos)
+	{
+		pos = buttPos;
+	}
+
+	glm::vec2 getPos()
+	{
+		return pos;
+	}
 protected:
 	//Text 
 	std::string buttonText;
 
-	//Sprite
-	SpriteComponent* buttonSprite;
-
 	//Sizes for Render/Check If Mouse Over
-	int sizeX, sizeY, posX, posY;
+	glm::vec2 pos, size;
 };
 

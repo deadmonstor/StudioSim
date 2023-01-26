@@ -23,10 +23,12 @@
     <ClInclude Include="Components\PlayerController.h" />
     <ClInclude Include="Components\PlayerFSM.h" />
     <ClInclude Include="Components\PlayerMovementBehaviour.h" />
+    <ClInclude Include="Components\Stats.h" />
     <ClInclude Include="Components\TurnComponent.h" />
     <ClInclude Include="Components\TurnManager.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="ScoreSystem.h" />
+    <ClInclude Include="Components\StatSystem.h" />
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
   </ItemGroup>

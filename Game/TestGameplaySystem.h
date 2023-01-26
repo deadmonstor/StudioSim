@@ -9,7 +9,6 @@
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
-#include "System/Inventory.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
@@ -17,7 +16,6 @@
 #include <string>
 #include "Components/TurnManager.h"
 #include "Components/PlayerController.h"
-#include "Components/ButtonComponent.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -121,10 +119,9 @@ public:
 		GridSystem::Instance()->setSatOnTile(0, pos, enemy);
 	}
 	
-	void TestFuncLewis(const OnSceneChanged* event) 
+	void TestFuncScene1(const OnSceneChanged* event) 
 	{
-		// TODO: Enum this or something its kinda bad to do this
-		if (event->key != "debugScene")
+		if (event->key != "debugScene1")
 			return;
 
 		auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
@@ -158,10 +155,10 @@ public:
 			{ 11, ResourceManager::GetTexture("tile242") }
 		});
 		
-		grid_system->loadFromFile(0, "Grid/test2.txt");
+		grid_system->loadFromFile(0, "Grid/Test2.txt");
 		
 		grid_system->setEmptyTileIDs(1, std::vector<int>{});
-		grid_system->setWallIDs(1, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
+		grid_system->setWallIDs(1, std::vector<int>{35, 36, 41, 42, 43, 44, 31, 32, 33});
 		grid_system->setTextureMap(1, std::map<int, Texture>
 		{
 			{ 21, ResourceManager::GetTexture("tile12")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
@@ -192,109 +189,102 @@ public:
 		
 		grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
 
-		/*auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
-		test->getTransform()->setSize(glm::vec2(96, 48));
-
-		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
-		auto sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-		sprites.push_back(sprite);*/
-
-		createEnemy(glm::vec2(20, 20));
-		createEnemy(glm::vec2(20, 21));
-		createEnemy(glm::vec2(20, 22));
-		createEnemy(glm::vec2(20, 23));
-		createEnemy(glm::vec2(20, 24));
-		createEnemy(glm::vec2(20, 25));
+		grid_system->setEmptyTileIDs(2, std::vector<int>{});
+		grid_system->setWallIDs(2, std::vector<int>{});
+		grid_system->setSpawnFunctionMap(2,
+		{
+			{ 91, [this](glm::vec2 pos)
+			{
+				PlayerController::Instance()->createPlayer();
+				PlayerController::Instance()->playerPTR->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
+			} },
+			{ 92, [this](glm::vec2 pos)
+			{
+				createEnemy(pos);
+			} },
+			{ 93, [this](glm::vec2 pos)
+			{
+				// TODO: Create a chest
+			} }
+		});
 		
-		//Slime Hurt Anim
-		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
-		testHurt->getTransform()->setSize(glm::vec2(96, 48));
+		grid_system->loadFromFile(2, "Grid/LevelDesignSP.txt");
 
-		const std::vector textureListHurt = ResourceManager::GetTexturesContaining("Blue-Slime-Hurt");
-		auto sprite = testHurt->addComponent<AnimatedSpriteRenderer>(textureListHurt, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
+		int m_count = 0;
+		if (m_count == 1)
+		{
+			ScoreSystem::Instance()->ReadScores(false);
+			m_count++;
+		}
 
-		//Slime Death Animation
-		auto *testDeath = SceneManager::Instance()->createGameObject("Blue-Slime-Death", glm::vec2{350, 350});
-		testDeath->getTransform()->setSize(glm::vec2(96, 48));
-
-		const std::vector textureListDeath = ResourceManager::GetTexturesContaining("Blue-Slime-Death");
-		sprite = testDeath->addComponent<AnimatedSpriteRenderer>(textureListDeath, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
+		if (m_count == 2)
+		{
+			ScoreSystem::Instance()->RenderTopScores();
+		}
 		
-		//Add zombie and skeleton
+		CreateFireball(glm::vec2{ 1000, 500 });
+		TurnManager::Instance()->StartTurnSystem();
+	}
 
-		//Zombie Animation
-		auto *testZombie = SceneManager::Instance()->createGameObject("Zombie", glm::vec2{400, 400});
-		testZombie->getTransform()->setSize(glm::vec2(38, 38));
+	void TestFuncScene2(const OnSceneChanged* event) 
+	{
+		if (event->key != "debugScene2")
+			return;
 
-		const std::vector textureListZombie = ResourceManager::GetTexturesContaining("Zombie");
-		sprite = testZombie->addComponent<AnimatedSpriteRenderer>(textureListZombie, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
+		auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
+		auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);
+		auto enemySortingLayer = Renderer::addSortingLayer("Top Grid", 1);
+
+		GridSystem* grid_system = GridSystem::Instance();
+		grid_system->init(glm::vec2(48, 48), glm::vec2(70, 70));
+		grid_system->setOrderMap(
+		{
+			{0, backgroundSortingLayer},
+			{1, middleSortingLayer},
+			{2, enemySortingLayer},
+		});
 		
+		grid_system->setEmptyTileIDs(0, std::vector<int>{0});
+		// TODO: Fill these out lol
+		grid_system->setWallIDs(0, std::vector<int>{1,9,3,4,5,6});
+		grid_system->setTextureMap(0, std::map<int, Texture>
+		{
+			{ 1, ResourceManager::GetTexture("tile25")},
+			{ 2, ResourceManager::GetTexture("tile218")},
+			{ 3, ResourceManager::GetTexture("tile2")},
+			{ 4, ResourceManager::GetTexture("tile4") },
+			{ 5, ResourceManager::GetTexture("tile50") },
+			{ 6, ResourceManager::GetTexture("tile28") },
+			{ 7, ResourceManager::GetTexture("tile51") },
+			{ 8, ResourceManager::GetTexture("tile204") },
+			{ 9, ResourceManager::GetTexture("tile26") },
+			{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
+			{ 11, ResourceManager::GetTexture("tile242") }
+		});
+		
+		grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
 
-		//Skeleton Animation
-		auto *testSkeleton = SceneManager::Instance()->createGameObject("Skeleton", glm::vec2{350, 400});
-		testSkeleton->getTransform()->setSize(glm::vec2(38, 38));
-
-
-		const std::vector textureListSkeleton = ResourceManager::GetTexturesContaining("Skeleton");
-		sprite = testSkeleton->addComponent<AnimatedSpriteRenderer>(textureListSkeleton, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-
-		//FX1
-		auto *testFX1 = SceneManager::Instance()->createGameObject("FX1", glm::vec2{350, 500});
-		testFX1->getTransform()->setSize(glm::vec2(64, 64));
-
-		const std::vector textureListFX1 = ResourceManager::GetTexturesContaining("FXSCircle");
-		sprite = testFX1->addComponent<AnimatedSpriteRenderer>(textureListFX1, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-		//FX2
-		auto *testFX2 = SceneManager::Instance()->createGameObject("FX2", glm::vec2{420, 500});
-		testFX2->getTransform()->setSize(glm::vec2(64, 64));
-
-		const std::vector textureListFX2 = ResourceManager::GetTexturesContaining("FXSDrop");
-		sprite = testFX2->addComponent<AnimatedSpriteRenderer>(textureListFX2, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-		//FX3
-		auto *testFX3 = SceneManager::Instance()->createGameObject("FX3", glm::vec2{280, 500});
-		testFX3->getTransform()->setSize(glm::vec2(64, 64));
-
-		const std::vector textureListFX3 = ResourceManager::GetTexturesContaining("FXSExpl");
-		sprite = testFX3->addComponent<AnimatedSpriteRenderer>(textureListFX3, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-
-		//Red-Slash-Thin
-		auto *testRST = SceneManager::Instance()->createGameObject("Red-Slash-Thin", glm::vec2{280, 700});
-		testRST->getTransform()->setSize(glm::vec2(55, 40));
-
-		const std::vector textureListRST = ResourceManager::GetTexturesContaining("RedSlashThin");
-		sprite = testRST->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-
-		//Red-Slash-Wide
-		auto *testRSW = SceneManager::Instance()->createGameObject("Red-Slash-Wide", glm::vec2{480, 700});
-		testRSW->getTransform()->setSize(glm::vec2(55, 40));
-
-		const std::vector textureListRSW = ResourceManager::GetTexturesContaining("Red-Slash-Wide");
-		sprite = testRSW->addComponent<AnimatedSpriteRenderer>(textureListRSW, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-
-		TurnManager::Instance()->addToTurnQueue(testRST);
-		TurnManager::Instance()->addToTurnQueue(testRSW);
-		//ScoreSystem score = new ScoreSystem();
-		//score.SaveScore();
+		grid_system->setEmptyTileIDs(2, std::vector<int>{});
+		grid_system->setWallIDs(2, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
+		grid_system->setSpawnFunctionMap(2,
+		{
+			{ 91, [this](glm::vec2 pos)
+			{
+				PlayerController::Instance()->createPlayer();
+				PlayerController::Instance()->playerPTR->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
+			} },
+			{ 92, [this](glm::vec2 pos)
+			{
+				createEnemy(pos);
+			} },
+			{ 93, [this](glm::vec2 pos)
+			{
+				// TODO: Create a chest
+			} }
+		});
+		
+		grid_system->loadFromFile(2, "Grid/SecondLevelDesignSP.txt");
+		
 		int m_count = 0;
 		if (m_count == 0)
 		{
@@ -314,29 +304,10 @@ public:
 		if (m_count == 2)
 		{
 			ScoreSystem::Instance()->RenderTopScores();
-			/*	ScoreSystem::Instance()->ReadScores();
-		ScoreSystem::Instance()->RenderTopScores();*/
 		}
-
-		/*
-		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
-		test->getTransform()->setSize(glm::vec2(96, 48));
-		
-		auto cam = test->addComponent<Camera>();
-		Renderer::Instance()->setCamera(cam);
-*/
-
-		//Player Idle Anim
-		//auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
-		//testPlayerIdle->getTransform()->setSize(glm::vec2(256, 256));
-
-		//const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
-		//sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
-		//sprite->setColor(glm::vec3(1, 1, 1));
-		//sprite->setLit(false);
-		PlayerController::Instance()->createPlayer();
 		
 		CreateFireball(glm::vec2{ 1000, 500 });
+		TurnManager::Instance()->StartTurnSystem();
 	}
 	
 	glm::fvec2 direction = glm::fvec2(0, 0);
@@ -353,7 +324,7 @@ public:
 
 	void testRender(OnEngineRender*)
 	{
-		//TextRenderer::Instance()->renderText("abcdefghijklmnopqrstuvwsyz", -200, 0, 1, glm::vec3(1, 1, 1));
+		TextRenderer::Instance()->renderText("abcdefghijklmnopqrstuvwsyz", 500, 500, 1, glm::vec3(1, 1, 1));
 	}
 	
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)

@@ -5,6 +5,7 @@
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
+#include "TurnManager.h"
 
 PlayerController::PlayerController()
 {
@@ -15,6 +16,7 @@ void PlayerController::createPlayer()
 	const glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
 	playerPTR = SceneManager::Instance()->createGameObject("Player", glm::vec2{ 30, 20 } * tileSize);
 	playerPTR->getTransform()->setSize(glm::vec2{ 32,32 });
+	TurnManager::Instance()->addToTurnQueue(playerPTR);
 
 	const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
 	playerSprite = playerPTR->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
@@ -24,11 +26,25 @@ void PlayerController::createPlayer()
 
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
+
+	playerStats = new PlayerStats();
+	playerStats->strength = 1;
+	playerStats->health = 10 + (playerStats->strength * 5);
+	playerStats->attackDamage = 1;
+	playerStats->agility = 1;
+	playerStats->defence = 1;
+	playerStats->critChance = 0.0f;
+	playerStats->intelligence = 1;
+	playerStats->mana = 10;
+	playerStats->spellPower = 1;
+	
 	myInventory = playerPTR->addComponent<Inventory>(20);
 	Light* light = playerPTR->addComponent<Light>();
 	light->setFalloff({0.75f, 0.75f, 7.5f});
 	light->setColor({1.0f, 1.0f, 1.0f, 1.0f});
 	Renderer::Instance()->setCamera(cameraComponent);
+
+	//std::cout << "Adding playerPTR to queue";
 }
 
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
@@ -73,7 +89,6 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 	//find the input and send it to the state machine
 	const std::type_index eventType = typeid(OnKeyDown);
 	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyDown(keyDown->key, keyDown->scancode), eventType);
-	
 }
 
 void PlayerController::onKeyHold(const OnKeyRepeat* keyHold)
