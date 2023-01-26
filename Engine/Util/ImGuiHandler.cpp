@@ -158,7 +158,8 @@ static std::map<std::string, DebugEvent> debugSettings
 static std::map<std::string, std::string> debugScenes
 {
 	{"Debug Rendering", "renderScene"},
-	{"Debug Scene", "debugScene"},
+	{"Debug Scene 1", "debugScene1"},
+	{"Debug Scene 2", "debugScene2"},
 };
 
 void ImGuiHandler::update()
