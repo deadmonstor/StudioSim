@@ -8,11 +8,7 @@ typedef std::pair<int, TileHolder*> Node;
 
 class PathfindingMachine : public SingletonTemplate<PathfindingMachine>
 {
-private:
-	std::map<int, std::map<int, TileHolder*>> pathfindingMap = {};
 public:
-	//Initialize Variables
-	void SetMap(std::map<int, std::map<int, TileHolder*>> pathfindingMapArg) { pathfindingMap = pathfindingMapArg; }
 
 	//Find tile path between tile pos A and tile pos B
 	std::deque<TileHolder*> FindPath(TileHolder* start, TileHolder* end);

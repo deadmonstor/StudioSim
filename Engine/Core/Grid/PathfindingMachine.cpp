@@ -31,11 +31,12 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			foundPath = true;
 			break;
 		}
-		//at the moment uses ID of 0, but make it use the flattened pathfinding map later
+		//at the moment uses ID of 0, but make it use a flattened map later
 		std::vector<TileHolder*> neighbours = GridSystem::Instance()->getNeighbours(0, currentNode.second);
 		//Find cost map entries of the neighbours
 		for (TileHolder* neighbour : neighbours) 
 		{
+			if (neighbour->isWall) continue;
 			int edgeCost = 1;
 
 			//cost when coming from current node
