@@ -28,6 +28,7 @@
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="PlayerStats.h" />
     <ClInclude Include="ScoreSystem.h" />
+    <ClInclude Include="SpellStats.h" />
     <ClInclude Include="StatSystem.h" />
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
@@ -46,6 +47,7 @@
     <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Components\TurnComponent.cpp" />
     <ClCompile Include="Components\TurnManager.cpp" />
+    <ClCompile Include="SpellStats.cpp" />
     <ClCompile Include="System\Inventory.cpp" />
   </ItemGroup>
   <ItemGroup>

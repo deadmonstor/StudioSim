@@ -14,6 +14,8 @@
     <ClCompile Include="Components\TurnManager.cpp" />
     <ClCompile Include="System\Inventory.cpp" />
     <ClCompile Include="Components\ButtonComponent.cpp" />
+    <ClCompile Include="PlayerStats.cpp" />
+    <ClCompile Include="SpellStats.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -30,6 +32,9 @@
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
     <ClInclude Include="Components\ButtonComponent.h" />
+    <ClInclude Include="PlayerStats.h" />
+    <ClInclude Include="StatSystem.h" />
+    <ClInclude Include="SpellStats.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />
