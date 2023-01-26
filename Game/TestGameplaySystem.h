@@ -290,8 +290,7 @@ public:
 		sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setLit(false);
 
-		TurnManager::Instance()->addToTurnQueue(testRST);
-		TurnManager::Instance()->addToTurnQueue(testRSW);
+
 		//ScoreSystem score = new ScoreSystem();
 		//score.SaveScore();
 		int m_count = 0;
@@ -338,6 +337,7 @@ public:
 
 		
 		CreateFireball(glm::vec2{ 1000, 500 });
+		TurnManager::Instance()->StartTurnSystem();
 	}
 	
 	void TestInventory(const OnSceneChanged* event)

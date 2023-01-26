@@ -4,6 +4,7 @@
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
+#include "TurnManager.h"
 
 PlayerController::PlayerController()
 {
@@ -14,6 +15,7 @@ void PlayerController::createPlayer()
 	const glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
 	playerPTR = SceneManager::Instance()->createGameObject("Player", glm::vec2{ 30, 20 } * tileSize);
 	playerPTR->getTransform()->setSize(glm::vec2{ 32,32 });
+	TurnManager::Instance()->addToTurnQueue(playerPTR);
 
 	const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
 	playerSprite = playerPTR->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
@@ -26,6 +28,8 @@ void PlayerController::createPlayer()
 	Light* light = playerPTR->addComponent<Light>();
 	light->setFalloff({0.75f, 0.75f, 10.0f});
 	Renderer::Instance()->setCamera(cameraComponent);
+
+	//std::cout << "Adding playerPTR to queue";
 }
 
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
