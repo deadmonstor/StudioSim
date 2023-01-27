@@ -15,6 +15,7 @@
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
 #include "UIManager.h"
+#include "../Game/ScoreSystem.h"
 
 
 namespace Griddy
@@ -84,6 +85,12 @@ namespace Griddy
 		m_Initialized = true;
 		ImGuiHandler::Instance()->init();
 
+		/*Score Stuff
+		ScoreSystem::Instance()->setScore(10);
+		ScoreSystem::Instance()->SaveScore("CONNER");
+		ScoreSystem::Instance()->ReadScores(false);
+		*/
+
 		glfwSetKeyCallback(Renderer::getWindow(), key_callback);
 		glfwSetMouseButtonCallback(Renderer::getWindow(), mouse_callback);
 		glfwSetDropCallback(Renderer::getWindow(), drop_callback);
@@ -130,6 +137,8 @@ namespace Griddy
 		ImGuiHandler::render();
 
 		UIManager::Instance()->render();
+
+		//ScoreSystem::Instance()->RenderTopScores();
 		glfwSwapBuffers(Renderer::getWindow());
 	}
 

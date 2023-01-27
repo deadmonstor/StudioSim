@@ -253,6 +253,7 @@ public:
 		
 		CreateFireball(glm::vec2{ 1000, 500 });
 		TurnManager::Instance()->StartTurnSystem();
+
 	}
 
 	void TestFuncScene2(const OnSceneChanged* event) 

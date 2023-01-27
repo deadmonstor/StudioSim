@@ -13,6 +13,7 @@ void UIManager::render()
 
 void UIManager::internalRender()
 {
+
 }
 
 void UIManager::addButtonToUI(std::string nameOfUIElement, ButtonComponent* button)
