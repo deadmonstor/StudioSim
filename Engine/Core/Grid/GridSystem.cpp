@@ -38,6 +38,7 @@ void GridSystem::clearGrid(const int id)
 
 			const auto tile = new Tile(Texture());
 			createTile(id, tile);
+			tile->init(grid_holder);
 			gridLayers[id]->internalMap[x][y]->tile = tile;
 		}
 	}
@@ -293,6 +294,7 @@ void GridSystem::loadFromFile(const int mapID, const std::string& fileName)
 				delete grid_holder->tile;
 				const auto tile = layer->tileFunctions[i]();
 				createTile(mapID, tile);
+				tile->init(grid_holder);
 				grid_holder->tile = tile;
 			}
 

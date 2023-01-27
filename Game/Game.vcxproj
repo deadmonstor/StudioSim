@@ -36,6 +36,7 @@
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
     <ClInclude Include="Components\WeaponEnum.h" />
+    <ClInclude Include="Tiles\LightTile.h" />
     <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +56,7 @@
     <ClCompile Include="Components\TurnManager.cpp" />
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="System\Inventory.cpp" />
+    <ClCompile Include="Tiles\LightTile.cpp" />
     <ClCompile Include="Tiles\TestTile.cpp" />
   </ItemGroup>
   <ItemGroup>
