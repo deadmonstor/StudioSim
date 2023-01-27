@@ -16,6 +16,7 @@
     <ClCompile Include="Components\ButtonComponent.cpp" />
     <ClCompile Include="Components\Consumables.cpp" />
     <ClCompile Include="Components\CommonDagger.cpp" />
+    <ClCompile Include="Components\Dagger.cpp" />
     <ClCompile Include="Components\AI Behaviours\NormalEnemyFSM.cpp" />
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="Tiles\LightTile.cpp" />
@@ -42,6 +43,7 @@
     <ClInclude Include="Components\CharacterStats.h" />
     <ClInclude Include="Components\Consumables.h" />
     <ClInclude Include="Components\CommonDagger.h" />
+    <ClInclude Include="Components\Dagger.h" />
     <ClInclude Include="Components\AI Behaviours\NormalEnemyFSM.h" />
     <ClInclude Include="Shop.h" />
     <ClInclude Include="Components\WeaponEnum.h" />
