@@ -380,4 +380,9 @@ void ImGuiHandler::onKeyDown(const int key, const int scancode, const int action
 	{
 		Griddy::Events::invoke<OnSceneChangeRequested>("debugScene2");
 	}
+
+	if (key == GLFW_KEY_V && action == GLFW_PRESS)
+	{
+		Griddy::Events::invoke<OnDebugEventChanged>(DebugNoclip);
+	}
 }

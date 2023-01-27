@@ -16,10 +16,15 @@ public:
 	void StartTurnSystem();
 	void EndTurn();
 	bool isCurrentTurnObject(const GameObject* object);
+	void Update();
+
+	static bool gNoclipMode;
 protected:
 
 private:
 	std::queue<class GameObject*> CanMakeATurn;
+	bool shouldGoNextTurn = false;
+	void onDebugEvent(const OnDebugEventChanged* event);
 	void onSceneChanged(OnSceneChanged* scene);
 	void NextTurn();
 	void debugString();

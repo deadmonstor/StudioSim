@@ -3,23 +3,28 @@
 #include "Core/GameObject.h"
 #include "Util/Events/Events.h"
 
+bool TurnManager::gNoclipMode = false;
+
 TurnManager::TurnManager()
 {
 	Griddy::Events::subscribe(this, &TurnManager::onUpdate);
 	Griddy::Events::subscribe(this, &TurnManager::onGameObjectRemoved);
 	Griddy::Events::subscribe(this, &TurnManager::onSceneChanged);
+	Griddy::Events::subscribe(this, &TurnManager::onDebugEvent);
 }
 
 void TurnManager::addToTurnQueue(GameObject* object)
 {
 	CanMakeATurn.push(object);
-	//object->addComponent<TurnComponent>();
-	
 }
 
 void TurnManager::onUpdate(OnEngineUpdate* event)
 {
-	//LOG_INFO("TEST");
+	if (shouldGoNextTurn)
+	{
+		shouldGoNextTurn = false;
+		NextTurn();
+	}
 }
 
 void TurnManager::onGameObjectRemoved(const OnGameObjectRemoved* event)
@@ -27,6 +32,14 @@ void TurnManager::onGameObjectRemoved(const OnGameObjectRemoved* event)
 	if (event->gameObject == m_CurrentTurnObject && !SceneManager::Instance()->isLoadingScene())
 	{
 		EndTurn();
+	}
+}
+
+void TurnManager::onDebugEvent(const OnDebugEventChanged* event)
+{
+	if (event->key == DebugNoclip)
+	{
+		gNoclipMode = !gNoclipMode;
 	}
 }
 
@@ -83,7 +96,7 @@ bool TurnManager::isCurrentTurnObject(const GameObject* object)
 void TurnManager::EndTurn()
 {
 	CanMakeATurn.push(m_CurrentTurnObject);
-	NextTurn();
+	shouldGoNextTurn = true;
 }
 
 //Called when the last enemy is spawned.

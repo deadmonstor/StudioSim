@@ -63,9 +63,17 @@ public:
 	
 	Tile* getTile(int id, const glm::ivec2& _pos);
 	std::vector<std::pair<glm::vec2, Tile*>> getNeighbours(int id, glm::vec2 pos);
-	std::vector<TileHolder*> getNeighbours(int id, TileHolder* tile);
+	std::vector<TileHolder*> getPathfindingNeighbours(int id, TileHolder* tile);
 	glm::vec2 getTilePosition(glm::vec2 vec) const;
 	glm::vec2 getWorldPosition(glm::vec2 vec) const;
 	void setSatOnTile(int id, glm::vec2 vec, GameObject* enemy);
 	void resetSatOnTile(int id, glm::vec2 vec);
+
+
+	//Finds the tile distance without considering diagonals
+	int FindManhattanTileDistance(glm::vec2 startPos, glm::vec2 endPos);
+
+	//Finds the tile distance using line intersection. This will find a diagonal tile distance
+	int FindLineTileDistance(glm::vec2 startPos, glm::vec2 endPos);
+
 };

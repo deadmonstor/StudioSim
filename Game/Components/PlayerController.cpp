@@ -6,6 +6,7 @@
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "TurnManager.h"
+#include "Core//Grid//PathfindingMachine.h"
 
 PlayerController::PlayerController()
 {
@@ -28,15 +29,17 @@ void PlayerController::createPlayer()
 	cameraComponent = playerPTR->addComponent<Camera>();
 
 	playerStats = new PlayerStats();
-	playerStats->strength = 1;
-	playerStats->health = 10 + (playerStats->strength * 5);
-	playerStats->attackDamage = 1;
-	playerStats->agility = 1;
+	playerStats->maxHealth = 10;
+	playerStats->currentHealth = 10;
+	playerStats->currentEXP = 0;
+	playerStats->maxEXP = 100;
+	playerStats->currentMana = 10;
+	playerStats->maxMana = 10;
+	playerStats->attack = 1;
+	playerStats->spellPower = 1;
 	playerStats->defence = 1;
 	playerStats->critChance = 0.0f;
-	playerStats->intelligence = 1;
-	playerStats->mana = 10;
-	playerStats->spellPower = 1;
+	playerStats->coinsHeld = 0;
 	
 	myInventory = playerPTR->addComponent<Inventory>(20);
 	Light* light = playerPTR->addComponent<Light>();
@@ -85,6 +88,14 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		myInventory->add_item(spell);
 		myInventory->equip_item("Bandit sword");
 	}
+	if (keyDown->key == GLFW_KEY_P)
+	{
+		//Testing pathfinding
+		glm::vec2 gridSize = GridSystem::Instance()->getGridSize();
+		glm::vec2 start = playerPTR->getTransform()->getPosition();
+		glm::vec2 goal = start + glm::vec2(-3 * gridSize.x, 6 * gridSize.y);
+		PathfindingMachine::Instance()->FindPath(start, goal);
+	}
 	
 	//find the input and send it to the state machine
 	const std::type_index eventType = typeid(OnKeyDown);
@@ -101,4 +112,9 @@ void PlayerController::onKeyUp(const OnKeyUp* keyUp)
 {
 	const std::type_index eventType = typeid(OnKeyUp);
 	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyUp(keyUp->key, keyUp->scancode), eventType);
+}
+
+void PlayerController::UpdateStats()
+{
+
 }
