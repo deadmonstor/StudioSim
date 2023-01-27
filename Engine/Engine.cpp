@@ -124,11 +124,12 @@ namespace Griddy
 
 		Renderer::Instance()->render();
 		SceneManager::Instance()->render();
-		UIManager::Instance()->render();
 
 		Events::invoke<OnEngineRender>();
 		
 		ImGuiHandler::render();
+
+		UIManager::Instance()->render();
 		glfwSwapBuffers(Renderer::getWindow());
 	}
 

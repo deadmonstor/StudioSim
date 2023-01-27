@@ -54,6 +54,18 @@ bool AudioEngine::init()
 		return false;
 	}
 	channelGroups["Audio SFX"] = audioEffectsChannel;
+	
+	fmodResult = audioEffectsChannel->setMode(FMOD_3D);
+	if (!checkResult(fmodResult, "Audio Set Mode 3D"))
+	{
+		return false;
+	}
+
+	fmodResult = audioEffectsChannel->setMode(FMOD_3D_LINEARROLLOFF);
+	if (!checkResult(fmodResult, "Audio Set Roll Off"))
+	{
+		return false;
+	}
 
 	fmodResult = fmodSystem->createChannelGroup("backgroundMusic", &backgroundMusicChannel);
 	if (!checkResult(fmodResult, "Failed to create backgroundMusic channel"))
@@ -61,6 +73,18 @@ bool AudioEngine::init()
 		return false;
 	}
 	channelGroups["Background Effects"] = backgroundMusicChannel;
+	fmodResult = backgroundMusicChannel->setMode(FMOD_3D);
+	if (!checkResult(fmodResult, "Background Set Mode 3D"))
+	{
+		return false;
+	}
+
+	fmodResult = backgroundMusicChannel->setMode(FMOD_3D_LINEARROLLOFF);
+	if (!checkResult(fmodResult, "Background Set Roll Off"))
+	{
+		return false;
+	}
+
 
 	//Add audio channel groups
 	masterChannel->addGroup(audioEffectsChannel);
@@ -79,7 +103,6 @@ void AudioEngine::update()
 	// Test Function
 	//updateListenerPositon(listenerPosition.x - 1, 0); 
 	const FMOD_VECTOR listenerPos = {listenerPosition.x, listenerPosition.y, 0};
-
 
 	//forward/up vectors left at default for now (probably not needed)
 	//const FMOD_VECTOR forward = FMOD_VECTOR(0, 0, 0);
