@@ -109,6 +109,8 @@ public:
 		double x, y;
 		glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 
+		std::cout << "GLFW: " << x << " " << y << std::endl;
+
 	    glm::vec2 screenSize = Renderer::getWindowSize();
 
 		const glm::vec3 win(x,y,0);
@@ -134,9 +136,15 @@ public:
 			return glm::vec2(0.0f);
 		
 		double x, y;
+		int topLeftX, topLeftY;
 		glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
+		glfwGetWindowPos(glfwGetCurrentContext(), &topLeftX, &topLeftY);
 
-		const glm::vec2 screenSize = Renderer::getWindowSize();
+		 float absoluteCursorX = topLeftX + static_cast<int>(std::floor(x));
+		 float absoluteCursorY = topLeftY + static_cast<int>(std::floor(y));
+
+		 glm::vec2 pos = { absoluteCursorX, absoluteCursorY };
+		/*const glm::vec2 screenSize = Renderer::getWindowSize();
 		glm::vec2 pos = Renderer::Instance()->getCameraPos();
 
 		const glm::vec3 win(x,y,0);
@@ -146,7 +154,7 @@ public:
 
 		// TODO: This math is most likely wrong, its off by a little bit
 		pos.x += screenSize.x / 2.0f * mousePos.x + screenSize.x / 2.0f;
-		pos.y += screenSize.y / 2.0f * mousePos.y + screenSize.y / 2.0f;
+		pos.y += screenSize.y / 2.0f * mousePos.y + screenSize.y / 2.0f;*/
 		
 		return {pos.x, pos.y};
 	}

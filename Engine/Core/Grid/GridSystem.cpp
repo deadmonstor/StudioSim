@@ -8,6 +8,14 @@
 #include "Util/Logger.h"
 #include "Util/Events/Events.h"
 
+void GridSystem::createTile(const int id, Tile* tile)
+{
+	tile->createBuffers();
+	tile->setSortingLayer(orderSortingMap.at(id));
+	tile->setLit(true);
+	tile->setPivot(Pivot::Center);
+}
+
 void GridSystem::clearGrid(const int id)
 {
 	if (gridLayers[id])
@@ -29,11 +37,8 @@ void GridSystem::clearGrid(const int id)
 			grid_holder->isSpawned = false;
 
 			const auto tile = new Tile(Texture());
-			tile->createBuffers();
-			tile->setSortingLayer(orderSortingMap.at(id));
-			tile->setLit(true);
-			tile->setPivot(Pivot::Center);
-
+			createTile(id, tile);
+			tile->init(grid_holder);
 			gridLayers[id]->internalMap[x][y]->tile = tile;
 		}
 	}
@@ -67,7 +72,7 @@ void GridSystem::renderInternal(const int id)
 			const float tileY = y * tileHeight;
 			const auto pos = glm::vec2{tileX, tileY};
 
-			if (!holder->isSpawned) continue;
+			if (holder == nullptr || !holder->isSpawned) continue;
 			if (holder->tile->getTexture().Height == 0 && holder->tile->getTexture().Width == 0)
 				continue;
 			
@@ -136,7 +141,7 @@ void GridSystem::refreshLightData(const LightUpdateRequest lightUpdateRequest)
 		{
 			for(auto [y, holder] : pointer)
 			{
-				if (!holder->isSpawned) continue;
+				if (holder == NULL || !holder->isSpawned) continue;
 				if (holder->tile->getTexture().Height == 0 && holder->tile->getTexture().Width == 0)
 					continue;
 
@@ -284,15 +289,20 @@ void GridSystem::loadFromFile(const int mapID, const std::string& fileName)
 			GridLayer* layer = gridLayers[mapID];
 			TileHolder* grid_holder = layer->internalMap[x][y];
 
-			if (Texture texture = gridLayers[mapID]->textureMap[i]; texture.Height != 0 && texture.Width != 0)
+			if (layer->tileFunctions.contains(i))
 			{
-				grid_holder->tile->SetTexture(texture);
+				delete grid_holder->tile;
+				const auto tile = layer->tileFunctions[i]();
+				createTile(mapID, tile);
+				tile->init(grid_holder);
+				grid_holder->tile = tile;
 			}
 
+			if (Texture texture = gridLayers[mapID]->textureMap[i]; texture.Height != 0 && texture.Width != 0)
+				grid_holder->tile->SetTexture(texture);
+
 			if (std::function<void(glm::vec2)> spawnFunction = gridLayers[mapID]->spawnFunctions[i]; spawnFunction != nullptr)
-			{
 				spawnFunction({x, y});
-			}
 
 			grid_holder->isSpawned = std::ranges::find(layer->emptyTiles, i) == layer->emptyTiles.end();
 			grid_holder->isWall =std::ranges::find(layer->wallIDs, i) != layer->wallIDs.end();

@@ -29,15 +29,17 @@ void PlayerController::createPlayer()
 	cameraComponent = playerPTR->addComponent<Camera>();
 
 	playerStats = new PlayerStats();
-	playerStats->strength = 1;
-	playerStats->health = 10 + (playerStats->strength * 5);
-	playerStats->attackDamage = 1;
-	playerStats->agility = 1;
+	playerStats->maxHealth = 10;
+	playerStats->currentHealth = 10;
+	playerStats->currentEXP = 0;
+	playerStats->maxEXP = 100;
+	playerStats->currentMana = 10;
+	playerStats->maxMana = 10;
+	playerStats->attack = 1;
+	playerStats->spellPower = 1;
 	playerStats->defence = 1;
 	playerStats->critChance = 0.0f;
-	playerStats->intelligence = 1;
-	playerStats->mana = 10;
-	playerStats->spellPower = 1;
+	playerStats->coinsHeld = 0;
 	
 	myInventory = playerPTR->addComponent<Inventory>(20);
 	Light* light = playerPTR->addComponent<Light>();
@@ -50,42 +52,6 @@ void PlayerController::createPlayer()
 
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
-	//DEBUG
-	if (keyDown->key == GLFW_KEY_F11)
-	{
-		Item sword;
-		sword.name = "Bandit sword";
-		sword.type = "Weapon";
-		sword.itemDescription = "A common sword";
-		sword.equipSlot = "Hand";
-		sword.isEquipped = false;
-		sword.atk = 10;
-		sword.crit = 2;
-		
-		myInventory->add_item(sword);
-
-		Item armour;
-		armour.name = "Bandit armor";
-		armour.type = "Armour";
-		armour.equipSlot = "Chest";
-		armour.isEquipped = false;
-		armour.def = 15;
-		
-		myInventory->add_item(armour);
-
-		Item spell;
-		spell.name = "Fireball";
-		spell.type = "Spell";
-		spell.equipSlot = "Spells";
-		spell.isEquipped = false;
-		spell.spellAtk = 20;
-		spell.manaCost = 10;
-		spell.coolDown = 4; //Secods
-		spell.effectDuration = 3; //Seconds
-		
-		myInventory->add_item(spell);
-		myInventory->equip_item("Bandit sword");
-	}
 	if (keyDown->key == GLFW_KEY_P)
 	{
 		//Testing pathfinding
@@ -111,4 +77,9 @@ void PlayerController::onKeyUp(const OnKeyUp* keyUp)
 {
 	const std::type_index eventType = typeid(OnKeyUp);
 	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyUp(keyUp->key, keyUp->scancode), eventType);
+}
+
+void PlayerController::UpdateStats()
+{
+
 }
