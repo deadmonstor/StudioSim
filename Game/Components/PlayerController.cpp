@@ -91,8 +91,9 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		//Testing pathfinding
 		glm::vec2 gridSize = GridSystem::Instance()->getGridSize();
 		glm::vec2 start = playerPTR->getTransform()->getPosition();
-		glm::vec2 goal = start + glm::vec2(-3 * gridSize.x, 6 * gridSize.y);
-		PathfindingMachine::Instance()->FindPath(start, goal);
+		glm::vec2 goal = start + glm::vec2(0 * gridSize.x, -30 * gridSize.y);
+		//PathfindingMachine::Instance()->FindPath(start, goal);
+		bool sight = PathfindingMachine::Instance()->LineOfSight(start, goal);
 	}
 	
 	//find the input and send it to the state machine

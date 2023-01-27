@@ -69,11 +69,4 @@ public:
 	void setSatOnTile(int id, glm::vec2 vec, GameObject* enemy);
 	void resetSatOnTile(int id, glm::vec2 vec);
 
-
-	//Finds the tile distance without considering diagonals
-	int FindManhattanTileDistance(glm::vec2 startPos, glm::vec2 endPos);
-
-	//Finds the tile distance using line intersection. This will find a diagonal tile distance
-	int FindLineTileDistance(glm::vec2 startPos, glm::vec2 endPos);
-
 };

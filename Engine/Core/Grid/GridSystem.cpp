@@ -336,14 +336,3 @@ void GridSystem::setEmptyTileIDs(const int id, const std::vector<int>& emptyTile
 		
 	this->gridLayers[id]->emptyTiles = emptyTileIDs;
 }
-
-int GridSystem::FindManhattanTileDistance(glm::vec2 startPos, glm::vec2 endPos)
-{
-	glm::vec2 directionVec = endPos - startPos;
-	return abs(directionVec.x) + abs(directionVec.y);
-}
-
-int GridSystem::FindLineTileDistance(glm::vec2 startPos, glm::vec2 endPos)
-{
-	return 0;
-}
