@@ -16,6 +16,7 @@
 #include <string>
 #include "Components/TurnManager.h"
 #include "Components/PlayerController.h"
+#include "Tiles/TestTile.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -153,6 +154,10 @@ public:
 			{ 9, ResourceManager::GetTexture("tile26") },
 			{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
 			{ 11, ResourceManager::GetTexture("tile242") }
+		});
+		grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
+		{
+			{ 10, [] { return new TestTile(Texture()); } },
 		});
 		
 		grid_system->loadFromFile(0, "Grid/Test2.txt");

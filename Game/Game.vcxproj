@@ -35,6 +35,7 @@
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
     <ClInclude Include="Components\Weapon.h" />
+    <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Components\CommonDagger.cpp" />
@@ -52,6 +53,7 @@
     <ClCompile Include="Components\TurnComponent.cpp" />
     <ClCompile Include="Components\TurnManager.cpp" />
     <ClCompile Include="System\Inventory.cpp" />
+    <ClCompile Include="Tiles\TestTile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
