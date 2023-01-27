@@ -110,6 +110,16 @@ public:
 		fireball->getTransform()->setSize(glm::vec2(48, 48));
 		fireball->addComponent<FireballComponent>();
 		sm = fireball->addComponent<StateMachine>();
+
+		////Crab Anim
+		//auto* testPlayerIdle = SceneManager::Instance()->createGameObject("Crab", glm::vec2{ 1600, 2600 });
+		//testPlayerIdle->getTransform()->setSize(glm::vec2(256, 256));
+
+		//const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("crab");
+		//auto sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
+		//sprite->setColor(glm::vec3(1, 1, 1));
+		//sprite->setLit(false);
+
 	}
 
 	void createEnemy(const glm::vec2 pos)
