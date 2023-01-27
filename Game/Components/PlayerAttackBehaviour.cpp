@@ -29,7 +29,7 @@ void PlayerAttackBehaviour::AttackOnMovement(glm::fvec2 dir)
 	attackDir = dir;
 	if (canAttack)
 	{
-		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 		{
 			Act();
 		}
@@ -162,7 +162,8 @@ void PlayerAttackBehaviour::Act()
 	}
 	canAttack = false;
 	
-	TurnManager::Instance()->EndTurn();
+	if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		TurnManager::Instance()->EndTurn();
 }
 
 void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -212,7 +213,7 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 	if (canAttack && (eventCasted->key == GLFW_KEY_W || eventCasted->key == GLFW_KEY_S ||
 		eventCasted->key == GLFW_KEY_A || eventCasted->key == GLFW_KEY_D))
 	{
-		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 		{
 			Act();
 		}

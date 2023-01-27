@@ -67,7 +67,7 @@ void GridSystem::renderInternal(const int id)
 			const float tileY = y * tileHeight;
 			const auto pos = glm::vec2{tileX, tileY};
 
-			if (!holder->isSpawned) continue;
+			if (holder == nullptr || !holder->isSpawned) continue;
 			if (holder->tile->getTexture().Height == 0 && holder->tile->getTexture().Width == 0)
 				continue;
 			
@@ -136,7 +136,7 @@ void GridSystem::refreshLightData(const LightUpdateRequest lightUpdateRequest)
 		{
 			for(auto [y, holder] : pointer)
 			{
-				if (!holder->isSpawned) continue;
+				if (holder == NULL || !holder->isSpawned) continue;
 				if (holder->tile->getTexture().Height == 0 && holder->tile->getTexture().Width == 0)
 					continue;
 

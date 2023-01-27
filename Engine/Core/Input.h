@@ -109,6 +109,8 @@ public:
 		double x, y;
 		glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 
+		std::cout << "GLFW: " << x << " " << y << std::endl;
+
 	    glm::vec2 screenSize = Renderer::getWindowSize();
 
 		const glm::vec3 win(x,y,0);
