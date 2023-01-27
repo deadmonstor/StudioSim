@@ -123,12 +123,12 @@ bool PathfindingMachine::LineOfSight(TileHolder* start, TileHolder* end)
 		{
 			auto finish = std::chrono::steady_clock::now();
 			double elapsedSeconds = std::chrono::duration_cast<std::chrono::duration<double>>(finish - startTime).count();
-			return true;
+			return false;
 		}
 	}
 	auto finish = std::chrono::steady_clock::now();
 	double elapsedSeconds = std::chrono::duration_cast<std::chrono::duration<double>>(finish - startTime).count();
-	return false;
+	return true;
 }
 
 
@@ -137,7 +137,7 @@ bool PathfindingMachine::LineOfSight(glm::vec2 startPos, glm::vec2 endPos)
 	TileHolder* tile1 = GridSystem::Instance()->getTileHolder(0, startPos / GridSystem::Instance()->getTileSize());
 	TileHolder* tile2 = GridSystem::Instance()->getTileHolder(0, endPos / GridSystem::Instance()->getTileSize());
 	if (tile1 == nullptr || tile2 == nullptr)
-		return true;
+		return false;
 	return LineOfSight(tile1, tile2);
 }
 
