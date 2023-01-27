@@ -39,7 +39,9 @@ public:
 	static GLFWwindow* getWindow() { return Instance()->window; }
 	static glm::vec2 getWindowSize() { return Instance()->windowSize; }
 	
-	[[nodiscard]] glm::mat4 getCameraViewMatrix() const { return mainCam->getViewProjectMatrix(); }
+	[[nodiscard]] glm::mat4 getViewProjectMatrix() const { return mainCam->getViewProjectMatrix(); }
+	[[nodiscard]] glm::mat4 getProjectMatrix() const { return mainCam->getProjectMatrix(); }
+	void getModelMatrix(const glm::vec2 position, const glm::vec2 size, const float rotation, const glm::vec2 pivot, glm::mat4& model);
 	[[nodiscard]] unsigned int getCameraSize() const { return mainCam->getSize(); }
 	[[nodiscard]] glm::vec2 getCameraPos() const;
 	[[nodiscard]] Camera* getCamera() const { return mainCam; }
@@ -57,7 +59,7 @@ public:
 	void resetShaders();
 	void setWindowTitle(const std::string& title) const;
 	bool createWindow(const std::string &windowName);
-	void renderSprite(SpriteComponent* spriteRenderer, glm::vec2 position, glm::vec2 size, float rotation) const;
+	void renderSprite(SpriteComponent* spriteRenderer, glm::vec2 position, glm::vec2 size, float rotation);
 	
 	void cleanup() const;
 	void render();

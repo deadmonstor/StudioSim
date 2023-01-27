@@ -95,9 +95,11 @@ public:
 
 		const auto cam = test->addComponent<Camera>();
 		Renderer::Instance()->setCamera(cam);
+		test->addComponent<Light>();
 		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
 		sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
         sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setPivot(Pivot::Center);
         sprites.push_back(sprite);
 	}
 	

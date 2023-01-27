@@ -1,4 +1,5 @@
 #pragma once
+#include "Pivot.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
 #include "Core/Renderer/Renderer.h"
@@ -85,7 +86,7 @@ public:
 			if (s_DebugMouseEvents)
 			{
 				const std::string strs(std::to_string(key));
-				LOG_INFO("Mouse-Down: " + strs);
+				LOG_INFO("Mouse-Up: " + strs);
 
 				glm::vec2 mousePos = getMousePosition();
 				LOG_INFO("Mouse Position: " + std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
@@ -108,26 +109,18 @@ public:
 		
 		double x, y;
 		glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
+		glm::vec2 test = getMousePositionScreenSpace();
 
-		std::cout << "GLFW: " << x << " " << y << std::endl;
+		test.y = Renderer::Instance()->getWindowSize().y - test.y;
 
-	    glm::vec2 screenSize = Renderer::getWindowSize();
+		// TODO: Fix this to work with any resolution and aspect ratio (currently only works with 16:9) 
+		x = (1120 * (test.x / Renderer::Instance()->getWindowSize().x)) - 560;
+		y = (580 * (test.y / Renderer::Instance()->getWindowSize().y)) - 290;
 
-		const glm::vec3 win(x,y,0);
-		const glm::vec4 viewport(0, 0, screenSize.x, screenSize.y);
-
-		const glm::vec3 mousePos = unProject(win, glm::mat4(1.0f), glm::mat4(1.0f), viewport);
-
-		GLfloat worldSpacex = mousePos.x;
-		GLfloat worldSpacey = -mousePos.y;
-
-		worldSpacex = worldSpacex * (screenSize.x / 2.0f);
-		worldSpacey = worldSpacey * (screenSize.y / 2.0f);
-
-		worldSpacex += Renderer::Instance()->getCameraPos().x;
-		worldSpacey += Renderer::Instance()->getCameraPos().y;
+		x += Renderer::Instance()->getCameraPos().x;
+		y += Renderer::Instance()->getCameraPos().y;
 		
-		return {worldSpacex, worldSpacey};
+		return {x, y};
 	}
 
 	static glm::vec2 getMousePositionScreenSpace()
@@ -140,21 +133,10 @@ public:
 		glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 		glfwGetWindowPos(glfwGetCurrentContext(), &topLeftX, &topLeftY);
 
-		 float absoluteCursorX = topLeftX + static_cast<int>(std::floor(x));
-		 float absoluteCursorY = topLeftY + static_cast<int>(std::floor(y));
+		float absoluteCursorX = topLeftX + static_cast<int>(std::floor(x));
+		float absoluteCursorY = topLeftY + static_cast<int>(std::floor(y));
 
-		 glm::vec2 pos = { absoluteCursorX, absoluteCursorY };
-		/*const glm::vec2 screenSize = Renderer::getWindowSize();
-		glm::vec2 pos = Renderer::Instance()->getCameraPos();
-
-		const glm::vec3 win(x,y,0);
-		const glm::vec4 viewport(0, 0, screenSize.x, screenSize.y);
-
-		const glm::vec3 mousePos = unProject(win, glm::mat4(1.0f), glm::mat4(1.0f), viewport);
-
-		// TODO: This math is most likely wrong, its off by a little bit
-		pos.x += screenSize.x / 2.0f * mousePos.x + screenSize.x / 2.0f;
-		pos.y += screenSize.y / 2.0f * mousePos.y + screenSize.y / 2.0f;*/
+		glm::vec2 pos = { absoluteCursorX, absoluteCursorY };
 		
 		return {pos.x, pos.y};
 	}

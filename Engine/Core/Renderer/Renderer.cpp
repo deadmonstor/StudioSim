@@ -187,7 +187,20 @@ void Renderer::render()
 	glDisable(GL_BLEND);
 }
 
-void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation) const
+void Renderer::getModelMatrix(const glm::vec2 position, const glm::vec2 size, const float rotation, const glm::vec2 pivot, glm::mat4& model)
+{
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(position, 0.0f));  
+	model = glm::translate(model, glm::vec3(-pivot.x * size.x, -pivot.y * size.y, 0.0f));  
+
+	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); 
+	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); 
+	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
+
+	model = glm::scale(model, glm::vec3(size, 1.0f));
+}
+
+void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation)
 {
 	if (mainCam == nullptr)
 		return;
@@ -199,15 +212,8 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 
 	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);
-	auto model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(position, 0.0f));  
-	model = glm::translate(model, glm::vec3(-pivot.x * size.x, -pivot.y * size.y, 0.0f));  
-
-	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); 
-	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); 
-	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
-
-	model = glm::scale(model, glm::vec3(size, 1.0f)); 
+	glm::mat4 model;
+	getModelMatrix(position, size, rotation, pivot, model);
 	spriteRenderer->getShader().SetMatrix4("uModelMatrix", model, true);
 	spriteRenderer->getShader().SetMatrix4("uProjectionMatrix", mainCam->getViewProjectMatrix(), true);
 	

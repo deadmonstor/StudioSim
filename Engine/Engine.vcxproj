@@ -38,8 +38,8 @@
     <ClInclude Include="Core\Renderer\Texture.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
+    <ClInclude Include="Core\Input.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="Input.h" />
     <ClInclude Include="Library\Aixlog.hpp" />
     <ClInclude Include="Library\glfw3.h" />
     <ClInclude Include="Library\glfw3native.h" />
