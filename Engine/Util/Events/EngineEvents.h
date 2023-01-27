@@ -21,6 +21,7 @@ enum DebugEvent
 	DebugLightColor,	
 	DebugPauseGame,	
 	DebugChangeScene,	
+	DebugNoclip,	
 };
 
 class OnDebugEventChanged : public Griddy::Event

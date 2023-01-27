@@ -3,40 +3,66 @@
 #include <Util/Events/EngineEvents.h>
 #include "PlayerAttackBehaviour.h"
 #include "Core/Components/Transform.h"
+#include "Core/AudioEngine.h"
+#include <Core/Components/Health.h>
+#include "TurnManager.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour()
 {
 	isInFSM = false; 
 	map = CreateFunctionMap(); 
 	origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
+	AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
+	attackBehaviour = new PlayerAttackBehaviour();
 }
 
 PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
 	origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition())/GridSystem::Instance()->getTileSize();
+	AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
 	map = CreateFunctionMap();
+	attackBehaviour = new PlayerAttackBehaviour();
 }
 
 void PlayerMovementBehaviour::Act()
 {
-	//move player
-	if (canMove)
-	{
-		TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
-		glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
+	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
+	
+	if (curTileHolder == nullptr)
+		return;
+	
+	GameObject* gameObjectOnTile = curTileHolder->gameObjectSatOnTile;
+	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
+	const bool isWallTile = GridSystem::Instance()->isWallTile(origPos + moveDir);
 		
-		if (curTileHolder->tile != nullptr && !curTileHolder->isWall)
+	if (curTileHolder->tile != nullptr && (!isWallTile || TurnManager::gNoclipMode))
+	{
+		if (gameObjectOnTile != nullptr && gameObjectOnTile->hasComponent(typeid(Health)))
+		{
+			attackBehaviour->AttackOnMovement(moveDir);
+			canAttackWhileMoving = false;
+		}
+		else
 		{
 			PlayerController::Instance()->playerPTR->getTransform()->
 				setPosition(tileSize * (origPos + moveDir));
 
-			origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
-		}
+			if(curTileHolder->tile->canInteractWith())
+				curTileHolder->tile->onInteractedWith(curTileHolder);
 
-		canMove = false;
+			origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
+		
+			AudioEngine::Instance()->playSound("Sounds\\step.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
+			
+			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+				TurnManager::Instance()->EndTurn();
+		}
 	}
 	
+	canMove = false;
+	attackBehaviour->canAttack = true;
+	moveDir = glm::fvec2(0, 0);
 }
 
 void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -51,52 +77,70 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 
 	if (eventCasted->key == GLFW_KEY_W)
 	{
-		moveDir.y += 1;
-		Act();
+		moveDir.y = 1;
 	}
 	else if (eventCasted->key == GLFW_KEY_S)
 	{
-		moveDir.y -= 1;
-		Act();
+		moveDir.y = -1;
 	}
 	else if (eventCasted->key == GLFW_KEY_A)
 	{
-		moveDir.x -= 1;
-		Act();
+		moveDir.x = -1;
 	}
 	else if (eventCasted->key == GLFW_KEY_D)
 	{
-		moveDir.x += 1;
-		Act();
+		moveDir.x = 1;
 	}
 
+	if (canMove && moveDir != glm::fvec2(0, 0))
+	{
+		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		{
+			Act();
+		}
+	}
 	
-	//if tile is moveable
+	moveDir = glm::fvec2(0, 0);
+}
+
+void PlayerMovementBehaviour::onKeyHoldResponse(Griddy::Event* event)
+{
+	OnKeyRepeat* eventCasted = static_cast<OnKeyRepeat*>(event);
+	canMove = true;
+
+	if (eventCasted->key == GLFW_KEY_W)
+	{
+		moveDir.y = 1;
+	}
+	else if (eventCasted->key == GLFW_KEY_S)
+	{
+		moveDir.y = -1;
+	}
+	else if (eventCasted->key == GLFW_KEY_A)
+	{
+		moveDir.x = -1;
+	}
+	else if (eventCasted->key == GLFW_KEY_D)
+	{
+		moveDir.x = 1;
+	}
+
+	if (canMove && canAttackWhileMoving)
+	{
+		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		{
+			Act();
+		}
+	}
 	
+	moveDir = glm::fvec2(0, 0);
 }
 
 void PlayerMovementBehaviour::onKeyUpResponse(Griddy::Event* event)
 {
-	OnKeyUp* eventCasted = static_cast<OnKeyUp*>(event);
-	
-	if (eventCasted->key == GLFW_KEY_W)
-	{
-		moveDir.y -= 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_S)
-	{
-		moveDir.y += 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_A)
-	{
-		moveDir.x += 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_D)
-	{
-		moveDir.x -= 1;
-	}
-
 	canMove = true;
+	attackBehaviour->canAttack = true;
+	canAttackWhileMoving = true;
 }
 
 FunctionMap PlayerMovementBehaviour::CreateFunctionMap()
@@ -111,6 +155,11 @@ FunctionMap PlayerMovementBehaviour::CreateFunctionMap()
 		[](Behaviour* pointer, Griddy::Event* event)
 	{
 		dynamic_cast<PlayerMovementBehaviour*>(pointer)->onKeyUpResponse(event);
+	};
+	map[typeid(OnKeyRepeat)] =
+		[](Behaviour* pointer, Griddy::Event* event)
+	{
+		dynamic_cast<PlayerMovementBehaviour*>(pointer)->onKeyHoldResponse(event);
 	};
 
 	return map;

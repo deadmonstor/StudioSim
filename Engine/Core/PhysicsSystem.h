@@ -10,6 +10,7 @@ public:
 	bool checkBoxCollision(GameObject gameObject1, GameObject gameObject2)
 	{
 		//AABB - AABB Collision
+		//To Do Cache Position to reduce calls
 		bool collisionXAxis = gameObject1.getTransform()->getPosition().x + gameObject1.getTransform()->GetScale().x >= gameObject2.getTransform()->getPosition().x &&
 							  gameObject2.getTransform()->getPosition().x + gameObject2.getTransform()->GetScale().x >= gameObject1.getTransform()->getPosition().x;
 
