@@ -1,18 +1,24 @@
 #include "Inventory.h"
 #include <iostream>
 #include "imgui/imgui.h"
+#include "Util/Logger.h"
 
+
+bool Inventory::add_item(const Item item)
 bool Inventory::add_item(Item* item)
 {
 	if (items.size() >= max_items)
 	{
-		std::cout << "Inventory is full. Can't add more items.\n";
+		LOG_ERROR("Inventory is full. Can't add more items.");
 		return false;
 	}
+	
 	items.push_back(item);
 	std::cout << "You added a " << item->name << std::endl;
 	return true;
 }
+
+bool Inventory::remove_item(const std::string& item_name)
 bool Inventory::remove_item(Item* item)
 {
 	for (int i = 0; i < items.size(); i++)
@@ -24,7 +30,8 @@ bool Inventory::remove_item(Item* item)
 			return true;
 		}
 	}
-	std::cout << "Item not found in inventory.\n";
+	
+	LOG_INFO("Item not found in inventory.");
 	return false;
 }
 
@@ -53,27 +60,60 @@ void Inventory::draw_inventory() {
 	std::cout << std::endl;
 }
 
-void Inventory::use_item(std::string item_name)
+void Inventory::getDebugInfo(std::string* basic_string)
 {
+	ImGui::Indent();
 	for (int i = 0; i < items.size(); i++)
 	{
-		if (items[i]->name == item_name)
+		ImGui::Text("%d. %s", i + 1, items[i].name.c_str());
+		ImGui::Indent();
+		if (items[i].type == "Weapon")
 		{
-			if (items[i]->type == "Potion")
+			ImGui::Text("Atk: %d / Crit: %d", items[i].atk, items[i].crit);
+		}
+		else if (items[i].type == "Armour")
+		{
+			ImGui::Text("Def: %d", items[i].def);
+		}
+		else if (items[i].type == "Spell")
+		{
+			ImGui::Text("Spell Power: %d / Mana Cost: %d / Effect Duration: %d", items[i].spellAtk, items[i].manaCost, items[i].effectDuration);
+		}
+		
+		if (items[i].isEquipped)
+		{
+			ImGui::Text("Equipped");
+		}
+		ImGui::Unindent();
+	}
+	ImGui::Unindent();
+	
+	Component::getDebugInfo(basic_string);
+}
+
+void Inventory::use_item(const std::string& item_name)
+{
+	for (auto& item : items)
+	{
+		if (item.name == item_name)
+		{
+			if (item.type == "Potion")
 			{
-				std::cout << "You used a " << items[i]->name << " and recovered 20 HP.\n";
+				LOG_INFO("You used a " + item.name + " and recovered 20 HP.");
 			}
 			else
 			{
-				std::cout << "You can't use this item.\n";
+				LOG_INFO("You used a " + item.name + ".");
 			}
+
 			return;
 		}
 	}
-	std::cout << "Item not found in inventory.\n";
+	
+	LOG_ERROR("Item not found in inventory");
 }
 
-void Inventory::equip_item(std::string item_name)
+void Inventory::equip_item(const std::string& item_name)
 {
 	for (auto item : items)
 	{
@@ -110,7 +150,7 @@ void Inventory::equip_item(std::string item_name)
 	}
 }
 
-void Inventory::unequip_item(std::string item_name)
+void Inventory::unequip_item(const std::string& item_name)
 {
 	for (auto item : items)
 	{

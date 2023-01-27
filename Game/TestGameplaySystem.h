@@ -1,21 +1,28 @@
 ﻿#pragma once
-#include "Input.h"
+#include "Components/EnemyTest.h"
+#include "Core/Input.h"
 #include "Components/FireballComponent.h"
+#include "Core/Components/AI/StateMachine.h"
 #include "Core/SceneManager.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/TextRenderer.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
-#include "System/Inventory.h"
 #include "Shop.h"
+#include "System/Inventory.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
-#include "TurnManager.h"
+#include "ScoreSystem.h"
+#include <string>
+#include "Components/TurnManager.h"
+#include "Components/PlayerController.h"
+#include "Tiles/TestTile.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
+	StateMachine* sm;
 public:
 	std::list<SpriteComponent*> sprites;
 	void testGameObjectDestroy(const OnGameObjectRemoved* event)
@@ -29,6 +36,11 @@ public:
 		if (it != sprites.end())
 		{
 			sprites.erase(it);
+		}
+
+		if (sm != nullptr && gameObject == sm->getOwner())
+		{
+			sm = nullptr;
 		}
 	}
 	void TestFunc(const OnSceneChanged* event)
@@ -96,202 +108,256 @@ public:
 		auto* fireball = SceneManager::Instance()->createGameObject("TestFireball", mousePos);
 		fireball->getTransform()->setSize(glm::vec2(48, 48));
 		fireball->addComponent<FireballComponent>();
-	}
-	
-	void TestFuncLewis(const OnSceneChanged* event) 
-	{
-		// TODO: Enum this or something its kinda bad to do this
-		if (event->key != "debugScene")
-			return;
-		
-		GridSystem::Instance()->init(glm::vec2(96, 48), glm::vec2(100, 100));
-		
-		auto *background = SceneManager::Instance()->createGameObject("Background", glm::vec2{0, 0});
-		background->getTransform()->setSize(glm::vec2(300 * 3, 225 * 3));
-		auto sprite = background->addComponent<SpriteComponent>();
-		sprite->setColor(glm::vec3(1,1,1));
-		sprite->setTexture(ResourceManager::GetTexture("rock"));
-
-		auto *test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
-		test->getTransform()->setSize(glm::vec2(96, 48));
-		
-		auto cam = test->addComponent<Camera>();
-		Renderer::Instance()->setCamera(cam);
-
-		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
-		sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-		sprites.push_back(sprite);
-		
-		//Slime Hurt Anim
-		auto* testHurt = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Hurt", glm::vec2{ 300, 300 });
-		testHurt->getTransform()->setSize(glm::vec2(96, 48));
-
-		const std::vector textureListHurt = ResourceManager::GetTexturesContaining("Blue-Slime-Hurt");
-		sprite = testHurt->addComponent<AnimatedSpriteRenderer>(textureListHurt, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-
-		//Slime Death Animation
-		auto *testDeath = SceneManager::Instance()->createGameObject("Blue-Slime-Death", glm::vec2{350, 350});
-		testDeath->getTransform()->setSize(glm::vec2(96, 48));
-
-		const std::vector textureListDeath = ResourceManager::GetTexturesContaining("Blue-Slime-Death");
-		sprite = testDeath->addComponent<AnimatedSpriteRenderer>(textureListDeath, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-		
-		//Add zombie and skeleton
-
-		//Zombie Animation
-		auto *testZombie = SceneManager::Instance()->createGameObject("Zombie", glm::vec2{400, 400});
-		testZombie->getTransform()->setSize(glm::vec2(38, 38));
-
-		const std::vector textureListZombie = ResourceManager::GetTexturesContaining("Zombie");
-		sprite = testZombie->addComponent<AnimatedSpriteRenderer>(textureListZombie, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-		
-
-		//Skeleton Animation
-		auto *testSkeleton = SceneManager::Instance()->createGameObject("Skeleton", glm::vec2{350, 400});
-		testSkeleton->getTransform()->setSize(glm::vec2(38, 38));
-
-
-		const std::vector textureListSkeleton = ResourceManager::GetTexturesContaining("Skeleton");
-		sprite = testSkeleton->addComponent<AnimatedSpriteRenderer>(textureListSkeleton, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-
-		//FX1
-		auto *testFX1 = SceneManager::Instance()->createGameObject("FX1", glm::vec2{350, 500});
-		testFX1->getTransform()->setSize(glm::vec2(64, 64));
-
-		const std::vector textureListFX1 = ResourceManager::GetTexturesContaining("FXSCircle");
-		sprite = testFX1->addComponent<AnimatedSpriteRenderer>(textureListFX1, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-		//FX2
-		auto *testFX2 = SceneManager::Instance()->createGameObject("FX2", glm::vec2{420, 500});
-		testFX2->getTransform()->setSize(glm::vec2(64, 64));
-
-		const std::vector textureListFX2 = ResourceManager::GetTexturesContaining("FXSDrop");
-		sprite = testFX2->addComponent<AnimatedSpriteRenderer>(textureListFX2, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-		//FX3
-		auto *testFX3 = SceneManager::Instance()->createGameObject("FX3", glm::vec2{280, 500});
-		testFX3->getTransform()->setSize(glm::vec2(64, 64));
-
-		const std::vector textureListFX3 = ResourceManager::GetTexturesContaining("FXSExpl");
-		sprite = testFX3->addComponent<AnimatedSpriteRenderer>(textureListFX3, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-
-		//Red-Slash-Thin
-		auto *testRST = SceneManager::Instance()->createGameObject("Red-Slash-Thin", glm::vec2{280, 700});
-		testRST->getTransform()->setSize(glm::vec2(55, 40));
-
-		const std::vector textureListRST = ResourceManager::GetTexturesContaining("RedSlashThin");
-		sprite = testRST->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-
-		//Red-Slash-Wide
-		auto *testRSW = SceneManager::Instance()->createGameObject("Red-Slash-Wide", glm::vec2{480, 700});
-		testRSW->getTransform()->setSize(glm::vec2(55, 40));
-
-		const std::vector textureListRSW = ResourceManager::GetTexturesContaining("Red-Slash-Wide");
-		sprite = testRSW->addComponent<AnimatedSpriteRenderer>(textureListRSW, 0.05f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-
-		TurnManager::Instance()->addToTurnQueue(testRST);
-		TurnManager::Instance()->addToTurnQueue(testRSW);
-
-		////Player Idle Anim
-		auto *testPlayerIdle = SceneManager::Instance()->createGameObject("Player", glm::vec2{600, 600});
-		testPlayerIdle->getTransform()->setSize(glm::vec2(256, 256));
-
-		const std::vector textureListPlayer = ResourceManager::GetTexturesContaining("hero");
-		sprite = testPlayerIdle->addComponent<AnimatedSpriteRenderer>(textureListPlayer, 0.075f);
-		sprite->setColor(glm::vec3(1, 1, 1));
-		sprite->setLit(false);
-
-		//CreateFireball(glm::vec2{ 1000, 500 });
+		sm = fireball->addComponent<StateMachine>();
 	}
 
-	void TestInventory(const OnSceneChanged* event)
+	void createEnemy(const glm::vec2 pos)
 	{
-		// TODO: Enum this or something its kinda bad to do this
-		if (event->key != "testInventory")
+		const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
+		
+		auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy", tileWorldSpace);
+		enemy->getTransform()->setSize(glm::vec2(48, 24));
+		enemy->addComponent<EnemyTest>();
+
+		GridSystem::Instance()->setSatOnTile(0, pos, enemy);
+	}
+	
+	void TestFuncScene1(const OnSceneChanged* event) 
+	{
+		if (event->key != "debugScene1")
 			return;
 
-		Inventory myInventory(50); // Holds 50 items
-	
-		Weapon sword;
-		sword.name = "Bandit sword";
-		sword.price = 200;
-		sword.type = "Weapon";
-		sword.itemDescription = "A common sword";
-		sword.equipSlot = "Hand";
-		sword.isEquipped = false;
-		sword.atk = 10;
-		sword.crit = 2;
-		myInventory.add_item(&sword);
+		auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
+		auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);
+		auto enemySortingLayer = Renderer::addSortingLayer("Top Grid", 1);
 
-		Armour armour;
-		armour.name = "Bandit armor";
-		armour.price = 120;
-		armour.type = "Armour";
-		armour.itemDescription = "A random armour";
-		armour.equipSlot = "Chest";
-		armour.isEquipped = false;
-		armour.def = 15;
-		myInventory.add_item(&armour);
-
-		Spell spell;
-		spell.name = "Fireball";
-		spell.price = 400;
-		spell.type = "Spell";
-		spell.itemDescription = "Command fire and shoot a fireball ";
-		spell.equipSlot = "Spells";
-		spell.isEquipped = false;
-		spell.spellAtk = 20;
-		spell.manaCost = 10;
-		spell.coolDown = 4; //Secods
-		spell.effectDuration = 3; //Seconds
-		myInventory.add_item(&spell);
-
-		Item potion;
-		potion.name = "Health potion";
-		potion.price = 50;
-		potion.type = "Potion";
-		potion.isUsable = true;
-		potion.isEquipped = false;
-		myInventory.add_item(&potion);
-
-
-		//std::cout << "There are " << myInventory.items.size() << " items left";
-		std::vector<Item*> shopItems;
-		shopItems.push_back(&sword);
-		shopItems.push_back(&armour);
-		shopItems.push_back(&spell);
-		shopItems.push_back(&potion);
+		GridSystem* grid_system = GridSystem::Instance();
+		grid_system->init(glm::vec2(48, 48), glm::vec2(70, 70));
+		grid_system->setOrderMap(
+		{
+			{0, backgroundSortingLayer},
+			{1, middleSortingLayer},
+			{2, enemySortingLayer},
+		});
 		
-		Shop shop = Shop(shopItems, std::string("$"), myInventory);
-		shop.displayItems();
-		//myInventory.draw_inventory();
-		//myInventory.equip_item("Bandit sword");
-		//myInventory.draw_inventory();
-	
-		//myInventory.equip_item("Fireball");
-		//myInventory.unequip_item("Bandit sword");
-		//myInventory.remove_item(&spell);
+		grid_system->setEmptyTileIDs(0, std::vector<int>{0});
+		// TODO: Fill these out lol
+		grid_system->setWallIDs(0, std::vector<int>{1,9,3,4,5,6});
+		grid_system->setTextureMap(0, std::map<int, Texture>
+		{
+			{ 1, ResourceManager::GetTexture("tile25")},
+			{ 2, ResourceManager::GetTexture("tile218")},
+			{ 3, ResourceManager::GetTexture("tile2")},
+			{ 4, ResourceManager::GetTexture("tile4") },
+			{ 5, ResourceManager::GetTexture("tile50") },
+			{ 6, ResourceManager::GetTexture("tile28") },
+			{ 7, ResourceManager::GetTexture("tile51") },
+			{ 8, ResourceManager::GetTexture("tile204") },
+			{ 9, ResourceManager::GetTexture("tile26") },
+			{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
+			{ 11, ResourceManager::GetTexture("tile242") }
+		});
+		grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
+		{
+			{ 10, [] { return new TestTile(Texture()); } },
+		});
+		
+		grid_system->loadFromFile(0, "Grid/Test2.txt");
+		
+		grid_system->setEmptyTileIDs(1, std::vector<int>{});
+		grid_system->setWallIDs(1, std::vector<int>{35, 36, 41, 42, 43, 44, 31, 32, 33});
+		grid_system->setTextureMap(1, std::map<int, Texture>
+		{
+			{ 21, ResourceManager::GetTexture("tile12")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
+			{ 22, ResourceManager::GetTexture("tile36")},//tile111 skulls
+			{ 23, ResourceManager::GetTexture("tile11")},//tile223 rocks
+			{ 24, ResourceManager::GetTexture("tile35")}, //Pillars : 20 44 68, 21 45 69, 22 46 70,
+			{ 25, ResourceManager::GetTexture("tile13")}, //104 105
+			{ 26, ResourceManager::GetTexture("tile37")}, //stair case/window
+			{ 27, ResourceManager::GetTexture("tile111")}, //skulls
+			{ 28, ResourceManager::GetTexture("tile223")}, //rocks
+			{ 29, ResourceManager::GetTexture("tile20")},
+			{ 30, ResourceManager::GetTexture("tile44")},
+			{ 31, ResourceManager::GetTexture("tile68")},
+			{ 32, ResourceManager::GetTexture("tile129")},	//vases
+			{ 33, ResourceManager::GetTexture("tile153")},	//vases
+			{ 34, ResourceManager::GetTexture("tile57") }, //lattice
+			{ 35, ResourceManager::GetTexture("tile127") },//barrels
+			{ 36, ResourceManager::GetTexture("tile151") },
+			{ 37, ResourceManager::GetTexture("tile131") },
+			{ 38, ResourceManager::GetTexture("tile155") },
+			{ 39, ResourceManager::GetTexture("tile288") },
+			{ 40, ResourceManager::GetTexture("tile289") },
+			{ 41, ResourceManager::GetTexture("tile132") },
+			{ 42, ResourceManager::GetTexture("tile133") },
+			{ 43, ResourceManager::GetTexture("tile156") },
+			{ 44, ResourceManager::GetTexture("tile157") },
+			{ 45, ResourceManager::GetTexture("tile290") }, //skulls
+			{ 46, ResourceManager::GetTexture("tile291") }, //skulls
+			{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
+			{ 48, ResourceManager::GetTexture("tile130") },//Jar
+			{ 49, ResourceManager::GetTexture("tile154") }
+		});
+		
+		grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
 
-		//myInventory.use_item("Health potion");
-		//myInventory.draw_inventory();
+		grid_system->setEmptyTileIDs(2, std::vector<int>{});
+		grid_system->setWallIDs(2, std::vector<int>{});
+		grid_system->setSpawnFunctionMap(2,
+		{
+			{ 91, [this](glm::vec2 pos)
+			{
+				PlayerController::Instance()->createPlayer();
+				PlayerController::Instance()->playerPTR->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
+			} },
+			{ 92, [this](glm::vec2 pos)
+			{
+				createEnemy(pos);
+			} },
+			{ 93, [this](glm::vec2 pos)
+			{
+				// TODO: Create a chest
+			} }
+		});
+		
+		grid_system->loadFromFile(2, "Grid/LevelDesignSP.txt");
+
+		int m_count = 0;
+		if (m_count == 1)
+		{
+			ScoreSystem::Instance()->ReadScores(false);
+			m_count++;
+		}
+
+		if (m_count == 2)
+		{
+			ScoreSystem::Instance()->RenderTopScores();
+		}
+		
+		CreateFireball(glm::vec2{ 1000, 500 });
+		TurnManager::Instance()->StartTurnSystem();
+	}
+
+	void TestFuncScene2(const OnSceneChanged* event) 
+	{
+		if (event->key != "debugScene2")
+			return;
+
+		auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
+		auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);
+		auto enemySortingLayer = Renderer::addSortingLayer("Top Grid", 1);
+
+		GridSystem* grid_system = GridSystem::Instance();
+		grid_system->init(glm::vec2(48, 48), glm::vec2(70, 70));
+		grid_system->setOrderMap(
+		{
+			{0, backgroundSortingLayer},
+			{1, middleSortingLayer},
+			{2, enemySortingLayer},
+		});
+		
+		grid_system->setEmptyTileIDs(0, std::vector<int>{0});
+		// TODO: Fill these out lol
+		grid_system->setWallIDs(0, std::vector<int>{1,9,3,4,5,6});
+		grid_system->setTextureMap(0, std::map<int, Texture>
+		{
+			{ 1, ResourceManager::GetTexture("tile25")},
+			{ 2, ResourceManager::GetTexture("tile218")},
+			{ 3, ResourceManager::GetTexture("tile2")},
+			{ 4, ResourceManager::GetTexture("tile4") },
+			{ 5, ResourceManager::GetTexture("tile50") },
+			{ 6, ResourceManager::GetTexture("tile28") },
+			{ 7, ResourceManager::GetTexture("tile51") },
+			{ 8, ResourceManager::GetTexture("tile204") },
+			{ 9, ResourceManager::GetTexture("tile26") },
+			{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
+			{ 11, ResourceManager::GetTexture("tile242") },
+			{ 12, ResourceManager::GetTexture("tile57") }
+		});
+		
+		grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
+
+		grid_system->setEmptyTileIDs(1, std::vector<int>{});
+		grid_system->setWallIDs(1, std::vector<int>{35, 36, 41, 42, 43, 44, 31, 32, 33});
+		grid_system->setTextureMap(1, std::map<int, Texture>
+		{
+			{ 21, ResourceManager::GetTexture("tile12")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
+			{ 22, ResourceManager::GetTexture("tile36") },//tile111 skulls
+			{ 23, ResourceManager::GetTexture("tile11") },//tile223 rocks
+			{ 24, ResourceManager::GetTexture("tile35") }, //Pillars : 20 44 68, 21 45 69, 22 46 70,
+			{ 25, ResourceManager::GetTexture("tile13") }, //104 105
+			{ 26, ResourceManager::GetTexture("tile37") }, //stair case/window
+			{ 27, ResourceManager::GetTexture("tile111") }, //skulls
+			{ 28, ResourceManager::GetTexture("tile223") }, //rocks
+			{ 29, ResourceManager::GetTexture("tile20") },
+			{ 30, ResourceManager::GetTexture("tile44") },
+			{ 31, ResourceManager::GetTexture("tile68") },
+			{ 32, ResourceManager::GetTexture("tile129") },	//vases
+			{ 33, ResourceManager::GetTexture("tile153") },	//vases
+			{ 34, ResourceManager::GetTexture("tile57") }, //lattice
+			{ 35, ResourceManager::GetTexture("tile127") },
+			{ 36, ResourceManager::GetTexture("tile151") },
+			{ 37, ResourceManager::GetTexture("tile131") },
+			{ 38, ResourceManager::GetTexture("tile155") },
+			{ 39, ResourceManager::GetTexture("tile288") },
+			{ 40, ResourceManager::GetTexture("tile289") },
+			{ 41, ResourceManager::GetTexture("tile132") },
+			{ 42, ResourceManager::GetTexture("tile133") },
+			{ 43, ResourceManager::GetTexture("tile156") },
+			{ 44, ResourceManager::GetTexture("tile157") },
+			{ 45, ResourceManager::GetTexture("tile290") }, //bones
+			{ 46, ResourceManager::GetTexture("tile291") }, //skulls
+			{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
+			{ 48, ResourceManager::GetTexture("tile130") },//Jar
+			{ 49, ResourceManager::GetTexture("tile154") }
+		});
+
+		grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");
+
+		grid_system->setEmptyTileIDs(2, std::vector<int>{});
+		grid_system->setWallIDs(2, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
+		grid_system->setSpawnFunctionMap(2,
+		{
+			{ 91, [this](glm::vec2 pos)
+			{
+				PlayerController::Instance()->createPlayer();
+				PlayerController::Instance()->playerPTR->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
+			} },
+			{ 92, [this](glm::vec2 pos)
+			{
+				createEnemy(pos);
+			} },
+			{ 93, [this](glm::vec2 pos)
+			{
+				// TODO: Create a chest
+			} }
+		});
+		
+		grid_system->loadFromFile(2, "Grid/SecondLevelDesignSP.txt");
+		
+		int m_count = 0;
+		if (m_count == 0)
+		{
+			ScoreSystem::Instance()->setScore(75);
+			std::string User = "LJP";
+			//ScoreSystem::Instance()->SaveScore(User);
+
+			m_count++;
+		}
+		
+		if (m_count == 1)
+		{
+			ScoreSystem::Instance()->ReadScores(false);
+			m_count++;
+		}
+
+		if (m_count == 2)
+		{
+			ScoreSystem::Instance()->RenderTopScores();
+		}
+		
+		CreateFireball(glm::vec2{ 1000, 500 });
+		TurnManager::Instance()->StartTurnSystem();
 	}
 	
 	glm::fvec2 direction = glm::fvec2(0, 0);
@@ -308,18 +374,22 @@ public:
 
 	void testRender(OnEngineRender*)
 	{
-		if (SceneManager::Instance()->getScene()->name != "testInventory")
-			return;
-		
 		TextRenderer::Instance()->renderText("abcdefghijklmnopqrstuvwsyz", 500, 500, 1, glm::vec3(1, 1, 1));
 	}
 	
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)
 	{
 		const glm::vec2 mousePos = Input::getMousePosition();
-		
+		if (sm != nullptr)
+		{
+			std::type_index type = typeid(OnMouseDown);
+			Griddy::Events::invoke<BehaviourEvent>(sm, new OnMouseDown(mouseDownEvent->key, mouseDownEvent->action), type);
+		}
 		if (mouseDownEvent->key == GLFW_MOUSE_BUTTON_3)
+		{
 			CreateFireball(mousePos);
+		}
+			
 	}
 	void testKeyDown(const OnKeyDown* keyDown)
 	{

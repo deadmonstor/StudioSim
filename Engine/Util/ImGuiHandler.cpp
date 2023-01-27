@@ -1,6 +1,7 @@
 ﻿#include "ImGuiHandler.h"
 
 #include "Engine.h"
+#include "../../Game/Components/TurnManager.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/Lighting.h"
@@ -32,35 +33,43 @@ void ImGuiHandler::init()
 
 void ImGuiHandler::ImGUIGridSystem() const
 {
-	for (GridSystem* gridSystem = GridSystem::Instance();
-		const auto& [x, mapHolder] : gridSystem->internalMap)
+	for (GridSystem* gridSystem = GridSystem::Instance(); const auto& [gridID, gridLayer] : gridSystem->gridLayers)
 	{
-		std::string xString = "X: " + std::to_string(x);
-
-		if (ImGui::TreeNode(xString.c_str()))
+		if (ImGui::TreeNode(std::to_string(gridID).c_str()))
 		{
-			for (const auto& [y, gridHolder] : mapHolder)
+			for (const auto& [x, mapHolder] : gridLayer->internalMap)
 			{
-				std::string yString = "Y: " + std::to_string(y);
-					
-				if (ImGui::TreeNode(yString.c_str()))
+				std::string xString = "X: " + std::to_string(x);
+
+				if (ImGui::TreeNode(xString.c_str()))
 				{
-					if (Tile* tile = gridHolder->tile)
+					for (const auto& [y, gridHolder] : mapHolder)
 					{
-						auto* tileString = new std::string("");
-						tile->getDebugInfo(tileString);
-						ImGui::Indent();
-						ImGui::Text("%s", tileString->c_str());
-						ImGui::Unindent();
+						std::string yString = "Y: " + std::to_string(y);
+					
+						if (ImGui::TreeNode(yString.c_str()))
+						{
+							if (Tile* tile = gridHolder->tile; tile != nullptr && tile->getTexture().Height != 0 && tile->getTexture().Width != 0)
+							{
+								auto* tileString = new std::string("");
+								tile->getDebugInfo(tileString);
+								ImGui::Indent();
+								ImGui::Text("%s", tileString->c_str());
+								ImGui::Unindent();
+							}
+							else
+							{
+								ImGui::Text("Tile: NULL");
+							}
+							
+							ImGui::TreePop();
+						}
 					}
-					else
-					{
-						ImGui::Text("Tile: NULL");
-					}
+						
 					ImGui::TreePop();
 				}
 			}
-						
+
 			ImGui::TreePop();
 		}
 	}
@@ -149,8 +158,8 @@ static std::map<std::string, DebugEvent> debugSettings
 static std::map<std::string, std::string> debugScenes
 {
 	{"Debug Rendering", "renderScene"},
-	{"Debug Scene", "debugScene"},
-	{"Debug Inventory", "testInventory"},
+	{"Debug Scene 1", "debugScene1"},
+	{"Debug Scene 2", "debugScene2"},
 };
 
 void ImGuiHandler::update()
@@ -260,6 +269,12 @@ void ImGuiHandler::update()
 				ImGUIGridSystem();
 				ImGui::TreePop();
 			}
+
+			if (ImGui::TreeNode("Turn Manager"))
+			{
+				TurnManager::Instance()->debugString();
+				ImGui::TreePop();
+			}
 		
 		}
 		ImGui::End();
@@ -316,10 +331,9 @@ void ImGuiHandler::render()
 
 	if (Griddy::Engine::isPaused())
 	{
-		const auto windowSize = Renderer::getWindowSize();
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			Renderer::Instance()->renderSprite(pausedSprite, {windowSize.x - 142 , windowSize.y - 39}, {142, 39}, 0);
+			Renderer::Instance()->renderSprite(pausedSprite, {0, 0}, {142, 39}, 0);
 		glDisable(GL_BLEND);
 	}
 	
@@ -348,6 +362,10 @@ void ImGuiHandler::cleanup()
 
 void ImGuiHandler::onKeyDown(const int key, const int scancode, const int action, const int mods)
 {
+#if (NDEBUG)
+	return;
+#endif
+
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		Griddy::Events::invoke<OnDebugEventChanged>(DebugPauseGame);
@@ -355,6 +373,16 @@ void ImGuiHandler::onKeyDown(const int key, const int scancode, const int action
 
 	if (key == GLFW_KEY_F8 && action == GLFW_PRESS)
 	{
-		Griddy::Events::invoke<OnSceneChangeRequested>("debugScene");
+		Griddy::Events::invoke<OnSceneChangeRequested>("debugScene1");
+	}
+
+	if (key == GLFW_KEY_F9 && action == GLFW_PRESS)
+	{
+		Griddy::Events::invoke<OnSceneChangeRequested>("debugScene2");
+	}
+
+	if (key == GLFW_KEY_V && action == GLFW_PRESS)
+	{
+		Griddy::Events::invoke<OnDebugEventChanged>(DebugNoclip);
 	}
 }

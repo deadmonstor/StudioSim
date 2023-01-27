@@ -1,7 +1,7 @@
 ﻿#include "Engine.h"
 #include <Windows.h>
 #include "Core/Components/TextRenderer.h"
-#include "Input.h"
+#include "Core/Input.h"
 #include "Core/AudioEngine.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
@@ -14,13 +14,16 @@
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
+#include "UIManager.h"
 
 
 namespace Griddy
 {
 	void key_callback(GLFWwindow* window, const int key, const int scancode, const int action, const int mods)
 	{
+#if (!NDEBUG)
 		ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
+#endif
 
 		if (!Engine::isPaused())
 			Input::Instance()->keyCallback(window, key, scancode, action, mods);
@@ -30,10 +33,18 @@ namespace Griddy
 
 	void mouse_callback(GLFWwindow* window, const int button, const int action, const int mods)
 	{
+#if (!NDEBUG)
 		ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
 		
-		if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !Engine::isPaused())
-			Input::Instance()->mouseCallback(window, button, action, mods);
+		if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
+		{
+#endif
+			if (!Engine::isPaused())
+				Input::Instance()->mouseCallback(window, button, action, mods);
+
+#if (!NDEBUG)
+		}
+#endif
 	}
 
 	void drop_callback(GLFWwindow* window, const int count, const char** paths)
@@ -106,14 +117,19 @@ namespace Griddy
 
 	void Engine::render()
 	{
-		Renderer::Instance()->render();
-
-		SceneManager::Instance()->render();
+		glClearColor(0, 0, 0, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		
 		GridSystem::Instance()->render();
+
+		Renderer::Instance()->render();
+		SceneManager::Instance()->render();
 
 		Events::invoke<OnEngineRender>();
 		
 		ImGuiHandler::render();
+
+		UIManager::Instance()->render();
 		glfwSwapBuffers(Renderer::getWindow());
 	}
 

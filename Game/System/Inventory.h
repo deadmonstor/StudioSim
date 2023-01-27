@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "Core/Component.h"
+
 struct Item
 {
 	std::string name;
@@ -52,8 +54,8 @@ struct Armour : Item
 
 class Inventory
 {
-private:
 	int max_items;
+	
 public:
 	Inventory(int max)
 	{
@@ -63,9 +65,13 @@ public:
 	bool add_item(Item* item);
 	bool remove_item(Item* item);
 	void draw_inventory();
-	void use_item(std::string item_name);
-	void equip_item(std::string item_name);
-	void unequip_item(std::string item_name);
+
+	void getDebugInfo(std::string*) override;
+	
+	bool remove_item(const std::string& item_name);
+	void use_item(const std::string& item_name);
+	void equip_item(const std::string& item_name);
+	void unequip_item(const std::string& item_name);
 };
 
 #endif
