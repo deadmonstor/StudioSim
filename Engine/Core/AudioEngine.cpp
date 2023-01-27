@@ -106,7 +106,7 @@ bool AudioEngine::checkResult(FMOD_RESULT fmodResult, std::string area)
 bool AudioEngine::loadSound(const char *path, const FMOD_MODE fMode) 
 { 
 	//Check if sound exists
-	if (ResourceManager::GetSound(path) != nullptr) 
+	if (ResourceManager::HasSound(path)) 
 	{
 		LOG_ERROR("Trying to load already loaded sound");
 		return false;
@@ -160,6 +160,8 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 	}
 	else
 	{
+		//Loop(0 - Oneshot, 1 - Loop Once and Stop, -1 - Loop Forever
+		fmodChannel->setLoopCount(-1);
 		fmodChannel->setChannelGroup(channelGroups["Background Music"]);
 	}
 	return true;
@@ -213,4 +215,61 @@ bool AudioEngine::deleteReverbZone(const int zone)
 	reverbZones[zone]->release();
 	reverbZones.erase(zone);
 	return true;
+}
+
+
+//Channel Group Functions
+bool AudioEngine::stopChannelGroup(std::string channelGroupName)
+{
+	channelGroups[channelGroupName]->stop();
+	return true;
+}
+
+bool AudioEngine::setPauseChannelGroup(std::string channelGroupName, bool pause)
+{
+	channelGroups[channelGroupName]->setPaused(pause);
+	return true;
+}
+
+bool AudioEngine::setModeChannelGroup(std::string channelGroupName, FMOD_MODE modes)
+{
+	channelGroups[channelGroupName]->setMode(modes);
+	return true;
+}
+
+bool AudioEngine::setPitchChannelGroup(std::string channelGroupName, float pitch)
+{
+	channelGroups[channelGroupName]->setPitch(pitch);
+	return true;
+}
+
+bool AudioEngine::setVolumeChannelGroup(std::string channelGroupName, float volume)
+{
+	channelGroups[channelGroupName]->setVolume(volume);
+	return true;
+}
+
+bool AudioEngine::setMuteChannelGroup(std::string channelGroupName, bool mute)
+{
+	channelGroups[channelGroupName]->setMute(mute);
+	return true;
+}
+
+bool AudioEngine::set3DAttributeChannelGroup(std::string channelGroupName, FMOD_VECTOR pos, FMOD_VECTOR vel)
+{
+	channelGroups[channelGroupName]->set3DAttributes(&pos, &vel);
+	return true;
+}
+
+bool AudioEngine::setMinMaxChannelGroup(std::string channelGroupName, float min, float max)
+{
+	channelGroups[channelGroupName]->set3DMinMaxDistance(min, max);
+	return true;
+}
+
+int AudioEngine::getNumberOfChannelsInGroup(std::string channelGroupName)
+{
+	int channels;
+	channelGroups[channelGroupName]->getNumChannels(&channels);
+	return channels;
 }

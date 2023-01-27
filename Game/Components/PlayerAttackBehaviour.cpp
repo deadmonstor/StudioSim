@@ -6,6 +6,7 @@
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/AudioEngine.h"
+#include "TurnManager.h"
 
 PlayerAttackBehaviour::PlayerAttackBehaviour()
 {
@@ -28,10 +29,13 @@ void PlayerAttackBehaviour::AttackOnMovement(glm::fvec2 dir)
 	attackDir = dir;
 	if (canAttack)
 	{
-		Act();
+		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		{
+			Act();
+		}
 	}
+	
 	attackDir = glm::fvec2(0, 0);
-	/*Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerMovementBehaviour(true));*/
 }
 
 void PlayerAttackBehaviour::Act()
@@ -39,6 +43,7 @@ void PlayerAttackBehaviour::Act()
 	currentPlayerPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
 	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, currentPlayerPos + attackDir);
 	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
+	const bool isWallTile = GridSystem::Instance()->isWallTile(currentPlayerPos + attackDir);
 
 	if (curTileHolder->tile != nullptr)
 	{
@@ -46,7 +51,7 @@ void PlayerAttackBehaviour::Act()
 		{
 			case Dagger:
 			{
-				if (!curTileHolder->isWall)
+				if (!isWallTile)
 				{
 					createSlashGameObject(currentPlayerPos + attackDir);
 					
@@ -64,8 +69,9 @@ void PlayerAttackBehaviour::Act()
 					attackPositions.assign(attackPosSword.begin(), attackPosSword.end());
 					for (glm::fvec2 attackPos : attackPositions)
 					{
+						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if(!attackTile->isWall && attackTile->isSpawned)
+						if(!attackTile->isWall && !isWallTile)
 						{
 							createSlashGameObject(attackPos);
 						}
@@ -80,8 +86,9 @@ void PlayerAttackBehaviour::Act()
 					attackPositions.assign(attackPosSword.begin(), attackPosSword.end());
 					for (glm::fvec2 attackPos : attackPositions)
 					{
+						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if (!attackTile->isWall && attackTile->isSpawned)
+						if (!isWallTile && attackTile->isSpawned)
 						{
 							createSlashGameObject(attackPos);
 						}
@@ -97,8 +104,9 @@ void PlayerAttackBehaviour::Act()
 				attackPositions.assign(attackPosAxe.begin(), attackPosAxe.end());
 				for (glm::fvec2 attackPos : attackPositions)
 				{
+					const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 					TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-					if (!attackTile->isWall && attackTile->isSpawned)
+					if (!isWallTile && attackTile->isSpawned)
 					{
 						createSlashGameObject(attackPos);
 					}
@@ -119,8 +127,9 @@ void PlayerAttackBehaviour::Act()
 
 					for (glm::fvec2 attackPos : attackPositions)
 					{
+						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if (!attackTile->isWall && attackTile->isSpawned)
+						if (!isWallTile && attackTile->isSpawned)
 						{
 							createSlashGameObject(attackPos);
 						}
@@ -136,8 +145,9 @@ void PlayerAttackBehaviour::Act()
 
 					for (glm::fvec2 attackPos : attackPositions)
 					{
+						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if (!attackTile->isWall && attackTile->isSpawned)
+						if (!isWallTile && attackTile->isSpawned)
 						{
 							createSlashGameObject(attackPos);
 						}
@@ -152,7 +162,7 @@ void PlayerAttackBehaviour::Act()
 	}
 	canAttack = false;
 	
-	
+	TurnManager::Instance()->EndTurn();
 }
 
 void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -184,50 +194,35 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 
 	if (eventCasted->key == GLFW_KEY_W)
 	{
-		attackDir.y += 1;
+		attackDir.y = 1;
 	}
 	else if (eventCasted->key == GLFW_KEY_S)
 	{
-		attackDir.y -= 1;
+		attackDir.y = -1;
 	}
 	else if (eventCasted->key == GLFW_KEY_A)
 	{
-		attackDir.x -= 1;
+		attackDir.x = -1;
 	}
 	else if (eventCasted->key == GLFW_KEY_D)
 	{
-		attackDir.x += 1;
+		attackDir.x = 1;
 	}
 
 	if (canAttack && (eventCasted->key == GLFW_KEY_W || eventCasted->key == GLFW_KEY_S ||
 		eventCasted->key == GLFW_KEY_A || eventCasted->key == GLFW_KEY_D))
 	{
-		Act();
+		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		{
+			Act();
+		}
 	}
+	
 	attackDir = glm::fvec2(0, 0);
 }
 
 void PlayerAttackBehaviour::onKeyUpResponse(Griddy::Event* event)
 {
-	/*OnKeyUp* eventCasted = static_cast<OnKeyUp*>(event);
-
-	if (eventCasted->key == GLFW_KEY_W)
-	{
-		attackDir.y -= 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_S)
-	{
-		attackDir.y += 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_A)
-	{
-		attackDir.x += 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_D)
-	{
-		attackDir.x -= 1;
-	}*/
-
 	canAttack = true;
 }
 
@@ -258,6 +253,7 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 	AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
 	slashSprite->setPivot(Pivot::Center);
 	slash->addComponent<DestroyAfterAnimation>();
+	
 	AudioEngine::Instance()->playSound("Sounds\\AirSlash.wav", false, 0.3f, 0, 0, AudioType::SoundEffect);
 }
 

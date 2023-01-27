@@ -25,6 +25,7 @@ void GridSystem::clearGrid(const int id)
 		for(int y = 0; y < gridSize.y; y++)
 		{
 			TileHolder* grid_holder = gridLayers[id]->internalMap[x][y] = new TileHolder();
+			grid_holder->position = glm::vec2(x, y);
 			grid_holder->isSpawned = false;
 
 			const auto tile = new Tile(Texture());
@@ -80,6 +81,29 @@ void GridSystem::renderInternal(const int id)
 	}
 }
 
+bool GridSystem::isWallTile(const glm::vec2 pos)
+{
+	for (const auto [id, layer] : gridLayers)
+	{
+		if (!isInMap(id, pos)) continue;
+		
+		if (layer->internalMap[pos.x][pos.y]->isWall)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool GridSystem::isInMap(int id, const glm::vec2 pos) const
+{
+	if (pos.x < 0 || pos.x > gridSize.x || pos.y < 0 || pos.y > gridSize.y)
+		return false;
+
+	return true;
+}
+
 void GridSystem::render()
 {
 	if (!shouldRender) return;
@@ -125,21 +149,19 @@ void GridSystem::refreshLightData(const LightUpdateRequest lightUpdateRequest)
 
 TileHolder* GridSystem::getTileHolder(const int id, const glm::ivec2& _pos)
 {
-	if (_pos.x < 0 || _pos.x > gridSize.x || _pos.y < 0 || _pos.y > gridSize.y)
-		return nullptr;
+	if (!isInMap(id, _pos)) return nullptr;
 
 	return gridLayers[id]->internalMap[_pos.x][_pos.y];
 }
 
-GridLayer* GridSystem::GetGridLayer(const int id)
+GridLayer* GridSystem::getGridLayer(const int id)
 {
 	return gridLayers[id];
 }
 
 Tile* GridSystem::getTile(const int id, const glm::ivec2& _pos)
 {
-	if (_pos.x < 0 || _pos.x > gridSize.x || _pos.y < 0 || _pos.y > gridSize.y)
-		return nullptr;
+	if (!isInMap(id, _pos)) return nullptr;
 
 	return gridLayers[id]->internalMap[_pos.x][_pos.y]->tile;
 }
@@ -167,14 +189,38 @@ std::vector<std::pair<glm::vec2, Tile*>> GridSystem::getNeighbours(const int id,
 	return neighbours;
 }
 
+std::vector<TileHolder*> GridSystem::getPathfindingNeighbours(int id, TileHolder* tile)
+{
+	auto& internalMap = gridLayers[id]->internalMap;
+	std::vector<TileHolder*> neighbours;
+
+	for (int x = -1; x < 2; x++)
+	{
+		for (int y = -1; y < 2; y++)
+		{
+			if (x == 0 && y == 0) continue;
+			//If diagonal neighbour then ignore
+			if (abs(x) == abs(y)) continue;
+
+			glm::vec2 neighbour = tile->position + glm::vec2(x, y);
+			if (neighbour.x < 0 || neighbour.y < 0) continue;
+			if (neighbour.x >= gridSize.x || neighbour.y >= gridSize.y) continue;
+
+			TileHolder* tile = internalMap[neighbour.x][neighbour.y];
+			neighbours.emplace_back(tile);
+		}
+	}
+	return neighbours;
+}
+
 glm::vec2 GridSystem::getTilePosition(const glm::vec2 vec) const
 {
-	return glm::vec2(floor(vec.x / tileSize.x), floor(vec.y / tileSize.y));
+	return {floor(vec.x / tileSize.x), floor(vec.y / tileSize.y)};
 }
 
 glm::vec2 GridSystem::getWorldPosition(const glm::vec2 vec) const
 {
-	return glm::vec2(vec.x * tileSize.x, vec.y * tileSize.y);
+	return {vec.x * tileSize.x, vec.y * tileSize.y};
 }
 
 void GridSystem::setSatOnTile(const int id, const glm::vec2 vec, GameObject* enemy)
@@ -243,6 +289,11 @@ void GridSystem::loadFromFile(const int mapID, const std::string& fileName)
 				grid_holder->tile->SetTexture(texture);
 			}
 
+			if (std::function<void(glm::vec2)> spawnFunction = gridLayers[mapID]->spawnFunctions[i]; spawnFunction != nullptr)
+			{
+				spawnFunction({x, y});
+			}
+
 			grid_holder->isSpawned = std::ranges::find(layer->emptyTiles, i) == layer->emptyTiles.end();
 			grid_holder->isWall =std::ranges::find(layer->wallIDs, i) != layer->wallIDs.end();
 			
@@ -284,4 +335,15 @@ void GridSystem::setEmptyTileIDs(const int id, const std::vector<int>& emptyTile
 		this->gridLayers[id] = new GridLayer();
 		
 	this->gridLayers[id]->emptyTiles = emptyTileIDs;
+}
+
+int GridSystem::FindManhattanTileDistance(glm::vec2 startPos, glm::vec2 endPos)
+{
+	glm::vec2 directionVec = endPos - startPos;
+	return abs(directionVec.x) + abs(directionVec.y);
+}
+
+int GridSystem::FindLineTileDistance(glm::vec2 startPos, glm::vec2 endPos)
+{
+	return 0;
 }

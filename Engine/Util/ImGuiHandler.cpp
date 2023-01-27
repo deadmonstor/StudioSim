@@ -1,6 +1,7 @@
 ﻿#include "ImGuiHandler.h"
 
 #include "Engine.h"
+#include "../../Game/Components/TurnManager.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/Lighting.h"
@@ -157,8 +158,8 @@ static std::map<std::string, DebugEvent> debugSettings
 static std::map<std::string, std::string> debugScenes
 {
 	{"Debug Rendering", "renderScene"},
-	{"Debug Scene", "debugScene"},
-	{"Debug Inventory", "testInventory"},
+	{"Debug Scene 1", "debugScene1"},
+	{"Debug Scene 2", "debugScene2"},
 };
 
 void ImGuiHandler::update()
@@ -268,6 +269,12 @@ void ImGuiHandler::update()
 				ImGUIGridSystem();
 				ImGui::TreePop();
 			}
+
+			if (ImGui::TreeNode("Turn Manager"))
+			{
+				TurnManager::Instance()->debugString();
+				ImGui::TreePop();
+			}
 		
 		}
 		ImGui::End();
@@ -366,6 +373,11 @@ void ImGuiHandler::onKeyDown(const int key, const int scancode, const int action
 
 	if (key == GLFW_KEY_F8 && action == GLFW_PRESS)
 	{
-		Griddy::Events::invoke<OnSceneChangeRequested>("debugScene");
+		Griddy::Events::invoke<OnSceneChangeRequested>("debugScene1");
+	}
+
+	if (key == GLFW_KEY_F9 && action == GLFW_PRESS)
+	{
+		Griddy::Events::invoke<OnSceneChangeRequested>("debugScene2");
 	}
 }
