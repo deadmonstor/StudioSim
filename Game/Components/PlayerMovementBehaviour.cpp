@@ -28,11 +28,15 @@ PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 void PlayerMovementBehaviour::Act()
 {
 	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
+	
+	if (curTileHolder == nullptr)
+		return;
+	
 	GameObject* gameObjectOnTile = curTileHolder->gameObjectSatOnTile;
 	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
 	const bool isWallTile = GridSystem::Instance()->isWallTile(origPos + moveDir);
 		
-	if (curTileHolder->tile != nullptr && !isWallTile)
+	if (curTileHolder->tile != nullptr && (!isWallTile || TurnManager::gNoclipMode))
 	{
 		if (gameObjectOnTile != nullptr && gameObjectOnTile->hasComponent(typeid(Health)))
 		{
@@ -47,7 +51,9 @@ void PlayerMovementBehaviour::Act()
 			origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
 		
 			AudioEngine::Instance()->playSound("Sounds\\step.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
-			TurnManager::Instance()->EndTurn();
+			
+			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+				TurnManager::Instance()->EndTurn();
 		}
 	}
 	
@@ -85,7 +91,7 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 
 	if (canMove && moveDir != glm::fvec2(0, 0))
 	{
-		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 		{
 			Act();
 		}
@@ -118,7 +124,7 @@ void PlayerMovementBehaviour::onKeyHoldResponse(Griddy::Event* event)
 
 	if (canMove && canAttackWhileMoving)
 	{
-		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 		{
 			Act();
 		}

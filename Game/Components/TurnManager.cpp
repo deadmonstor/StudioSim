@@ -3,11 +3,14 @@
 #include "Core/GameObject.h"
 #include "Util/Events/Events.h"
 
+bool TurnManager::gNoclipMode = false;
+
 TurnManager::TurnManager()
 {
 	Griddy::Events::subscribe(this, &TurnManager::onUpdate);
 	Griddy::Events::subscribe(this, &TurnManager::onGameObjectRemoved);
 	Griddy::Events::subscribe(this, &TurnManager::onSceneChanged);
+	Griddy::Events::subscribe(this, &TurnManager::onDebugEvent);
 }
 
 void TurnManager::addToTurnQueue(GameObject* object)
@@ -29,6 +32,14 @@ void TurnManager::onGameObjectRemoved(const OnGameObjectRemoved* event)
 	if (event->gameObject == m_CurrentTurnObject && !SceneManager::Instance()->isLoadingScene())
 	{
 		EndTurn();
+	}
+}
+
+void TurnManager::onDebugEvent(const OnDebugEventChanged* event)
+{
+	if (event->key == DebugNoclip)
+	{
+		gNoclipMode = !gNoclipMode;
 	}
 }
 
