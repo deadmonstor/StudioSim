@@ -4,7 +4,6 @@
 #include "Util/Logger.h"
 
 
-bool Inventory::add_item(const Item item)
 bool Inventory::add_item(Item* item)
 {
 	if (items.size() >= max_items)
@@ -18,7 +17,6 @@ bool Inventory::add_item(Item* item)
 	return true;
 }
 
-bool Inventory::remove_item(const std::string& item_name)
 bool Inventory::remove_item(Item* item)
 {
 	for (int i = 0; i < items.size(); i++)
@@ -65,7 +63,7 @@ void Inventory::getDebugInfo(std::string* basic_string)
 	ImGui::Indent();
 	for (int i = 0; i < items.size(); i++)
 	{
-		ImGui::Text("%d. %s", i + 1, items[i].name.c_str());
+		/*ImGui::Text("%d. %s", i + 1, items[i].name.c_str());
 		ImGui::Indent();
 		if (items[i].type == "Weapon")
 		{
@@ -83,7 +81,7 @@ void Inventory::getDebugInfo(std::string* basic_string)
 		if (items[i].isEquipped)
 		{
 			ImGui::Text("Equipped");
-		}
+		}*/
 		ImGui::Unindent();
 	}
 	ImGui::Unindent();
@@ -95,15 +93,15 @@ void Inventory::use_item(const std::string& item_name)
 {
 	for (auto& item : items)
 	{
-		if (item.name == item_name)
+		if (item->name == item_name)
 		{
-			if (item.type == "Potion")
+			if (item->type == "Potion")
 			{
-				LOG_INFO("You used a " + item.name + " and recovered 20 HP.");
+				LOG_INFO("You used a " + item->name + " and recovered 20 HP.");
 			}
 			else
 			{
-				LOG_INFO("You used a " + item.name + ".");
+				LOG_INFO("You used a " + item->name + ".");
 			}
 
 			return;

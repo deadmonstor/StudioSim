@@ -1,7 +1,7 @@
 #pragma once
-#include "Weapon.h"
+#include "WeaponEnum.h"
 class CommonDagger :
-    public Weapon
+    public WeaponEnum
 {
 public:
     

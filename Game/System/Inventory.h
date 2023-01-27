@@ -27,8 +27,6 @@ struct Weapon : Item
 
 	int crit;
 	int getCrit() { return crit; };
-
-
 };
 
 struct Spell : Item
@@ -52,7 +50,7 @@ struct Armour : Item
 	int getDef() { return def; }
 };
 
-class Inventory
+class Inventory : public Component
 {
 	int max_items;
 	
