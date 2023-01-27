@@ -16,6 +16,7 @@
     <ClCompile Include="Components\ButtonComponent.cpp" />
     <ClCompile Include="Components\Consumables.cpp" />
     <ClCompile Include="Components\CommonDagger.cpp" />
+    <ClCompile Include="Components\Dagger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -38,5 +39,6 @@
     <ClInclude Include="Components\Weapon.h" />
     <ClInclude Include="Components\Consumables.h" />
     <ClInclude Include="Components\CommonDagger.h" />
+    <ClInclude Include="Components\Dagger.h" />
   </ItemGroup>
 </Project>

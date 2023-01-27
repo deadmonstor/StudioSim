@@ -52,6 +52,7 @@ void PlayerAttackBehaviour::Act()
 		{
 			case Dagger:
 			{
+				/*std::vector<glm::fvec2> attackPosDagger = {}*/
 				if (!isWallTile)
 				{
 					createSlashGameObject(currentPlayerPos + attackDir);
