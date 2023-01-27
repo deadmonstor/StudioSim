@@ -7,6 +7,7 @@
 #include "Core/Grid/GridSystem.h"
 #include "Core/AudioEngine.h"
 #include "TurnManager.h"
+#include "EnemyTest.h"
 
 PlayerAttackBehaviour::PlayerAttackBehaviour()
 {
@@ -37,6 +38,8 @@ void PlayerAttackBehaviour::AttackOnMovement(glm::fvec2 dir)
 	
 	attackDir = glm::fvec2(0, 0);
 }
+
+
 
 void PlayerAttackBehaviour::Act()
 {
