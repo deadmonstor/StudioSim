@@ -9,6 +9,8 @@
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
+#include "Shop.h"
+#include "System/Inventory.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
@@ -16,6 +18,8 @@
 #include <string>
 #include "Components/TurnManager.h"
 #include "Components/PlayerController.h"
+#include "Tiles/LightTile.h"
+#include "Tiles/TestTile.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -154,6 +158,10 @@ public:
 			{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
 			{ 11, ResourceManager::GetTexture("tile242") }
 		});
+		grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
+		{
+			{ 10, [] { return new TestTile(Texture()); } },
+		});
 		
 		grid_system->loadFromFile(0, "Grid/Test2.txt");
 		
@@ -190,6 +198,10 @@ public:
 			{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
 			{ 48, ResourceManager::GetTexture("tile130") },//Jar
 			{ 49, ResourceManager::GetTexture("tile154") }
+		});
+		grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile*()>>
+		{
+			{ 37, [] { return new LightTile(Texture()); } },
 		});
 		
 		grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
@@ -264,7 +276,8 @@ public:
 			{ 8, ResourceManager::GetTexture("tile204") },
 			{ 9, ResourceManager::GetTexture("tile26") },
 			{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
-			{ 11, ResourceManager::GetTexture("tile242") }
+			{ 11, ResourceManager::GetTexture("tile242") },
+			{ 12, ResourceManager::GetTexture("tile57") }
 		});
 		
 		grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
@@ -296,7 +309,12 @@ public:
 			{ 41, ResourceManager::GetTexture("tile132") },
 			{ 42, ResourceManager::GetTexture("tile133") },
 			{ 43, ResourceManager::GetTexture("tile156") },
-			{ 44, ResourceManager::GetTexture("tile157") }
+			{ 44, ResourceManager::GetTexture("tile157") },
+			{ 45, ResourceManager::GetTexture("tile290") }, //bones
+			{ 46, ResourceManager::GetTexture("tile291") }, //skulls
+			{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
+			{ 48, ResourceManager::GetTexture("tile130") },//Jar
+			{ 49, ResourceManager::GetTexture("tile154") }
 		});
 
 		grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");

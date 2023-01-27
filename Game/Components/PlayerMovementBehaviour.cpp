@@ -49,6 +49,9 @@ void PlayerMovementBehaviour::Act()
 			PlayerController::Instance()->playerPTR->getTransform()->
 				setPosition(tileSize * (origPos + moveDir));
 
+			if(curTileHolder->tile->canInteractWith())
+				curTileHolder->tile->onInteractedWith(curTileHolder);
+
 			origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
 		
 			AudioEngine::Instance()->playSound("Sounds\\step.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
