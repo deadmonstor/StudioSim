@@ -12,6 +12,7 @@
 void EnemyTest::start()
 {
 	getOwner()->addComponent<Health>();
+	enemyFSM = getOwner()->addComponent<NormalEnemyFSM>();
 	
 	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
 	auto sprite = getOwner()->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
@@ -50,6 +51,7 @@ void EnemyTest::onTurnChanged(const onStartTurn* event)
 		glm::vec2 pos = {std::rand() % 25, std::rand() % 25};
 		// get random tile in range
 		const auto tile = GridSystem::Instance()->getTile(0, pos);
+		enemyFSM->Act();
 		// move to that tile
 		//getOwner()->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
 		// end turn

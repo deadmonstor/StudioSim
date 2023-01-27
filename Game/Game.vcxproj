@@ -31,6 +31,7 @@
     <ClInclude Include="Components\TurnManager.h" />
     <ClInclude Include="Components\Consumables.h" />
     <ClInclude Include="MainGame.h" />
+    <ClInclude Include="Components\NormalEnemyFSM.h" />
     <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
@@ -48,6 +49,7 @@
     <ClCompile Include="Components\PlayerMovementBehaviour.cpp" />
     <ClCompile Include="Components\Consumables.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="Components\NormalEnemyFSM.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Components\TurnComponent.cpp" />
     <ClCompile Include="Components\TurnManager.cpp" />

@@ -25,12 +25,12 @@ public:
 	Weapon weaponClassEquipped;
 	bool canAttack = true;
 	void AttackOnMovement(glm::fvec2 dir);
+	
 private:
 	void Act() override;
 	void onKeyDownResponse(Griddy::Event*);
 	void onKeyUpResponse(Griddy::Event*);
 	void createSlashGameObject(glm::fvec2 pos);
-	
 
 protected:
 	FunctionMap CreateFunctionMap() override;

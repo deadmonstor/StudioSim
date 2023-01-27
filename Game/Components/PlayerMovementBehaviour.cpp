@@ -6,6 +6,7 @@
 #include "Core/AudioEngine.h"
 #include <Core/Components/Health.h>
 #include "TurnManager.h"
+#include "EnemyTest.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour()
 {
@@ -38,7 +39,7 @@ void PlayerMovementBehaviour::Act()
 		
 	if (curTileHolder->tile != nullptr && (!isWallTile || TurnManager::gNoclipMode))
 	{
-		if (gameObjectOnTile != nullptr && gameObjectOnTile->hasComponent(typeid(Health)))
+		if (gameObjectOnTile != nullptr && gameObjectOnTile->hasComponent(typeid(EnemyTest)))
 		{
 			attackBehaviour->AttackOnMovement(moveDir);
 			canAttackWhileMoving = false;
