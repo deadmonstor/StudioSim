@@ -2,7 +2,7 @@
 #include <list>
 #include "glm/fwd.hpp"
 
-class Weapon
+class WeaponEnum
 {
 
 public:

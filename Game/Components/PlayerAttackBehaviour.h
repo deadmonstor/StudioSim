@@ -5,7 +5,7 @@
 #include "glm/fwd.hpp"
 
 
-enum Weapon
+enum WeaponEnum
 {
 	Dagger,
 	Sword,
@@ -22,7 +22,7 @@ public:
 	glm::fvec2 currentPlayerPos;
 	std::list<glm::fvec2> attackPositions;
 	const std::vector<Texture> textureListRST = ResourceManager::GetTexturesContaining("RedSlashThin");
-	Weapon weaponClassEquipped;
+	WeaponEnum weaponClassEquipped;
 	bool canAttack = true;
 	void AttackOnMovement(glm::fvec2 dir);
 private:

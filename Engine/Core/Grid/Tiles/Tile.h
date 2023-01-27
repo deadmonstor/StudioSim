@@ -1,7 +1,9 @@
 ﻿#pragma once
 #include "Core/Components/SpriteComponent.h"
 
-class Tile final : public SpriteComponent
+struct TileHolder;
+
+class Tile : public SpriteComponent
 {
 public:
 	Tile(const Texture& _texture) : SpriteComponent()
@@ -11,4 +13,8 @@ public:
 	
 	void SetTexture(const Texture& texture);
 	void SetShader(const Shader& shader);
+
+	virtual void init(TileHolder* curTileHolder) {}
+	virtual bool canInteractWith() { return false; }
+	virtual void onInteractedWith(TileHolder* curTileHolder) {}
 };

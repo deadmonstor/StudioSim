@@ -52,42 +52,6 @@ void PlayerController::createPlayer()
 
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
-	//DEBUG
-	if (keyDown->key == GLFW_KEY_F11)
-	{
-		Item sword;
-		sword.name = "Bandit sword";
-		sword.type = "Weapon";
-		sword.itemDescription = "A common sword";
-		sword.equipSlot = "Hand";
-		sword.isEquipped = false;
-		sword.atk = 10;
-		sword.crit = 2;
-		
-		myInventory->add_item(sword);
-
-		Item armour;
-		armour.name = "Bandit armor";
-		armour.type = "Armour";
-		armour.equipSlot = "Chest";
-		armour.isEquipped = false;
-		armour.def = 15;
-		
-		myInventory->add_item(armour);
-
-		Item spell;
-		spell.name = "Fireball";
-		spell.type = "Spell";
-		spell.equipSlot = "Spells";
-		spell.isEquipped = false;
-		spell.spellAtk = 20;
-		spell.manaCost = 10;
-		spell.coolDown = 4; //Secods
-		spell.effectDuration = 3; //Seconds
-		
-		myInventory->add_item(spell);
-		myInventory->equip_item("Bandit sword");
-	}
 	if (keyDown->key == GLFW_KEY_P)
 	{
 		//Testing pathfinding

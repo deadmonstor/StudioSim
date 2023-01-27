@@ -32,9 +32,12 @@
     <ClInclude Include="Components\Consumables.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="ScoreSystem.h" />
+    <ClInclude Include="Shop.h" />
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
-    <ClInclude Include="Components\Weapon.h" />
+    <ClInclude Include="Components\WeaponEnum.h" />
+    <ClInclude Include="Tiles\LightTile.h" />
+    <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Components\CommonDagger.cpp" />
@@ -51,7 +54,10 @@
     <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Components\TurnComponent.cpp" />
     <ClCompile Include="Components\TurnManager.cpp" />
+    <ClCompile Include="Shop.cpp" />
     <ClCompile Include="System\Inventory.cpp" />
+    <ClCompile Include="Tiles\LightTile.cpp" />
+    <ClCompile Include="Tiles\TestTile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
