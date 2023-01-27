@@ -28,6 +28,10 @@ PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 void PlayerMovementBehaviour::Act()
 {
 	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
+	
+	if (curTileHolder == nullptr)
+		return;
+	
 	GameObject* gameObjectOnTile = curTileHolder->gameObjectSatOnTile;
 	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
 	const bool isWallTile = GridSystem::Instance()->isWallTile(origPos + moveDir);
