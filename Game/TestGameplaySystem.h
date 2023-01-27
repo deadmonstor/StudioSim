@@ -287,7 +287,9 @@ public:
 			{ 9, ResourceManager::GetTexture("tile26") },
 			{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
 			{ 11, ResourceManager::GetTexture("tile242") },
-			{ 12, ResourceManager::GetTexture("tile57") }
+			{ 12, ResourceManager::GetTexture("tile57") },
+			{ 13, ResourceManager::GetTexture("tile57") },
+			{ 15, ResourceManager::GetTexture("tile57") }
 		});
 		
 		grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
