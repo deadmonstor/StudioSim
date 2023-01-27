@@ -62,7 +62,7 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			{
 				costMap[neighbour] = newCost;
 				cameFromMap[neighbour] = currentNode.second;
-				int heuristic = GridSystem::Instance()->FindManhattanTileDistance(end->position, neighbour->position);
+				int heuristic = FindManhattanDistance(end->position, neighbour->position);
 				frontier.push(std::make_pair(heuristic, neighbour));
 			}
 		}
@@ -98,12 +98,50 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(glm::vec2 startPos, glm::ve
 	return FindPath(tile1, tile2);
 }
 
-std::deque<TileHolder*> PathfindingMachine::ContinuePath(std::deque<glm::vec2> currentPath, TileHolder* end)
+float PathfindingMachine::FindManhattanDistance(glm::vec2 startPos, glm::vec2 endPos)
 {
-	//check if the new target lies on the current path
-	//if it does, shorten the path
-	//otherwise, find path from end of current path to new target
+	glm::vec2 directionVec = endPos - startPos;
+	return abs(directionVec.x) + abs(directionVec.y);
+}
+
+bool PathfindingMachine::LineOfSight(TileHolder* start, TileHolder* end)
+{
+	auto startTime = std::chrono::steady_clock::now();
+	int distance = FindDiagonalDistance(start->position, end->position);
+	for (int i = 0; i <= distance; i++)
+	{
+		//Finds the lerp fraction
+		float t = (distance == 0) ? 0.0f : float(i) / distance;
+		//Interpolates over the line to find intersecting points
+		float xlerp = std::lerp(start->position.x, end->position.x, t);
+		float ylerp = std::lerp(start->position.y, end->position.y, t);
+		xlerp = std::round(xlerp);
+		ylerp = std::round(ylerp);
+		TileHolder* tile = GridSystem::Instance()->getTileHolder(0, glm::vec2(xlerp, ylerp));
+		//If the intersecting tile is a wall, break the function
+		if (tile->isWall)
+		{
+			auto finish = std::chrono::steady_clock::now();
+			double elapsedSeconds = std::chrono::duration_cast<std::chrono::duration<double>>(finish - startTime).count();
+			return true;
+		}
+	}
+	auto finish = std::chrono::steady_clock::now();
+	double elapsedSeconds = std::chrono::duration_cast<std::chrono::duration<double>>(finish - startTime).count();
+	return false;
+}
 
 
-	return std::deque<TileHolder*>();
+bool PathfindingMachine::LineOfSight(glm::vec2 startPos, glm::vec2 endPos)
+{
+	TileHolder* tile1 = GridSystem::Instance()->getTileHolder(0, startPos / GridSystem::Instance()->getTileSize());
+	TileHolder* tile2 = GridSystem::Instance()->getTileHolder(0, endPos / GridSystem::Instance()->getTileSize());
+	if (tile1 == nullptr || tile2 == nullptr)
+		return true;
+	return LineOfSight(tile1, tile2);
+}
+
+float PathfindingMachine::FindDiagonalDistance(glm::vec2 startPos, glm::vec2 endPos)
+{
+	return std::max(std::abs(endPos.x - startPos.x), std::abs(endPos.y - startPos.y));
 }
