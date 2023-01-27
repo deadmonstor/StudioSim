@@ -273,9 +273,15 @@ public:
 		myInventory.add_item(&potion);
 
 
-		std::cout << "There are " << myInventory.items.size() << " items left";
-
-		//Shop myShop(myInventory.items, "$", &myInventory);
+		//std::cout << "There are " << myInventory.items.size() << " items left";
+		std::vector<Item*> shopItems;
+		shopItems.push_back(&sword);
+		shopItems.push_back(&armour);
+		shopItems.push_back(&spell);
+		shopItems.push_back(&potion);
+		
+		Shop shop = Shop(shopItems, std::string("$"), myInventory);
+		shop.displayItems();
 		//myInventory.draw_inventory();
 		//myInventory.equip_item("Bandit sword");
 		//myInventory.draw_inventory();
