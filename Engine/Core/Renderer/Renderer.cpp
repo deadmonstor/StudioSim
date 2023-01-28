@@ -69,7 +69,17 @@ glm::vec2 Renderer::getCameraPos() const
 	if (mainCam == nullptr  || mainCam->getOwner() == nullptr || !mainCam->getOwner()->isValidTransform() )
 		return {0, 0};
 		
-	return mainCam->getOwner()->getTransform()->position;
+	return mainCam->getOwner()->getTransform()->getPosition();
+}
+
+glm::vec2 Renderer::getCameraPosScreenSpace() const
+{
+	// TODO: Fix these MAGIC numbers again
+	if (mainCam == nullptr  || mainCam->getOwner() == nullptr || !mainCam->getOwner()->isValidTransform() )
+		return {-(1080 / 2), -(600 / 2)};
+		
+	// TODO: Fix these MAGIC numbers again
+	return mainCam->getOwner()->getTransform()->getPosition() + glm::vec2{-(1080 / 2), -(600 / 2)};
 }
 
 void Renderer::setupCommonShader(const std::string& name, const glm::ivec2 value, const glm::mat4 projection, const glm::mat4 view)
@@ -181,7 +191,7 @@ void Renderer::render()
 	for (SpriteComponent* spriteRenderer : spriteRenderQueue)
 	{
 		const Transform* transform = spriteRenderer->getOwner()->getTransform();
-		renderSprite(spriteRenderer, transform->getPosition(), transform->GetScale(), transform->GetRotation());
+		renderSprite(spriteRenderer, transform->getPosition(), transform->getScale(), transform->getRotation());
 	}
 	
 	glDisable(GL_BLEND);
@@ -214,6 +224,28 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);
 	glm::mat4 model;
 	getModelMatrix(position, size, rotation, pivot, model);
+	spriteRenderer->getShader().SetMatrix4("uModelMatrix", model, true);
+	spriteRenderer->getShader().SetMatrix4("uProjectionMatrix", mainCam->getViewProjectMatrix(), true);
+	
+	glActiveTexture(GL_TEXTURE0);
+	spriteRenderer->getTexture().Bind();
+	glBindVertexArray(quadVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
+}
+
+void Renderer::renderUI(SpriteComponent* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation)
+{
+	if (mainCam == nullptr)
+		return;
+
+	const glm::vec2 pivot = spriteRenderer->getPivot();
+	
+	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);
+	glm::mat4 model;
+
+	// TODO: This is probably wrong (position - camera position)
+	getModelMatrix(position + getCameraPosScreenSpace(), size, rotation, pivot, model);
 	spriteRenderer->getShader().SetMatrix4("uModelMatrix", model, true);
 	spriteRenderer->getShader().SetMatrix4("uProjectionMatrix", mainCam->getViewProjectMatrix(), true);
 	

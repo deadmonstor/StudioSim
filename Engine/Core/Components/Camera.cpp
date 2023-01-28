@@ -9,9 +9,9 @@ void Camera::screenSizeChanged()
 {
     const glm::vec2 value = Renderer::getWindowSize();
 
-    const float aspect = value.x / value.y;
+    aspectRatio = value.x / value.y;
     const float size = getSize();
-    projectionMatrix = glm::ortho(-aspect * size, aspect * size, -size, size, -1.0f, 1.0f);
+    projectionMatrix = glm::ortho(-aspectRatio * size, aspectRatio * size, -size, size, -1.0f, 1.0f);
     viewProjectionMatrix = projectionMatrix * viewMatrix;
 }
 
@@ -31,7 +31,7 @@ void Camera::update()
 
     const glm::mat4 transform_mat4 =
                 translate(glm::mat4(1.0), glm::vec3(position.x, position.y, 0.0)) *
-                rotate(glm::mat4(1.0), glm::radians(transform->GetRotation()), glm::vec3(0,0, 1));
+                rotate(glm::mat4(1.0), glm::radians(transform->getRotation()), glm::vec3(0,0, 1));
 
     viewMatrix = inverse(transform_mat4);
     viewProjectionMatrix = projectionMatrix * viewMatrix;
@@ -63,7 +63,7 @@ void Camera::getDebugInfo(std::string* string)
 
 bool Camera::isInFrustum(const glm::vec2 pos, const glm::vec2 size)
 {
-    const glm::vec2 halfSize = size;
+    const glm::vec2 halfSize = size / aspectRatio;
     const glm::vec2 min = pos;
     const glm::vec2 max = pos + halfSize;
 

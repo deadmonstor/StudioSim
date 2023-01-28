@@ -133,10 +133,9 @@ namespace Griddy
 		SceneManager::Instance()->render();
 
 		Events::invoke<OnEngineRender>();
+		UIManager::Instance()->render();
 		
 		ImGuiHandler::render();
-
-		UIManager::Instance()->render();
 
 		//ScoreSystem::Instance()->RenderTopScores();
 		glfwSwapBuffers(Renderer::getWindow());

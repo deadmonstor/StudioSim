@@ -41,9 +41,12 @@ public:
 	
 	[[nodiscard]] glm::mat4 getViewProjectMatrix() const { return mainCam->getViewProjectMatrix(); }
 	[[nodiscard]] glm::mat4 getProjectMatrix() const { return mainCam->getProjectMatrix(); }
-	void getModelMatrix(const glm::vec2 position, const glm::vec2 size, const float rotation, const glm::vec2 pivot, glm::mat4& model);
+	void getModelMatrix(glm::vec2 position, glm::vec2 size, float rotation, glm::vec2 pivot, glm::mat4& model);
+	
 	[[nodiscard]] unsigned int getCameraSize() const { return mainCam->getSize(); }
+	[[nodiscard]] float getAspectRatio() const { return mainCam->getAspectRatio(); }
 	[[nodiscard]] glm::vec2 getCameraPos() const;
+	[[nodiscard]] glm::vec2 getCameraPosScreenSpace() const;
 	[[nodiscard]] Camera* getCamera() const { return mainCam; }
 	void setCamera(Camera* cam)
 	{
@@ -60,6 +63,7 @@ public:
 	void setWindowTitle(const std::string& title) const;
 	bool createWindow(const std::string &windowName);
 	void renderSprite(SpriteComponent* spriteRenderer, glm::vec2 position, glm::vec2 size, float rotation);
+	void renderUI(SpriteComponent* spriteRenderer, glm::vec2 position, glm::vec2 size, float rotation);
 	
 	void cleanup() const;
 	void render();

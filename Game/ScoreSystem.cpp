@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+
+#include "Core/Pivot.h"
 #include "Core/Components/TextRenderer.h"
 
 ScoreSystem::ScoreSystem()
@@ -88,8 +90,8 @@ void ScoreSystem::RenderTopScores()
 {
 	for (int i = 0; i < 10; i++)
 	{
-		TextRenderer::Instance()->renderText(m_FileData[9 - i].Name, -150, i * 30 - 80, 0.4, glm::vec3(1, 1, 1));
-		TextRenderer::Instance()->renderText(std::to_string(m_FileData[9 - i].Score), 50, i * 30 - 80, 0.4, glm::vec3(1, 1, 1));
+		TextRenderer::Instance()->renderText(m_FileData[9 - i].Name, -150, i * 30 - 80, 0.4, glm::vec3(1, 1, 1), Pivot::BottomLeft);
+		TextRenderer::Instance()->renderText(std::to_string(m_FileData[9 - i].Score), 50, i * 30 - 80, 0.4, glm::vec3(1, 1, 1),  Pivot::BottomLeft);
 	}
 	//TextRenderer::Instance()->renderText("", 500, 500, 1, glm::vec3(1, 1, 1));
 }

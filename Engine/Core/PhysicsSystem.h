@@ -11,11 +11,11 @@ public:
 	{
 		//AABB - AABB Collision
 		//To Do Cache Position to reduce calls
-		bool collisionXAxis = gameObject1.getTransform()->getPosition().x + gameObject1.getTransform()->GetScale().x >= gameObject2.getTransform()->getPosition().x &&
-							  gameObject2.getTransform()->getPosition().x + gameObject2.getTransform()->GetScale().x >= gameObject1.getTransform()->getPosition().x;
+		bool collisionXAxis = gameObject1.getTransform()->getPosition().x + gameObject1.getTransform()->getScale().x >= gameObject2.getTransform()->getPosition().x &&
+							  gameObject2.getTransform()->getPosition().x + gameObject2.getTransform()->getScale().x >= gameObject1.getTransform()->getPosition().x;
 
-		bool collisionYAxis = gameObject1.getTransform()->getPosition().y + gameObject1.getTransform()->GetScale().y >= gameObject2.getTransform()->getPosition().y &&
-							  gameObject2.getTransform()->getPosition().y + gameObject2.getTransform()->GetScale().y >= gameObject1.getTransform()->getPosition().y;
+		bool collisionYAxis = gameObject1.getTransform()->getPosition().y + gameObject1.getTransform()->getScale().y >= gameObject2.getTransform()->getPosition().y &&
+							  gameObject2.getTransform()->getPosition().y + gameObject2.getTransform()->getScale().y >= gameObject1.getTransform()->getPosition().y;
 
 		return collisionXAxis && collisionYAxis;
 	}

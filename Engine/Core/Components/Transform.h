@@ -4,8 +4,6 @@
 
 class Transform final : public Component
 {
-	friend class Renderer;
-	
 	glm::vec2 position = { 0, 0};
 	glm::vec2 size = {1, 1};
 	float rotation = 0;
@@ -23,6 +21,6 @@ public:
 
 	[[nodiscard]] glm::vec2 getPosition() const;
 	[[nodiscard]] glm::vec2 getScreenSpacePosition() const;
-	[[nodiscard]] glm::vec2 GetScale() const { return size; }
-	[[nodiscard]] float GetRotation() const { return rotation; }
+	[[nodiscard]] glm::vec2 getScale() const { return size; }
+	[[nodiscard]] float getRotation() const { return rotation; }
 };

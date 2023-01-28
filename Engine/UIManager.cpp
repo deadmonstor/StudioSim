@@ -1,22 +1,16 @@
 #include "UIManager.h"
 
+#include <ranges>
+#include <glad/glad.h>
+#include "Core/Components/UI/Panel.h"
+
 void UIManager::render()
 {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	for (auto const& [name, button] : buttons)
+	for (const auto& panel : UIElements | std::views::values)
 	{
-		button->render();
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			panel->render();
+		glDisable(GL_BLEND);
 	}
-	glDisable(GL_BLEND);
-}
-
-void UIManager::internalRender()
-{
-
-}
-
-void UIManager::addButtonToUI(std::string nameOfUIElement, ButtonComponent* button)
-{
-	buttons[nameOfUIElement] = button;
 }
