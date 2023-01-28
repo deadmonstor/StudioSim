@@ -16,5 +16,4 @@ private:
 public:
 	void createHUD();
 	void updateHUD();
-	int getRandomNumber();
 };

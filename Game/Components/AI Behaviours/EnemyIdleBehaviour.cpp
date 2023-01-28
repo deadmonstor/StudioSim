@@ -1,8 +1,8 @@
 #include "EnemyIdleBehaviour.h"
-#include "Core\Grid\PathfindingMachine.h"
-#include "Core\GameObject.h"
-#include "Core\Components\Transform.h"
-#include "..\PlayerController.h"
+#include "../Player/PlayerController.h"
+#include "Core/GameObject.h"
+#include "Core/Components/Transform.h"
+#include "Core/Grid/PathfindingMachine.h"
 
 EnemyIdleBehaviour::EnemyIdleBehaviour()
 {

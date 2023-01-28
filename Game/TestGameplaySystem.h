@@ -15,7 +15,7 @@
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
-#include "Components/PlayerController.h"
+#include "Components/Player/PlayerController.h"
 #include "Components/TurnManager.h"
 #include "Components/UI/HUD.h"
 #include "Tiles/LightTile.h"

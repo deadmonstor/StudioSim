@@ -1,8 +1,8 @@
 #pragma once
+#include "../Items/Stats.h"
 #include "Core/Components/Camera.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
-#include "Items/Stats.h"
 
 class Inventory;
 class PlayerFSM;

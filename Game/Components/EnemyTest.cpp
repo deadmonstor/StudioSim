@@ -20,10 +20,6 @@ void EnemyTest::start()
 	sprite->setLit(true);
 	sprite->setPivot(Pivot::Center);
 
-	/*Light* light = getOwner()->addComponent<Light>();
-	light->setFalloff({2.75f, 2.75f, 55.0f});
-	light->setColor({1.0f, 1.0f, 1.0f, 0.25f});*/
-
 	TurnManager::Instance()->addToTurnQueue(getOwner());
 
 	if (onStartTurnID == -1)
@@ -44,17 +40,7 @@ void EnemyTest::onTurnChanged(const onStartTurn* event)
 {
 	if (event->objectToStart == getOwner())
 	{
-		// generate x,y coords in range
-		std::srand(std::time(nullptr));
-		int random_variable = std::rand() % 50;
-
-		glm::vec2 pos = {std::rand() % 25, std::rand() % 25};
-		// get random tile in range
-		const auto tile = GridSystem::Instance()->getTile(0, pos);
 		enemyFSM->Act();
-		// move to that tile
-		//getOwner()->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
-		// end turn
 		TurnManager::Instance()->EndTurn();
 	}
 }

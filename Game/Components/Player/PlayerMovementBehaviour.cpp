@@ -2,11 +2,10 @@
 #include <Core/Grid/GridSystem.h>
 #include <Util/Events/EngineEvents.h>
 #include "PlayerAttackBehaviour.h"
-#include "Core/Components/Transform.h"
+#include "../EnemyTest.h"
+#include "../TurnManager.h"
 #include "Core/AudioEngine.h"
-#include <Core/Components/Health.h>
-#include "TurnManager.h"
-#include "EnemyTest.h"
+#include "Core/Components/Transform.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour()
 {

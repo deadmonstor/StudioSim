@@ -3,6 +3,7 @@
 #include "ButtonComponent.h"
 #include "TextComponent.h"
 #include "UIManager.h"
+#include "../Player/PlayerController.h"
 #include "Core/Components/TextRenderer.h"
 #include "Core/Components/Transform.h"
 #include "Core/Renderer/ResourceManager.h"
@@ -82,6 +83,18 @@ void HUD::updateHUD()
 	{
 		return;
 	}
+
+	const PlayerController* playerController = PlayerController::Instance();
+	if (playerController == nullptr)
+	{
+		return;
+	}
+
+	const PlayerStats* playerStats = playerController->playerStats;
+	if (playerStats == nullptr)
+	{
+		return;
+	}
 	
 	const auto topLeft =
 					glm::vec2(0, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
@@ -93,8 +106,8 @@ void HUD::updateHUD()
 					glm::vec2((Renderer::getWindowSize().x / 2), Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
 
 	// =============================================Update health text=============================================
-	int health = getRandomNumber(); //10;
-	int maxHealth = getRandomNumber(); //20;
+	int health = playerStats->currentHealth;
+	int maxHealth = playerStats->maxHealth;
 	
 	auto sizeOfText = TextRenderer::Instance()->renderTextSize(std::to_string(health) + "/" + std::to_string(maxHealth), 1);
 	auto position = topLeft - glm::vec2{-75, sizeOfText.y} - glm::vec2{0, 38};
@@ -104,8 +117,8 @@ void HUD::updateHUD()
 	healthText->setText(" " + std::to_string(health) + "/" + std::to_string(maxHealth));
 	
 	// =============================================Update mana text===============================================
-	int mana = getRandomNumber(); //10;
-	int maxMana = getRandomNumber(); //20;
+	const int mana = playerStats->currentMana;
+	const int maxMana = playerStats->maxMana;
 	
 	sizeOfText = TextRenderer::Instance()->renderTextSize(std::to_string(mana) + "/" + std::to_string(maxMana), 1);
 	position.y -= sizeOfText.y;
@@ -116,7 +129,7 @@ void HUD::updateHUD()
 	manaText->setText(" " + std::to_string(mana) + "/" + std::to_string(maxMana));
 
 	// =============================================Update coins text==============================================
-	int coins = getRandomNumber(); //10000;	
+	const int coins = playerStats->coinsHeld;
 	
 	sizeOfText = TextRenderer::Instance()->renderTextSize(std::to_string(coins), 1);
 	position = topRight - glm::vec2{sizeOfText.x, sizeOfText.y} - glm::vec2{25, 38};
@@ -130,8 +143,8 @@ void HUD::updateHUD()
 	coinsIcon->getTransform()->setPosition(position);
 	
 	// =============================================Update xp text===============================================
-	int xp = getRandomNumber(); //10;
-	int maxXp = getRandomNumber(); //100;
+	const int xp = playerStats->currentEXP;
+	const int maxXp = playerStats->maxEXP;
 	
 	sizeOfText = TextRenderer::Instance()->renderTextSize("XP: " + std::to_string(xp) + "/" + std::to_string(maxXp), 1);
 	position = topMiddle - glm::vec2{sizeOfText.x / 2, sizeOfText.y} - glm::vec2{0, 31}; 
@@ -140,12 +153,4 @@ void HUD::updateHUD()
 	xpText->getTransform()->setPosition(position);
 	xpText->getTransform()->setSize(sizeOfText);
 	xpText->setText(" XP: " + std::to_string(xp) + "/" + std::to_string(maxXp));
-}
-
-
-int HUD::getRandomNumber()
-{
-	// generate random number
-	//int random = rand() % 1000000 + 1000000;
-	return 100;
 }

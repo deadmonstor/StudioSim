@@ -1,13 +1,13 @@
 #include "PlayerAttackBehaviour.h"
 #include <Core/Components/Health.h>
-#include "DestroyAfterAnimation.h"
 #include "PlayerMovementBehaviour.h"
+#include "../DestroyAfterAnimation.h"
+#include "../EnemyTest.h"
+#include "../TurnManager.h"
+#include "Core/AudioEngine.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
-#include "Core/AudioEngine.h"
-#include "TurnManager.h"
-#include "EnemyTest.h"
 
 PlayerAttackBehaviour::PlayerAttackBehaviour()
 {
