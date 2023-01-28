@@ -10,6 +10,12 @@
 
 void HUD::createHUD()
 {
+	if (hasLoaded)
+		return;
+
+	if (sceneChangeID != -1)
+		sceneChangeID = Griddy::Events::subscribe(this, &HUD::onSceneChange);
+	
 	const auto topLeft =
 					glm::vec2(0, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
 
@@ -75,6 +81,8 @@ void HUD::createHUD()
 	coinsIcon->setPivot(Pivot::TopRight);
 
 	xpText = UIManager::Instance()->createUIElement<TextComponent>("xpText");
+
+	hasLoaded = true;
 }
 
 void HUD::updateHUD()
@@ -153,4 +161,9 @@ void HUD::updateHUD()
 	xpText->getTransform()->setPosition(position);
 	xpText->getTransform()->setSize(sizeOfText);
 	xpText->setText(" XP: " + std::to_string(xp) + "/" + std::to_string(maxXp));
+}
+
+void HUD::onSceneChange(OnSceneChanged*)
+{
+	hasLoaded = false;
 }

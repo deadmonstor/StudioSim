@@ -61,8 +61,6 @@ public:
         sprite->setColor(glm::vec3(1, 1, 1));
 		sprite->setPivot(Pivot::Center);
         sprites.push_back(sprite);
-
-		HUD::Instance()->createHUD();
 	}
 
 	void CreateFireball(glm::vec2 mousePos)
@@ -215,8 +213,6 @@ public:
 		
 		CreateFireball(glm::vec2{ 1000, 500 });
 		TurnManager::Instance()->StartTurnSystem();
-
-		HUD::Instance()->createHUD();
 	}
 
 	void TestFuncScene2(const OnSceneChanged* event) 
@@ -346,7 +342,13 @@ public:
 	glm::fvec2 direction = glm::fvec2(0, 0);
 	void TestFuncUpdate(OnEngineUpdate*)
 	{
-		HUD::Instance()->updateHUD();
+		if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
+		{
+			if (!HUD::Instance()->getHasLoaded())
+				HUD::Instance()->createHUD();
+
+			HUD::Instance()->updateHUD();
+		}
 		
 		// Update all sprites color to be a random color
 		for (const auto& sprite : sprites)

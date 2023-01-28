@@ -12,8 +12,14 @@ private:
 	TextComponent* healthText;
 
 	Panel* coinsIcon;
+	bool hasLoaded = false;
+
+	int sceneChangeID = -1;
 	
 public:
 	void createHUD();
 	void updateHUD();
+	void onSceneChange(OnSceneChanged* event);
+
+	bool getHasLoaded() const { return hasLoaded; }
 };

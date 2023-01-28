@@ -48,6 +48,7 @@ void GridSystem::init(const glm::fvec2 _tileSize, const glm::ivec2 _gridSize)
 {
 	tileSize = _tileSize;
 	gridSize = _gridSize;
+	hasLoaded = false;
 
 	// subscribe to the event
 	Griddy::Events::subscribe(this, &GridSystem::onDebugEvent);
@@ -82,6 +83,8 @@ void GridSystem::renderInternal(const int id)
 			                                   {tileWidth, tileHeight},
 			                                   0
 			);
+
+			hasLoaded = true;
 		}
 	}
 }
