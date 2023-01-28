@@ -1,10 +1,6 @@
 #pragma once
-#include "Stats.h"
 #include "glm/fwd.hpp"
-#include <list>
 #include <vector>
-#include "Stats.h"
-#include "glm/fwd.hpp"
 #include <Core/Renderer/ResourceManager.cpp>
 
 class Weapon

@@ -2,7 +2,7 @@
 #include "Core/Components/Camera.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
-#include "Stats.h"
+#include "Items/Stats.h"
 
 class Inventory;
 class PlayerFSM;
