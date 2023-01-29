@@ -4,6 +4,8 @@
 #include "Core/Components/Transform.h"
 #include "Core/Components/AI/StateMachine.h"
 #include "Core/Grid/PathfindingMachine.h"
+#include "../TurnManager.h"
+#include "../LerpPosition.h"
 
 EnemyIdleBehaviour::EnemyIdleBehaviour()
 {
@@ -33,18 +35,24 @@ void EnemyIdleBehaviour::Act()
 				std::deque<TileHolder*> tiles = PathfindingMachine::Instance()->FindPath(myPos, playerPos);
 				
 				if (tiles.empty())
+				{
+					endTurn();
 					return;
+				}
 
 				const TileHolder* front = tiles.front();
 				GridSystem* gridSystem = GridSystem::Instance();
 
 				if (gridSystem->getWorldPosition(front->position) == playerPos)
+				{
+					endTurn();
 					return;
+				}
 
 				const Transform* transform = parentFSM->getOwner()->getTransform();
 				gridSystem->resetSatOnTile(0, gridSystem->getTilePosition(transform->getPosition()));
-				parentFSM->getOwner()->getTransform()->setPosition(gridSystem->getWorldPosition(tiles.front()->position));
-				gridSystem->setSatOnTile(0, gridSystem->getTilePosition(transform->getPosition()), parentFSM->getOwner());
+				lerpPosition(parentFSM->getOwner(), gridSystem->getWorldPosition(tiles.front()->position));
+				gridSystem->setSatOnTile(0, tiles.front()->position, parentFSM->getOwner());
 			}
 		}
 	}
@@ -63,5 +71,25 @@ void EnemyIdleBehaviour::Act()
 			}
 		}
 	}
-	
+}
+
+void EnemyIdleBehaviour::endTurn()
+{
+	TurnManager::Instance()->endTurn();
+}
+
+void EnemyIdleBehaviour::lerpPosition(GameObject* object, const glm::vec2 targetPosition)
+{
+	if (!object->hasComponent(typeid(LerpPosition)))
+	{
+		object->addComponent<LerpPosition>(targetPosition, 3);
+	}
+
+	LerpPosition* lerpPosition = object->getComponent<LerpPosition>();
+	lerpPosition->onLerpComplete = [this]
+	{
+		endTurn();
+	};
+	lerpPosition->setSpeed(3);
+	lerpPosition->setPosition(targetPosition);
 }

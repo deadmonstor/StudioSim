@@ -41,6 +41,5 @@ void EnemyTest::onTurnChanged(const onStartTurn* event)
 	if (event->objectToStart == getOwner())
 	{
 		enemyFSM->Act();
-		TurnManager::Instance()->endTurn();
 	}
 }
