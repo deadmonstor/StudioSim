@@ -1,11 +1,14 @@
 #include "EnemyIdleBehaviour.h"
+
+#include "../Flash.h"
+#include "../LerpPosition.h"
+#include "../TurnManager.h"
 #include "../Player/PlayerController.h"
 #include "Core/GameObject.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
 #include "Core/Components/AI/StateMachine.h"
 #include "Core/Grid/PathfindingMachine.h"
-#include "../TurnManager.h"
-#include "../LerpPosition.h"
 
 EnemyIdleBehaviour::EnemyIdleBehaviour()
 {
@@ -45,7 +48,9 @@ void EnemyIdleBehaviour::Act()
 
 				if (gridSystem->getWorldPosition(front->position) == playerPos)
 				{
-					endTurn();
+					// ATTACK ME OUCH
+					PlayerController::Instance()->playerStats->currentHealth -= 1;
+					flashPlayer(PlayerController::Instance()->playerPTR, glm::vec3(1.0f, 0.0f, 0.0f));
 					return;
 				}
 
@@ -90,6 +95,24 @@ void EnemyIdleBehaviour::lerpPosition(GameObject* object, const glm::vec2 target
 	{
 		endTurn();
 	};
-	lerpPosition->setSpeed(3);
+	lerpPosition->setSpeed(4);
 	lerpPosition->setPosition(targetPosition);
+}
+
+void EnemyIdleBehaviour::flashPlayer(GameObject* object, const glm::vec3 targetColor)
+{
+	if (!object->hasComponent(typeid(Flash)))
+	{
+		object->addComponent<Flash>(object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5);
+	}
+
+	auto* flash = object->getComponent<Flash>();
+
+	flash->onFlashComplete = [this]
+	{
+		endTurn();
+	};
+	
+	flash->setSpeed(5);
+	flash->setColor(targetColor);
 }
