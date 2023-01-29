@@ -5,6 +5,7 @@
 #include "../EnemyTest.h"
 #include "../TurnManager.h"
 #include "Core/AudioEngine.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour()
@@ -38,6 +39,12 @@ void PlayerMovementBehaviour::Act()
 		
 	if (curTileHolder->tile != nullptr && (!isWallTile || TurnManager::gNoclipMode))
 	{
+		// TODO: Remove this before release
+		if (TurnManager::gNoclipMode)
+			PlayerController::Instance()->playerPTR->getComponent<AnimatedSpriteRenderer>()->setColor({ 0.3, 0.3 , 0.3 });
+		else
+			PlayerController::Instance()->playerPTR->getComponent<AnimatedSpriteRenderer>()->setColor({ 1, 1, 1 });
+		
 		if (gameObjectOnTile != nullptr && gameObjectOnTile->hasComponent(typeid(EnemyTest)))
 		{
 			attackBehaviour->AttackOnMovement(moveDir);

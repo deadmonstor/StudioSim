@@ -36,14 +36,14 @@ void HUD::createHUD()
 		UIManager::Instance()->createUIElement<ButtonComponent>("inventoryButton", ResourceManager::GetTexture("BasicArmourChestInventoryUI"));
 	
 	inventoryButton->getTransform()->setPosition(bottomRight);
-	inventoryButton->getTransform()->setSize(glm::vec2(200, 200));
+	inventoryButton->getTransform()->setSize(glm::vec2(100, 100));
 	inventoryButton->setPivot(Pivot::BottomRight);
 	
 	ResourceManager::LoadTexture("Sprites\\Weapons\\Spellbook4.png", "SpellbookInventoryUI");
 	ButtonComponent* spellsButton =
 		UIManager::Instance()->createUIElement<ButtonComponent>("spellsButton", ResourceManager::GetTexture("SpellbookInventoryUI"));
 	
-	spellsButton->getTransform()->setPosition(bottomRight - glm::vec2{200, 0});
+	spellsButton->getTransform()->setPosition(bottomRight - glm::vec2{100, 0});
 	spellsButton->getTransform()->setSize(glm::vec2(100, 100));
 	spellsButton->setPivot(Pivot::BottomRight);
 
@@ -51,7 +51,7 @@ void HUD::createHUD()
 	ButtonComponent* weaponButton =
 		UIManager::Instance()->createUIElement<ButtonComponent>("weaponButton", ResourceManager::GetTexture("SwordInventoryUI"));
 	
-	weaponButton->getTransform()->setPosition(bottomRight - glm::vec2{300, 0});
+	weaponButton->getTransform()->setPosition(bottomRight - glm::vec2{200, 0});
 	weaponButton->getTransform()->setSize(glm::vec2(100, 100));
 	weaponButton->setPivot(Pivot::BottomRight);
 

@@ -43,7 +43,9 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 		//Find cost map entries of the neighbours
 		for (TileHolder* neighbour : neighbours) 
 		{
-			if (neighbour->isWall || neighbour->gameObjectSatOnTile != nullptr) continue;
+			const bool isWall = GridSystem::Instance()->isWallTile(neighbour->position);
+			
+			if (isWall || neighbour->isWall || neighbour->gameObjectSatOnTile != nullptr) continue;
 			int edgeCost = 1;
 
 			//cost when coming from current node
@@ -117,9 +119,10 @@ bool PathfindingMachine::LineOfSight(TileHolder* start, TileHolder* end)
 		float ylerp = std::lerp(start->position.y, end->position.y, t);
 		xlerp = std::round(xlerp);
 		ylerp = std::round(ylerp);
-		TileHolder* tile = GridSystem::Instance()->getTileHolder(0, glm::vec2(xlerp, ylerp));
+		
+		const bool isWall = GridSystem::Instance()->isWallTile(glm::vec2(xlerp, ylerp));
 		//If the intersecting tile is a wall, break the function
-		if (tile->isWall)
+		if (isWall)
 		{
 			auto finish = std::chrono::steady_clock::now();
 			double elapsedSeconds = std::chrono::duration_cast<std::chrono::duration<double>>(finish - startTime).count();
