@@ -23,9 +23,12 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 	}
 
 	//Add the start node to frontier
-	frontier.push(std::make_pair(0, start));
+	frontier.push(std::make_pair(std::numeric_limits<int>::max(), start));
 	costMap[start] = 0;
 	bool foundPath = false;
+
+	//If the path is not found, the pathfinder will output the path to the best node instead
+	Node bestNode = std::make_pair(std::numeric_limits<int>::max(), nullptr);
 
 	while (!frontier.empty())
 	{
@@ -38,12 +41,16 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			foundPath = true;
 			break;
 		}
+		else if (currentNode.first < bestNode.first)
+		{
+			bestNode = currentNode;
+		}
 		//at the moment uses ID of 0, but make it use a flattened map later
 		std::vector<TileHolder*> neighbours = GridSystem::Instance()->getPathfindingNeighbours(0, currentNode.second);
 		//Find cost map entries of the neighbours
 		for (TileHolder* neighbour : neighbours) 
 		{
-			if (neighbour->isWall) continue;
+			if (neighbour->isWall || neighbour->gameObjectSatOnTile != nullptr) continue;
 			int edgeCost = 1;
 
 			//cost when coming from current node
@@ -83,9 +90,21 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			tempStack.pop();
 		}
 	}
-	else 
+	else if(bestNode.second != nullptr)
 	{
-		LOG_INFO("Path to target was not found.");
+		//output the closest tile to the target if the path was not found
+		std::stack<TileHolder*> tempStack;
+		TileHolder* queueNode = bestNode.second;
+		while (queueNode != start)
+		{
+			tempStack.push(queueNode);
+			queueNode = cameFromMap[queueNode];
+		}
+		while (!tempStack.empty())
+		{
+			path.push_back(tempStack.top());
+			tempStack.pop();
+		}
 	}
 
 	return path;
@@ -106,8 +125,7 @@ float PathfindingMachine::FindManhattanDistance(glm::vec2 startPos, glm::vec2 en
 
 bool PathfindingMachine::LineOfSight(TileHolder* start, TileHolder* end)
 {
-	auto startTime = std::chrono::steady_clock::now();
-	int distance = FindDiagonalDistance(start->position, end->position);
+	int distance = EstimateDistance(start->position, end->position);
 	for (int i = 0; i <= distance; i++)
 	{
 		//Finds the lerp fraction
@@ -121,13 +139,9 @@ bool PathfindingMachine::LineOfSight(TileHolder* start, TileHolder* end)
 		//If the intersecting tile is a wall, break the function
 		if (tile->isWall)
 		{
-			auto finish = std::chrono::steady_clock::now();
-			double elapsedSeconds = std::chrono::duration_cast<std::chrono::duration<double>>(finish - startTime).count();
 			return false;
 		}
 	}
-	auto finish = std::chrono::steady_clock::now();
-	double elapsedSeconds = std::chrono::duration_cast<std::chrono::duration<double>>(finish - startTime).count();
 	return true;
 }
 
@@ -141,7 +155,7 @@ bool PathfindingMachine::LineOfSight(glm::vec2 startPos, glm::vec2 endPos)
 	return LineOfSight(tile1, tile2);
 }
 
-float PathfindingMachine::FindDiagonalDistance(glm::vec2 startPos, glm::vec2 endPos)
+float PathfindingMachine::EstimateDistance(glm::vec2 startPos, glm::vec2 endPos)
 {
 	return std::max(std::abs(endPos.x - startPos.x), std::abs(endPos.y - startPos.y));
 }

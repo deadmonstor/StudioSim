@@ -31,8 +31,10 @@
     <ClInclude Include="Components\TurnManager.h" />
     <ClInclude Include="Components\Consumables.h" />
     <ClInclude Include="Components\AI Behaviours\EnemyIdleBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\EnemyCombatBehaviour.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Components\AI Behaviours\NormalEnemyFSM.h" />
+    <ClInclude Include="Components\AI Behaviours\MoveTowardsAction.h" />
     <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="Shop.h" />
     <ClInclude Include="System\Inventory.h" />
@@ -53,8 +55,10 @@
     <ClCompile Include="Components\PlayerMovementBehaviour.cpp" />
     <ClCompile Include="Components\Consumables.cpp" />
     <ClCompile Include="Components\AI Behaviours\EnemyIdleBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\EnemyCombatBehaviour.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Components\AI Behaviours\NormalEnemyFSM.cpp" />
+    <ClCompile Include="Components\AI Behaviours\MoveTowardsAction.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Components\TurnComponent.cpp" />
     <ClCompile Include="Components\TurnManager.cpp" />
