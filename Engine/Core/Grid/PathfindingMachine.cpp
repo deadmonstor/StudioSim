@@ -43,7 +43,7 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 		//Find cost map entries of the neighbours
 		for (TileHolder* neighbour : neighbours) 
 		{
-			if (neighbour->isWall) continue;
+			if (neighbour->isWall || neighbour->gameObjectSatOnTile != nullptr) continue;
 			int edgeCost = 1;
 
 			//cost when coming from current node

@@ -23,6 +23,8 @@ class SpriteComponent : public Component
 	float debugColor[3] = {1, 1, 1};
 	int debugPivotIndex = -1;
 public:
+	// TODO: Move this
+	bool wasInFrame = false;
 
 	void start() override;
 	void createBuffers();

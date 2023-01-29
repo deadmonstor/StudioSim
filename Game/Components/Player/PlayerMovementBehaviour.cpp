@@ -56,7 +56,7 @@ void PlayerMovementBehaviour::Act()
 			AudioEngine::Instance()->playSound("Sounds\\softStep.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 			
 			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
-				TurnManager::Instance()->EndTurn();
+				TurnManager::Instance()->endTurn();
 		}
 	}
 	

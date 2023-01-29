@@ -63,7 +63,7 @@ void Camera::getDebugInfo(std::string* string)
 
 bool Camera::isInFrustum(const glm::vec2 pos, const glm::vec2 size)
 {
-    const glm::vec2 halfSize = size / aspectRatio;
+    const glm::vec2 halfSize = size;
     const glm::vec2 min = pos;
     const glm::vec2 max = pos + halfSize;
 

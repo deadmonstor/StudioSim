@@ -13,16 +13,12 @@ PlayerAttackBehaviour::PlayerAttackBehaviour()
 {
 	isInFSM = false; 
 	map = CreateFunctionMap();
-	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
-	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 PlayerAttackBehaviour::PlayerAttackBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
 	map = CreateFunctionMap();
-	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
-	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 void PlayerAttackBehaviour::AttackOnMovement(glm::fvec2 dir)
@@ -167,7 +163,7 @@ void PlayerAttackBehaviour::Act()
 	canAttack = false;
 	
 	if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
-		TurnManager::Instance()->EndTurn();
+		TurnManager::Instance()->endTurn();
 }
 
 void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)

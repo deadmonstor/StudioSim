@@ -2,6 +2,7 @@
 #include "../Player/PlayerController.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
+#include "Core/Components/AI/StateMachine.h"
 #include "Core/Grid/PathfindingMachine.h"
 
 EnemyIdleBehaviour::EnemyIdleBehaviour()
@@ -28,8 +29,22 @@ void EnemyIdleBehaviour::Act()
 		{
 			if (PathfindingMachine::Instance()->LineOfSight(myPos, playerPos))
 			{
-				return;
 				//Enemy can sense player here. engage combat.
+				std::deque<TileHolder*> tiles = PathfindingMachine::Instance()->FindPath(myPos, playerPos);
+				
+				if (tiles.empty())
+					return;
+
+				const TileHolder* front = tiles.front();
+				GridSystem* gridSystem = GridSystem::Instance();
+
+				if (gridSystem->getWorldPosition(front->position) == playerPos)
+					return;
+
+				const Transform* transform = parentFSM->getOwner()->getTransform();
+				gridSystem->resetSatOnTile(0, gridSystem->getTilePosition(transform->getPosition()));
+				parentFSM->getOwner()->getTransform()->setPosition(gridSystem->getWorldPosition(tiles.front()->position));
+				gridSystem->setSatOnTile(0, gridSystem->getTilePosition(transform->getPosition()), parentFSM->getOwner());
 			}
 		}
 	}

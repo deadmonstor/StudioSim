@@ -216,7 +216,10 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 		return;
 
 	if (!mainCam->isInFrustum(position, size))
+	{
+		spriteRenderer->wasInFrame = false;
 		return;
+	}
 
 	const glm::vec2 pivot = spriteRenderer->getPivot();
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
@@ -232,6 +235,7 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
+	spriteRenderer->wasInFrame = true;
 }
 
 void Renderer::renderUI(SpriteComponent* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation)

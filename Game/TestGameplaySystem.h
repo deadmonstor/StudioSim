@@ -212,7 +212,7 @@ public:
 		}
 		
 		CreateFireball(glm::vec2{ 1000, 500 });
-		TurnManager::Instance()->StartTurnSystem();
+		TurnManager::Instance()->startTurnSystem();
 	}
 
 	void TestFuncScene2(const OnSceneChanged* event) 
@@ -336,7 +336,7 @@ public:
 		}
 		
 		CreateFireball(glm::vec2{ 1000, 500 });
-		TurnManager::Instance()->StartTurnSystem();
+		TurnManager::Instance()->startTurnSystem();
 	}
 	
 	glm::fvec2 direction = glm::fvec2(0, 0);
