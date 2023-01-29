@@ -50,3 +50,17 @@ void Flash::setColor(const glm::vec3& _color)
 	hasFinished = false;
 	internalTimer = 0.0f;
 }
+
+
+void Flash::createFlash(GameObject* object, SpriteComponent* spriteComponent, const glm::vec3 targetColor, const float speed, std::function<void()> onFlashComplete)
+{
+	if (!object->hasComponent(typeid(Flash)))
+	{
+		object->addComponent<Flash>(spriteComponent, targetColor, speed);
+	}
+
+	auto* flash = object->getComponent<Flash>();
+	flash->onFlashComplete = move(onFlashComplete);
+	flash->setSpeed(speed);
+	flash->setColor(targetColor);
+}

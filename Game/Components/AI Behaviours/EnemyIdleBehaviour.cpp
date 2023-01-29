@@ -58,6 +58,7 @@ void EnemyIdleBehaviour::Act()
 				gridSystem->resetSatOnTile(0, gridSystem->getTilePosition(transform->getPosition()));
 				lerpPosition(parentFSM->getOwner(), gridSystem->getWorldPosition(tiles.front()->position));
 				gridSystem->setSatOnTile(0, tiles.front()->position, parentFSM->getOwner());
+				return;
 			}
 		}
 	}
@@ -71,11 +72,13 @@ void EnemyIdleBehaviour::Act()
 		{
 			if (PathfindingMachine::Instance()->LineOfSight(myPos, playerPos))
 			{
-				return;
+				//return;
 				//Enemy can sense player here. engage combat.
 			}
 		}
 	}
+
+	endTurn();
 }
 
 void EnemyIdleBehaviour::endTurn()
@@ -90,29 +93,19 @@ void EnemyIdleBehaviour::lerpPosition(GameObject* object, const glm::vec2 target
 		object->addComponent<LerpPosition>(targetPosition, 3);
 	}
 
-	LerpPosition* lerpPosition = object->getComponent<LerpPosition>();
+	const auto lerpPosition = object->getComponent<LerpPosition>();
 	lerpPosition->onLerpComplete = [this]
 	{
 		endTurn();
 	};
-	lerpPosition->setSpeed(4);
+	lerpPosition->setSpeed(3);
 	lerpPosition->setPosition(targetPosition);
 }
 
 void EnemyIdleBehaviour::flashPlayer(GameObject* object, const glm::vec3 targetColor)
 {
-	if (!object->hasComponent(typeid(Flash)))
-	{
-		object->addComponent<Flash>(object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5);
-	}
-
-	auto* flash = object->getComponent<Flash>();
-
-	flash->onFlashComplete = [this]
+	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [this]
 	{
 		endTurn();
-	};
-	
-	flash->setSpeed(5);
-	flash->setColor(targetColor);
+	});
 }

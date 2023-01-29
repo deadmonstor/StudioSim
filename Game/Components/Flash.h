@@ -25,4 +25,11 @@ public:
 	void setColor(const glm::vec3& _color);
 	void setSpeed(const float _speed) { speed = _speed; }
 	std::function<void()> onFlashComplete;
+
+	static void createFlash(
+		GameObject* object,
+		SpriteComponent* spriteComponent,
+		glm::vec3 targetColor,
+		float speed,
+		std::function<void()> onFlashComplete);
 };
