@@ -10,6 +10,7 @@ private:
 	TextComponent* xpText;
 	TextComponent* coinsText;
 	TextComponent* healthText;
+	TextComponent* audioText;
 
 	Panel* coinsIcon;
 	bool hasLoaded = false;

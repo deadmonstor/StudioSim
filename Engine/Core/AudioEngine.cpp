@@ -296,3 +296,10 @@ int AudioEngine::getNumberOfChannelsInGroup(std::string channelGroupName)
 	channelGroups[channelGroupName]->getNumChannels(&channels);
 	return channels;
 }
+
+float AudioEngine::getChannelVolume(std::string channelGroupName)
+{
+	float volume;
+	channelGroups[channelGroupName]->getVolume(&volume);
+	return volume;
+}

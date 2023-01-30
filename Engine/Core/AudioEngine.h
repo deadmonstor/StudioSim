@@ -42,6 +42,7 @@ public:
 	bool set3DAttributeChannelGroup(std::string channelGroupName, FMOD_VECTOR pos, FMOD_VECTOR vel);
 	bool setMinMaxChannelGroup(std::string channelGroupName, float min, float max);
 	int getNumberOfChannelsInGroup(std::string channelGroupName);
+	float getChannelVolume(std::string channelGroupName);
 
 	//Channel Stuff
 	FMOD::ChannelGroup* masterChannel;
