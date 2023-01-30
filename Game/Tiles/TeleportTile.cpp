@@ -1,8 +1,8 @@
 #include "TeleportTile.h"
 
-#include "Core/Grid/GridSystem.h"
-#include "../Game/Components/PlayerController.h"
+#include "../Game/Components/Player/PlayerController.h"
 #include "Core/Components/Transform.h"
+#include "Core/Grid/GridSystem.h"
 
 bool TeleportTile::canInteractWith()
 {
