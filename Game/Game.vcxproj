@@ -42,6 +42,7 @@
     <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="Shop.h" />
     <ClInclude Include="System\Inventory.h" />
+    <ClInclude Include="Tiles\TeleportTile.h" />
     <ClInclude Include="TestGameplaySystem.h" />
     <ClInclude Include="Tiles\LightTile.h" />
     <ClInclude Include="Tiles\TestTile.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="Components\TurnManager.cpp" />
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="System\Inventory.cpp" />
+    <ClCompile Include="Tiles\TeleportTile.cpp" />
     <ClCompile Include="Tiles\LightTile.cpp" />
     <ClCompile Include="Tiles\TestTile.cpp" />
   </ItemGroup>

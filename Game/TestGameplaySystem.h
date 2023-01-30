@@ -20,6 +20,7 @@
 #include "Components/UI/HUD.h"
 #include "Tiles/LightTile.h"
 #include "Tiles/TestTile.h"
+#include "Tiles/TeleportTile.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -253,6 +254,12 @@ public:
 			{ 13, ResourceManager::GetTexture("tile57") },
 			{ 15, ResourceManager::GetTexture("tile57") }
 		});
+
+		grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile* ()>>
+		{
+			{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
+			{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
+		});
 		
 		grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
 
@@ -314,26 +321,26 @@ public:
 		
 		grid_system->loadFromFile(2, "Grid/SecondLevelDesignSP.txt");
 		
-		int m_count = 0;
-		if (m_count == 0)
-		{
-			ScoreSystem::Instance()->setScore(75);
-			std::string User = "LJP";
-			//ScoreSystem::Instance()->SaveScore(User);
+		//int m_count = 0;
+		//if (m_count == 0)
+		//{
+		//	ScoreSystem::Instance()->setScore(75);
+		//	std::string User = "LJP";
+		//	//ScoreSystem::Instance()->SaveScore(User);
 
-			m_count++;
-		}
-		
-		if (m_count == 1)
-		{
-			ScoreSystem::Instance()->ReadScores(false);
-			m_count++;
-		}
+		//	m_count++;
+		//}
+		//
+		//if (m_count == 1)
+		//{
+		//	ScoreSystem::Instance()->ReadScores(false);
+		//	m_count++;
+		//}
 
-		if (m_count == 2)
-		{
-			ScoreSystem::Instance()->RenderTopScores();
-		}
+		//if (m_count == 2)
+		//{
+		//	ScoreSystem::Instance()->RenderTopScores();
+		//}
 		
 		CreateFireball(glm::vec2{ 1000, 500 });
 		TurnManager::Instance()->startTurnSystem();

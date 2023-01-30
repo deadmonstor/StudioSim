@@ -18,10 +18,11 @@
     <ClCompile Include="Components\CommonDagger.cpp" />
     <ClCompile Include="Components\Dagger.cpp" />
     <ClCompile Include="Components\AI Behaviours\NormalEnemyFSM.cpp" />
+    <ClCompile Include="Components\AI Behaviours\EnemyIdleBehaviour.cpp" />
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="Tiles\LightTile.cpp" />
     <ClCompile Include="Tiles\TestTile.cpp" />
-    <ClCompile Include="Components\AI Behaviours\EnemyIdleBehaviour.cpp" />
+    <ClCompile Include="Tiles\TeleportTile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -50,5 +51,6 @@
     <ClInclude Include="Tiles\LightTile.h" />
     <ClInclude Include="Tiles\TestTile.h" />
     <ClInclude Include="Components\AI Behaviours\EnemyIdleBehaviour.h" />
+    <ClInclude Include="Tiles\TeleportTile.h" />
   </ItemGroup>
 </Project>
