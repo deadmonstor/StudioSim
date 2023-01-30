@@ -15,10 +15,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\CommonDagger.h" />
     <ClInclude Include="Components\ButtonComponent.h" />
+    <ClInclude Include="Components\CharacterStats.h" />
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
     <ClInclude Include="Components\EnemyTest.h" />
     <ClInclude Include="Components\FireballComponent.h" />
+    <ClInclude Include="Components\ItemStats.h" />
     <ClInclude Include="Components\PlayerAttackBehaviour.h" />
     <ClInclude Include="Components\PlayerController.h" />
     <ClInclude Include="Components\PlayerFSM.h" />
@@ -26,14 +29,16 @@
     <ClInclude Include="Components\Stats.h" />
     <ClInclude Include="Components\TurnComponent.h" />
     <ClInclude Include="Components\TurnManager.h" />
+    <ClInclude Include="Components\Consumables.h" />
+    <ClInclude Include="Components\Dagger.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="ScoreSystem.h" />
-    <ClInclude Include="Components\StatSystem.h" />
-    <ClInclude Include="Components\Spells.h" />
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
+    <ClInclude Include="Components\Weapon.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\CommonDagger.cpp" />
     <ClCompile Include="Components\ButtonComponent.cpp" />
     <ClCompile Include="Components\DestroyAfterAnimation.cpp" />
     <ClCompile Include="Components\EnemyTest.cpp" />
@@ -42,6 +47,8 @@
     <ClCompile Include="Components\PlayerController.cpp" />
     <ClCompile Include="Components\PlayerFSM.cpp" />
     <ClCompile Include="Components\PlayerMovementBehaviour.cpp" />
+    <ClCompile Include="Components\Consumables.cpp" />
+    <ClCompile Include="Components\Dagger.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Components\TurnComponent.cpp" />
