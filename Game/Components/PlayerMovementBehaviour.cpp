@@ -50,8 +50,8 @@ void PlayerMovementBehaviour::Act()
 				setPosition(tileSize * (origPos + moveDir));
 
 			//Set grid system "satOnTile" values
-			GridSystem::Instance()->resetSatOnTile(0, origPos);
-			GridSystem::Instance()->setSatOnTile(0, PlayerController::Instance()->playerPTR->getTransform()->getPosition(),
+			GridSystem::Instance()->resetSatOnTile(0, origPos/tileSize);
+			GridSystem::Instance()->setSatOnTile(0, PlayerController::Instance()->playerPTR->getTransform()->getPosition() / tileSize,
 				PlayerController::Instance()->playerPTR);
 
 

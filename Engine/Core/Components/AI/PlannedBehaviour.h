@@ -36,6 +36,8 @@ public:
     void update() override {}
     void lateUpdate() override{}
 
+    void EventResponse(BehaviourEvent* event) override;
+
     //performs planning and chooses the action with the highest fitness
     void Act() override;
 
