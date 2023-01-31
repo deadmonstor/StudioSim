@@ -72,10 +72,4 @@ public:
 	glm::vec2 getTilePosition(glm::vec2 vec) const;
 	glm::vec2 getWorldPosition(glm::vec2 vec) const;
 
-	//Finds the tile distance without considering diagonals
-	int FindManhattanTileDistance(glm::vec2 startPos, glm::vec2 endPos);
-
-	//Finds the tile distance using line intersection. This will find a diagonal tile distance
-	int FindLineTileDistance(glm::vec2 startPos, glm::vec2 endPos);
-
 };

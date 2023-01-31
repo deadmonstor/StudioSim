@@ -13,10 +13,20 @@ public:
 	//Find tile path between tile pos A and tile pos B
 	std::deque<TileHolder*> FindPath(TileHolder* start, TileHolder* end);
 
+	//Find tile path between pos A and tile pos B
 	std::deque<TileHolder*> FindPath(glm::vec2 startPos, glm::vec2 endPos);
 
-	//Continues the previously found path to a new position
-	std::deque<TileHolder*> ContinuePath(std::deque<glm::vec2> currentPath, TileHolder* end);
+	//Finds the distance without considering diagonals
+	float FindManhattanDistance(glm::vec2 startPos, glm::vec2 endPos);
+
+	//Find whether a line intersects a wall between tile A and tile B
+	bool LineOfSight(TileHolder* start, TileHolder* end);
+
+	//Find whether a line intersects a wall between point A and point B
+	bool LineOfSight(glm::vec2 startPos, glm::vec2 endPos);
+
+	//Estimates the diagonal distance between 2 points
+	float FindDiagonalDistance(glm::vec2 startPos, glm::vec2 endPos);
 
 	//breadcrumb pathfinding implementation here also
 };
