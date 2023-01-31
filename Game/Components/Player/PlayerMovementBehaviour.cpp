@@ -55,6 +55,12 @@ void PlayerMovementBehaviour::Act()
 			PlayerController::Instance()->playerPTR->getTransform()->
 				setPosition(tileSize * (origPos + moveDir));
 
+			//Set grid system "satOnTile" values
+			GridSystem::Instance()->resetSatOnTile(0, origPos);
+			GridSystem::Instance()->setSatOnTile(0, PlayerController::Instance()->playerPTR->getTransform()->getPosition(),
+				PlayerController::Instance()->playerPTR);
+
+
 			if(curTileHolder->tile->canInteractWith())
 				curTileHolder->tile->onInteractedWith(curTileHolder);
 

@@ -22,6 +22,9 @@
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="Tiles\LightTile.cpp" />
     <ClCompile Include="Tiles\TestTile.cpp" />
+    <ClCompile Include="Components\AI Behaviours\EnemyIdleBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\EnemyCombatBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\MoveTowardsAction.cpp" />
     <ClCompile Include="Tiles\TeleportTile.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +54,8 @@
     <ClInclude Include="Tiles\LightTile.h" />
     <ClInclude Include="Tiles\TestTile.h" />
     <ClInclude Include="Components\AI Behaviours\EnemyIdleBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\EnemyCombatBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\MoveTowardsAction.h" />
     <ClInclude Include="Tiles\TeleportTile.h" />
   </ItemGroup>
 </Project>
