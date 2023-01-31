@@ -6,15 +6,38 @@
 //type definition for a Node - allows attaching a heuristic value to each tile holder
 typedef std::pair<int, TileHolder*> Node;
 
+struct PathfindingData
+{
+	PathfindingData() { 
+		tiles = std::deque<TileHolder*>(); 
+		frontier = std::priority_queue<Node, std::vector<Node>, 
+			std::greater<Node>>(); cameFromMap = std::unordered_map<TileHolder*, TileHolder*>(); 
+		costMap = std::unordered_map<TileHolder*, int>(); found = false;
+	}
+	//output path to target
+	std::deque<TileHolder*> tiles;
+
+	//frontier queue - chooses the next node to inspect
+	std::priority_queue<Node, std::vector<Node>, std::greater<Node>> frontier;
+
+	//Map specifying which was the previous tile that was used to find the mapped tile
+	std::unordered_map<TileHolder*, TileHolder*> cameFromMap;
+
+	//Maps the total distance to get to a particular tile
+	std::unordered_map<TileHolder*, int> costMap;
+
+	bool found;
+};
+
 class PathfindingMachine : public SingletonTemplate<PathfindingMachine>
 {
 public:
 
 	//Find tile path between tile pos A and tile pos B
-	std::deque<TileHolder*> FindPath(TileHolder* start, TileHolder* end);
+	PathfindingData FindPath(PathfindingData& dataOut, TileHolder* start, TileHolder* end);
 
 	//Find tile path between pos A and tile pos B
-	std::deque<TileHolder*> FindPath(glm::vec2 startPos, glm::vec2 endPos);
+	PathfindingData FindPath(PathfindingData& dataOut, glm::vec2 startPos, glm::vec2 endPos);
 
 	//Finds the distance without considering diagonals
 	float FindManhattanDistance(glm::vec2 startPos, glm::vec2 endPos);
@@ -27,6 +50,13 @@ public:
 
 	//Estimates the distance between 2 points
 	float EstimateDistance(glm::vec2 startPos, glm::vec2 endPos);
+
+	PathfindingData FindClosestEmptyTile(PathfindingData& dataOut, TileHolder* goal, int depth);
+	PathfindingData FindClosestEmptyTile(PathfindingData& dataOut, glm::vec2 goal, int depth);
+
+	PathfindingData FindClosestEmptyTile(PathfindingData& dataOut, TileHolder* start, TileHolder* goal, int depth);
+
+	PathfindingData FindClosestEmptyTile(PathfindingData& dataOut, glm::vec2 start, glm::vec2 goal, int depth);
 
 	//breadcrumb pathfinding implementation here also
 };

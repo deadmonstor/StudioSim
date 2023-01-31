@@ -2,35 +2,40 @@
 #include <stack>
 #include <chrono>
 
-std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHolder* end)
+PathfindingData PathfindingMachine::FindPath(PathfindingData& dataOut, TileHolder* start, TileHolder* end)
 {
 	//frontier queue - chooses the next node to inspect
 	std::priority_queue<Node, std::vector<Node>, std::greater<Node>> frontier;
+	frontier = dataOut.frontier;
 
 	//Map specifying which was the previous tile that was used to find the mapped tile
 	std::unordered_map<TileHolder*, TileHolder*> cameFromMap;
+	cameFromMap = dataOut.cameFromMap;
 
 	//Maps the total distance to get to a particular tile
 	std::unordered_map<TileHolder*, int> costMap;
+	costMap = dataOut.costMap;
 
 	//The path is output to this queue
 	std::deque<TileHolder*> path = std::deque<TileHolder*>();
+	path = dataOut.tiles;
 
-	if (end->isWall)
+	if (end->isWall || end->gameObjectSatOnTile != nullptr)
 	{
 		LOG_INFO("Target is an obstructed tile");
-		return path;
+		return dataOut;
 	}
-
-	//Add the start node to frontier
-	frontier.push(std::make_pair(std::numeric_limits<int>::max(), start));
-	costMap[start] = 0;
-	bool foundPath = false;
-
-	//If the path is not found, the pathfinder will output the path to the best node instead
-	Node bestNode = std::make_pair(std::numeric_limits<int>::max(), nullptr);
-
-	while (!frontier.empty())
+	if (path.empty()){
+		//Add the start node to frontier
+		frontier.push(std::make_pair(0, start));
+		costMap[start] = 0;
+	}
+	else {
+		frontier.push(std::make_pair(costMap[path.back()], path.back()));
+	}
+	dataOut.found = false;
+	
+	while (!dataOut.found || !frontier.empty())
 	{
 		//Inspect the top node of frontier
 		Node currentNode = frontier.top();
@@ -38,17 +43,13 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 		//if the currently inspected node is the target, then the goal has been found
 		if (currentNode.second == end)
 		{
-			foundPath = true;
+			dataOut.found = true;
 			break;
-		}
-		else if (currentNode.first < bestNode.first)
-		{
-			bestNode = currentNode;
 		}
 		//at the moment uses ID of 0, but make it use a flattened map later
 		std::vector<TileHolder*> neighbours = GridSystem::Instance()->getPathfindingNeighbours(0, currentNode.second);
 		//Find cost map entries of the neighbours
-		for (TileHolder* neighbour : neighbours) 
+		for (TileHolder* neighbour : neighbours)
 		{
 			if (neighbour->isWall || neighbour->gameObjectSatOnTile != nullptr) continue;
 			int edgeCost = 1;
@@ -59,13 +60,20 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 
 			//cost currently stored in the cost map
 			int currentCost;
-			if (costMap.contains(neighbour))
+			bool contains = costMap.contains(neighbour);
+			if (contains)
+			{
 				currentCost = costMap[neighbour];
+				if (neighbour == end)
+				{
+					dataOut.found = true;
+				}
+			}
 			else
 				currentCost = (std::numeric_limits<int>::max)(); //If there is no cost stored, set it to infinity
 
 			//Update cameFromMap and costMap with neighbours
-			if (!cameFromMap.contains(neighbour) || newCost < currentCost)
+			if (!contains || newCost < currentCost)
 			{
 				costMap[neighbour] = newCost;
 				cameFromMap[neighbour] = currentNode.second;
@@ -74,8 +82,9 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			}
 		}
 	}
-	if (foundPath)
+	if (dataOut.found)
 	{
+		path.clear();
 		//If the path was found, the queue needs to be created by following the cameFromMap from the target to start
 		std::stack<TileHolder*> tempStack;
 		TileHolder* queueNode = end;
@@ -89,32 +98,21 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			path.push_back(tempStack.top());
 			tempStack.pop();
 		}
+		dataOut.tiles = path;
+		dataOut.frontier = frontier;
+		dataOut.costMap = costMap;
+		dataOut.cameFromMap = cameFromMap;
 	}
-	else if(bestNode.second != nullptr)
-	{
-		//output the closest tile to the target if the path was not found
-		std::stack<TileHolder*> tempStack;
-		TileHolder* queueNode = bestNode.second;
-		while (queueNode != start)
-		{
-			tempStack.push(queueNode);
-			queueNode = cameFromMap[queueNode];
-		}
-		while (!tempStack.empty())
-		{
-			path.push_back(tempStack.top());
-			tempStack.pop();
-		}
-	}
-
-	return path;
+	return dataOut;
 }
 
-std::deque<TileHolder*> PathfindingMachine::FindPath(glm::vec2 startPos, glm::vec2 endPos)
+PathfindingData PathfindingMachine::FindPath(PathfindingData& dataOut, glm::vec2 startPos, glm::vec2 endPos)
 {
 	TileHolder* tile1 = GridSystem::Instance()->getTileHolder(0, startPos / GridSystem::Instance()->getTileSize());
 	TileHolder* tile2 = GridSystem::Instance()->getTileHolder(0, endPos / GridSystem::Instance()->getTileSize());
-	return FindPath(tile1, tile2);
+	if (tile1 == nullptr || tile2 == nullptr)
+		return PathfindingData();
+	return FindPath(dataOut, tile1, tile2);
 }
 
 float PathfindingMachine::FindManhattanDistance(glm::vec2 startPos, glm::vec2 endPos)
@@ -158,4 +156,54 @@ bool PathfindingMachine::LineOfSight(glm::vec2 startPos, glm::vec2 endPos)
 float PathfindingMachine::EstimateDistance(glm::vec2 startPos, glm::vec2 endPos)
 {
 	return std::max(std::abs(endPos.x - startPos.x), std::abs(endPos.y - startPos.y));
+}
+
+PathfindingData PathfindingMachine::FindClosestEmptyTile(PathfindingData& dataOut, TileHolder* start, TileHolder* goal, int depth)
+{
+	//frontier queue - chooses the next node to inspect
+	std::priority_queue<Node, std::vector<Node>, std::greater<Node>> frontier;
+	frontier = dataOut.frontier;
+
+	//Maps the distance to get to a particular tile
+	std::unordered_map<TileHolder*, int> costMap;
+	costMap = dataOut.costMap;
+
+	//Empty tiles in the range are output here, with the closest one on top
+	std::deque<TileHolder*> tiles = std::deque<TileHolder*>();
+	tiles = dataOut.tiles;
+
+	if (goal->isWall)
+	{
+		LOG_INFO("Target is an obstructed tile");
+		return PathfindingData();
+	}
+	//push the goal node to frontier
+	frontier.push(std::make_pair(0, goal));
+	costMap[goal] = FindManhattanDistance(start->position, goal->position);
+
+	dataOut.found = false;
+
+//	while (!frontier.empty())
+//	{
+//		//Inspect the top node of frontier
+//		Node currentNode = frontier.top();
+//		frontier.pop();
+//		//at the moment uses ID of 0, but make it use a flattened map later
+//		std::vector<TileHolder*> neighbours = GridSystem::Instance()->getPathfindingNeighbours(0, currentNode.second);
+//		//Find cost map entries of the neighbours
+//		for (TileHolder* neighbour : neighbours)
+//		{
+//			frontier.push(std::make_pair(0, goal));
+//			costMap[neighbour] = FindManhattanDistance(start->position, goal->position);
+//		}
+//	}
+}
+
+PathfindingData PathfindingMachine::FindClosestEmptyTile(PathfindingData& dataOut, glm::vec2 startPos, glm::vec2 goalPos, int depth)
+{
+	TileHolder* tile1 = GridSystem::Instance()->getTileHolder(0, startPos / GridSystem::Instance()->getTileSize());
+	TileHolder* tile2 = GridSystem::Instance()->getTileHolder(0, goalPos / GridSystem::Instance()->getTileSize());
+	if (tile1 == nullptr || tile2 == nullptr)
+		return PathfindingData();
+	return FindClosestEmptyTile(dataOut, tile1, tile2, depth);
 }
