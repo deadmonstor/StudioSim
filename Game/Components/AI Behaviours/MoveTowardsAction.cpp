@@ -1,5 +1,6 @@
 #include "MoveTowardsAction.h"
 
+#include "../TurnManager.h"
 #include "Core/Components/Transform.h"
 
 MoveTowardsAction::MoveTowardsAction()
@@ -24,12 +25,14 @@ void MoveTowardsAction::Act()
 		const std::deque<TileHolder*> path = PathfindingMachine::Instance()->FindPath(currentPos, target);
 		if (!path.empty())
 		{
-			GridSystem::Instance()->resetSatOnTile(0, parentObject->getTransform()->getPosition());
-			parentObject->getTransform()->setPosition(path.front()->position * GridSystem::Instance()->getTileSize());
-			//Set grid system "satOnTile" values
+			const glm::vec2 tile = GridSystem::Instance()->getTilePosition(parentObject->getTransform()->getPosition());
 
-			GridSystem::Instance()->setSatOnTile(0, parentObject->getTransform()->getPosition(),parentObject);
+			GridSystem::Instance()->resetSatOnTile(0, tile);
+			parentObject->getTransform()->setPosition(path.front()->position * GridSystem::Instance()->getTileSize());
+			GridSystem::Instance()->setSatOnTile(0, tile, parentObject);
 		}
+
+		TurnManager::Instance()->endTurn();
 	}
 	
 }

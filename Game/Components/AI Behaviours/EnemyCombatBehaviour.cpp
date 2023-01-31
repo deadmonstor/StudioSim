@@ -28,7 +28,7 @@ void EnemyCombatBehaviour::ActionAnalysis()
 {
 	PlannedBehaviour::ActionAnalysis();
 	//Set the player position as the target for the move towards action
-	static_cast<MoveTowardsAction*>(availableActions["MoveTowards"].second)->SetTarget(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
+	dynamic_cast<MoveTowardsAction*>(availableActions["MoveTowards"].second)->SetTarget(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
 }
 
 void EnemyCombatBehaviour::GenerateBehaviourList()

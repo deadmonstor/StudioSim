@@ -32,8 +32,7 @@ void EnemyIdleBehaviour::Act()
 			if (PathfindingMachine::Instance()->LineOfSight(myPos, playerPos))
 			{
 				//Enemy can sense player here. engage combat.
-				EnemyCombatBehaviour* test = new EnemyCombatBehaviour(parentFSM);
-				//Griddy::Events::invoke<StateTransition>(parentFSM, test);
+				Griddy::Events::invoke<StateTransition>(parentFSM, new EnemyCombatBehaviour(parentFSM));
 			}
 		}
 	}
