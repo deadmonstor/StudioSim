@@ -17,6 +17,14 @@
     <ClCompile Include="Components\Consumables.cpp" />
     <ClCompile Include="Components\CommonDagger.cpp" />
     <ClCompile Include="Components\Dagger.cpp" />
+    <ClCompile Include="Components\Sword.cpp" />
+    <ClCompile Include="Components\Axe.cpp" />
+    <ClCompile Include="Components\Hammer.cpp" />
+    <ClCompile Include="Components\CommonSword.cpp" />
+    <ClCompile Include="Components\RareSword.cpp" />
+    <ClCompile Include="Components\CommonAxe.cpp" />
+    <ClCompile Include="Components\RareAxe.cpp" />
+    <ClCompile Include="Components\LegendaryHammer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -40,5 +48,13 @@
     <ClInclude Include="Components\Consumables.h" />
     <ClInclude Include="Components\CommonDagger.h" />
     <ClInclude Include="Components\Dagger.h" />
+    <ClInclude Include="Components\Sword.h" />
+    <ClInclude Include="Components\Axe.h" />
+    <ClInclude Include="Components\Hammer.h" />
+    <ClInclude Include="Components\CommonSword.h" />
+    <ClInclude Include="Components\RareSword.h" />
+    <ClInclude Include="Components\CommonAxe.h" />
+    <ClInclude Include="Components\RareAxe.h" />
+    <ClInclude Include="Components\LegendaryHammer.h" />
   </ItemGroup>
 </Project>
