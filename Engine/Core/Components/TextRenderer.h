@@ -12,7 +12,8 @@ class TextRenderer : public SingletonTemplate<TextRenderer>
 {
 public:
 	void init();
-	void renderText(std::string text, float screenPosX, float screenPosY, float scale, glm::vec3 colour);
+	void renderText(std::string text, float screenPosX, float screenPosY, float scale, glm::vec3 colour, glm::vec2 pivot);
+	glm::vec2 renderTextSize(std::string text, float scale);
 
 private:
 	FT_Library ft;

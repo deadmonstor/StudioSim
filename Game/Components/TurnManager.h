@@ -1,21 +1,40 @@
 #pragma once
-//#include "EngineSingletonTemplate.h"
+#include <queue>
+#include "Core/Scene.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
-#include <queue>
 
 
 class TurnManager : public SingletonTemplate<TurnManager>
 {
 public:
-	void addToTurnQueue(class GameObject* object);
-	void onUpdate(OnEngineUpdate* event);
 	TurnManager();
+	
+	void addToTurnQueue(GameObject* object);
+	void onUpdate(OnEngineUpdate* event);
+	void onGameObjectRemoved(const OnGameObjectRemoved* event);
+	void startTurnSystem();
+	void endTurn();
+	bool isCurrentTurnObject(const GameObject* object);
 
-protected:
-
+	static bool gNoclipMode;
 private:
-	std::queue<class GameObject*> CanMakeATurn;
+	std::queue<GameObject*> canMakeATurn;
+	bool shouldGoNextTurn = false;
+	void onDebugEvent(const OnDebugEventChanged* event);
+	void onSceneChanged(OnSceneChanged* scene);
+	void nextTurn();
+	void debugString();
 
+	GameObject* m_CurrentTurnObject;
+
+	friend class ImGuiHandler;
+};
+
+class onStartTurn : public Griddy::Event
+{
+public:
+	explicit onStartTurn(GameObject* object) : objectToStart(object) {}
+	GameObject* objectToStart;
 };
 

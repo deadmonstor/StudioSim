@@ -95,10 +95,13 @@ void PlannedBehaviour::ActionAnalysis()
 	//for each effect, add its influence on available actions. 
 	for (auto& effect : effects)
 	{
-		for (auto& influence : effect.second.influencedActions)
+		if (effect.second.active)
 		{
-			//add the influence value to the fitness value
-			availableActions[influence.first].first += influence.second.first;
+			for (auto& influence : effect.second.influencedActions)
+			{
+				//add the influence value to the fitness value
+				availableActions[influence.first].first += influence.second.first;
+			}
 		}
 	}
 }

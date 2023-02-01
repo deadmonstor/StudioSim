@@ -96,7 +96,7 @@ void StateMachine::OnTransitionReceived(const StateTransition* event)
 
 void StateMachine::CleanUp()
 {
-	if (baseState == currentState)
+	if (baseState == currentState && baseState != nullptr)
 	{
 		baseState->destroy();
 		delete baseState;
@@ -105,12 +105,18 @@ void StateMachine::CleanUp()
 	}
 	else
 	{
-		baseState->destroy();
-		delete baseState;
-		baseState = nullptr;
-		currentState->destroy();
-		delete currentState;
-		currentState = nullptr;
-	}
+		if (baseState != nullptr)
+		{
+			baseState->destroy();
+			delete baseState;
+			baseState = nullptr;
+		}
 
+		if (currentState != nullptr)
+		{
+			currentState->destroy();
+			delete currentState;
+			currentState = nullptr;
+		}
+	}
 }

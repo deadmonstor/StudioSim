@@ -1,44 +1,49 @@
 #include "PlayerAttackBehaviour.h"
 #include <Core/Components/Health.h>
-#include "DestroyAfterAnimation.h"
 #include "PlayerMovementBehaviour.h"
+#include "../DestroyAfterAnimation.h"
+#include "../EnemyTest.h"
+#include "../Flash.h"
+#include "../TurnManager.h"
+#include "Core/AudioEngine.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
-#include "Core/AudioEngine.h"
 
 PlayerAttackBehaviour::PlayerAttackBehaviour()
 {
 	isInFSM = false; 
 	map = CreateFunctionMap();
-	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
-	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 PlayerAttackBehaviour::PlayerAttackBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
 	map = CreateFunctionMap();
-	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
-	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 void PlayerAttackBehaviour::AttackOnMovement(glm::fvec2 dir)
 {
 	attackDir = dir;
-	if (canAttack)
+	if (canAttack && !willFlashOnce)
 	{
-		Act();
+		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		{
+			Act();
+		}
 	}
+	
 	attackDir = glm::fvec2(0, 0);
-	/*Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerMovementBehaviour(true));*/
 }
 
 void PlayerAttackBehaviour::Act()
 {
+	if (willFlashOnce) return;
+	
 	currentPlayerPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
 	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, currentPlayerPos + attackDir);
 	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
+	const bool isWallTile = GridSystem::Instance()->isWallTile(currentPlayerPos + attackDir);
 
 	if (curTileHolder->tile != nullptr)
 	{
@@ -46,7 +51,8 @@ void PlayerAttackBehaviour::Act()
 		{
 			case Dagger:
 			{
-				if (!curTileHolder->isWall)
+				/*std::vector<glm::fvec2> attackPosDagger = {}*/
+				if (!isWallTile)
 				{
 					createSlashGameObject(currentPlayerPos + attackDir);
 					
@@ -61,11 +67,12 @@ void PlayerAttackBehaviour::Act()
 						(currentPlayerPos + attackDir + glm::fvec2(-1, 0)) ,
 						(currentPlayerPos + attackDir + glm::fvec2(1, 0)) };
 
-					attackPositions.assign_range(attackPosSword);
+					attackPositions.assign(attackPosSword.begin(), attackPosSword.end());
 					for (glm::fvec2 attackPos : attackPositions)
 					{
+						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if(!attackTile->isWall && attackTile->isSpawned)
+						if(!attackTile->isWall && !isWallTile)
 						{
 							createSlashGameObject(attackPos);
 						}
@@ -77,11 +84,12 @@ void PlayerAttackBehaviour::Act()
 						(currentPlayerPos + attackDir + glm::fvec2(0, 1)) ,
 						(currentPlayerPos + attackDir + glm::fvec2(0, -1)) };
 
-					attackPositions.assign_range(attackPosSword);
+					attackPositions.assign(attackPosSword.begin(), attackPosSword.end());
 					for (glm::fvec2 attackPos : attackPositions)
 					{
+						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if (!attackTile->isWall && attackTile->isSpawned)
+						if (!isWallTile && attackTile->isSpawned)
 						{
 							createSlashGameObject(attackPos);
 						}
@@ -94,11 +102,12 @@ void PlayerAttackBehaviour::Act()
 				std::vector<glm::fvec2> attackPosAxe = { (currentPlayerPos + attackDir),
 					(currentPlayerPos + attackDir + attackDir) };
 
-				attackPositions.assign_range(attackPosAxe);
+				attackPositions.assign(attackPosAxe.begin(), attackPosAxe.end());
 				for (glm::fvec2 attackPos : attackPositions)
 				{
+					const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 					TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-					if (!attackTile->isWall && attackTile->isSpawned)
+					if (!isWallTile && attackTile->isSpawned)
 					{
 						createSlashGameObject(attackPos);
 					}
@@ -115,12 +124,13 @@ void PlayerAttackBehaviour::Act()
 					firstTileinAttackDir + glm::fvec2(-1, 0), secondTileinAttackDir, secondTileinAttackDir + glm::fvec2(1, 0),
 					secondTileinAttackDir + glm::fvec2(-1, 0) };
 
-					attackPositions.assign_range(attackPosHammer);
+					attackPositions.assign(attackPosHammer.begin(), attackPosHammer.end());
 
 					for (glm::fvec2 attackPos : attackPositions)
 					{
+						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if (!attackTile->isWall && attackTile->isSpawned)
+						if (!isWallTile && attackTile->isSpawned)
 						{
 							createSlashGameObject(attackPos);
 						}
@@ -132,12 +142,13 @@ void PlayerAttackBehaviour::Act()
 					firstTileinAttackDir + glm::fvec2(0, -1), secondTileinAttackDir, secondTileinAttackDir + glm::fvec2(0, 1),
 					secondTileinAttackDir + glm::fvec2(0, -1) };
 
-					attackPositions.assign_range(attackPosHammer);
+					attackPositions.assign(attackPosHammer.begin(), attackPosHammer.end());
 
 					for (glm::fvec2 attackPos : attackPositions)
 					{
+						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
 						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if (!attackTile->isWall && attackTile->isSpawned)
+						if (!isWallTile && attackTile->isSpawned)
 						{
 							createSlashGameObject(attackPos);
 						}
@@ -152,7 +163,8 @@ void PlayerAttackBehaviour::Act()
 	}
 	canAttack = false;
 	
-	
+	if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) && !willFlashOnce)
+		TurnManager::Instance()->endTurn();
 }
 
 void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -184,50 +196,35 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 
 	if (eventCasted->key == GLFW_KEY_W)
 	{
-		attackDir.y += 1;
+		attackDir.y = 1;
 	}
 	else if (eventCasted->key == GLFW_KEY_S)
 	{
-		attackDir.y -= 1;
+		attackDir.y = -1;
 	}
 	else if (eventCasted->key == GLFW_KEY_A)
 	{
-		attackDir.x -= 1;
+		attackDir.x = -1;
 	}
 	else if (eventCasted->key == GLFW_KEY_D)
 	{
-		attackDir.x += 1;
+		attackDir.x = 1;
 	}
 
 	if (canAttack && (eventCasted->key == GLFW_KEY_W || eventCasted->key == GLFW_KEY_S ||
 		eventCasted->key == GLFW_KEY_A || eventCasted->key == GLFW_KEY_D))
 	{
-		Act();
+		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		{
+			Act();
+		}
 	}
+	
 	attackDir = glm::fvec2(0, 0);
 }
 
 void PlayerAttackBehaviour::onKeyUpResponse(Griddy::Event* event)
 {
-	/*OnKeyUp* eventCasted = static_cast<OnKeyUp*>(event);
-
-	if (eventCasted->key == GLFW_KEY_W)
-	{
-		attackDir.y -= 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_S)
-	{
-		attackDir.y += 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_A)
-	{
-		attackDir.x += 1;
-	}
-	else if (eventCasted->key == GLFW_KEY_D)
-	{
-		attackDir.x -= 1;
-	}*/
-
 	canAttack = true;
 }
 
@@ -240,14 +237,36 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 	{
 		if (gameObject->hasComponent(typeid(Health)))
 		{
+			if (!willFlashOnce && !TurnManager::gNoclipMode)
+			{
+				Flash::createFlash(gameObject, gameObject->getComponent<AnimatedSpriteRenderer>(), {1, 0, 0}, 5,
+					[this, gameObject, pos]
+				{
+					TurnManager::Instance()->endTurn();
+
+					auto* health = gameObject->getComponent<Health>();
+					health->setHealth(health->getHealth() - 50);
+
+					// TODO: This is probably shitty 
+					if (gameObject->isBeingDeleted())
+						GridSystem::Instance()->resetSatOnTile(0, pos);
+
+					willFlashOnce = false;
+				});
+				
+				willFlashOnce = true;
+			}
+			else
+			{
+				auto* health = gameObject->getComponent<Health>();
+				health->setHealth(health->getHealth() - 50);
+
+				// TODO: This is probably shitty 
+				if (gameObject->isBeingDeleted())
+					GridSystem::Instance()->resetSatOnTile(0, pos);
+			}
+			
 			AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
-
-			auto* health = gameObject->getComponent<Health>();
-			health->setHealth(health->getHealth() - 50);
-
-			// TODO: This is probably shitty 
-			if (gameObject->isBeingDeleted())
-				GridSystem::Instance()->resetSatOnTile(0, pos);
 		}
 	}
 

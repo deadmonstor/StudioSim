@@ -1,6 +1,6 @@
 #pragma once
-#include "Core/Components/AI/Behaviour.h"
 #include <map>
+#include "Core/Components/AI/Behaviour.h"
 
 //Pair of fitness value and behaviour
 typedef std::pair<int, Behaviour*> FitAction;

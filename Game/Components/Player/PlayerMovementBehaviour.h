@@ -12,10 +12,12 @@ public:
 	glm::fvec2 moveDir;
 	glm::fvec2 origPos;
 	bool canMove = true;
+	bool canAttackWhileMoving = true;
 	PlayerAttackBehaviour* attackBehaviour;
 private:
 	void Act() override;
 	void onKeyDownResponse(Griddy::Event*);
+	void onKeyHoldResponse(Griddy::Event*);
 	void onKeyUpResponse(Griddy::Event*);
 protected:
 	FunctionMap CreateFunctionMap() override;

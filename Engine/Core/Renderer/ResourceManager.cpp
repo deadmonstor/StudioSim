@@ -195,21 +195,48 @@ Texture ResourceManager::loadTextureFromFile(const char *file)
     Texture texture;
     int width, height, nrChannels;
     unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
-
-    if (nrChannels == 4)
+    
+    switch(nrChannels)
     {
-        texture.Internal_Format = GL_RGBA;
-        texture.Image_Format = GL_RGBA;
+        case 4:
+        {
+            texture.Internal_Format = GL_RGBA;
+            texture.Image_Format = GL_RGBA;
+            break;
+        }
+        case 3:
+        {
+            texture.Internal_Format = GL_RGB;
+            texture.Image_Format = GL_RGB;
+            break;
+        }
+        case 2:
+        {
+            texture.Internal_Format = GL_RG;
+            texture.Image_Format = GL_RG;
+            break;
+        }
+        default:
+        {
+            texture.Internal_Format = GL_RGBA;
+            texture.Image_Format = GL_RGBA;
+            break;
+        }
     }
-        
-    if (!stbi_failure_reason())
+    
+    if (stbi_failure_reason() == nullptr && width != 0 && height != 0)
     {
         texture.Generate(width, height, data);
+    }
+    else if (stbi_failure_reason() != nullptr)
+    {
+        LOG_ERROR("ERROR::TEXTURE: Failed to load texture " + std::string(file));
+        LOG_ERROR(stbi_failure_reason());
     }
     else
     {
         LOG_ERROR("ERROR::TEXTURE: Failed to load texture " + std::string(file));
-        LOG_ERROR(stbi_failure_reason());
+        LOG_ERROR("Width and Height == 0");
     }
 
     stbi_image_free(data);

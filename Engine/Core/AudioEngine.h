@@ -18,9 +18,9 @@ public:
 	void update();
 	bool checkResult(FMOD_RESULT fmodResult, std::string area);
 	bool loadSound(const char* path, FMOD_MODE fMode);
-	bool playSound(const char *path, bool isPaused, float volume, float positionX, float positionY, AudioType audioType);
+	bool playSound(const char *path, bool isPaused, float volume, float positionX, float positionY, AudioType audioType); //Pass in Position of Sound
 	void onDebugEvent(const OnDebugEventChanged* event);
-	void updateListenerPositon(float positionX, float positionY);
+	void updateListenerPositon(float positionX, float positionY); //Update with Player Position
 	FMOD::System *fmodSystem = NULL;
 
 	//Store all of the sounds in the game
@@ -43,15 +43,15 @@ public:
 	bool setMinMaxChannelGroup(std::string channelGroupName, float min, float max);
 	int getNumberOfChannelsInGroup(std::string channelGroupName);
 
+	//Channel Stuff
+	FMOD::ChannelGroup* masterChannel;
+	FMOD::ChannelGroup* audioEffectsChannel;
+	FMOD::ChannelGroup* backgroundMusicChannel;
+
 	//Reverb zones
 	std::map<const int, FMOD::Reverb3D*> reverbZones;
 	bool createReverbZone(const int zone);
 	bool setReverbPos(const int zone, const float posX, const float posY, const float minX, const float minY);
 	bool deleteReverbZone(const int zone);
-
-	//Channel Stuff
-	FMOD::ChannelGroup* masterChannel;
-	FMOD::ChannelGroup* audioEffectsChannel;
-	FMOD::ChannelGroup* backgroundMusicChannel;
 };
 
