@@ -60,7 +60,10 @@ void StateMachine::Act()
 void StateMachine::ChangeState(Behaviour* behaviourParam) 
 { 
 	currentState->destroy();
-	delete currentState;
+	if (currentState != baseState)
+	{
+		delete currentState;
+	}
 	currentState = nullptr;
 	currentState = behaviourParam;
 	if (currentState->GetInitValue() == false)
@@ -96,7 +99,7 @@ void StateMachine::OnTransitionReceived(const StateTransition* event)
 
 void StateMachine::CleanUp()
 {
-	if (baseState == currentState && baseState != nullptr)
+	if (baseState == currentState)
 	{
 		baseState->destroy();
 		delete baseState;
@@ -105,18 +108,15 @@ void StateMachine::CleanUp()
 	}
 	else
 	{
-		if (baseState != nullptr)
+		if (baseState->GetInitValue() == true)
 		{
 			baseState->destroy();
-			delete baseState;
-			baseState = nullptr;
 		}
-
-		if (currentState != nullptr)
-		{
-			currentState->destroy();
-			delete currentState;
-			currentState = nullptr;
-		}
+		delete baseState;
+		baseState = nullptr;
+		currentState->destroy();
+		delete currentState;
+		currentState = nullptr;
 	}
+
 }

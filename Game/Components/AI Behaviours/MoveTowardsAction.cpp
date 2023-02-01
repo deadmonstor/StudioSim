@@ -1,38 +1,20 @@
 #include "MoveTowardsAction.h"
 
-#include "../TurnManager.h"
-#include "Core/Components/Transform.h"
-
-MoveTowardsAction::MoveTowardsAction()
-	: target(glm::vec2())
-	, currentPos(glm::vec2())
-	, parentObject(nullptr)
-{
-}
-
-MoveTowardsAction::MoveTowardsAction(GameObject* parentObjectArg)
-	: target(glm::vec2())
-	, currentPos(glm::vec2())
-	, parentObject(parentObjectArg)
-{
-}
-
 void MoveTowardsAction::Act()
 {
 	if (parentObject != nullptr)
 	{
 		currentPos = parentObject->getTransform()->getPosition();
-		const std::deque<TileHolder*> path = PathfindingMachine::Instance()->FindPath(currentPos, target);
+		std::deque<TileHolder*> path = PathfindingMachine::Instance()->FindPath(currentPos, target);
 		if (!path.empty())
 		{
-			const glm::vec2 tile = GridSystem::Instance()->getTilePosition(parentObject->getTransform()->getPosition());
+			glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
+			GridSystem::Instance()->resetSatOnTile(0, parentObject->getTransform()->getPosition()/tileSize);
+			parentObject->getTransform()->setPosition(path.front()->position * tileSize);
+			//Set grid system "satOnTile" values
 
-			GridSystem::Instance()->resetSatOnTile(0, tile);
-			parentObject->getTransform()->setPosition(path.front()->position * GridSystem::Instance()->getTileSize());
-			GridSystem::Instance()->setSatOnTile(0, tile, parentObject);
+			GridSystem::Instance()->setSatOnTile(0, parentObject->getTransform()->getPosition()/tileSize,parentObject);
 		}
-
-		TurnManager::Instance()->endTurn();
 	}
 	
 }
