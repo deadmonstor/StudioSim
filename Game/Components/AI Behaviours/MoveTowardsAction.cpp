@@ -1,4 +1,20 @@
 #include "MoveTowardsAction.h"
+#include "Core/Components/Transform.h"
+
+
+MoveTowardsAction::MoveTowardsAction()
+	: target(glm::vec2())
+	, currentPos(glm::vec2())
+	, parentObject(nullptr)
+{
+}
+
+MoveTowardsAction::MoveTowardsAction(GameObject* parentObjectArg)
+	: target(glm::vec2())
+	, currentPos(glm::vec2())
+	, parentObject(parentObjectArg)
+{
+}
 
 void MoveTowardsAction::Act()
 {
