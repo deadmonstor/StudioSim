@@ -16,21 +16,22 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 	//The path is output to this queue
 	std::deque<TileHolder*> path = std::deque<TileHolder*>();
 
-	if (end->isWall)
+	if (end->isWall || end->gameObjectSatOnTile != nullptr)
 	{
 		LOG_INFO("Target is an obstructed tile");
 		return path;
 	}
-
-	//Add the start node to frontier
-	frontier.push(std::make_pair(std::numeric_limits<int>::max(), start));
-	costMap[start] = 0;
+	if (path.empty()) {
+		//Add the start node to frontier
+		frontier.push(std::make_pair(0, start));
+		costMap[start] = 0;
+	}
+	else {
+		frontier.push(std::make_pair(costMap[path.back()], path.back()));
+	}
 	bool foundPath = false;
 
-	//If the path is not found, the pathfinder will output the path to the best node instead
-	Node bestNode = std::make_pair(std::numeric_limits<int>::max(), nullptr);
-
-	while (!frontier.empty())
+	while (!foundPath || !frontier.empty())
 	{
 		//Inspect the top node of frontier
 		Node currentNode = frontier.top();
@@ -41,14 +42,10 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			foundPath = true;
 			break;
 		}
-		else if (currentNode.first < bestNode.first)
-		{
-			bestNode = currentNode;
-		}
 		//at the moment uses ID of 0, but make it use a flattened map later
 		std::vector<TileHolder*> neighbours = GridSystem::Instance()->getPathfindingNeighbours(0, currentNode.second);
 		//Find cost map entries of the neighbours
-		for (TileHolder* neighbour : neighbours) 
+		for (TileHolder* neighbour : neighbours)
 		{
 			if (neighbour->isWall || neighbour->gameObjectSatOnTile != nullptr) continue;
 			int edgeCost = 1;
@@ -59,13 +56,16 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 
 			//cost currently stored in the cost map
 			int currentCost;
-			if (costMap.contains(neighbour))
+			bool contains = costMap.contains(neighbour);
+			if (contains)
+			{
 				currentCost = costMap[neighbour];
+			}
 			else
 				currentCost = (std::numeric_limits<int>::max)(); //If there is no cost stored, set it to infinity
 
 			//Update cameFromMap and costMap with neighbours
-			if (!cameFromMap.contains(neighbour) || newCost < currentCost)
+			if (!contains || newCost < currentCost)
 			{
 				costMap[neighbour] = newCost;
 				cameFromMap[neighbour] = currentNode.second;
@@ -76,6 +76,7 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 	}
 	if (foundPath)
 	{
+		path.clear();
 		//If the path was found, the queue needs to be created by following the cameFromMap from the target to start
 		std::stack<TileHolder*> tempStack;
 		TileHolder* queueNode = end;
@@ -90,23 +91,6 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			tempStack.pop();
 		}
 	}
-	else if(bestNode.second != nullptr)
-	{
-		//output the closest tile to the target if the path was not found
-		std::stack<TileHolder*> tempStack;
-		TileHolder* queueNode = bestNode.second;
-		while (queueNode != start)
-		{
-			tempStack.push(queueNode);
-			queueNode = cameFromMap[queueNode];
-		}
-		while (!tempStack.empty())
-		{
-			path.push_back(tempStack.top());
-			tempStack.pop();
-		}
-	}
-
 	return path;
 }
 
