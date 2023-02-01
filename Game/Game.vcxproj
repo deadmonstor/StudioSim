@@ -31,6 +31,7 @@
     <ClInclude Include="Components\TurnManager.h" />
     <ClInclude Include="Components\Consumables.h" />
     <ClInclude Include="Components\Dagger.h" />
+    <ClInclude Include="Components\FireBallSpell.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="System\Inventory.h" />
@@ -49,6 +50,7 @@
     <ClCompile Include="Components\PlayerMovementBehaviour.cpp" />
     <ClCompile Include="Components\Consumables.cpp" />
     <ClCompile Include="Components\Dagger.cpp" />
+    <ClCompile Include="Components\FireBallSpell.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Components\TurnComponent.cpp" />

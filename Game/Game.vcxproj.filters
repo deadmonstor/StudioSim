@@ -17,6 +17,8 @@
     <ClCompile Include="Components\Consumables.cpp" />
     <ClCompile Include="Components\CommonDagger.cpp" />
     <ClCompile Include="Components\Dagger.cpp" />
+    <ClCompile Include="Components\Spells.cpp" />
+    <ClCompile Include="Components\FireBallSpell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -40,5 +42,9 @@
     <ClInclude Include="Components\Consumables.h" />
     <ClInclude Include="Components\CommonDagger.h" />
     <ClInclude Include="Components\Dagger.h" />
+    <ClInclude Include="Components\FireBallSpell.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Font\Pixel.ttf" />
   </ItemGroup>
 </Project>
