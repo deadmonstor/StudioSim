@@ -1,5 +1,18 @@
 #include "MoveTowardsAction.h"
 
+MoveTowardsAction::MoveTowardsAction()
+	: target(glm::vec2())
+	, currentPos(glm::vec2())
+	, parentObject(nullptr)
+{
+}
+
+MoveTowardsAction::MoveTowardsAction(GameObject* parentObjectArg)
+	: target(glm::vec2())
+	, currentPos(glm::vec2())
+	, parentObject(parentObjectArg)
+{
+}
 void MoveTowardsAction::Act()
 {
 	if (parentObject != nullptr)

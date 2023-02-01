@@ -6,8 +6,8 @@ class MoveTowardsAction :
     public Behaviour
 {
 public:
-    MoveTowardsAction() { parentObject = nullptr; target = glm::vec2(); currentPos = glm::vec2(); }
-    MoveTowardsAction(GameObject* parentObjectArg) { parentObject = parentObjectArg; target = glm::vec2(); currentPos = glm::vec2(); }
+    MoveTowardsAction();
+    explicit MoveTowardsAction(GameObject* parentObjectArg);
     void Act() override;
     void SetTarget(glm::vec2 targetArg) { target = targetArg; }
 private:
