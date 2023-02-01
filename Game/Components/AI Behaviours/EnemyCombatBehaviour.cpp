@@ -25,8 +25,22 @@ void EnemyCombatBehaviour::WorldAnalysis()
 void EnemyCombatBehaviour::ActionAnalysis()
 {
 	PlannedBehaviour::ActionAnalysis();
-	//Set the player position as the target for the move towards action
-	((MoveTowardsAction*)availableActions["MoveTowards"].second)->SetTarget(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
+
+	//Set the closest available tile to the player as the target for the move towards action
+	glm::vec2 playerPos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
+	glm::vec2 myPos = parentFSM->getOwner()->getTransform()->getPosition();
+	glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
+	TileHolder* targetTile = nullptr;
+	int depth = 0;
+	while (targetTile == nullptr)
+	{
+		//int startDepth = (depth - 1 < 0) ? 0 : depth - 1;
+		TileHolder* closestEmptyTile = PathfindingMachine::Instance()->FindClosestEmptyTile(myPos, playerPos, depth, 0);
+		if (closestEmptyTile != nullptr)
+			targetTile = closestEmptyTile;
+		depth++;
+	}
+	((MoveTowardsAction*)availableActions["MoveTowards"].second)->SetTarget(targetTile->position * tileSize);
 }
 
 void EnemyCombatBehaviour::GenerateBehaviourList()

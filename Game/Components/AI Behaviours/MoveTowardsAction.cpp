@@ -1,4 +1,5 @@
 #include "MoveTowardsAction.h"
+#include "Core\Components\Transform.h"
 
 MoveTowardsAction::MoveTowardsAction()
 	: target(glm::vec2())

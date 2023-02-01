@@ -1,7 +1,7 @@
 #pragma once
 #include "Core\Components\AI\Behaviour.h"
 #include "Core\Grid\PathfindingMachine.h"
-#include "Core\Components\Transform.h"
+
 class MoveTowardsAction :
     public Behaviour
 {
