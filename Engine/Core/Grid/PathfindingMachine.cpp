@@ -16,19 +16,21 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 	//The path is output to this queue
 	std::deque<TileHolder*> path = std::deque<TileHolder*>();
 
+	if (start == end)
+	{
+		return path;
+	}
+
 	if (end->isWall || end->gameObjectSatOnTile != nullptr)
 	{
 		LOG_INFO("Target is an obstructed tile");
 		return path;
 	}
-	if (path.empty()) {
-		//Add the start node to frontier
-		frontier.push(std::make_pair(0, start));
-		costMap[start] = 0;
-	}
-	else {
-		frontier.push(std::make_pair(costMap[path.back()], path.back()));
-	}
+
+	//Add the start node to frontier
+	frontier.push(std::make_pair(0, start));
+	costMap[start] = 0;
+
 	bool foundPath = false;
 
 	while (!frontier.empty())
