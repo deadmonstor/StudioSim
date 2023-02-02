@@ -39,8 +39,21 @@
     <ClCompile Include="Components\Items\HealthPotion.cpp" />
     <ClCompile Include="Components\Items\ManaPotion.cpp" />
     <ClCompile Include="Components\Items\ExpPotion.cpp" />
+    <ClCompile Include="Components\Items\Armour.cpp" />
+    <ClCompile Include="Components\Items\CommonArmour.cpp" />
+    <ClCompile Include="Components\Items\RareArmour.cpp" />
+    <ClCompile Include="Components\Items\LegendaryArmour.cpp" />
+    <ClCompile Include="LootTable.cpp" />
     <ClCompile Include="Tiles\SpikeTile.cpp" />
     <ClCompile Include="Components\Player\PlayerSpellBehaviour.cpp" />
+    <ClCompile Include="Scenes\DefeatScene.cpp" />
+    <ClCompile Include="Scenes\Level1Scene.cpp" />
+    <ClCompile Include="Scenes\Level2Scene.cpp" />
+    <ClCompile Include="Scenes\MainMenu.cpp" />
+    <ClCompile Include="Scenes\VictoryScene.cpp" />
+    <ClCompile Include="Tiles\ChestTile.cpp" />
+    <ClCompile Include="Components\DelayTask.cpp" />
+    <ClCompile Include="Components\UI\PauseButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -87,7 +100,20 @@
     <ClInclude Include="Components\Items\HealthPotion.h" />
     <ClInclude Include="Components\Items\ManaPotion.h" />
     <ClInclude Include="Components\Items\ExpPotion.h" />
+    <ClInclude Include="Components\Items\Armour.h" />
+    <ClInclude Include="Components\Items\CommonArmour.h" />
+    <ClInclude Include="Components\Items\RareArmour.h" />
+    <ClInclude Include="Components\Items\LegendaryArmour.h" />
+    <ClInclude Include="LootTable.h" />
     <ClInclude Include="Tiles\SpikeTile.h" />
     <ClInclude Include="Components\Player\PlayerSpellBehaviour.h" />
+    <ClInclude Include="Scenes\DefeatScene.h" />
+    <ClInclude Include="Scenes\Level1Scene.h" />
+    <ClInclude Include="Scenes\Level2Scene.h" />
+    <ClInclude Include="Scenes\MainMenu.h" />
+    <ClInclude Include="Scenes\VictoryScene.h" />
+    <ClInclude Include="Tiles\ChestTile.h" />
+    <ClInclude Include="Components\DelayTask.h" />
+    <ClInclude Include="Components\UI\PauseButton.h" />
   </ItemGroup>
 </Project>
