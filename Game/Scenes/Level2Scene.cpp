@@ -14,6 +14,7 @@
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
+#include "../Tiles/LightTile.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
 {
@@ -107,6 +108,11 @@ void Level2Scene::init()
 			{ 48, ResourceManager::GetTexture("tile130") },//Jar
 			{ 49, ResourceManager::GetTexture("tile154") },
 			{ 56, ResourceManager::GetTexture("tile60") } // spike
+		});
+		
+		grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile* ()>>
+		{
+			{ 37, [] { return new LightTile(Texture()); } },
 		});
 
 		grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");
