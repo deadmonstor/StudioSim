@@ -1,11 +1,9 @@
 ﻿#include "EnemyTest.h"
 
-#include <string>
 #include "TurnManager.h"
 #include "Core/GameObject.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Health.h"
-#include "Core/Components/Transform.h"
 #include "Core/Renderer/ResourceManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Util/Events/Events.h"
@@ -13,6 +11,7 @@
 void EnemyTest::start()
 {
 	getOwner()->addComponent<Health>();
+	getOwner()->addComponent<Camera>();
 	enemyFSM = getOwner()->addComponent<NormalEnemyFSM>();
 	
 	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");

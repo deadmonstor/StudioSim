@@ -11,6 +11,10 @@
 
 PlayerController::PlayerController()
 {
+	Griddy::Events::subscribe(this, &PlayerController::onKeyDown);
+	Griddy::Events::subscribe(this, &PlayerController::onKeyUp);
+	Griddy::Events::subscribe(this, &PlayerController::onKeyHold);
+	
 	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
 	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
@@ -44,6 +48,11 @@ void PlayerController::createPlayer()
 	playerStats->critChance = 0.0f;
 	playerStats->coinsHeld = 0;
 	
+	daggerClass = new Dagger();
+	swordClass = new Sword();
+	axeClass = new Axe();
+	hammerClass = new Hammer();
+
 	myInventory = playerPTR->addComponent<Inventory>(20);
 	Light* light = playerPTR->addComponent<Light>();
 	light->setFalloff({0.75f, 0.75f, 7.5f});
@@ -84,5 +93,8 @@ void PlayerController::onKeyUp(const OnKeyUp* keyUp)
 
 void PlayerController::UpdateStats()
 {
-
+	if (playerStats->currentHealth <= 0)
+	{
+		SceneManager::Instance()->changeScene("defeatScreen");
+	}
 }

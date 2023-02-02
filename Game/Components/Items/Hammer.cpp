@@ -4,6 +4,10 @@
 #include "../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
 
+Hammer::Hammer()
+{
+}
+
 void Hammer::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 {
 	glm::fvec2 firstTileinAttackDir = (playerPos + attackDir);
@@ -44,6 +48,7 @@ void Hammer::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 			}
 		}
 	}
+	attackPositions.clear();
 }
 
 void Hammer::createSlashGameObject(glm::fvec2 pos)

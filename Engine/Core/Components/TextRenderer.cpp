@@ -64,12 +64,16 @@ void TextRenderer::init()
 
 void TextRenderer::renderText(std::string text, float screenPosX, float screenPosY, const float scale, const glm::vec3 colour, const glm::vec2 pivot)
 {
+	if (Renderer::Instance()->getCamera() == nullptr) return;
+	
 	internalSpriteComponent->getShader().SetVector3f("spriteColor", colour.x, colour.y, colour.z, true);
-	Lighting::Instance()->refreshLightData(internalSpriteComponent, LightUpdateRequest::All);
+	//Lighting::Instance()->refreshLightData(internalSpriteComponent, LightUpdateRequest::All);
 
-	// TODO: This is magic numbers, fix this
-	screenPosX += -(1080 / 2);
-	screenPosY += -(600 / 2);
+	const glm::vec2 result = Renderer::getWindowSize();
+	const float aspectRatio = Renderer::Instance()->getAspectRatio();
+	
+	screenPosX += -((result.x / aspectRatio) / 2);
+	screenPosY += -((result.y / aspectRatio) / 2);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -80,7 +84,7 @@ void TextRenderer::renderText(std::string text, float screenPosX, float screenPo
 	{
 		const auto [texture, Size, Bearing, Advance] = Chars[*c];
 		const float xPosition = screenPosX + (Bearing.x * scale) * pivot.x;
-		const float yPosition = screenPosY - ((Size.y - Bearing.y) * scale) * pivot.x;
+		const float yPosition = screenPosY - ((Size.y - Bearing.y) * scale);
 
 		const float width = Size.x * scale;
 		const float height = Size.y * scale;
@@ -111,6 +115,8 @@ void TextRenderer::renderText(std::string text, float screenPosX, float screenPo
 
 glm::vec2 TextRenderer::renderTextSize(std::string text, float scale)
 {
+	if (Renderer::Instance()->getCamera() == nullptr) return {0,0};
+	
 	float screenPosX = 0;
 	float screenPosY = 0;
 	

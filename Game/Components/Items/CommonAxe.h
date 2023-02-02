@@ -7,8 +7,6 @@ class CommonAxe :
 public:
     CommonAxe();
 
-    void createCommonAxe();
-
     WeaponStats* commonAxeStats{};
 };
 
