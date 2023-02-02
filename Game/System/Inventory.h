@@ -20,7 +20,7 @@ struct Item
 	virtual ~Item() {}; // added virtual destructor
 };
 
-struct Weapon : Item
+struct TestWeapon : Item
 {
 	int atk; // Added on to health and strength
 	int getAtk() { return atk; }

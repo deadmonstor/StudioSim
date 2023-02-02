@@ -55,6 +55,7 @@
     <ClInclude Include="Components\Items\Sword.h" />
     <ClInclude Include="Shop.h" />
     <ClInclude Include="System\Inventory.h" />
+    <ClInclude Include="Tiles\SpikeTile.h" />
     <ClInclude Include="Tiles\TeleportTile.h" />
     <ClInclude Include="TestGameplaySystem.h" />
     <ClInclude Include="Tiles\LightTile.h" />
@@ -96,6 +97,7 @@
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="System\Inventory.cpp" />
     <ClCompile Include="Tiles\LightTile.cpp" />
+    <ClCompile Include="Tiles\SpikeTile.cpp" />
     <ClCompile Include="Tiles\TeleportTile.cpp" />
     <ClCompile Include="Tiles\TestTile.cpp" />
   </ItemGroup>

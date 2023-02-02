@@ -38,8 +38,8 @@ void Inventory::draw_inventory() {
 	for (int i = 0; i < items.size(); i++)
 	{
 		std::cout << i + 1 << ". " << items[i]->name;
-		if (dynamic_cast<Weapon*>(items[i])) {
-			auto item = dynamic_cast<Weapon*>(items[i]);
+		if (dynamic_cast<TestWeapon*>(items[i])) {
+			auto item = dynamic_cast<TestWeapon*>(items[i]);
 			std::cout << " (Atk:" << item->getAtk() << " / Crit:" << item->getCrit() << ")";
 		}
 		else if (dynamic_cast<Armour*>(items[i])) {
@@ -117,9 +117,9 @@ void Inventory::equip_item(const std::string& item_name)
 	{
 		if (item->name == item_name)
 		{
-			if (dynamic_cast<Weapon*>(item) != nullptr) // check if item is a weapon
+			if (dynamic_cast<TestWeapon*>(item) != nullptr) // check if item is a weapon
 			{
-				Weapon* weapon = dynamic_cast<Weapon*>(item);
+				TestWeapon* weapon = dynamic_cast<TestWeapon*>(item);
 				weapon->isEquipped = true; // set isEquipped to true for the weapon
 				std::cout << weapon->name << " equipped." << std::endl;
 				break;
@@ -154,9 +154,9 @@ void Inventory::unequip_item(const std::string& item_name)
 	{
 		if (item->name == item_name)
 		{
-			if (dynamic_cast<Weapon*>(item) != nullptr) // check if item is a weapon
+			if (dynamic_cast<TestWeapon*>(item) != nullptr) // check if item is a weapon
 			{
-				Weapon* weapon = dynamic_cast<Weapon*>(item);
+				TestWeapon* weapon = dynamic_cast<TestWeapon*>(item);
 				if (weapon->isEquipped) {
 					weapon->isEquipped = false; // set isEquipped to false for the weapon
 					std::cout << weapon->name << " unequipped." << std::endl;

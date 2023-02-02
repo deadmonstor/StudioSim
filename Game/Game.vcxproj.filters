@@ -39,6 +39,7 @@
     <ClCompile Include="Components\Items\HealthPotion.cpp" />
     <ClCompile Include="Components\Items\ManaPotion.cpp" />
     <ClCompile Include="Components\Items\ExpPotion.cpp" />
+    <ClCompile Include="Tiles\SpikeTile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -85,5 +86,6 @@
     <ClInclude Include="Components\Items\HealthPotion.h" />
     <ClInclude Include="Components\Items\ManaPotion.h" />
     <ClInclude Include="Components\Items\ExpPotion.h" />
+    <ClInclude Include="Tiles\SpikeTile.h" />
   </ItemGroup>
 </Project>
