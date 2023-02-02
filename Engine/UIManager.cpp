@@ -20,3 +20,14 @@ void UIManager::render()
 		glDisable(GL_BLEND);
 	}
 }
+
+void UIManager::clear()
+{
+	for (const auto& panel : UIElements | std::views::values)
+	{
+		panel->destroy();
+		delete panel;
+	}
+
+	UIElements.clear();
+}

@@ -1,4 +1,4 @@
-﻿#include "MainMenu.h"
+﻿#include "VictoryScene.h"
 
 #include "Core/SceneManager.h"
 #include "Core/Components/Camera.h"
@@ -6,26 +6,26 @@
 #include "Core/Renderer/Renderer.h"
 #include "Util/Events/Events.h"
 
-void MainMenu::init()
+void VictoryScene::init()
 {
-    Griddy::Events::subscribe(this, &MainMenu::onEngineRender);
-    Griddy::Events::subscribe(this, &MainMenu::onKeyDown);
+    Griddy::Events::subscribe(this, &VictoryScene::onEngineRender);
+    Griddy::Events::subscribe(this, &VictoryScene::onKeyDown);
 
     GameObject* cam = SceneManager::Instance()->createGameObject("test", glm::vec2{0, 0});
     cam->addComponent<Camera>();
     Renderer::Instance()->setCamera(cam->getComponent<Camera>());
 }
 
-void MainMenu::destroy()
+void VictoryScene::destroy()
 {
     // TODO: Unsubscribe
 }
 
-void MainMenu::onEngineRender(const OnEngineRender* event)
+void VictoryScene::onEngineRender(const OnEngineRender* event)
 {
     if (SceneManager::Instance()->isLoadingScene() ||
         SceneManager::Instance()->isShuttingDown() ||
-        SceneManager::Instance()->getScene()->name != "mainMenu") return;
+        SceneManager::Instance()->getScene()->name != "victoryScreen") return;
     
     const auto MiddleTopHalf =
                     glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y / 1.5)) / Renderer::Instance()->getAspectRatio();
@@ -33,16 +33,16 @@ void MainMenu::onEngineRender(const OnEngineRender* event)
     const auto MiddleMiddle =
                   glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y / 2.5)) / Renderer::Instance()->getAspectRatio();
     
-    glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize("Into the Crypt", 1);
-    TextRenderer::Instance()->renderText(" Into the Crypt", MiddleTopHalf.x - (sizeOfText.x / 2),
+    glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize("Victory!", 1);
+    TextRenderer::Instance()->renderText(" Victory!", MiddleTopHalf.x - (sizeOfText.x / 2),
         MiddleTopHalf.y - (sizeOfText.y / 2), 1, glm::vec3{1, 1, 1}, glm::vec2{0, 0});
 
-    sizeOfText = TextRenderer::Instance()->renderTextSize( "Press Enter to Start", 1);
-    TextRenderer::Instance()->renderText(" Press Enter to Start", MiddleMiddle.x - (sizeOfText.x / 2),
+    sizeOfText = TextRenderer::Instance()->renderTextSize( "Press Enter to Start Again", 1);
+    TextRenderer::Instance()->renderText(" Press Enter to Start Again", MiddleMiddle.x - (sizeOfText.x / 2),
         MiddleMiddle.y - (sizeOfText.y / 2), 1, glm::vec3{1, 1, 1}, glm::vec2{0, 0});
 }
 
-void MainMenu::onKeyDown(const OnKeyDown* event)
+void VictoryScene::onKeyDown(const OnKeyDown* event)
 {
     if (event->key == GLFW_KEY_ENTER)
     {

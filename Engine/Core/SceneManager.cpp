@@ -1,33 +1,36 @@
 ﻿#include "SceneManager.h"
 
+#include "UIManager.h"
 #include "Components/AnimatedSpriteRenderer.h"
 #include "Components/Transform.h"
 #include "Renderer/Renderer.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
 
-void SceneManager::destroyScene(const Scene* scene)
+void SceneManager::destroyScene(Scene* scene)
 {
 	#ifdef _DEBUG_ECS
 		LOG_INFO("destroyScene() ");
 	#endif
 	
 	shuttingDown = true;
+	addPendingObjects();
 
 	for(const auto gameObjects = scene->gameObjects; const auto object : gameObjects)
 	{
 		destroyGameObject(object);
 	}
-
-	addPendingObjects();
+	
+	UIManager::Instance()->clear();
+	scene->destroy();
 }
 
 bool SceneManager::changeScene(const std::string& scene)
 {
 	if (isLoadingScene()) return false;
-	
+
 	loadingScene = true;
-	loadNextScene = new Scene();
+	loadNextScene = sceneToTypeID[scene]();
 	loadNextScene->name = scene;
 	shuttingDown = true;
 	return true;
@@ -101,6 +104,8 @@ void SceneManager::destroyGameObject(GameObject* gameObject) const
 
 void SceneManager::update() const
 {
+	currentScene->update();
+	
 	for(auto i : currentScene->gameObjects)
 	{
 		i->update();
@@ -151,6 +156,7 @@ void SceneManager::lateShutdown()
 		shuttingDown = false;
 		LOG_INFO("Changed scene to " + loadNextScene->name);
 		currentScene = loadNextScene;
+		currentScene->init();
 
 		Griddy::Events::invoke<OnSceneChanged>(currentScene->name);
 		loadingScene = false;

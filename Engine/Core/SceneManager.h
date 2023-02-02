@@ -12,7 +12,7 @@
 class SceneManager : public SingletonTemplate<SceneManager>
 {
 public:
-	void destroyScene(const Scene* scene);
+	void destroyScene(Scene* scene);
 	bool changeScene(const std::string& scene);
 	GameObject* createGameObject(std::string name, glm::vec2 position);
 	void destroyGameObject(GameObject* gameObject) const;
@@ -30,7 +30,7 @@ public:
 
 	Scene* getScene() const { return currentScene; }
 
-	std::map<std::string, std::type_index> sceneToTypeID;
+	std::map<std::string, std::function<Scene*()>> sceneToTypeID;
 private:
 	std::list<GameObject*> pendingObjects;
 	void addGameObject(GameObject* gameObject);

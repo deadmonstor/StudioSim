@@ -157,7 +157,6 @@ static std::map<std::string, DebugEvent> debugSettings
 
 static std::map<std::string, std::string> debugScenes
 {
-	{"Debug Rendering", "renderScene"},
 	{"Debug Main Menu", "mainMenu"},
 	{"Debug Level 1", "level1"},
 	{"Debug Level 2", "level2"},

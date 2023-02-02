@@ -11,6 +11,7 @@ class UIManager : public SingletonTemplate<UIManager>
 
 public:
 	void render();
+	void clear();
 
 	// TODO: Make this only work for classes that inherit from Panel
 	template<typename T, typename... Args>

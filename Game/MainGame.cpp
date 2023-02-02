@@ -2,7 +2,11 @@
 #include <Util/Logger.h>
 #include "TestGameplaySystem.h"
 #include "Core/Renderer/Renderer.h"
+#include "Scenes/DefeatScene.h"
+#include "Scenes/Level1Scene.h"
+#include "Scenes/Level2Scene.h"
 #include "Scenes/MainMenu.h"
+#include "Scenes/VictoryScene.h"
 #include "Util/Events/Events.h"
 
 int main(int, char**)
@@ -39,28 +43,39 @@ int main(int, char**)
 
 	ResourceManager::LoadTexture("Sprites\\rock.png", "rock");
 	ResourceManager::LoadTexture("Sprites\\background.png", "background");
-	ResourceManager::LoadTexture("Sprites\\UE.png", "troll");
 	ResourceManager::LoadTexture("Sprites\\image.png", "buttonTest");
 
-	SceneManager::Instance()->sceneToTypeID = std::map<std::string, std::type_index>
+	SceneManager::Instance()->sceneToTypeID = std::map<std::string, std::function<Scene*()>>
 	{
-		{"mainMenu", typeid(MainMenu)},
+		{"mainMenu", []
+			{
+				return new MainMenu();
+			}
+		},
+		{"level1", []
+			{
+				return new Level1Scene();
+			}
+		},
+		{"level2", []
+			{
+				return new Level2Scene();
+			}
+		},
+		{"victoryScreen", []
+			{
+				return new VictoryScene();
+			}
+		},
+		{"defeatScreen", []
+			{
+				return new DefeatScene();
+			}
+		},
 	};
 	
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFunc);
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncScene1);
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncScene2);
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncUpdate);
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testDropCallback);
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testKeyDown);
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testKeyUp);
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testGameObjectDestroy);
-	
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestMouseDown);
-	Griddy::Events::subscribe(PlayerController::Instance(), &PlayerController::onKeyDown);
-	Griddy::Events::subscribe(PlayerController::Instance(), &PlayerController::onKeyUp);
-	Griddy::Events::subscribe(PlayerController::Instance(), &PlayerController::onKeyHold);
-
+	
 	MainGame::Instance()->run();
 	return 0;
 }

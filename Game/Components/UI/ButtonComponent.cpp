@@ -6,7 +6,9 @@
 
 ButtonComponent::ButtonComponent(const Texture& _texture): Panel()
 {
-	Griddy::Events::subscribe(this, &ButtonComponent::onMouseDown);
+	if (eventID == -1)
+		eventID = Griddy::Events::subscribe(this, &ButtonComponent::onMouseDown);
+	
 	SetTexture(_texture);
 }
 
@@ -20,9 +22,19 @@ void ButtonComponent::render()
 	}
 }
 
+void ButtonComponent::destroy()
+{
+	Panel::destroy();
+
+	if (eventID != -1)
+		Griddy::Events::unsubscribe(this, &ButtonComponent::onMouseDown, eventID);
+}
+
 void ButtonComponent::onMouseDown(const OnMouseDown* event)
 {
 	const Transform* transform = getTransform();
+	if (transform == nullptr) return;
+	
 	glm::vec2 pos = transform->getPosition() * Renderer::Instance()->getAspectRatio();
 	const glm::vec2 size = transform->getScale() * Renderer::Instance()->getAspectRatio();
 	const glm::vec2 pivot = getPivot();

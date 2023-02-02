@@ -13,6 +13,7 @@ private:
 	friend class SceneManager;
 	friend class ImGuiHandler;
 
-	virtual void init();
-	virtual void destroy();
+	virtual void init() {}
+	virtual void update() {}
+	virtual void destroy() {}
 };

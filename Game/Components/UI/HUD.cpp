@@ -13,7 +13,7 @@ void HUD::createHUD()
 	if (hasLoaded)
 		return;
 
-	if (sceneChangeID != -1)
+	if (sceneChangeID == -1)
 		sceneChangeID = Griddy::Events::subscribe(this, &HUD::onSceneChange);
 
 	ResourceManager::LoadTexture("Sprites\\Armour\\BasicArmourChest.png", "BasicArmourChestInventoryUI");
