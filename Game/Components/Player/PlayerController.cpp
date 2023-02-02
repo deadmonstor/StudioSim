@@ -93,5 +93,8 @@ void PlayerController::onKeyUp(const OnKeyUp* keyUp)
 
 void PlayerController::UpdateStats()
 {
-
+	if (playerStats->currentHealth <= 0)
+	{
+		SceneManager::Instance()->changeScene("defeatScreen");
+	}
 }

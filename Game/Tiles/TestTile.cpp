@@ -1,5 +1,4 @@
 #include "TestTile.h"
-
 #include "Core/Grid/GridSystem.h"
 
 bool TestTile::canInteractWith()
@@ -10,5 +9,5 @@ bool TestTile::canInteractWith()
 void TestTile::onInteractedWith(TileHolder* curTileHolder)
 {
     // change scene
-    SceneManager::Instance()->changeScene("level2");
+    SceneManager::Instance()->changeScene(m_SceneToChangeTo);
 }

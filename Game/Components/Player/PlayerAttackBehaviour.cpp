@@ -1,6 +1,7 @@
 #include "PlayerAttackBehaviour.h"
 #include <Core/Components/Health.h>
 #include "PlayerMovementBehaviour.h"
+#include "PlayerSpellBehaviour.h"
 #include "../DestroyAfterAnimation.h"
 #include "../EnemyTest.h"
 #include "../Flash.h"
@@ -181,6 +182,11 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 	{
 		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerMovementBehaviour(true));
 		return;
+	}
+
+	if (eventCasted->key == GLFW_KEY_E)
+	{
+		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerSpellBehaviour(true));
 	}
 
 	if (eventCasted->key == GLFW_KEY_E)

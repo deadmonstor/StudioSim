@@ -6,8 +6,6 @@
 
 Dagger::Dagger()
 {
-	daggerStats = new WeaponStats();
-	daggerStats->name = "dagger";
 }
 
 void Dagger::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)

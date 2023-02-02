@@ -21,7 +21,6 @@
 #include "Tiles/LightTile.h"
 #include "Tiles/TestTile.h"
 #include "Tiles/TeleportTile.h"
-#include "Tiles/SpikeTile.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
