@@ -1,7 +1,5 @@
 #pragma once
 #include "Stats.h"
-#include "glm/fwd.hpp"
-#include "Core/Renderer/ResourceManager.h"
 #include "Core/Grid/GridSystem.h"
 #include <Core/Components/Health.h>
 #include "Core/Components/Transform.h"
