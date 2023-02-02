@@ -12,6 +12,7 @@ private:
 	TextComponent* coinsText;
 	TextComponent* healthText;
 	TextComponent* levelText;
+	TextComponent* audioText;
 
 	ButtonComponent* inventoryButton;
 	ButtonComponent* weaponButton;

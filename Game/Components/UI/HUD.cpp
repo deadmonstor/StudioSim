@@ -7,6 +7,7 @@
 #include "Core/Components/TextRenderer.h"
 #include "Core/Components/Transform.h"
 #include "Core/Renderer/ResourceManager.h"
+#include "Core/AudioEngine.h"
 
 void HUD::createHUD()
 {
@@ -42,12 +43,29 @@ void HUD::createHUD()
 	xpText = UIManager::Instance()->createUIElement<TextComponent>("xpText");
 	levelText = UIManager::Instance()->createUIElement<TextComponent>("levelText");
 
+	//Audio Controls
+	ResourceManager::LoadTexture("Sprites\\Audio\\Plus.png", "plusIcon");
+	ButtonComponent* plusAudioButton =
+		UIManager::Instance()->createUIElement<ButtonComponent>("plusAudioButton", ResourceManager::GetTexture("plusIcon"));
+	plusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -60, -35 });
+	plusAudioButton->getTransform()->setSize(glm::vec2(50, 50));
+	plusAudioButton->setPivot(Pivot::BottomRight);
+
+	ResourceManager::LoadTexture("Sprites\\Audio\\Minus.png", "minusIcon");
+	ButtonComponent* minusAudioButton =
+		UIManager::Instance()->createUIElement<ButtonComponent>("minusAudioButton", ResourceManager::GetTexture("minusIcon"));
+	minusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -120, -35 });
+	minusAudioButton->getTransform()->setSize(glm::vec2(50, 50));
+	minusAudioButton->setPivot(Pivot::BottomRight);
+
+	audioText = UIManager::Instance()->createUIElement<TextComponent>("audioText");
+
 	hasLoaded = true;
 }
 
 void HUD::updateHUD()
 {
-	if (healthText == nullptr || manaText == nullptr || coinsText == nullptr || coinsIcon == nullptr || xpText == nullptr || levelText == nullptr)
+	if (healthText == nullptr || manaText == nullptr || coinsText == nullptr || coinsIcon == nullptr || xpText == nullptr || levelText == nullptr || audioText == nullptr)
 	{
 		return;
 	}
@@ -75,6 +93,9 @@ void HUD::updateHUD()
 
 	const auto topMiddle =
 					glm::vec2((Renderer::getWindowSize().x / 2), Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
+                    
+    const auto bottomLeft = 
+                    glm::vec2(0, 0) / Renderer::Instance()->getAspectRatio();
 
 	// =============================================Update Inventory Button ======================================
 	inventoryButton->getTransform()->setPosition(bottomRight);
@@ -107,7 +128,6 @@ void HUD::updateHUD()
 	coinsIcon->getTransform()->setSize({50, 50});
 	coinsIcon->setTexture(ResourceManager::GetTexture("coinsIcon"));
 	coinsIcon->setPivot(Pivot::TopRight);
-	
 	// =============================================Update health text=============================================
 	const int health = playerStats->currentHealth;
 	const int maxHealth = playerStats->maxHealth;
@@ -165,6 +185,17 @@ void HUD::updateHUD()
 	levelText->getTransform()->setPosition(position);
 	levelText->getTransform()->setSize(sizeOfText);
 	levelText->setText(" Level: " + std::to_string(level));
+
+	// =============================================Update audio text===============================================
+	//TO DO: Find a way to reduce decimal places floorf no work
+	float audioLevel = floorf(AudioEngine::Instance()->getChannelVolume("Master Channel") * 100) / 100;
+	sizeOfText = TextRenderer::Instance()->renderTextSize("Volume: " + std::to_string(floorf(audioLevel * 100) / 100), 0.5);
+	position = bottomLeft - glm::vec2{ -5, sizeOfText.y } - glm::vec2{ 0, -120 };
+
+	audioText = UIManager::Instance()->createUIElement<TextComponent>("audioText");
+	audioText->getTransform()->setPosition(position);
+	audioText->getTransform()->setSize(sizeOfText);
+	audioText->setText("Volume: " + std::to_string(floorf(audioLevel * 100) / 100));
 }
 
 void HUD::onSceneChange(OnSceneChanged*)
