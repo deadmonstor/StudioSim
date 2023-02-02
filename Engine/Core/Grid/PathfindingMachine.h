@@ -25,8 +25,15 @@ public:
 	//Find whether a line intersects a wall between point A and point B
 	bool LineOfSight(glm::vec2 startPos, glm::vec2 endPos);
 
-	//Estimates the diagonal distance between 2 points
-	float FindDiagonalDistance(glm::vec2 startPos, glm::vec2 endPos);
+	//Estimates the distance between 2 points
+	float EstimateDistance(glm::vec2 startPos, glm::vec2 endPos);
+
+
+
+	TileHolder* FindClosestEmptyTile(TileHolder* start, TileHolder* goal, int maxDepth, int startDepth);
+	TileHolder* FindClosestEmptyTile(glm::vec2 startPos, glm::vec2 goalPos, int maxDepth, int startDepth);
+	TileHolder* FindClosestEmptyTile(TileHolder* goal, int maxDepth, int startDepth);
+	TileHolder* FindClosestEmptyTile(glm::vec2 goalPos, int maxDepth, int startDepth);
 
 	//breadcrumb pathfinding implementation here also
 };
