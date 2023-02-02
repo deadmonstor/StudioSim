@@ -31,9 +31,9 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\player\\", "hero", 5);
 	ResourceManager::LoadTextureArray("Sprites\\TileMap\\", "tile", 293);
 	//Coins and chest
-	ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_", 4);
-	ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_open_", 4);
-	ResourceManager::LoadTextureArray("Sprites\\Coins\\", "coin", 10);
+	//ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_", 4);
+	//ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_open_", 4);
+	//ResourceManager::LoadTextureArray("Sprites\\Coins\\", "coin", 10);
 	
 
 	ResourceManager::LoadTexture("Sprites\\rock.png", "rock");
