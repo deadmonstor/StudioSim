@@ -184,19 +184,13 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 	}
 	else
 	{
-		std::cout << backgroundChannelIndex << std::endl;
-		std::cout << backgroundChannel2Index << std::endl;
+		//std::cout << backgroundChannelIndex << std::endl;
 		//														   0
 		channelGroups["Background Music"]->getChannel(backgroundChannelIndex, &backgroundChannel);
-		channelGroups["Background Music"]->getChannel(backgroundChannel2Index, &backgroundChannel2);
 
-		bool backgroundChannelPlaying, backgroundChannel2Playing;
-		backgroundChannel->isPlaying(&backgroundChannelPlaying);
+		//bool backgroundChannelPlaying;
+		//backgroundChannel->isPlaying(&backgroundChannelPlaying);
 
-		if (backgroundChannelPlaying)
-		{
-			std::cout << "true";
-		}
 
 		if (!firstRun)
 		{
@@ -208,8 +202,6 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 		}
 
 		backgroundChannel->getIndex(&backgroundChannelIndex);
-		backgroundChannel->getIndex(&backgroundChannel2Index);
-
 		fmodSystem->playSound(ResourceManager::GetSound(path), channelGroups["Background Music"], isPaused, &backgroundChannel);
 
 		//Audio source position
@@ -297,7 +289,12 @@ bool AudioEngine::createReverbZone(const int zone)
 
 bool AudioEngine::setReverbPos(const int zone, const float posX, const float posY, const float minX, const float minY)
 {
-	reverbZones[zone]->set3DAttributes(new FMOD_VECTOR{ posX, posY, 0} , minX, minY);
+	FMOD_RESULT fmodResult;
+	fmodResult = reverbZones[zone]->set3DAttributes(new FMOD_VECTOR{ posX, posY, 0} , minX, minY);
+	if (!checkResult(fmodResult, "Set 3D Reverb Zone"))
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -313,62 +310,112 @@ bool AudioEngine::deleteReverbZone(const int zone)
 //Channel Group Functions
 bool AudioEngine::stopChannelGroup(std::string channelGroupName)
 {
-	channelGroups[channelGroupName]->stop();
+	FMOD_RESULT fmodResult;
+	fmodResult = channelGroups[channelGroupName]->stop();
+	if (!checkResult(fmodResult, "stopChannelGroup"))
+	{
+		return false;
+	}
 	return true;
 }
 
 bool AudioEngine::setPauseChannelGroup(std::string channelGroupName, bool pause)
 {
-	channelGroups[channelGroupName]->setPaused(pause);
+	FMOD_RESULT fmodResult;
+	fmodResult = channelGroups[channelGroupName]->setPaused(pause);
+	if (!checkResult(fmodResult, "setPauseChannelGroup"))
+	{
+		return false;
+	}
 	return true;
 }
 
 bool AudioEngine::setModeChannelGroup(std::string channelGroupName, FMOD_MODE modes)
 {
-	channelGroups[channelGroupName]->setMode(modes);
+	FMOD_RESULT fmodResult;
+	fmodResult = channelGroups[channelGroupName]->setMode(modes);
+	if (!checkResult(fmodResult, "setModeChannelGroup"))
+	{
+		return false;
+	}
 	return true;
 }
 
 bool AudioEngine::setPitchChannelGroup(std::string channelGroupName, float pitch)
 {
-	channelGroups[channelGroupName]->setPitch(pitch);
+	FMOD_RESULT fmodResult;
+	fmodResult = channelGroups[channelGroupName]->setPitch(pitch);
+	if (!checkResult(fmodResult, "setPitchChannelGroup"))
+	{
+		return false;
+	}
 	return true;
 }
 
 bool AudioEngine::setVolumeChannelGroup(std::string channelGroupName, float volume)
 {
-	channelGroups[channelGroupName]->setVolume(volume);
+	FMOD_RESULT fmodResult;
+	fmodResult = channelGroups[channelGroupName]->setVolume(volume);
+	if (!checkResult(fmodResult, "setVolumeChannelGroup"))
+	{
+		return false;
+	}
 	return true;
 }
 
 bool AudioEngine::setMuteChannelGroup(std::string channelGroupName, bool mute)
 {
-	channelGroups[channelGroupName]->setMute(mute);
+	FMOD_RESULT fmodResult;
+	fmodResult = channelGroups[channelGroupName]->setMute(mute);
+	if (!checkResult(fmodResult, "setMuteChannelGroup"))
+	{
+		return false;
+	}
 	return true;
 }
 
 bool AudioEngine::set3DAttributeChannelGroup(std::string channelGroupName, FMOD_VECTOR pos, FMOD_VECTOR vel)
 {
-	channelGroups[channelGroupName]->set3DAttributes(&pos, &vel);
+	FMOD_RESULT fmodResult;
+	fmodResult = channelGroups[channelGroupName]->set3DAttributes(&pos, &vel);
+	if (!checkResult(fmodResult, "set3DAttributeChannelGroup"))
+	{
+		return false;
+	}
 	return true;
 }
 
 bool AudioEngine::setMinMaxChannelGroup(std::string channelGroupName, float min, float max)
 {
-	channelGroups[channelGroupName]->set3DMinMaxDistance(min, max);
+	FMOD_RESULT fmodResult;
+	fmodResult = channelGroups[channelGroupName]->set3DMinMaxDistance(min, max);
+	if (!checkResult(fmodResult, "setMinMaxChannelGroup"))
+	{
+		return false;
+	}
 	return true;
 }
 
 int AudioEngine::getNumberOfChannelsInGroup(std::string channelGroupName)
 {
+	FMOD_RESULT fmodResult;
 	int channels;
-	channelGroups[channelGroupName]->getNumChannels(&channels);
+	fmodResult = channelGroups[channelGroupName]->getNumChannels(&channels);
+	if (!checkResult(fmodResult, "getNumberOfChannelsInGroup"))
+	{
+		return 0;
+	}
 	return channels;
 }
 
 float AudioEngine::getChannelVolume(std::string channelGroupName)
 {
+	FMOD_RESULT fmodResult;
 	float volume;
-	channelGroups[channelGroupName]->getVolume(&volume);
+	fmodResult = channelGroups[channelGroupName]->getVolume(&volume);
+	if (!checkResult(fmodResult, "getChannelVolume"))
+	{
+		return 0;
+	}
 	return volume;
 }
