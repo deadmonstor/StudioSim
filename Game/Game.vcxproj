@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\DelayTask.h" />
     <ClInclude Include="Components\Items\CommonAxe.h" />
     <ClInclude Include="Components\Items\CommonSword.h" />
     <ClInclude Include="Components\Items\Axe.h" />
@@ -58,6 +59,7 @@
     <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\DelayTask.cpp" />
     <ClCompile Include="Components\Items\CommonAxe.cpp" />
     <ClCompile Include="Components\Items\CommonSword.cpp" />
     <ClCompile Include="Components\Items\Axe.cpp" />

@@ -81,13 +81,14 @@ void HUD::createHUD()
 	coinsIcon->setPivot(Pivot::TopRight);
 
 	xpText = UIManager::Instance()->createUIElement<TextComponent>("xpText");
+	levelText = UIManager::Instance()->createUIElement<TextComponent>("levelText");
 
 	hasLoaded = true;
 }
 
 void HUD::updateHUD()
 {
-	if (healthText == nullptr || manaText == nullptr || coinsText == nullptr || coinsIcon == nullptr || xpText == nullptr)
+	if (healthText == nullptr || manaText == nullptr || coinsText == nullptr || coinsIcon == nullptr || xpText == nullptr || levelText == nullptr)
 	{
 		return;
 	}
@@ -110,12 +111,15 @@ void HUD::updateHUD()
 	const auto topRight =
 					glm::vec2(Renderer::getWindowSize().x, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
 
+	const auto bottomRight =
+					glm::vec2(Renderer::getWindowSize().x, 0) / Renderer::Instance()->getAspectRatio();
+
 	const auto topMiddle =
 					glm::vec2((Renderer::getWindowSize().x / 2), Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
 
 	// =============================================Update health text=============================================
-	int health = playerStats->currentHealth;
-	int maxHealth = playerStats->maxHealth;
+	const int health = playerStats->currentHealth;
+	const int maxHealth = playerStats->maxHealth;
 	
 	auto sizeOfText = TextRenderer::Instance()->renderTextSize(std::to_string(health) + "/" + std::to_string(maxHealth), 1);
 	auto position = topLeft - glm::vec2{-75, sizeOfText.y} - glm::vec2{0, 38};
@@ -155,12 +159,21 @@ void HUD::updateHUD()
 	const int maxXp = playerStats->maxEXP;
 	
 	sizeOfText = TextRenderer::Instance()->renderTextSize("XP: " + std::to_string(xp) + "/" + std::to_string(maxXp), 1);
-	position = topMiddle - glm::vec2{sizeOfText.x / 2, sizeOfText.y} - glm::vec2{0, 31}; 
+	position = topMiddle - glm::vec2{sizeOfText.x / 2, sizeOfText.y} - glm::vec2{0, 31};
 	
-	xpText = UIManager::Instance()->createUIElement<TextComponent>("xpText");
 	xpText->getTransform()->setPosition(position);
 	xpText->getTransform()->setSize(sizeOfText);
 	xpText->setText(" XP: " + std::to_string(xp) + "/" + std::to_string(maxXp));
+
+	// =============================================Update level text=============================================
+	const int level = 0 ; //playerStats->level;
+
+	sizeOfText = TextRenderer::Instance()->renderTextSize("Level: " + std::to_string(level), 1);
+	position = bottomRight - glm::vec2{200, -75} + glm::vec2{sizeOfText.x / 2, sizeOfText.y};
+	
+	levelText->getTransform()->setPosition(position);
+	levelText->getTransform()->setSize(sizeOfText);
+	levelText->setText(" Level: " + std::to_string(level));
 }
 
 void HUD::onSceneChange(OnSceneChanged*)
