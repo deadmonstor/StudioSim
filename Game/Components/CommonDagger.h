@@ -1,19 +1,9 @@
 #pragma once
-#include "Dagger.h"
-//#include "Core/Components/Camera.h"
-//#include "Util/SingletonTemplate.h"
-//#include "Util/Events/EngineEvents.h"
-
+#include "WeaponEnum.h"
 class CommonDagger :
-    public Dagger
+    public WeaponEnum
 {
 public:
-    CommonDagger();
-
-    void createCommonDagger();
-
-    //GameObject* daggerPTR{};
-    WeaponStats* commonDaggerStats{};
     
 };
 
