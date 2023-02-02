@@ -2,10 +2,7 @@
 
 CommonAxe::CommonAxe()
 {
-}
-
-void CommonAxe::createCommonAxe()
-{
+	commonAxeStats = new WeaponStats();
 	commonAxeStats->name = "common axe";
 	commonAxeStats->rarity = "common";
 	commonAxeStats->costInShop = 20;

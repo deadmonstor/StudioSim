@@ -6,7 +6,6 @@ class CommonSword :
 public:
     CommonSword();
 
-    void createCommonSword();
 
     WeaponStats* commonSwordStats{};
 };
