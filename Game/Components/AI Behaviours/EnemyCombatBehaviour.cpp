@@ -4,6 +4,9 @@
 #include "../Player/PlayerController.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/PathfindingMachine.h"
+#include "../TurnManager.h"
+#include "../Flash.h"
+#include "../Core/Components/AnimatedSpriteRenderer.h"
 
 EnemyCombatBehaviour::EnemyCombatBehaviour()
 	: PlannedBehaviour()
@@ -29,20 +32,23 @@ void EnemyCombatBehaviour::ActionAnalysis()
 	PlannedBehaviour::ActionAnalysis();
 
 	//Set the closest available tile to the player as the target for the move towards action
-	glm::vec2 playerPos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
-	glm::vec2 myPos = parentFSM->getOwner()->getTransform()->getPosition();
-	glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
-	TileHolder* targetTile = nullptr;
+	const glm::vec2 playerPos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
+	const glm::vec2 myPos = parentFSM->getOwner()->getTransform()->getPosition();
+	const glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
+	const TileHolder* targetTile = nullptr;
 	int depth = 0;
 	while (targetTile == nullptr)
 	{
 		//int startDepth = (depth - 1 < 0) ? 0 : depth - 1;
-		TileHolder* closestEmptyTile = PathfindingMachine::Instance()->FindClosestEmptyTile(myPos, playerPos, depth, 0);
+		const TileHolder* closestEmptyTile = PathfindingMachine::Instance()->FindClosestEmptyTile(myPos, playerPos, depth, 0);
+		
 		if (closestEmptyTile != nullptr)
 			targetTile = closestEmptyTile;
+		
 		depth++;
 	}
-	((MoveTowardsAction*)availableActions["MoveTowards"].second)->SetTarget(targetTile->position * tileSize);
+	
+	static_cast<MoveTowardsAction*>(availableActions["MoveTowards"].second)->SetTarget(targetTile->position * tileSize);
 }
 
 void EnemyCombatBehaviour::GenerateBehaviourList()
@@ -57,4 +63,17 @@ void EnemyCombatBehaviour::GenerateBehaviourList()
 
 void EnemyCombatBehaviour::GenerateEffects()
 {
+}
+
+void EnemyCombatBehaviour::endTurn()
+{
+	TurnManager::Instance()->endTurn();
+}
+
+void EnemyCombatBehaviour::flashPlayer(GameObject* object, const glm::vec3 targetColor)
+{
+	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [this]
+	{
+		endTurn();
+	});
 }

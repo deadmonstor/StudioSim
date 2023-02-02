@@ -14,5 +14,8 @@ private:
     glm::vec2 target;
     glm::vec2 currentPos;
     GameObject* parentObject;
+
+    void endTurn();
+    void lerpPosition(GameObject* object, glm::vec2 targetPosition);
 };
 
