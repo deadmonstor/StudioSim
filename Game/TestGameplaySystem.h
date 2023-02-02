@@ -21,6 +21,7 @@
 #include "Tiles/LightTile.h"
 #include "Tiles/TestTile.h"
 #include "Tiles/TeleportTile.h"
+#include "LootTable.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -100,6 +101,8 @@ public:
 	{
 		if (event->key != "debugScene1")
 			return;
+
+		LootTable::Instance()->LoadingIntoLootTableArray();
 
 		auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
 		auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);

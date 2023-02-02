@@ -48,6 +48,7 @@
     <ClInclude Include="Components\Items\HealthPotion.h" />
     <ClInclude Include="Components\Items\ExpPotion.h" />
     <ClInclude Include="Components\Items\LegendaryArmour.h" />
+    <ClInclude Include="LootTable.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Components\Items\RareSword.h" />
     <ClInclude Include="Components\Items\RareAxe.h" />
@@ -93,6 +94,7 @@
     <ClCompile Include="Components\Items\HealthPotion.cpp" />
     <ClCompile Include="Components\Items\ExpPotion.cpp" />
     <ClCompile Include="Components\Items\LegendaryArmour.cpp" />
+    <ClCompile Include="LootTable.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Components\Items\RareSword.cpp" />
     <ClCompile Include="Components\Items\RareAxe.cpp" />

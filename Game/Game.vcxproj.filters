@@ -43,6 +43,7 @@
     <ClCompile Include="Components\Items\CommonArmour.cpp" />
     <ClCompile Include="Components\Items\RareArmour.cpp" />
     <ClCompile Include="Components\Items\LegendaryArmour.cpp" />
+    <ClCompile Include="LootTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -93,5 +94,6 @@
     <ClInclude Include="Components\Items\CommonArmour.h" />
     <ClInclude Include="Components\Items\RareArmour.h" />
     <ClInclude Include="Components\Items\LegendaryArmour.h" />
+    <ClInclude Include="LootTable.h" />
   </ItemGroup>
 </Project>
