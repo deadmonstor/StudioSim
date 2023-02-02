@@ -17,6 +17,8 @@ private:
 	ButtonComponent* inventoryButton;
 	ButtonComponent* weaponButton;
 	ButtonComponent* spellsButton;
+	ButtonComponent* plusAudioButton;
+	ButtonComponent* minusAudioButton;
 	Panel* healthIcon;
 	Panel* manaIcon;
 	Panel* coinsIcon;

@@ -45,18 +45,12 @@ void HUD::createHUD()
 
 	//Audio Controls
 	ResourceManager::LoadTexture("Sprites\\Audio\\Plus.png", "plusIcon");
-	ButtonComponent* plusAudioButton =
+	plusAudioButton =
 		UIManager::Instance()->createUIElement<ButtonComponent>("plusAudioButton", ResourceManager::GetTexture("plusIcon"));
-	plusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -60, -35 });
-	plusAudioButton->getTransform()->setSize(glm::vec2(50, 50));
-	plusAudioButton->setPivot(Pivot::BottomRight);
 
 	ResourceManager::LoadTexture("Sprites\\Audio\\Minus.png", "minusIcon");
-	ButtonComponent* minusAudioButton =
+	minusAudioButton =
 		UIManager::Instance()->createUIElement<ButtonComponent>("minusAudioButton", ResourceManager::GetTexture("minusIcon"));
-	minusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -120, -35 });
-	minusAudioButton->getTransform()->setSize(glm::vec2(50, 50));
-	minusAudioButton->setPivot(Pivot::BottomRight);
 
 	audioText = UIManager::Instance()->createUIElement<TextComponent>("audioText");
 
@@ -97,6 +91,15 @@ void HUD::updateHUD()
     const auto bottomLeft = 
                     glm::vec2(0, 0) / Renderer::Instance()->getAspectRatio();
 
+	// =============================================Update Audio Text ==========================================
+	plusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -60, -35 });
+	plusAudioButton->getTransform()->setSize(glm::vec2(50, 50));
+	plusAudioButton->setPivot(Pivot::BottomRight);
+
+	minusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -120, -35 });
+	minusAudioButton->getTransform()->setSize(glm::vec2(50, 50));
+	minusAudioButton->setPivot(Pivot::BottomRight);
+	
 	// =============================================Update Inventory Button ======================================
 	inventoryButton->getTransform()->setPosition(bottomRight);
 	inventoryButton->getTransform()->setSize(glm::vec2(100, 100));
@@ -187,15 +190,15 @@ void HUD::updateHUD()
 	levelText->setText(" Level: " + std::to_string(level));
 
 	// =============================================Update audio text===============================================
-	//TO DO: Find a way to reduce decimal places floorf no work
-	float audioLevel = floorf(AudioEngine::Instance()->getChannelVolume("Master Channel") * 100) / 100;
-	sizeOfText = TextRenderer::Instance()->renderTextSize("Volume: " + std::to_string(floorf(audioLevel * 100) / 100), 0.5);
+	const float audioLevel = AudioEngine::Instance()->getChannelVolume("Master Channel") * 100 / 100;
+	
+	sizeOfText = TextRenderer::Instance()->renderTextSize("Volume: " + std::format("{:.2f}", audioLevel), 0.5);
 	position = bottomLeft - glm::vec2{ -5, sizeOfText.y } - glm::vec2{ 0, -120 };
 
 	audioText = UIManager::Instance()->createUIElement<TextComponent>("audioText");
 	audioText->getTransform()->setPosition(position);
 	audioText->getTransform()->setSize(sizeOfText);
-	audioText->setText("Volume: " + std::to_string(floorf(audioLevel * 100) / 100));
+	audioText->setText("Volume: " + std::format("{:.2f}", audioLevel));
 }
 
 void HUD::onSceneChange(OnSceneChanged*)
