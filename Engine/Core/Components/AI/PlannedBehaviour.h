@@ -1,6 +1,6 @@
 #pragma once
-#include "Core/Components/AI/Behaviour.h"
 #include <map>
+#include "Core/Components/AI/Behaviour.h"
 
 //Pair of fitness value and behaviour
 typedef std::pair<int, Behaviour*> FitAction;
@@ -35,6 +35,8 @@ public:
     void start() override;
     void update() override {}
     void lateUpdate() override{}
+
+    void EventResponse(BehaviourEvent* event) override;
 
     //performs planning and chooses the action with the highest fitness
     void Act() override;

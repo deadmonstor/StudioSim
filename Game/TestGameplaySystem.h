@@ -1,23 +1,23 @@
 ﻿#pragma once
+#include <string>
+#include "ScoreSystem.h"
+#include "Shop.h"
 #include "Components/EnemyTest.h"
-#include "Core/Input.h"
 #include "Components/FireballComponent.h"
-#include "Core/Components/AI/StateMachine.h"
+#include "Core/Input.h"
 #include "Core/SceneManager.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/TextRenderer.h"
 #include "Core/Components/Transform.h"
+#include "Core/Components/AI/StateMachine.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/ResourceManager.h"
-#include "Shop.h"
-#include "System/Inventory.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Time.h"
 #include "Util/Events/EngineEvents.h"
-#include "ScoreSystem.h"
-#include <string>
+#include "Components/Player/PlayerController.h"
 #include "Components/TurnManager.h"
-#include "Components/PlayerController.h"
+#include "Components/UI/HUD.h"
 #include "Tiles/LightTile.h"
 #include "Tiles/TestTile.h"
 #include "Tiles/TeleportTile.h"
@@ -51,57 +51,19 @@ public:
 		if (event->key != "renderScene")
 			return;
 
-		GameObject* test = SceneManager::Instance()->createGameObject("Background", glm::vec2{-(1920 / 2), -(1080 / 2)});
-		test->getTransform()->setSize(glm::vec2(1920 * 2, 1080 * 2));
-		SpriteComponent* sprite = test->addComponent<SpriteComponent>();
-		sprite->setTexture(ResourceManager::GetTexture("background"));
-		sprite->setColor(glm::vec3(1, 1, 1));
-		
-		auto sortingLayer = Renderer::addSortingLayer("background", -2);
-		sprite->setSortingLayer(sortingLayer);
-
-		auto troll = SceneManager::Instance()->createGameObject("troll", glm::vec2 { -855, -540 + 127  });
-		troll->getTransform()->setSize(glm::vec2(339, 26));
-
-		auto trollsprite = troll->addComponent<SpriteComponent>();
-		trollsprite->setLit(false);
-		trollsprite->setTexture(ResourceManager::GetTexture("troll"));
-		trollsprite->setColor(glm::vec3(1, 1, 1));
-		sprites.push_back(trollsprite);
-		sortingLayer = Renderer::addSortingLayer("troll sorting layer", 3);
-		trollsprite->setSortingLayer(sortingLayer);
-
-		sortingLayer = Renderer::addSortingLayer("middle", -1);
-		
-		for (int y = 0; y < 10; y++)
-		{
-			// Get random position
-			float x = 400 - rand() % 1920;
-			float yy = 400 - y;
-			
-			test = SceneManager::Instance()->createGameObject("Test-" + std::to_string(y), glm::vec2 { x, yy });
-			test->getTransform()->setSize(glm::vec2(100,100));
-
-			// pick a random texture between these 2
-			const int textureIndex = rand() % 2;
-
-			sprite = test->addComponent<SpriteComponent>();
-			sprite->setColor(glm::vec3(1,1,1));
-			sprite->setTexture(ResourceManager::GetTexture(textureIndex == 0 ? "face" : "face2"));
-			sprite->setSortingLayer(sortingLayer);
-		}
-
-		test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
+		GameObject* test = SceneManager::Instance()->createGameObject("TestBlue-Slime-Idle Idle", glm::vec2{100, 100});
 		test->getTransform()->setSize(glm::vec2(96, 48));
 
 		const auto cam = test->addComponent<Camera>();
 		Renderer::Instance()->setCamera(cam);
+		test->addComponent<Light>();
 		const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
-		sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
+		AnimatedSpriteRenderer* sprite = test->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
         sprite->setColor(glm::vec3(1, 1, 1));
+		sprite->setPivot(Pivot::Center);
         sprites.push_back(sprite);
 	}
-	
+
 	void CreateFireball(glm::vec2 mousePos)
 	{
 		mousePos.x = mousePos.x;
@@ -251,7 +213,7 @@ public:
 		}
 		
 		CreateFireball(glm::vec2{ 1000, 500 });
-		TurnManager::Instance()->StartTurnSystem();
+		TurnManager::Instance()->startTurnSystem();
 	}
 
 	void TestFuncScene2(const OnSceneChanged* event) 
@@ -381,12 +343,20 @@ public:
 		//}
 		
 		CreateFireball(glm::vec2{ 1000, 500 });
-		TurnManager::Instance()->StartTurnSystem();
+		TurnManager::Instance()->startTurnSystem();
 	}
 	
 	glm::fvec2 direction = glm::fvec2(0, 0);
 	void TestFuncUpdate(OnEngineUpdate*)
 	{
+		if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
+		{
+			if (!HUD::Instance()->getHasLoaded())
+				HUD::Instance()->createHUD();
+
+			HUD::Instance()->updateHUD();
+		}
+		
 		// Update all sprites color to be a random color
 		for (const auto& sprite : sprites)
 		{
@@ -394,11 +364,6 @@ public:
 			Transform* transform = sprite->getOwner()->getTransform();
 			transform->setPosition(transform->getPosition() + direction * static_cast<float>(100.0f * Time::getDeltaTime()));
 		}
-	}
-
-	void testRender(OnEngineRender*)
-	{
-		TextRenderer::Instance()->renderText("abcdefghijklmnopqrstuvwsyz", 500, 500, 1, glm::vec3(1, 1, 1));
 	}
 	
 	void TestMouseDown(const OnMouseDown* mouseDownEvent)

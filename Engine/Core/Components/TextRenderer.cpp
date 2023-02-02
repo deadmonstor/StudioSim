@@ -62,10 +62,14 @@ void TextRenderer::init()
 	FT_Done_FreeType(ft);
 }
 
-void TextRenderer::renderText(std::string text, float screenPosX, const float screenPosY, const float scale, const glm::vec3 colour)
+void TextRenderer::renderText(std::string text, float screenPosX, float screenPosY, const float scale, const glm::vec3 colour, const glm::vec2 pivot)
 {
 	internalSpriteComponent->getShader().SetVector3f("spriteColor", colour.x, colour.y, colour.z, true);
 	Lighting::Instance()->refreshLightData(internalSpriteComponent, LightUpdateRequest::All);
+
+	// TODO: This is magic numbers, fix this
+	screenPosX += -(1080 / 2);
+	screenPosY += -(600 / 2);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -75,8 +79,8 @@ void TextRenderer::renderText(std::string text, float screenPosX, const float sc
 	for (std::string::const_iterator c = text.begin(); c != text.end(); ++c)
 	{
 		const auto [texture, Size, Bearing, Advance] = Chars[*c];
-		const float xPosition = screenPosX + Bearing.x * scale;
-		const float yPosition = screenPosY - (Size.y - Bearing.y) * scale;
+		const float xPosition = screenPosX + (Bearing.x * scale) * pivot.x;
+		const float yPosition = screenPosY - ((Size.y - Bearing.y) * scale) * pivot.x;
 
 		const float width = Size.x * scale;
 		const float height = Size.y * scale;
@@ -103,4 +107,21 @@ void TextRenderer::renderText(std::string text, float screenPosX, const float sc
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_BLEND);
+}
+
+glm::vec2 TextRenderer::renderTextSize(std::string text, float scale)
+{
+	float screenPosX = 0;
+	float screenPosY = 0;
+	
+	for (std::string::const_iterator c = text.begin(); c != text.end(); ++c)
+	{
+		const auto [texture, Size, Bearing, Advance] = Chars[*c];
+		const float height = Size.y * scale;
+
+		screenPosX += (Advance >> 6) * scale;
+		screenPosY = std::max(screenPosY, height);
+	}
+
+	return {screenPosX, screenPosY};
 }

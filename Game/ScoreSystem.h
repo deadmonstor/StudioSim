@@ -22,10 +22,12 @@ public:
 	void ReadScores(bool FromMainMenu);
 	void RenderTopScores();
 
-private:
-	int currentScore;
 	void SortScores();
 	void UpdateScoreFile();
+
+private:
+	int currentScore;
+
 
 	std::fstream file;
 
