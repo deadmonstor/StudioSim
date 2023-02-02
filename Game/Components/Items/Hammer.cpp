@@ -6,8 +6,6 @@
 
 Hammer::Hammer()
 {
-	hammerStats = new WeaponStats();
-	hammerStats->name = "hammer";
 }
 
 void Hammer::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)

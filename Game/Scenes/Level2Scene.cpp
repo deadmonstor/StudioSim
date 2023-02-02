@@ -15,6 +15,7 @@
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
 #include "../Tiles/LightTile.h"
+#include "../LootTable.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
 {
@@ -29,50 +30,52 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 
 void Level2Scene::init()
 {
+	LootTable::Instance()->LoadingIntoLootTableArray();
+	
 	auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
-		auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);
-		auto enemySortingLayer = Renderer::addSortingLayer("Top Grid", 1);
+	auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);
+	auto enemySortingLayer = Renderer::addSortingLayer("Top Grid", 1);
 
-		GridSystem* grid_system = GridSystem::Instance();
-		grid_system->init(glm::vec2(48, 48), glm::vec2(70, 70));
-		grid_system->setOrderMap(
-		{
-			{0, backgroundSortingLayer},
-			{1, middleSortingLayer},
-			{2, enemySortingLayer},
-		});
-		
-		grid_system->setEmptyTileIDs(0, std::vector<int>{0});
-		// TODO: Fill these out lol
-		grid_system->setWallIDs(0, std::vector<int>{1,9,3,4,5,6});
-		grid_system->setTextureMap(0, std::map<int, Texture>
-		{
-			{ 1, ResourceManager::GetTexture("tile25")},
-			{ 2, ResourceManager::GetTexture("tile218")},
-			{ 3, ResourceManager::GetTexture("tile2")},
-			{ 4, ResourceManager::GetTexture("tile4") },
-			{ 5, ResourceManager::GetTexture("tile50") },
-			{ 6, ResourceManager::GetTexture("tile28") },
-			{ 7, ResourceManager::GetTexture("tile51") },
-			{ 8, ResourceManager::GetTexture("tile204") },
-			{ 9, ResourceManager::GetTexture("tile26") },
-			{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
-			{ 11, ResourceManager::GetTexture("tile242") },
-			{ 12, ResourceManager::GetTexture("tile57") },
-			{ 13, ResourceManager::GetTexture("tile57") },
-			{ 15, ResourceManager::GetTexture("tile57") },
-			{ 14, ResourceManager::GetTexture("tile270") }
-		});
+	GridSystem* grid_system = GridSystem::Instance();
+	grid_system->init(glm::vec2(48, 48), glm::vec2(70, 70));
+	grid_system->setOrderMap(
+	{
+		{0, backgroundSortingLayer},
+		{1, middleSortingLayer},
+		{2, enemySortingLayer},
+	});
+	
+	grid_system->setEmptyTileIDs(0, std::vector<int>{0});
+	// TODO: Fill these out lol
+	grid_system->setWallIDs(0, std::vector<int>{1,9,3,4,5,6});
+	grid_system->setTextureMap(0, std::map<int, Texture>
+	{
+		{ 1, ResourceManager::GetTexture("tile25")},
+		{ 2, ResourceManager::GetTexture("tile218")},
+		{ 3, ResourceManager::GetTexture("tile2")},
+		{ 4, ResourceManager::GetTexture("tile4") },
+		{ 5, ResourceManager::GetTexture("tile50") },
+		{ 6, ResourceManager::GetTexture("tile28") },
+		{ 7, ResourceManager::GetTexture("tile51") },
+		{ 8, ResourceManager::GetTexture("tile204") },
+		{ 9, ResourceManager::GetTexture("tile26") },
+		{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
+		{ 11, ResourceManager::GetTexture("tile242") },
+		{ 12, ResourceManager::GetTexture("tile57") },
+		{ 13, ResourceManager::GetTexture("tile57") },
+		{ 15, ResourceManager::GetTexture("tile57") },
+		{ 14, ResourceManager::GetTexture("tile270") }
+	});
 
-		grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile* ()>>
-		{
-			{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
-			{ 14, [] { return new TestTile(Texture(), "victoryScreen"); } },
-			{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
-			{ 56, [] { return new SpikeTile(Texture()); } }
-		});
-		
-		grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
+	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile* ()>>
+	{
+		{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
+		{ 14, [] { return new TestTile(Texture(), "victoryScreen"); } },
+		{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
+		{ 56, [] { return new SpikeTile(Texture()); } }
+	});
+	
+	grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
 
 		grid_system->setEmptyTileIDs(1, std::vector<int>{});
 		grid_system->setWallIDs(1, std::vector<int>{35, 36, 41, 42, 43, 44, 31, 32, 33});
@@ -115,29 +118,29 @@ void Level2Scene::init()
 			{ 37, [] { return new LightTile(Texture()); } },
 		});
 
-		grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");
+	grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");
 
-		grid_system->setEmptyTileIDs(2, std::vector<int>{});
-		grid_system->setWallIDs(2, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
-		grid_system->setSpawnFunctionMap(2,
+	grid_system->setEmptyTileIDs(2, std::vector<int>{});
+	grid_system->setWallIDs(2, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
+	grid_system->setSpawnFunctionMap(2,
+	{
+		{ 91, [this](glm::vec2 pos)
 		{
-			{ 91, [this](glm::vec2 pos)
-			{
-				PlayerController::Instance()->createPlayer();
-				PlayerController::Instance()->playerPTR->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
-			} },
-			{ 92, [this](glm::vec2 pos)
-			{
-				createEnemy(pos);
-			} },
-			{ 93, [this](glm::vec2 pos)
-			{
-				// TODO: Create a chest
-			} }
-		});
-		
-		grid_system->loadFromFile(2, "Grid/SecondLevelDesignSP.txt");
-		TurnManager::Instance()->startTurnSystem();
+			PlayerController::Instance()->createPlayer();
+			PlayerController::Instance()->playerPTR->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
+		} },
+		{ 92, [this](glm::vec2 pos)
+		{
+			createEnemy(pos);
+		} },
+		{ 93, [this](glm::vec2 pos)
+		{
+			// TODO: Create a chest
+		} }
+	});
+	
+	grid_system->loadFromFile(2, "Grid/SecondLevelDesignSP.txt");
+	TurnManager::Instance()->startTurnSystem();
 }
 
 void Level2Scene::update()

@@ -6,8 +6,6 @@
 
 Sword::Sword()
 {
-	swordStats = new WeaponStats();
-	swordStats->name = "sword";
 }
 
 void Sword::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)

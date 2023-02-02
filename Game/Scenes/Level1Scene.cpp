@@ -15,6 +15,7 @@
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
+#include "../LootTable.h"
 
 void Level1Scene::createEnemy(const glm::vec2 pos)
 {
@@ -29,6 +30,8 @@ void Level1Scene::createEnemy(const glm::vec2 pos)
 
 void Level1Scene::init()
 {
+	LootTable::Instance()->LoadingIntoLootTableArray();
+	
 	auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
 	auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);
 	auto enemySortingLayer = Renderer::addSortingLayer("Top Grid", 1);
