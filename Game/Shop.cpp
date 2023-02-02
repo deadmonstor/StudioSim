@@ -21,7 +21,7 @@ void Shop::purchase(Item* item, int& playerCurrency) {
     // Update player's currency and inventory
     playerCurrency -= item->price;
     inventory_.add_item(item);
-    std::cout << "Purchase successful! You now have s" << playerCurrency << " " << currency_ << " remaining." << std::endl;
+    std::cout << "Purchase successful! You now have " << playerCurrency << " " << currency_ << " remaining." << std::endl;
 }
 
 void Shop::sell(Item* item, int& playerCurrency) {
