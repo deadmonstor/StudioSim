@@ -8,8 +8,8 @@
 
 void MainMenu::init()
 {
-    Griddy::Events::subscribe(this, &MainMenu::onEngineRender);
-    Griddy::Events::subscribe(this, &MainMenu::onKeyDown);
+    engineRenderID = Griddy::Events::subscribe(this, &MainMenu::onEngineRender);
+    keyDownID = Griddy::Events::subscribe(this, &MainMenu::onKeyDown);
 
     GameObject* cam = SceneManager::Instance()->createGameObject("test", glm::vec2{0, 0});
     cam->addComponent<Camera>();
@@ -18,7 +18,8 @@ void MainMenu::init()
 
 void MainMenu::destroy()
 {
-    // TODO: Unsubscribe
+    Griddy::Events::unsubscribe(this, &MainMenu::onEngineRender, engineRenderID);
+    Griddy::Events::unsubscribe(this, &MainMenu::onKeyDown, keyDownID);
 }
 
 void MainMenu::onEngineRender(const OnEngineRender* event)

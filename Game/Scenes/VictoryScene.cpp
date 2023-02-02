@@ -8,8 +8,8 @@
 
 void VictoryScene::init()
 {
-    Griddy::Events::subscribe(this, &VictoryScene::onEngineRender);
-    Griddy::Events::subscribe(this, &VictoryScene::onKeyDown);
+    engineRenderID = Griddy::Events::subscribe(this, &VictoryScene::onEngineRender);
+    keyDownID = Griddy::Events::subscribe(this, &VictoryScene::onKeyDown);
 
     GameObject* cam = SceneManager::Instance()->createGameObject("test", glm::vec2{0, 0});
     cam->addComponent<Camera>();
@@ -18,7 +18,8 @@ void VictoryScene::init()
 
 void VictoryScene::destroy()
 {
-    // TODO: Unsubscribe
+    Griddy::Events::unsubscribe(this, &VictoryScene::onEngineRender, engineRenderID);
+    Griddy::Events::unsubscribe(this, &VictoryScene::onKeyDown, keyDownID);
 }
 
 void VictoryScene::onEngineRender(const OnEngineRender* event)

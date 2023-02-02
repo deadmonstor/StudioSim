@@ -4,6 +4,9 @@
 
 class MainMenu : public Scene
 {
+    int engineRenderID = -1;
+    int keyDownID = -1;
+    
 public:
     void init() override;
     void destroy() override;
