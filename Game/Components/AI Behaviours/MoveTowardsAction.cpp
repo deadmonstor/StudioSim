@@ -1,6 +1,5 @@
 #include "MoveTowardsAction.h"
-#include "Core/Components/Transform.h"
-
+#include "Core\Components\Transform.h"
 
 MoveTowardsAction::MoveTowardsAction()
 	: target(glm::vec2())
@@ -15,7 +14,6 @@ MoveTowardsAction::MoveTowardsAction(GameObject* parentObjectArg)
 	, parentObject(parentObjectArg)
 {
 }
-
 void MoveTowardsAction::Act()
 {
 	if (parentObject != nullptr)
