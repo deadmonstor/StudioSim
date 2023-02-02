@@ -15,6 +15,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\Items\CommonArmour.h" />
+    <ClInclude Include="Components\Items\Armour.h" />
     <ClInclude Include="Components\Items\CommonAxe.h" />
     <ClInclude Include="Components\Items\CommonSword.h" />
     <ClInclude Include="Components\Items\Axe.h" />
@@ -45,12 +47,14 @@
     <ClInclude Include="Components\UI\TextComponent.h" />
     <ClInclude Include="Components\Items\HealthPotion.h" />
     <ClInclude Include="Components\Items\ExpPotion.h" />
+    <ClInclude Include="Components\Items\LegendaryArmour.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Components\Items\RareSword.h" />
     <ClInclude Include="Components\Items\RareAxe.h" />
     <ClInclude Include="Components\AI Behaviours\MoveTowardsAction.h" />
     <ClInclude Include="Components\AI Behaviours\NormalEnemyFSM.h" />
     <ClInclude Include="Components\Items\ManaPotion.h" />
+    <ClInclude Include="Components\Items\RareArmour.h" />
     <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="Components\Items\Sword.h" />
     <ClInclude Include="Shop.h" />
@@ -61,6 +65,8 @@
     <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\Items\CommonArmour.cpp" />
+    <ClCompile Include="Components\Items\Armour.cpp" />
     <ClCompile Include="Components\Items\CommonAxe.cpp" />
     <ClCompile Include="Components\Items\CommonSword.cpp" />
     <ClCompile Include="Components\Items\Axe.cpp" />
@@ -86,10 +92,12 @@
     <ClCompile Include="Components\UI\TextComponent.cpp" />
     <ClCompile Include="Components\Items\HealthPotion.cpp" />
     <ClCompile Include="Components\Items\ExpPotion.cpp" />
+    <ClCompile Include="Components\Items\LegendaryArmour.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Components\Items\RareSword.cpp" />
     <ClCompile Include="Components\Items\RareAxe.cpp" />
     <ClCompile Include="Components\Items\ManaPotion.cpp" />
+    <ClCompile Include="Components\Items\RareArmour.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Components\TurnManager.cpp" />
     <ClCompile Include="Components\Items\Sword.cpp" />
