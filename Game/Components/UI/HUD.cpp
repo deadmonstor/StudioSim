@@ -37,7 +37,7 @@ void HUD::createHUD()
 	manaText = UIManager::Instance()->createUIElement<TextComponent>("manaText");
 	coinsText = UIManager::Instance()->createUIElement<TextComponent>("coinsText");
 	
-	ResourceManager::LoadTexture("Sprites\\Weapons\\Potion3.png", "coinsIcon");
+	ResourceManager::LoadTexture("Sprites\\Coins\\coin3.png", "coinsIcon");
 	coinsIcon = UIManager::Instance()->createUIElement<Panel>("coinsIcon");
 	xpText = UIManager::Instance()->createUIElement<TextComponent>("xpText");
 	levelText = UIManager::Instance()->createUIElement<TextComponent>("levelText");
