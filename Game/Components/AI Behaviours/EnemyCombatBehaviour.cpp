@@ -1,6 +1,7 @@
 #include "EnemyCombatBehaviour.h"
 
 #include "MoveTowardsAction.h"
+#include "../DelayTask.h"
 #include "../Player/PlayerController.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/PathfindingMachine.h"
@@ -59,6 +60,11 @@ void EnemyCombatBehaviour::GenerateBehaviourList()
 	{
 		availableActions["MoveTowards"].second->start();
 	}
+
+	DelayTask::createTask(parentFSM->getOwner(), 1.0f, [this]()
+	{
+		TurnManager::Instance()->endTurn();
+	});
 }
 
 void EnemyCombatBehaviour::GenerateEffects()

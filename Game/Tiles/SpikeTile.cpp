@@ -10,5 +10,5 @@ void SpikeTile::onInteractedWith(TileHolder* curTileHolder)
 {
 	int damageDealt = 2;
 	PlayerController::Instance()->playerStats->currentHealth -= damageDealt;
-
+	PlayerController::Instance()->UpdateStats();
 }

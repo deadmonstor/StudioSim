@@ -157,9 +157,11 @@ static std::map<std::string, DebugEvent> debugSettings
 
 static std::map<std::string, std::string> debugScenes
 {
-	{"Debug Rendering", "renderScene"},
-	{"Debug Scene 1", "debugScene1"},
-	{"Debug Scene 2", "debugScene2"},
+	{"Debug Main Menu", "mainMenu"},
+	{"Debug Level 1", "level1"},
+	{"Debug Level 2", "level2"},
+	{"Debug Victory", "victoryScreen"},
+	{"Debug Defeat", "defeatScreen"},
 };
 
 void ImGuiHandler::update()
@@ -373,12 +375,12 @@ void ImGuiHandler::onKeyDown(const int key, const int scancode, const int action
 
 	if (key == GLFW_KEY_F8 && action == GLFW_PRESS)
 	{
-		Griddy::Events::invoke<OnSceneChangeRequested>("debugScene1");
+		Griddy::Events::invoke<OnSceneChangeRequested>("level1");
 	}
 
 	if (key == GLFW_KEY_F9 && action == GLFW_PRESS)
 	{
-		Griddy::Events::invoke<OnSceneChangeRequested>("debugScene2");
+		Griddy::Events::invoke<OnSceneChangeRequested>("level2");
 	}
 
 	if (key == GLFW_KEY_V && action == GLFW_PRESS)
