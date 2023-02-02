@@ -1,7 +1,7 @@
 #pragma once
-#include "Consumables.h"
+#include "ConsumableItem.h"
 class ExpPotion :
-    public Consumables
+    public ConsumableItem
 {
 public:
     ExpPotion();
