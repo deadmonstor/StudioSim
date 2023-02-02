@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "ButtonComponent.h"
 #include "TextComponent.h"
+#include "PauseButton.h"
 #include "Util/SingletonTemplate.h"
 
 class HUD : public SingletonTemplate<HUD>
@@ -12,10 +13,16 @@ private:
 	TextComponent* coinsText;
 	TextComponent* healthText;
 	TextComponent* levelText;
+	TextComponent* audioText;
 
 	ButtonComponent* inventoryButton;
 	ButtonComponent* weaponButton;
 	ButtonComponent* spellsButton;
+	ButtonComponent* plusAudioButton;
+	ButtonComponent* minusAudioButton;
+
+	PauseButton* pauseButton;
+
 	Panel* healthIcon;
 	Panel* manaIcon;
 	Panel* coinsIcon;

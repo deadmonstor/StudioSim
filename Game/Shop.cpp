@@ -6,8 +6,8 @@ Shop::Shop(std::vector<Item*> items, std::string currency, Inventory& inventory)
 void Shop::displayItems() {
     // Display a list of all items for sale, their prices, and descriptions
     for (auto item : items_) {
-        std::cout << item->name << " - " << item->price << " " << currency_ << std::endl;
-        std::cout << item->itemDescription << std::endl;
+        std::cout << item->name() << " - " << item->price << " " << currency_ << std::endl;
+        std::cout << item->itemDescription() << std::endl;
     }
 }
 

@@ -6,7 +6,6 @@ class CommonAxe :
 {
 public:
     CommonAxe();
-
     WeaponStats* commonAxeStats{};
 };
 

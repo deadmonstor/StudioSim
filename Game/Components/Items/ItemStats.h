@@ -3,5 +3,4 @@
 struct items
 {
 	int cost;
-	std::string name;
 };
