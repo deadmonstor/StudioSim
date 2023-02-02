@@ -1,33 +1,31 @@
 #include "PlayerAttackBehaviour.h"
 #include <Core/Components/Health.h>
-#include "DestroyAfterAnimation.h"
 #include "PlayerMovementBehaviour.h"
+#include "../DestroyAfterAnimation.h"
+#include "../EnemyTest.h"
+#include "../Flash.h"
+#include "../TurnManager.h"
+#include "Core/AudioEngine.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
-#include "Core/AudioEngine.h"
-#include "TurnManager.h"
 
 PlayerAttackBehaviour::PlayerAttackBehaviour()
 {
 	isInFSM = false; 
 	map = CreateFunctionMap();
-	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
-	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 PlayerAttackBehaviour::PlayerAttackBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
 	map = CreateFunctionMap();
-	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
-	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 void PlayerAttackBehaviour::AttackOnMovement(glm::fvec2 dir)
 {
 	attackDir = dir;
-	if (canAttack)
+	if (canAttack && !willFlashOnce)
 	{
 		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 		{
@@ -40,6 +38,8 @@ void PlayerAttackBehaviour::AttackOnMovement(glm::fvec2 dir)
 
 void PlayerAttackBehaviour::Act()
 {
+	if (willFlashOnce) return;
+	
 	currentPlayerPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
 	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, currentPlayerPos + attackDir);
 	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
@@ -51,6 +51,7 @@ void PlayerAttackBehaviour::Act()
 		{
 			case Dagger:
 			{
+				/*std::vector<glm::fvec2> attackPosDagger = {}*/
 				if (!isWallTile)
 				{
 					createSlashGameObject(currentPlayerPos + attackDir);
@@ -162,8 +163,8 @@ void PlayerAttackBehaviour::Act()
 	}
 	canAttack = false;
 	
-	if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
-		TurnManager::Instance()->EndTurn();
+	if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) && !willFlashOnce)
+		TurnManager::Instance()->endTurn();
 }
 
 void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -236,14 +237,36 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 	{
 		if (gameObject->hasComponent(typeid(Health)))
 		{
+			if (!willFlashOnce && !TurnManager::gNoclipMode)
+			{
+				Flash::createFlash(gameObject, gameObject->getComponent<AnimatedSpriteRenderer>(), {1, 0, 0}, 5,
+					[this, gameObject, pos]
+				{
+					TurnManager::Instance()->endTurn();
+
+					auto* health = gameObject->getComponent<Health>();
+					health->setHealth(health->getHealth() - 50);
+
+					// TODO: This is probably shitty 
+					if (gameObject->isBeingDeleted())
+						GridSystem::Instance()->resetSatOnTile(0, pos);
+
+					willFlashOnce = false;
+				});
+				
+				willFlashOnce = true;
+			}
+			else
+			{
+				auto* health = gameObject->getComponent<Health>();
+				health->setHealth(health->getHealth() - 50);
+
+				// TODO: This is probably shitty 
+				if (gameObject->isBeingDeleted())
+					GridSystem::Instance()->resetSatOnTile(0, pos);
+			}
+			
 			AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
-
-			auto* health = gameObject->getComponent<Health>();
-			health->setHealth(health->getHealth() - 50);
-
-			// TODO: This is probably shitty 
-			if (gameObject->isBeingDeleted())
-				GridSystem::Instance()->resetSatOnTile(0, pos);
 		}
 	}
 
