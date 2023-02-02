@@ -300,6 +300,7 @@ public:
 
 		grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");
 
+
 		grid_system->setEmptyTileIDs(2, std::vector<int>{});
 		grid_system->setWallIDs(2, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
 		grid_system->setSpawnFunctionMap(2,
@@ -344,6 +345,18 @@ public:
 		
 		CreateFireball(glm::vec2{ 1000, 500 });
 		TurnManager::Instance()->startTurnSystem();
+
+		//Shop myShop(myInventory.items, "$", &myInventory);
+		//myInventory.draw_inventory();
+		//myInventory.equip_item("Bandit sword");
+		//myInventory.draw_inventory();
+	
+		//myInventory.equip_item("Fireball");
+		//myInventory.unequip_item("Bandit sword");
+		//myInventory.remove_item(&spell);
+
+		//myInventory.use_item("Health potion");
+		//myInventory.draw_inventory();
 	}
 	
 	glm::fvec2 direction = glm::fvec2(0, 0);

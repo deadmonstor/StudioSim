@@ -38,21 +38,21 @@ void Inventory::draw_inventory() {
 	for (int i = 0; i < items.size(); i++)
 	{
 		std::cout << i + 1 << ". " << items[i]->name;
-		if (dynamic_cast<Weapon*>(items[i])) {
-			auto item = dynamic_cast<Weapon*>(items[i]);
+		if (dynamic_cast<WeaponStats*>(items[i])) {
+			auto item = dynamic_cast<WeaponStats*>(items[i]);
 			std::cout << " (Atk:" << item->getAtk() << " / Crit:" << item->getCrit() << ")";
 		}
-		else if (dynamic_cast<Armour*>(items[i])) {
-			auto item = dynamic_cast<Armour*>(items[i]);
+		else if (dynamic_cast<ArmourStats*>(items[i])) {
+			auto item = dynamic_cast<ArmourStats*>(items[i]);
 			std::cout << " (Def:" << item->getDef() << " )";
 		}
-		else if (dynamic_cast<Spell*>(items[i])) {
-			auto item = dynamic_cast<Spell*>(items[i]);
-			std::cout << " (Spell Power:" << item->getSpellAtk() << " / Mana Cost:" << item->getManaCost() << " / Effect Duration:" << item->getEffectDuration() << ")";
+		else if (dynamic_cast<SpellsStats*>(items[i])) {
+			auto item = dynamic_cast<SpellsStats*>(items[i]);
+			std::cout << " (Spell Power:" << item->getSpellPow() << " / Mana Cost:" << item->getManaCost() << " / Effect Duration:" << item->getEffectDuration() << ")";
 		}
-		if (items[i]->isEquipped) {
-			std::cout << " (equipped) ";
-		}
+		//if (items[i]->isEquipped) {
+		//	std::cout << " (equipped) ";
+		//}
 		std::cout << std::endl;
 	}
 	std::cout << std::endl;
@@ -117,24 +117,24 @@ void Inventory::equip_item(const std::string& item_name)
 	{
 		if (item->name == item_name)
 		{
-			if (dynamic_cast<Weapon*>(item) != nullptr) // check if item is a weapon
+			if (dynamic_cast<WeaponStats*>(item) != nullptr) // check if item is a weapon
 			{
-				Weapon* weapon = dynamic_cast<Weapon*>(item);
-				weapon->isEquipped = true; // set isEquipped to true for the weapon
+				WeaponStats* weapon = dynamic_cast<WeaponStats*>(item);
+				weapon->weaponIsEquipped = true; // set isEquipped to true for the weapon
 				std::cout << weapon->name << " equipped." << std::endl;
 				break;
 			}
-			else if (dynamic_cast<Armour*>(item) != nullptr) // check if item is an armor
+			else if (dynamic_cast<ArmourStats*>(item) != nullptr) // check if item is an armor
 			{
-				Armour* armor = dynamic_cast<Armour*>(item);
-				armor->isEquipped = true; // set isEquipped to true for the armor
+				ArmourStats* armor = dynamic_cast<ArmourStats*>(item);
+				armor->armourIsEquipped = true; // set isEquipped to true for the armor
 				std::cout << armor->name << " equipped." << std::endl;
 				break;
 			}
-			else if (dynamic_cast<Spell*>(item) != nullptr)
+			else if (dynamic_cast<SpellsStats*>(item) != nullptr)
 			{
-				Spell* spell = dynamic_cast<Spell*>(item);
-				spell->isEquipped = true; // set isEquipped to true for the spell
+				SpellsStats* spell = dynamic_cast<SpellsStats*>(item);
+				spell->spellIsEquipped = true; // set isEquipped to true for the spell
 				std::cout << spell->name << " equipped." << std::endl;
 				break;
 			}
@@ -154,11 +154,11 @@ void Inventory::unequip_item(const std::string& item_name)
 	{
 		if (item->name == item_name)
 		{
-			if (dynamic_cast<Weapon*>(item) != nullptr) // check if item is a weapon
+			if (dynamic_cast<WeaponStats*>(item) != nullptr) // check if item is a weapon
 			{
-				Weapon* weapon = dynamic_cast<Weapon*>(item);
-				if (weapon->isEquipped) {
-					weapon->isEquipped = false; // set isEquipped to false for the weapon
+				WeaponStats* weapon = dynamic_cast<WeaponStats*>(item);
+				if (weapon->weaponIsEquipped) {
+					weapon->weaponIsEquipped = false; // set isEquipped to false for the weapon
 					std::cout << weapon->name << " unequipped." << std::endl;
 				}
 				else {
@@ -166,11 +166,11 @@ void Inventory::unequip_item(const std::string& item_name)
 				}
 				break;
 			}
-			else if (dynamic_cast<Armour*>(item) != nullptr) // check if item is an armor
+			else if (dynamic_cast<ArmourStats*>(item) != nullptr) // check if item is an armor
 			{
-				Armour* armor = dynamic_cast<Armour*>(item);
-				if (armor->isEquipped) {
-					armor->isEquipped = false; // set isEquipped to false for the armor
+				ArmourStats* armor = dynamic_cast<ArmourStats*>(item);
+				if (armor->armourIsEquipped) {
+					armor->armourIsEquipped = false; // set isEquipped to false for the armor
 					std::cout << armor->name << " unequipped." << std::endl;
 				}
 				else {
@@ -178,11 +178,11 @@ void Inventory::unequip_item(const std::string& item_name)
 				}
 				break;
 			}
-			else if (dynamic_cast<Spell*>(item) != nullptr)
+			else if (dynamic_cast<SpellsStats*>(item) != nullptr)
 			{
-				Spell* spell = dynamic_cast<Spell*>(item);
-				if (spell->isEquipped) {
-					spell->isEquipped = false;
+				SpellsStats* spell = dynamic_cast<SpellsStats*>(item);
+				if (spell->spellIsEquipped) {
+					spell->spellIsEquipped = false;
 					std::cout << spell->name << " unequipped." << std::endl;
 				}
 				else
