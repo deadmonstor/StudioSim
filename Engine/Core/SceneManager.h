@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <string>
+#include <typeindex>
 
 #include "GameObject.h"
 #include "Scene.h"
@@ -28,6 +29,8 @@ public:
 	bool isLoadingScene() const { return loadingScene; }
 
 	Scene* getScene() const { return currentScene; }
+
+	std::map<std::string, std::type_index> sceneToTypeID;
 private:
 	std::list<GameObject*> pendingObjects;
 	void addGameObject(GameObject* gameObject);

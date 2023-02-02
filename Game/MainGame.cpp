@@ -41,8 +41,11 @@ int main(int, char**)
 	ResourceManager::LoadTexture("Sprites\\background.png", "background");
 	ResourceManager::LoadTexture("Sprites\\UE.png", "troll");
 	ResourceManager::LoadTexture("Sprites\\image.png", "buttonTest");
-	
-	MainMenu::Instance()->init();
+
+	SceneManager::Instance()->sceneToTypeID = std::map<std::string, std::type_index>
+	{
+		{"mainMenu", typeid(MainMenu)},
+	};
 	
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFunc);
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncScene1);

@@ -12,4 +12,7 @@ private:
 	std::vector<GameObject*> gameObjects;
 	friend class SceneManager;
 	friend class ImGuiHandler;
+
+	virtual void init();
+	virtual void destroy();
 };

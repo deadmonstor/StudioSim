@@ -8,20 +8,17 @@
 
 void MainMenu::init()
 {
-    Griddy::Events::subscribe(this, &MainMenu::onSceneChanged);
     Griddy::Events::subscribe(this, &MainMenu::onEngineRender);
     Griddy::Events::subscribe(this, &MainMenu::onKeyDown);
+
+    GameObject* cam = SceneManager::Instance()->createGameObject("test", glm::vec2{0, 0});
+    cam->addComponent<Camera>();
+    Renderer::Instance()->setCamera(cam->getComponent<Camera>());
 }
 
-void MainMenu::onSceneChanged(const OnSceneChanged* event)
+void MainMenu::destroy()
 {
-    if (event->key == "mainMenu")
-    {
-        // create game object for camera
-        GameObject* cam = SceneManager::Instance()->createGameObject("test", glm::vec2{0, 0});
-        cam->addComponent<Camera>();
-        Renderer::Instance()->setCamera(cam->getComponent<Camera>());
-    }
+    
 }
 
 void MainMenu::onEngineRender(const OnEngineRender* event)
@@ -30,7 +27,6 @@ void MainMenu::onEngineRender(const OnEngineRender* event)
         SceneManager::Instance()->isShuttingDown() ||
         SceneManager::Instance()->getScene()->name != "mainMenu") return;
     
-
     const auto MiddleTopHalf =
                     glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y / 1.5)) / Renderer::Instance()->getAspectRatio();
 

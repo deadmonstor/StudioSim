@@ -1,12 +1,13 @@
 ﻿#pragma once
-#include "Util/SingletonTemplate.h"
+#include "Core/Scene.h"
 #include "Util/Events/EngineEvents.h"
 
-class MainMenu : public SingletonTemplate<MainMenu>
+class MainMenu : public Scene
 {
 public:
-    void init();
-    void onSceneChanged(const OnSceneChanged* event);
+    void init() override;
+    void destroy() override;
+    
     void onEngineRender(const OnEngineRender* event);
     void onKeyDown(const OnKeyDown* event);
 };
