@@ -49,6 +49,9 @@ public:
 	FMOD::ChannelGroup* audioEffectsChannel;
 	FMOD::ChannelGroup* backgroundMusicChannel;
 
+	//Background Channel
+	FMOD::Channel* backgroundChannel;
+
 	//Reverb zones
 	std::map<const int, FMOD::Reverb3D*> reverbZones;
 	bool createReverbZone(const int zone);
