@@ -48,6 +48,7 @@ void GridSystem::init(const glm::fvec2 _tileSize, const glm::ivec2 _gridSize)
 {
 	tileSize = _tileSize;
 	gridSize = _gridSize;
+	hasLoaded = false;
 
 	// subscribe to the event
 	Griddy::Events::subscribe(this, &GridSystem::onDebugEvent);
@@ -82,6 +83,8 @@ void GridSystem::renderInternal(const int id)
 			                                   {tileWidth, tileHeight},
 			                                   0
 			);
+
+			hasLoaded = true;
 		}
 	}
 }
@@ -137,16 +140,17 @@ void GridSystem::refreshLightData(const LightUpdateRequest lightUpdateRequest)
 		auto internalMap = gridLayers[id]->internalMap;
 		if (internalMap.empty()) return;
 		
-		for(auto [x, pointer] : internalMap)
+		for(auto pointer : internalMap | std::views::values)
 		{
-			for(auto [y, holder] : pointer)
+			for(const auto holder : pointer | std::views::values)
 			{
-				if (holder == NULL || !holder->isSpawned) continue;
+				if (holder == nullptr || !holder->isSpawned) continue;
 				if (holder->tile->getTexture().Height == 0 && holder->tile->getTexture().Width == 0)
 					continue;
 
 				// TODO: This is really bad, can we only do this when they are in the view of the camera or something?
-				Lighting::Instance()->refreshLightData(holder->tile, lightUpdateRequest);
+				if (!holder->tile->wasInFrame)
+					Lighting::Instance()->refreshLightData(holder->tile, lightUpdateRequest);
 			}
 		}
 	}
@@ -345,15 +349,4 @@ void GridSystem::setEmptyTileIDs(const int id, const std::vector<int>& emptyTile
 		this->gridLayers[id] = new GridLayer();
 		
 	this->gridLayers[id]->emptyTiles = emptyTileIDs;
-}
-
-int GridSystem::FindManhattanTileDistance(glm::vec2 startPos, glm::vec2 endPos)
-{
-	glm::vec2 directionVec = endPos - startPos;
-	return abs(directionVec.x) + abs(directionVec.y);
-}
-
-int GridSystem::FindLineTileDistance(glm::vec2 startPos, glm::vec2 endPos)
-{
-	return 0;
 }

@@ -1,15 +1,18 @@
 #include "PlayerController.h"
 #include "PlayerFSM.h"
-#include "../System/Inventory.h"
+#include "../TurnManager.h"
+#include "../../System/Inventory.h"
+#include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
+#include "Core/Grid/PathfindingMachine.h"
 #include "Core/Renderer/ResourceManager.h"
-#include "TurnManager.h"
-#include "Core//Grid//PathfindingMachine.h"
 
 PlayerController::PlayerController()
 {
+	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 void PlayerController::createPlayer()
@@ -57,8 +60,9 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		//Testing pathfinding
 		glm::vec2 gridSize = GridSystem::Instance()->getGridSize();
 		glm::vec2 start = playerPTR->getTransform()->getPosition();
-		glm::vec2 goal = start + glm::vec2(-3 * gridSize.x, 6 * gridSize.y);
-		PathfindingMachine::Instance()->FindPath(start, goal);
+		glm::vec2 goal = start + glm::vec2(0 * gridSize.x, -30 * gridSize.y);
+		//PathfindingMachine::Instance()->FindPath(start, goal);
+		bool sight = PathfindingMachine::Instance()->LineOfSight(start, goal);
 	}
 	
 	//find the input and send it to the state machine

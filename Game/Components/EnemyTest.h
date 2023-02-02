@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "TurnManager.h"
 #include "Core/Component.h"
-#include "NormalEnemyFSM.h"
+#include "AI Behaviours/NormalEnemyFSM.h"
 
 class EnemyTest : public Component
 {

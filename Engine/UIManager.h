@@ -1,15 +1,23 @@
 #pragma once
+#include <map>
+#include <string>
 #include "Util/SingletonTemplate.h"
-#include "Util/Events/EngineEvents.h"
-#include "../Game/Components/ButtonComponent.h"
+
+class Panel;
 
 class UIManager : public SingletonTemplate<UIManager>
 {
-	std::map<std::string, ButtonComponent*> buttons;
+	std::map<std::string, Panel*> UIElements;
 
 public:
 	void render();
-	void internalRender();
-	void addButtonToUI(std::string nameOfUIElement, ButtonComponent* button);
+
+	// TODO: Make this only work for classes that inherit from Panel
+	template<typename T, typename... Args>
+	T* createUIElement(const std::string& name, Args... args)
+	{
+		UIElements[name] = new T(args...);
+		return static_cast<T*>(UIElements[name]);
+	}
 };
 

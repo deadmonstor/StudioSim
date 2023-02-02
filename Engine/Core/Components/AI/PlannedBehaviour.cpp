@@ -10,11 +10,11 @@ void PlannedBehaviour::destroy()
 {
 	if (eventResponseID != -1)
 	{
-		Griddy::Events::unsubscribe((Behaviour*)this, &Behaviour::EventResponse, eventResponseID);
+		Griddy::Events::unsubscribe(this, &PlannedBehaviour::EventResponse, eventResponseID);
 		eventResponseID = -1;
 	}
 
-	CleanUp();
+
 
 	Component::destroy();
 }
@@ -24,7 +24,7 @@ void PlannedBehaviour::start()
 	if (!isInFSM)
 	{
 		if (eventResponseID == -1)
-			eventResponseID = Griddy::Events::subscribe((Behaviour*)this, &Behaviour::EventResponse);
+			eventResponseID = Griddy::Events::subscribe(this, &PlannedBehaviour::EventResponse);
 	}
 	
 	GenerateBehaviourList();
@@ -34,6 +34,18 @@ void PlannedBehaviour::start()
 	initialized = true;
 
 	Component::start();
+}
+
+void PlannedBehaviour::EventResponse(BehaviourEvent* event)
+{
+	if (event->targetBehaviour == this)
+	{
+		for (auto action : availableActions)
+		{
+			event->targetBehaviour = action.second.second;
+			action.second.second->EventResponse(event);
+		}
+	}
 }
 
 //performs planning and chooses the action with the highest fitness
@@ -95,10 +107,13 @@ void PlannedBehaviour::ActionAnalysis()
 	//for each effect, add its influence on available actions. 
 	for (auto& effect : effects)
 	{
-		for (auto& influence : effect.second.influencedActions)
+		if (effect.second.active)
 		{
-			//add the influence value to the fitness value
-			availableActions[influence.first].first += influence.second.first;
+			for (auto& influence : effect.second.influencedActions)
+			{
+				//add the influence value to the fitness value
+				availableActions[influence.first].first += influence.second.first;
+			}
 		}
 	}
 }

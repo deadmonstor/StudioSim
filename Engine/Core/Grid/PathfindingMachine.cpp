@@ -23,9 +23,12 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 	}
 
 	//Add the start node to frontier
-	frontier.push(std::make_pair(0, start));
+	frontier.push(std::make_pair(std::numeric_limits<int>::max(), start));
 	costMap[start] = 0;
 	bool foundPath = false;
+
+	//If the path is not found, the pathfinder will output the path to the best node instead
+	Node bestNode = std::make_pair(std::numeric_limits<int>::max(), nullptr);
 
 	while (!frontier.empty())
 	{
@@ -38,12 +41,18 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			foundPath = true;
 			break;
 		}
+		else if (currentNode.first < bestNode.first)
+		{
+			bestNode = currentNode;
+		}
 		//at the moment uses ID of 0, but make it use a flattened map later
 		std::vector<TileHolder*> neighbours = GridSystem::Instance()->getPathfindingNeighbours(0, currentNode.second);
 		//Find cost map entries of the neighbours
 		for (TileHolder* neighbour : neighbours) 
 		{
-			if (neighbour->isWall) continue;
+			const bool isWall = GridSystem::Instance()->isWallTile(neighbour->position);
+			
+			if (isWall || neighbour->isWall || neighbour->gameObjectSatOnTile != nullptr) continue;
 			int edgeCost = 1;
 
 			//cost when coming from current node
@@ -62,7 +71,7 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			{
 				costMap[neighbour] = newCost;
 				cameFromMap[neighbour] = currentNode.second;
-				int heuristic = GridSystem::Instance()->FindManhattanTileDistance(end->position, neighbour->position);
+				int heuristic = FindManhattanDistance(end->position, neighbour->position);
 				frontier.push(std::make_pair(heuristic, neighbour));
 			}
 		}
@@ -83,9 +92,21 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 			tempStack.pop();
 		}
 	}
-	else 
+	else if(bestNode.second != nullptr)
 	{
-		LOG_INFO("Path to target was not found.");
+		//output the closest tile to the target if the path was not found
+		std::stack<TileHolder*> tempStack;
+		TileHolder* queueNode = bestNode.second;
+		while (queueNode != start)
+		{
+			tempStack.push(queueNode);
+			queueNode = cameFromMap[queueNode];
+		}
+		while (!tempStack.empty())
+		{
+			path.push_back(tempStack.top());
+			tempStack.pop();
+		}
 	}
 
 	return path;
@@ -98,12 +119,46 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(glm::vec2 startPos, glm::ve
 	return FindPath(tile1, tile2);
 }
 
-std::deque<TileHolder*> PathfindingMachine::ContinuePath(std::deque<glm::vec2> currentPath, TileHolder* end)
+float PathfindingMachine::FindManhattanDistance(glm::vec2 startPos, glm::vec2 endPos)
 {
-	//check if the new target lies on the current path
-	//if it does, shorten the path
-	//otherwise, find path from end of current path to new target
+	glm::vec2 directionVec = endPos - startPos;
+	return abs(directionVec.x) + abs(directionVec.y);
+}
+
+bool PathfindingMachine::LineOfSight(TileHolder* start, TileHolder* end)
+{
+	int distance = EstimateDistance(start->position, end->position);
+	for (int i = 0; i <= distance; i++)
+	{
+		//Finds the lerp fraction
+		float t = (distance == 0) ? 0.0f : float(i) / distance;
+		//Interpolates over the line to find intersecting points
+		float xlerp = std::lerp(start->position.x, end->position.x, t);
+		float ylerp = std::lerp(start->position.y, end->position.y, t);
+		xlerp = std::round(xlerp);
+		ylerp = std::round(ylerp);
+		
+		const bool isWall = GridSystem::Instance()->isWallTile(glm::vec2(xlerp, ylerp));
+		//If the intersecting tile is a wall, break the function
+		if (isWall)
+		{
+			return false;
+		}
+	}
+	return true;
+}
 
 
-	return std::deque<TileHolder*>();
+bool PathfindingMachine::LineOfSight(glm::vec2 startPos, glm::vec2 endPos)
+{
+	TileHolder* tile1 = GridSystem::Instance()->getTileHolder(0, startPos / GridSystem::Instance()->getTileSize());
+	TileHolder* tile2 = GridSystem::Instance()->getTileHolder(0, endPos / GridSystem::Instance()->getTileSize());
+	if (tile1 == nullptr || tile2 == nullptr)
+		return false;
+	return LineOfSight(tile1, tile2);
+}
+
+float PathfindingMachine::EstimateDistance(glm::vec2 startPos, glm::vec2 endPos)
+{
+	return std::max(std::abs(endPos.x - startPos.x), std::abs(endPos.y - startPos.y));
 }

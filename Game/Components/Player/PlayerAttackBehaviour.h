@@ -32,6 +32,8 @@ private:
 	void onKeyUpResponse(Griddy::Event*);
 	void createSlashGameObject(glm::fvec2 pos);
 
+	bool willFlashOnce = false;
+
 protected:
 	FunctionMap CreateFunctionMap() override;
 };
