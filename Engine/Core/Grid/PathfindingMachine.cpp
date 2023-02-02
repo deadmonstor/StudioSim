@@ -31,7 +31,7 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 	}
 	bool foundPath = false;
 
-	while (!foundPath && !frontier.empty())
+	while (!frontier.empty())
 	{
 		//Inspect the top node of frontier
 		Node currentNode = frontier.top();
@@ -49,7 +49,7 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 		{
 			const bool isWall = GridSystem::Instance()->isWallTile(neighbour->position);
 			
-			if (isWall || neighbour->isWall || neighbour->gameObjectSatOnTile != nullptr) continue;
+			if (isWall || neighbour->gameObjectSatOnTile != nullptr) continue;
 			int edgeCost = 1;
 
 			//cost when coming from current node
@@ -98,8 +98,9 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 
 std::deque<TileHolder*> PathfindingMachine::FindPath(glm::vec2 startPos, glm::vec2 endPos)
 {
-	TileHolder* tile1 = GridSystem::Instance()->getTileHolder(0, startPos / GridSystem::Instance()->getTileSize());
-	TileHolder* tile2 = GridSystem::Instance()->getTileHolder(0, endPos / GridSystem::Instance()->getTileSize());
+	GridSystem* gridSystem = GridSystem::Instance();
+	TileHolder* tile1 = gridSystem->getTileHolder(0, gridSystem->getTilePosition(startPos));
+	TileHolder* tile2 = gridSystem->getTileHolder(0, gridSystem->getTilePosition(endPos));
 	return FindPath(tile1, tile2);
 }
 
@@ -135,8 +136,9 @@ bool PathfindingMachine::LineOfSight(TileHolder* start, TileHolder* end)
 
 bool PathfindingMachine::LineOfSight(glm::vec2 startPos, glm::vec2 endPos)
 {
-	TileHolder* tile1 = GridSystem::Instance()->getTileHolder(0, startPos / GridSystem::Instance()->getTileSize());
-	TileHolder* tile2 = GridSystem::Instance()->getTileHolder(0, endPos / GridSystem::Instance()->getTileSize());
+	GridSystem* gridSystem = GridSystem::Instance();
+	TileHolder* tile1 = gridSystem->getTileHolder(0, gridSystem->getTilePosition(startPos));
+	TileHolder* tile2 = gridSystem->getTileHolder(0, gridSystem->getTilePosition(endPos));
 	if (tile1 == nullptr || tile2 == nullptr)
 		return false;
 	return LineOfSight(tile1, tile2);
@@ -169,7 +171,10 @@ TileHolder* PathfindingMachine::FindClosestEmptyTile(TileHolder* start, TileHold
 			Node currentNode = frontier.top();
 
 			//Check whether the tile is empty and above the start depth. If so, push it onto inspected tiles
-			if (currentNode.second->gameObjectSatOnTile == nullptr && i >= startDepth && !currentNode.second->isWall)
+			if (i >= startDepth 
+				&& !GridSystem::Instance()->isWallTile(currentNode.second->position)
+				&& (currentNode.second->gameObjectSatOnTile == nullptr || currentNode.second->gameObjectSatOnTile == start->gameObjectSatOnTile))
+
 				tilesToInspect.push_back(currentNode.second);
 
 			//Check the neighbours and add them to frontier
@@ -178,6 +183,7 @@ TileHolder* PathfindingMachine::FindClosestEmptyTile(TileHolder* start, TileHold
 				std::vector<TileHolder*> neighbours = GridSystem::Instance()->getPathfindingNeighbours(0, currentNode.second);
 				for (auto neighbour : neighbours)
 				{
+					if (GridSystem::Instance()->isWallTile(neighbour->position)) continue;
 					if (!costMap.contains(neighbour))
 					{
 						costMap[neighbour] = FindManhattanDistance(start->position, neighbour->position);
@@ -208,8 +214,9 @@ TileHolder* PathfindingMachine::FindClosestEmptyTile(TileHolder* start, TileHold
 
 TileHolder* PathfindingMachine::FindClosestEmptyTile(glm::vec2 startPos, glm::vec2 goalPos, int maxDepth, int startDepth)
 {
-	TileHolder* tile1 = GridSystem::Instance()->getTileHolder(0, startPos / GridSystem::Instance()->getTileSize());
-	TileHolder* tile2 = GridSystem::Instance()->getTileHolder(0, goalPos / GridSystem::Instance()->getTileSize());
+	GridSystem* gridSystem = GridSystem::Instance();
+	TileHolder* tile1 = gridSystem->getTileHolder(0, gridSystem->getTilePosition(startPos));
+	TileHolder* tile2 = gridSystem->getTileHolder(0, gridSystem->getTilePosition(goalPos));
 	if (tile1 == nullptr || tile2 == nullptr)
 		return nullptr;
 	return FindClosestEmptyTile(tile1, tile2, maxDepth, startDepth);
@@ -217,12 +224,75 @@ TileHolder* PathfindingMachine::FindClosestEmptyTile(glm::vec2 startPos, glm::ve
 
 TileHolder* PathfindingMachine::FindClosestEmptyTile(TileHolder* goal, int maxDepth, int startDepth)
 {
-	return FindClosestEmptyTile(goal, goal, maxDepth, startDepth);
+	//frontier queue - chooses the next node to inspect
+	std::priority_queue<Node, std::vector<Node>, std::greater<Node>> frontier;
+
+	//Maps the total distance to get to a particular tile
+	std::unordered_map<TileHolder*, int> costMap;
+
+	//Add the goal node to the frontier
+	if (goal->isWall)
+	{
+		LOG_INFO("Target is an obstructed tile");
+		return nullptr;
+	}
+	frontier.push(std::make_pair(0, goal));
+	costMap[goal] = FindManhattanDistance(goal->position, goal->position);
+	for (int i = 0; i <= maxDepth; i++)
+	{
+		//the tiles to inspect on this depth
+		std::vector<TileHolder*> tilesToInspect = std::vector<TileHolder*>();
+
+		//while exploring this depth
+		while (!frontier.empty() && frontier.top().first == i)
+		{
+			Node currentNode = frontier.top();
+
+			//Check whether the tile is empty and above the start depth. If so, push it onto inspected tiles
+			if (i >= startDepth
+				&& !GridSystem::Instance()->isWallTile(currentNode.second->position)
+				&& currentNode.second->gameObjectSatOnTile == nullptr)
+					tilesToInspect.push_back(currentNode.second);
+
+			//Check the neighbours and add them to frontier
+			if (i + 1 <= maxDepth)
+			{
+				std::vector<TileHolder*> neighbours = GridSystem::Instance()->getPathfindingNeighbours(0, currentNode.second);
+				for (auto neighbour : neighbours)
+				{
+					if (neighbour->isWall) continue;
+					if (!costMap.contains(neighbour))
+					{
+						costMap[neighbour] = FindManhattanDistance(goal->position, neighbour->position);
+						frontier.push(std::make_pair(i + 1, neighbour));
+					}
+				}
+			}
+			frontier.pop();
+		}
+		//If there were tiles to inspect, find the best one and output it.
+		Node currentBest;
+		currentBest.first = std::numeric_limits<int>::max();
+		currentBest.second = nullptr;
+		for (auto tile : tilesToInspect)
+		{
+			if (costMap[tile] < currentBest.first)
+			{
+				currentBest = std::make_pair(costMap[tile], tile);
+			}
+		}
+		if (currentBest.second != nullptr)
+		{
+			return currentBest.second;
+		}
+	}
+	return nullptr;
 }
 
 TileHolder* PathfindingMachine::FindClosestEmptyTile(glm::vec2 goalPos, int maxDepth, int startDepth)
 {
-	TileHolder* tile = GridSystem::Instance()->getTileHolder(0, goalPos / GridSystem::Instance()->getTileSize());
+	GridSystem* gridSystem = GridSystem::Instance();
+	TileHolder* tile = gridSystem->getTileHolder(0, gridSystem->getTilePosition(goalPos));
 	if (tile == nullptr)
 		return nullptr;
 	return FindClosestEmptyTile(tile, maxDepth, startDepth);
