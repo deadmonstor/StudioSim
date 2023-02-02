@@ -51,6 +51,7 @@
     <ClInclude Include="Components\AI Behaviours\MoveTowardsAction.h" />
     <ClInclude Include="Components\AI Behaviours\NormalEnemyFSM.h" />
     <ClInclude Include="Components\Items\ManaPotion.h" />
+    <ClInclude Include="Components\Player\PlayerSpellBehaviour.h" />
     <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="Components\Items\Sword.h" />
     <ClInclude Include="Shop.h" />
@@ -91,6 +92,7 @@
     <ClCompile Include="Components\Items\RareSword.cpp" />
     <ClCompile Include="Components\Items\RareAxe.cpp" />
     <ClCompile Include="Components\Items\ManaPotion.cpp" />
+    <ClCompile Include="Components\Player\PlayerSpellBehaviour.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Components\TurnManager.cpp" />
     <ClCompile Include="Components\Items\Sword.cpp" />

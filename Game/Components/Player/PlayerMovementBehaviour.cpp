@@ -2,6 +2,7 @@
 #include <Core/Grid/GridSystem.h>
 #include <Util/Events/EngineEvents.h>
 #include "PlayerAttackBehaviour.h"
+#include "PlayerSpellBehaviour.h"
 #include "../EnemyTest.h"
 #include "../TurnManager.h"
 #include "Core/AudioEngine.h"
@@ -85,6 +86,12 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 	if (eventCasted->key == GLFW_KEY_Q)
 	{
 		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerAttackBehaviour(true));
+		return;
+	}
+
+	if (eventCasted->key == GLFW_KEY_E)
+	{
+		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerSpellBehaviour(true));
 		return;
 	}
 
