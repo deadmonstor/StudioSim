@@ -56,7 +56,7 @@ void HUD::createHUD()
 
 	//Pause Button
 	ResourceManager::LoadTexture("Sprites\\pauseButton.png", "pauseButton");
-	pauseButton = UIManager::Instance()->createUIElement<PauseButton>("plusAudioButton", ResourceManager::GetTexture("pauseButton"));
+	pauseButton = UIManager::Instance()->createUIElement<PauseButton>("pauseButton", ResourceManager::GetTexture("pauseButton"));
 
 	hasLoaded = true;
 }
@@ -82,6 +82,9 @@ void HUD::updateHUD()
 	
 	const auto topLeft =
 					glm::vec2(0, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
+
+	const auto MiddleLeft =
+					glm::vec2(0, Renderer::getWindowSize().y / 2) / Renderer::Instance()->getAspectRatio();
 
 	const auto topRight =
 					glm::vec2(Renderer::getWindowSize().x, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
@@ -136,10 +139,10 @@ void HUD::updateHUD()
 	coinsIcon->setTexture(ResourceManager::GetTexture("coinsIcon"));
 	coinsIcon->setPivot(Pivot::TopRight);
 	// =============================================Update pause icon=============================================
-	pauseButton->getTransform()->setPosition(topLeft - glm::vec2{ -50, 110 });
+	pauseButton->getTransform()->setPosition(MiddleLeft + glm::vec2{45, 125});
 	pauseButton->getTransform()->setSize({ 30, 30 });
 	pauseButton->setTexture(ResourceManager::GetTexture("pauseButton"));
-	pauseButton->setPivot(Pivot::TopLeft);
+	pauseButton->setPivot(Pivot::Center);
 
 	// =============================================Update health text=============================================
 	const int health = playerStats->currentHealth;
