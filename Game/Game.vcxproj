@@ -15,6 +15,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\CommonAxe.h" />
+    <ClInclude Include="Components\CommonSword.h" />
+    <ClInclude Include="Components\Axe.h" />
+    <ClInclude Include="Components\CommonDagger.h" />
+    <ClInclude Include="Components\ButtonComponent.h" />
+    <ClInclude Include="Components\CharacterStats.h" />
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
     <ClInclude Include="Components\EnemyTest.h" />
     <ClInclude Include="Components\FireballComponent.h" />
@@ -33,15 +39,22 @@
     <ClInclude Include="Components\Player\PlayerFSM.h" />
     <ClInclude Include="Components\Player\PlayerMovementBehaviour.h" />
     <ClInclude Include="Components\TurnManager.h" />
+    <ClInclude Include="Components\Consumables.h" />
+    <ClInclude Include="Components\Dagger.h" />
+    <ClInclude Include="Components\Hammer.h" />
+    <ClInclude Include="Components\LegendaryHammer.h" />
     <ClInclude Include="Components\AI Behaviours\EnemyIdleBehaviour.h" />
     <ClInclude Include="Components\AI Behaviours\EnemyCombatBehaviour.h" />
     <ClInclude Include="Components\UI\ButtonComponent.h" />
     <ClInclude Include="Components\UI\HUD.h" />
     <ClInclude Include="Components\UI\TextComponent.h" />
     <ClInclude Include="MainGame.h" />
+    <ClInclude Include="Components\RareSword.h" />
+    <ClInclude Include="Components\RareAxe.h" />
     <ClInclude Include="Components\AI Behaviours\MoveTowardsAction.h" />
     <ClInclude Include="Components\AI Behaviours\NormalEnemyFSM.h" />
     <ClInclude Include="ScoreSystem.h" />
+    <ClInclude Include="Components\Sword.h" />
     <ClInclude Include="Shop.h" />
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="Tiles\TeleportTile.h" />
@@ -50,6 +63,11 @@
     <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\CommonAxe.cpp" />
+    <ClCompile Include="Components\CommonSword.cpp" />
+    <ClCompile Include="Components\Axe.cpp" />
+    <ClCompile Include="Components\CommonDagger.cpp" />
+    <ClCompile Include="Components\ButtonComponent.cpp" />
     <ClCompile Include="Components\AI Behaviours\EnemyIdleBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\EnemyCombatBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\MoveTowardsAction.cpp" />
@@ -57,6 +75,14 @@
     <ClCompile Include="Components\DestroyAfterAnimation.cpp" />
     <ClCompile Include="Components\EnemyTest.cpp" />
     <ClCompile Include="Components\FireballComponent.cpp" />
+    <ClCompile Include="Components\PlayerAttackBehaviour.cpp" />
+    <ClCompile Include="Components\PlayerController.cpp" />
+    <ClCompile Include="Components\PlayerFSM.cpp" />
+    <ClCompile Include="Components\PlayerMovementBehaviour.cpp" />
+    <ClCompile Include="Components\Consumables.cpp" />
+    <ClCompile Include="Components\Dagger.cpp" />
+    <ClCompile Include="Components\Hammer.cpp" />
+    <ClCompile Include="Components\LegendaryHammer.cpp" />
     <ClCompile Include="Components\Flash.cpp" />
     <ClCompile Include="Components\Items\CommonDagger.cpp" />
     <ClCompile Include="Components\Items\Consumables.cpp" />
@@ -71,7 +97,12 @@
     <ClCompile Include="Components\UI\HUD.cpp" />
     <ClCompile Include="Components\UI\TextComponent.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="Components\RareSword.cpp" />
+    <ClCompile Include="Components\RareAxe.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
+    <ClCompile Include="Components\TurnComponent.cpp" />
+    <ClCompile Include="Components\TurnManager.cpp" />
+    <ClCompile Include="Components\Sword.cpp" />
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="System\Inventory.cpp" />
     <ClCompile Include="Tiles\LightTile.cpp" />
