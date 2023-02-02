@@ -1,7 +1,7 @@
 #include "Hammer.h"
 #include "Core/Grid/GridSystem.h"
 #include <Core/Components/Health.h>
-#include "DestroyAfterAnimation.h"
+#include "../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
 
 void Hammer::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)

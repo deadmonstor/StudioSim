@@ -1,5 +1,6 @@
 ﻿#include "EnemyTest.h"
 
+#include <string>
 #include "TurnManager.h"
 #include "Core/GameObject.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
