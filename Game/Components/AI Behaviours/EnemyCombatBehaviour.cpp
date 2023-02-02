@@ -25,7 +25,10 @@ EnemyCombatBehaviour::EnemyCombatBehaviour(StateMachine* parentFSMArg)
 
 void EnemyCombatBehaviour::WorldAnalysis()
 {
-	int attackDistance = 1; //Get the attack distance from the Attack behaviour
+	//Check collisions with the attack behaviour's attack tiles and the player. This toggles between the InRange and OutOfRange effects
+
+	effects["OutOfRange"].active = true;
+
 
 }
 
@@ -76,6 +79,9 @@ void EnemyCombatBehaviour::GenerateEffects()
 	effects["InRange"] = Effect();
 	effects["InRange"].influencedActions["Attack"] = std::make_pair(5, availableActions["Attack"].second);
 	effects["InRange"].influencedActions["MoveTowards"] = std::make_pair(-5, availableActions["MoveTowards"].second);
+
+	effects["OutOfRange"] = Effect();
+	effects["OutOfRange"].influencedActions["MoveTowards"] = std::make_pair(1, availableActions["MoveTowards"].second);
 }
 
 void EnemyCombatBehaviour::endTurn()
