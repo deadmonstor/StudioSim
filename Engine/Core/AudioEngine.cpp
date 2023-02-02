@@ -72,7 +72,7 @@ bool AudioEngine::init()
 	{
 		return false;
 	}
-	channelGroups["Background Effects"] = backgroundMusicChannel;
+	channelGroups["Background Music"] = backgroundMusicChannel;
 	fmodResult = backgroundMusicChannel->setMode(FMOD_3D);
 	if (!checkResult(fmodResult, "Background Set Mode 3D"))
 	{
@@ -184,87 +184,76 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 	}
 	else
 	{
-		int backgroundChannelIndex;
-		backgroundChannel->getIndex(&backgroundChannelIndex);
+		std::cout << backgroundChannelIndex << std::endl;
+		std::cout << backgroundChannel2Index << std::endl;
 		//														   0
-		fmodResult = channelGroups["Background Music"]->getChannel(backgroundChannelIndex, &fmodChannel);
-		if (!checkResult(fmodResult, "get channel"))
+		channelGroups["Background Music"]->getChannel(backgroundChannelIndex, &backgroundChannel);
+		channelGroups["Background Music"]->getChannel(backgroundChannel2Index, &backgroundChannel2);
+
+		bool backgroundChannelPlaying, backgroundChannel2Playing;
+		backgroundChannel->isPlaying(&backgroundChannelPlaying);
+
+		if (backgroundChannelPlaying)
+		{
+			std::cout << "true";
+		}
+
+		if (!firstRun)
+		{
+			firstRun = true;
+		}
+		else
+		{
+			backgroundChannel->stop();
+		}
+
+		backgroundChannel->getIndex(&backgroundChannelIndex);
+		backgroundChannel->getIndex(&backgroundChannel2Index);
+
+		fmodSystem->playSound(ResourceManager::GetSound(path), channelGroups["Background Music"], isPaused, &backgroundChannel);
+
+		//Audio source position
+		FMOD_VECTOR sourcePosition = { positionX, positionY, 0 };
+
+		//Enable Channel Modes
+		fmodResult = backgroundChannel->setMode(FMOD_3D);
+		if (!checkResult(fmodResult, "Set Channel Volume"))
 		{
 			return false;
 		}
 
-		if (fmodChannel != nullptr)
+		fmodResult = backgroundChannel->setMode(FMOD_3D_LINEARROLLOFF);
+		if (!checkResult(fmodResult, "Set Channel Volume"))
 		{
-			std::cout << "Not Null \n";
-			fmodSystem->playSound(ResourceManager::GetSound(path), nullptr, isPaused, &fmodChannel);
-			fmodChannel->setMode(FMOD_3D);
-
-			//Audio source position
-			FMOD_VECTOR sourcePosition = { positionX, positionY, 0 };
-
-			//Enable Channel Modes
-			fmodChannel->setMode(FMOD_3D);
-			fmodChannel->setMode(FMOD_3D_LINEARROLLOFF);
-
-			//Set Volume
-			fmodResult = fmodChannel->setVolume(volume);
-			if (!checkResult(fmodResult, "Set Channel Volume"))
-			{
-				return false;
-			}
-
-			//Set audio position
-			fmodResult = fmodChannel->set3DAttributes(&sourcePosition, nullptr);
-			if (!checkResult(fmodResult, "Set 3D Channel Attributes"))
-			{
-				return false;
-			}
-
-			//Set min/max falloff
-			fmodResult = fmodChannel->set3DMinMaxDistance(10, 1000);
-			if (!checkResult(fmodResult, "Set 3D Min/Max Distance"))
-			{
-				return false;
-			}
+			return false;
 		}
-		else
+
+		//Set Volume
+		fmodResult = backgroundChannel->setVolume(volume);
+		if (!checkResult(fmodResult, "Set Channel Volume"))
 		{
-			std::cout << "Is Null \n";
-			fmodSystem->playSound(ResourceManager::GetSound(path), nullptr, isPaused, &fmodChannel);
-			fmodChannel->setMode(FMOD_3D);
+			return false;
+		}
 
-			//Audio source position
-			FMOD_VECTOR sourcePosition = { positionX, positionY, 0 };
+		//Set audio position
+		fmodResult = backgroundChannel->set3DAttributes(&sourcePosition, nullptr);
+		if (!checkResult(fmodResult, "Set 3D Channel Attributes"))
+		{
+			return false;
+		}
 
-			//Enable Channel Modes
-			fmodChannel->setMode(FMOD_3D);
-			fmodChannel->setMode(FMOD_3D_LINEARROLLOFF);
+		//Set min/max falloff
+		fmodResult = backgroundChannel->set3DMinMaxDistance(10, 1000);
+		if (!checkResult(fmodResult, "Set 3D Min/Max Distance"))
+		{
+			return false;
+		}
 
-			//Set Volume
-			fmodResult = fmodChannel->setVolume(volume);
-			if (!checkResult(fmodResult, "Set Channel Volume"))
-			{
-				return false;
-			}
-
-			//Set audio position
-			fmodResult = fmodChannel->set3DAttributes(&sourcePosition, nullptr);
-			if (!checkResult(fmodResult, "Set 3D Channel Attributes"))
-			{
-				return false;
-			}
-
-			//Set min/max falloff
-			fmodResult = fmodChannel->set3DMinMaxDistance(10, 1000);
-			if (!checkResult(fmodResult, "Set 3D Min/Max Distance"))
-			{
-				return false;
-			}
-
-			//Loop(0 - Oneshot, 1 - Loop Once and Stop, -1 - Loop Forever
-			fmodChannel->setLoopCount(-1);
-			fmodChannel->setChannelGroup(channelGroups["Background Music"]);
-			backgroundChannel = fmodChannel;
+		//Loop(0 - Oneshot, 1 - Loop Once and Stop, -1 - Loop Forever
+		fmodResult = backgroundChannel->setLoopCount(-1);
+		if (!checkResult(fmodResult, "Set Loop"))
+		{
+			return false;
 		}
 	}
 	return true;

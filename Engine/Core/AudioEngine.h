@@ -51,11 +51,16 @@ public:
 
 	//Background Channel
 	FMOD::Channel* backgroundChannel;
+	FMOD::Channel* backgroundChannel2;
 
 	//Reverb zones
 	std::map<const int, FMOD::Reverb3D*> reverbZones;
 	bool createReverbZone(const int zone);
 	bool setReverbPos(const int zone, const float posX, const float posY, const float minX, const float minY);
 	bool deleteReverbZone(const int zone);
+
+	bool firstRun = false;
+
+	int backgroundChannelIndex = 0, backgroundChannel2Index = 0;
 };
 
