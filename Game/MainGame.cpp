@@ -30,10 +30,17 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\Crab\\", "crab", 16);
 	ResourceManager::LoadTextureArray("Sprites\\player\\", "hero", 5);
 	ResourceManager::LoadTextureArray("Sprites\\TileMap\\", "tile", 293);
+	//Coins and chest
+	ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_", 4);
+	ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_open_", 4);
+	ResourceManager::LoadTextureArray("Sprites\\Coins\\", "coin", 10);
+	
+
 	ResourceManager::LoadTexture("Sprites\\rock.png", "rock");
 	ResourceManager::LoadTexture("Sprites\\background.png", "background");
 	ResourceManager::LoadTexture("Sprites\\UE.png", "troll");
 	ResourceManager::LoadTexture("Sprites\\image.png", "buttonTest");
+
 
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFunc);
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncScene1);
