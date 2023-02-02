@@ -14,6 +14,7 @@
 #include "../ScoreSystem.h"
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
+#include "../Tiles/SpikeTile.h"
 
 void Level1Scene::createEnemy(const glm::vec2 pos)
 {
@@ -56,11 +57,13 @@ void Level1Scene::init()
 		{ 8, ResourceManager::GetTexture("tile204") },
 		{ 9, ResourceManager::GetTexture("tile26") },
 		{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
-		{ 11, ResourceManager::GetTexture("tile242") }
+		{ 11, ResourceManager::GetTexture("tile242") },
+		{ 56, ResourceManager::GetTexture("tile218") } // Spike
 	});
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
 	{
 		{ 10, [] { return new TestTile(Texture()); } },
+		{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	
 	grid_system->loadFromFile(0, "Grid/Test2.txt");
@@ -97,7 +100,8 @@ void Level1Scene::init()
 		{ 46, ResourceManager::GetTexture("tile291") }, //skulls
 		{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
 		{ 48, ResourceManager::GetTexture("tile130") },//Jar
-		{ 49, ResourceManager::GetTexture("tile154") }
+		{ 49, ResourceManager::GetTexture("tile154") },
+		{ 56, ResourceManager::GetTexture("tile60") } // Spike
 	});
 	grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile*()>>
 	{

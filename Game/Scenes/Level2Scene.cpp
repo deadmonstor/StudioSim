@@ -13,6 +13,7 @@
 #include "../Components/EnemyTest.h"
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
+#include "../Tiles/SpikeTile.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
 {
@@ -65,6 +66,7 @@ void Level2Scene::init()
 		{
 			{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
 			{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
+			{ 56, [] { return new SpikeTile(Texture()); } }
 		});
 		
 		grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
@@ -101,7 +103,8 @@ void Level2Scene::init()
 			{ 46, ResourceManager::GetTexture("tile291") }, //skulls
 			{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
 			{ 48, ResourceManager::GetTexture("tile130") },//Jar
-			{ 49, ResourceManager::GetTexture("tile154") }
+			{ 49, ResourceManager::GetTexture("tile154") },
+			{ 56, ResourceManager::GetTexture("tile60") } // spike
 		});
 
 		grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");
