@@ -32,7 +32,7 @@ struct WeaponStats : public items
 	int attack;
 	std::string rarity;
 	int costInShop;
-	
+	std::string weaponClass;
 };
 
 struct ConsumableStats : public items
@@ -52,4 +52,10 @@ struct SpellsStats : public items
 	int damagePerTurn;
 	int spellCooldown;
 	
+};
+
+struct LootTables : public items
+{
+	std::string itemName;
+	float dropChance;
 };

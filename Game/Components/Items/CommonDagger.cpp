@@ -3,6 +3,7 @@
 CommonDagger::CommonDagger()
 {
 	commonDaggerStats = new WeaponStats();
+	commonDaggerStats->weaponClass = "Dagger";
 	commonDaggerStats->name = "common dagger";
 	commonDaggerStats->rarity = "common";
 	commonDaggerStats->costInShop = 5;

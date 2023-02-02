@@ -39,6 +39,11 @@
     <ClCompile Include="Components\Items\HealthPotion.cpp" />
     <ClCompile Include="Components\Items\ManaPotion.cpp" />
     <ClCompile Include="Components\Items\ExpPotion.cpp" />
+    <ClCompile Include="Components\Items\Armour.cpp" />
+    <ClCompile Include="Components\Items\CommonArmour.cpp" />
+    <ClCompile Include="Components\Items\RareArmour.cpp" />
+    <ClCompile Include="Components\Items\LegendaryArmour.cpp" />
+    <ClCompile Include="LootTable.cpp" />
     <ClCompile Include="Tiles\SpikeTile.cpp" />
     <ClCompile Include="Components\Player\PlayerSpellBehaviour.cpp" />
   </ItemGroup>
@@ -87,6 +92,11 @@
     <ClInclude Include="Components\Items\HealthPotion.h" />
     <ClInclude Include="Components\Items\ManaPotion.h" />
     <ClInclude Include="Components\Items\ExpPotion.h" />
+    <ClInclude Include="Components\Items\Armour.h" />
+    <ClInclude Include="Components\Items\CommonArmour.h" />
+    <ClInclude Include="Components\Items\RareArmour.h" />
+    <ClInclude Include="Components\Items\LegendaryArmour.h" />
+    <ClInclude Include="LootTable.h" />
     <ClInclude Include="Tiles\SpikeTile.h" />
     <ClInclude Include="Components\Player\PlayerSpellBehaviour.h" />
   </ItemGroup>
