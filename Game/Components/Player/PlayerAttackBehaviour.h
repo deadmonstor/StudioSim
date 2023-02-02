@@ -4,16 +4,6 @@
 
 #include "Core/Renderer/ResourceManager.h"
 #include "glm/fwd.hpp"  
-#include "../Items/Stats.h"
-
-
-enum WeaponEnum
-{
-	dagger,
-	sword,
-	hammer,
-	axe
-};
 
 class PlayerAttackBehaviour : public Behaviour
 {
@@ -24,7 +14,6 @@ public:
 	glm::fvec2 currentPlayerPos;
 	std::list<glm::fvec2> attackPositions;
 	const std::vector<Texture> textureListRST = ResourceManager::GetTexturesContaining("RedSlashThin");
-	WeaponEnum weaponClassEquipped;
 	
 	bool canAttack = true;
 	void AttackOnMovement(glm::fvec2 dir);

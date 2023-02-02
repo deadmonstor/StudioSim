@@ -19,13 +19,8 @@ public:
 	void onKeyDown(const OnKeyDown* keyDown);
 	void onKeyHold(const OnKeyRepeat* keyHold);
 	void onKeyUp(const OnKeyUp* keyUp);
-
 	void UpdateStats();
 
-	Dagger* daggerClass;
-	Axe* axeClass;
-	Hammer* hammerClass;
-	Sword* swordClass;
 	SpriteComponent* playerSprite{};
 	GameObject* playerPTR{};
 	PlayerFSM* playerFSM{};

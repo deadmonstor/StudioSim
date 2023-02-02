@@ -1,10 +1,14 @@
 #pragma once
-#include "Armour.h"
+#include "ArmourItem.h"
 class LegendaryArmour :
-    public Armour
+    public ArmourItem
 {
 public:
     LegendaryArmour();
+    
+    std::string name() override { return "Legendary Armour"; }
+    std::string itemDescription() override { return "Legendary Armour"; }
+    std::string rarity() override { return "Legendary"; }
 
     ArmourStats* legendaryArmourStats{};
 };

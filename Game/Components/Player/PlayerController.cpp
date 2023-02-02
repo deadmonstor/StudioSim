@@ -2,6 +2,10 @@
 #include "PlayerFSM.h"
 #include "../TurnManager.h"
 #include "../../System/Inventory.h"
+#include "../Items/HealthPotion.h"
+#include "../Items/LegendaryArmour.h"
+#include "../Items/LegendaryHammer.h"
+#include "../Items/RareSword.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
@@ -48,18 +52,11 @@ void PlayerController::createPlayer()
 	playerStats->critChance = 0.0f;
 	playerStats->coinsHeld = 0;
 	
-	daggerClass = new Dagger();
-	swordClass = new Sword();
-	axeClass = new Axe();
-	hammerClass = new Hammer();
-
 	myInventory = playerPTR->addComponent<Inventory>(20);
 	Light* light = playerPTR->addComponent<Light>();
 	light->setFalloff({0.75f, 0.75f, 7.5f});
 	light->setColor({1.0f, 1.0f, 1.0f, 1.0f});
 	Renderer::Instance()->setCamera(cameraComponent);
-
-	//std::cout << "Adding playerPTR to queue";
 }
 
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
@@ -72,6 +69,11 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		glm::vec2 goal = start + glm::vec2(0 * gridSize.x, -30 * gridSize.y);
 		//PathfindingMachine::Instance()->FindPath(start, goal);
 		bool sight = PathfindingMachine::Instance()->LineOfSight(start, goal);
+
+		myInventory->add_item(new LegendaryHammer());
+		myInventory->add_item(new RareSword());
+		myInventory->add_item(new HealthPotion());
+		myInventory->add_item(new LegendaryArmour());
 	}
 	
 	//find the input and send it to the state machine
