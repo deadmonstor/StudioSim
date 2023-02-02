@@ -30,9 +30,7 @@ struct ArmourStats : public items
 struct WeaponStats : public items
 {
 	int attack;
-	std::string rarity;
 	int costInShop;
-	std::string weaponClass;
 };
 
 struct ConsumableStats : public items

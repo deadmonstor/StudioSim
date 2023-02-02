@@ -6,11 +6,11 @@
 #include "../EnemyTest.h"
 #include "../Flash.h"
 #include "../TurnManager.h"
+#include "../../System/Inventory.h"
 #include "Core/AudioEngine.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
-#include "../../System/Inventory.h"
 
 PlayerAttackBehaviour::PlayerAttackBehaviour()
 {
@@ -43,131 +43,25 @@ void PlayerAttackBehaviour::Act()
 	if (willFlashOnce) return;
 	
 	currentPlayerPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
-	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, currentPlayerPos + attackDir);
-	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
-	const bool isWallTile = GridSystem::Instance()->isWallTile(currentPlayerPos + attackDir);
-	/*for (Item* item : PlayerController::Instance()->myInventory->items)
-	{
-		if (item->isEquipped && item->name == "Dagger")
-		{
-			PlayerController::Instance()->daggerClass->Attack(currentPlayerPos, attackDir);
-		}
-	}*/
+	const TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, currentPlayerPos + attackDir);
+
 	if (curTileHolder->tile != nullptr)
 	{
-		switch (weaponClassEquipped)
+		if (Item* weapon = PlayerController::Instance()->myInventory->getFirstItemWithEquipSlot(EquipSlot::WEAPON); weapon != nullptr)
 		{
-			case dagger:
-			{
-				if (!isWallTile)
-				{
-					createSlashGameObject(currentPlayerPos + attackDir);
-					
-				}
-				break;
-			}
-			case sword:
-			{
-				if (attackDir == glm::fvec2{ 0,1 } || attackDir == glm::fvec2{ 0,-1 })
-				{
-					std::vector<glm::fvec2> attackPosSword = { (currentPlayerPos + attackDir),
-						(currentPlayerPos + attackDir + glm::fvec2(-1, 0)) ,
-						(currentPlayerPos + attackDir + glm::fvec2(1, 0)) };
-
-					attackPositions.assign(attackPosSword.begin(), attackPosSword.end());
-					for (glm::fvec2 attackPos : attackPositions)
-					{
-						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
-						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if(!attackTile->isWall && !isWallTile)
-						{
-							createSlashGameObject(attackPos);
-						}
-					}
-				}
-				else
-				{
-					std::vector<glm::fvec2> attackPosSword = { (currentPlayerPos + attackDir),
-						(currentPlayerPos + attackDir + glm::fvec2(0, 1)) ,
-						(currentPlayerPos + attackDir + glm::fvec2(0, -1)) };
-
-					attackPositions.assign(attackPosSword.begin(), attackPosSword.end());
-					for (glm::fvec2 attackPos : attackPositions)
-					{
-						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
-						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if (!isWallTile && attackTile->isSpawned)
-						{
-							createSlashGameObject(attackPos);
-						}
-					}
-				}
-				break;
-			}
-			case axe:
-			{
-				std::vector<glm::fvec2> attackPosAxe = { (currentPlayerPos + attackDir),
-					(currentPlayerPos + attackDir + attackDir) };
-
-				attackPositions.assign(attackPosAxe.begin(), attackPosAxe.end());
-				for (glm::fvec2 attackPos : attackPositions)
-				{
-					const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
-					TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-					if (!isWallTile && attackTile->isSpawned)
-					{
-						createSlashGameObject(attackPos);
-					}
-				}
-				break;
-			}
-			case hammer:
-			{
-				glm::fvec2 firstTileinAttackDir = (currentPlayerPos + attackDir);
-				glm::fvec2 secondTileinAttackDir = (currentPlayerPos + attackDir + attackDir);
-				if (attackDir == glm::fvec2{ 0,1 } || attackDir == glm::fvec2{ 0,-1 })
-				{
-					std::vector<glm::fvec2> attackPosHammer = { firstTileinAttackDir, firstTileinAttackDir + glm::fvec2(1, 0),
-					firstTileinAttackDir + glm::fvec2(-1, 0), secondTileinAttackDir, secondTileinAttackDir + glm::fvec2(1, 0),
-					secondTileinAttackDir + glm::fvec2(-1, 0) };
-
-					attackPositions.assign(attackPosHammer.begin(), attackPosHammer.end());
-
-					for (glm::fvec2 attackPos : attackPositions)
-					{
-						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
-						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if (!isWallTile && attackTile->isSpawned)
-						{
-							createSlashGameObject(attackPos);
-						}
-					}
-				}
-				else
-				{
-					std::vector<glm::fvec2> attackPosHammer = { firstTileinAttackDir, firstTileinAttackDir + glm::fvec2(0, 1),
-					firstTileinAttackDir + glm::fvec2(0, -1), secondTileinAttackDir, secondTileinAttackDir + glm::fvec2(0, 1),
-					secondTileinAttackDir + glm::fvec2(0, -1) };
-
-					attackPositions.assign(attackPosHammer.begin(), attackPosHammer.end());
-
-					for (glm::fvec2 attackPos : attackPositions)
-					{
-						const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
-						TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-						if (!isWallTile && attackTile->isSpawned)
-						{
-							createSlashGameObject(attackPos);
-						}
-					}
-				}
-				break;
-			}
-
+			const auto weaponCasted = dynamic_cast<WeaponItem*>(weapon);
+			weaponCasted->Attack(currentPlayerPos, attackDir);
 		}
-
-		attackPositions.clear();
+		else
+		{
+			// TODO: This is the same as the "bad" dagger attack, very low damage
+			if (const bool isWallTile = GridSystem::Instance()->isWallTile(currentPlayerPos + attackDir); !isWallTile)
+			{
+				createSlashGameObject(currentPlayerPos + attackDir);
+			}
+		}
 	}
+	
 	canAttack = false;
 	
 	if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) && !willFlashOnce)
@@ -187,23 +81,6 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 	if (eventCasted->key == GLFW_KEY_E)
 	{
 		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerSpellBehaviour(true));
-	}
-
-	if (eventCasted->key == GLFW_KEY_E)
-	{
-		weaponClassEquipped = dagger;
-	}
-	else if (eventCasted->key == GLFW_KEY_R)
-	{
-		weaponClassEquipped = sword;
-	}
-	else if (eventCasted->key == GLFW_KEY_T)
-	{
-		weaponClassEquipped = hammer;
-	}
-	else if (eventCasted->key == GLFW_KEY_Y)
-	{
-		weaponClassEquipped = axe;
 	}
 
 	if (eventCasted->key == GLFW_KEY_W)
@@ -257,7 +134,8 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 					TurnManager::Instance()->endTurn();
 
 					auto* health = gameObject->getComponent<Health>();
-					health->setHealth(health->getHealth() - 50);
+					// TODO: Change this
+					health->setHealth(health->getHealth() - 1);
 
 					// TODO: This is probably shitty 
 					if (gameObject->isBeingDeleted())

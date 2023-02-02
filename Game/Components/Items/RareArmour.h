@@ -1,7 +1,7 @@
 #pragma once
-#include "Armour.h"
+#include "ArmourItem.h"
 class RareArmour :
-    public Armour
+    public ArmourItem
 {
 public:
     RareArmour();

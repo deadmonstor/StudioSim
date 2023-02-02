@@ -1,5 +1,4 @@
-#ifndef INVENTORY_H
-#define INVENTORY_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -26,51 +25,61 @@
 #include "../Components/Items/Stats.h"
 #include "../Components/Items/Weapon.h"
 
-
-
-
-//struct Weapon : public Item
-//{
-//	int atk; // Added on to health and strength
-//	int getAtk() { return atk; }
-//
-//	int crit;
-//	int getCrit() { return crit; };
-//};
-//
-//struct Spell : public Item
-//{
-//	int manaCost;// Added on to intelligence and spell power
-//	int getManaCost() { return manaCost; }
-//
-//	int coolDown;
-//	int getCoolDown() { return coolDown; }
-//
-//	int effectDuration;
-//	int getEffectDuration() { return effectDuration; }
-//
-//	int spellAtk;
-//	int getSpellAtk() { return spellAtk; }
-//};
-//
-//struct Armour : public Item
-//{
-//	int def;  // Added on to agility and crit
-//	int getDef() { return def; }
-//};
-
-struct Item
+enum class ItemType
 {
-	std::string name;
-	std::string type;
-	std::string itemDescription;
-	std::string equipSlot;
-	std::string rarity;
+	WEAPON,
+	SPELL,
+	ARMOUR,
+	CONSUMABLE,
+	NOTSET
+};
+
+enum class EquipSlot
+{
+	ARMOUR,
+	WEAPON,
+	SPELL,
+	NOTSET
+};
+
+class Item
+{
+public:
+	virtual std::string name() { return "NOT SET"; }
+	virtual std::string itemDescription() { return "NOT SET"; }
+	virtual std::string rarity() { return "NOT SET"; }
+	
 	int price;
 	int getPrice() { return price; }
-	bool isUsable;
+	
+	virtual bool isUsable() { return false; }
+	virtual bool isEquipable() { return false; }
 	bool isEquipped;
-	virtual ~Item() {}; // added virtual destructor
+
+	virtual void use() {}
+	virtual EquipSlot getEquipSlot() { return EquipSlot::NOTSET; }
+	virtual ItemType getItemType() { return ItemType::NOTSET; }
+};
+
+class SpellItem : public Item
+{
+public:
+	int manaCost;// Added on to intelligence and spell power
+	int getManaCost() { return manaCost; }
+
+	int coolDown;
+	int getCoolDown() { return coolDown; }
+
+	int effectDuration;
+	int getEffectDuration() { return effectDuration; }
+
+	int spellAtk;
+	int getSpellAtk() { return spellAtk; }
+
+	bool isEquipable() override { return true; }
+	
+	ItemType getItemType() override { return ItemType::SPELL; }
+	EquipSlot getEquipSlot() override { return EquipSlot::SPELL; }
 };
 
 class Inventory : public Component
@@ -82,6 +91,7 @@ public:
 	{
 		this->max_items = max;
 	}
+	
 	std::vector<Item*> items;
 	bool add_item(Item* item);
 	bool remove_item(Item* item);
@@ -92,41 +102,5 @@ public:
 	void equip_item(const std::string& item_name);
 	void unequip_item(const std::string& item_name);
 
-	WeaponStats* getWeaponEquipped() 
-	{
-		for ( auto item : items)
-		{
-			WeaponStats* weapon = dynamic_cast<WeaponStats*>(item);
-			if (weapon && weapon->isEquipped)
-			{
-				return weapon;
-			}
-		}
-	}
-
-	ArmourStats* getArmourEquipped()
-	{
-		for (auto item : items)
-		{
-			ArmourStats* armour = dynamic_cast<ArmourStats*>(item);
-			if (armour && armour->isEquipped)
-			{
-				return armour;
-			}
-		}
-	}
-
-	SpellsStats* getSpellsEquipped()
-	{
-		for (auto item : items)
-		{
-			SpellsStats* spell = dynamic_cast<SpellsStats*>(item);
-			if (spell && spell->isEquipped)
-			{
-				return spell;
-			}
-		}
-	}
+	Item* getFirstItemWithEquipSlot(EquipSlot slot);
 };
-
-#endif

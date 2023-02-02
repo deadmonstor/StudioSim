@@ -12,10 +12,13 @@ private:
 	TextComponent* coinsText;
 	TextComponent* healthText;
 	TextComponent* levelText;
+	TextComponent* audioText;
 
 	ButtonComponent* inventoryButton;
 	ButtonComponent* weaponButton;
 	ButtonComponent* spellsButton;
+	ButtonComponent* plusAudioButton;
+	ButtonComponent* minusAudioButton;
 	Panel* healthIcon;
 	Panel* manaIcon;
 	Panel* coinsIcon;
