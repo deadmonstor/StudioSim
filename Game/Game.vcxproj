@@ -15,6 +15,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\CommonAxe.h" />
+    <ClInclude Include="Components\CommonSword.h" />
+    <ClInclude Include="Components\Axe.h" />
     <ClInclude Include="Components\CommonDagger.h" />
     <ClInclude Include="Components\ButtonComponent.h" />
     <ClInclude Include="Components\CharacterStats.h" />
@@ -30,10 +33,16 @@
     <ClInclude Include="Components\TurnComponent.h" />
     <ClInclude Include="Components\TurnManager.h" />
     <ClInclude Include="Components\Consumables.h" />
+    <ClInclude Include="Components\Dagger.h" />
+    <ClInclude Include="Components\Hammer.h" />
+    <ClInclude Include="Components\LegendaryHammer.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Components\NormalEnemyFSM.h" />
-    <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="Shop.h" />
+    <ClInclude Include="Components\RareSword.h" />
+    <ClInclude Include="Components\RareAxe.h" />
+    <ClInclude Include="ScoreSystem.h" />
+    <ClInclude Include="Components\Sword.h" />
     <ClInclude Include="System\Inventory.h" />
     <ClInclude Include="TestGameplaySystem.h" />
     <ClInclude Include="Components\WeaponEnum.h" />
@@ -41,6 +50,9 @@
     <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\CommonAxe.cpp" />
+    <ClCompile Include="Components\CommonSword.cpp" />
+    <ClCompile Include="Components\Axe.cpp" />
     <ClCompile Include="Components\CommonDagger.cpp" />
     <ClCompile Include="Components\ButtonComponent.cpp" />
     <ClCompile Include="Components\DestroyAfterAnimation.cpp" />
@@ -51,12 +63,18 @@
     <ClCompile Include="Components\PlayerFSM.cpp" />
     <ClCompile Include="Components\PlayerMovementBehaviour.cpp" />
     <ClCompile Include="Components\Consumables.cpp" />
+    <ClCompile Include="Components\Dagger.cpp" />
+    <ClCompile Include="Components\Hammer.cpp" />
+    <ClCompile Include="Components\LegendaryHammer.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Components\NormalEnemyFSM.cpp" />
-    <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Components\TurnComponent.cpp" />
     <ClCompile Include="Components\TurnManager.cpp" />
     <ClCompile Include="Shop.cpp" />
+    <ClCompile Include="Components\RareSword.cpp" />
+    <ClCompile Include="Components\RareAxe.cpp" />
+    <ClCompile Include="ScoreSystem.cpp" />
+    <ClCompile Include="Components\Sword.cpp" />
     <ClCompile Include="System\Inventory.cpp" />
     <ClCompile Include="Tiles\LightTile.cpp" />
     <ClCompile Include="Tiles\TestTile.cpp" />
