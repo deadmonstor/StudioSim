@@ -4,6 +4,12 @@
 #include "../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
 
+Sword::Sword()
+{
+	swordStats = new WeaponStats();
+	swordStats->name = "sword";
+}
+
 void Sword::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 {
 	const bool isWallTile = GridSystem::Instance()->isWallTile(playerPos + attackDir);
@@ -42,6 +48,7 @@ void Sword::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 						}
 					}
 				}
+	attackPositions.clear();
 }
 
 void Sword::createSlashGameObject(glm::fvec2 pos)

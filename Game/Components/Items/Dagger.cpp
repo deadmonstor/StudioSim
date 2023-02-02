@@ -4,6 +4,12 @@
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
 
+Dagger::Dagger()
+{
+	daggerStats = new WeaponStats();
+	daggerStats->name = "dagger";
+}
+
 void Dagger::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 {
 	const bool isWallTile = GridSystem::Instance()->isWallTile(playerPos + attackDir);
@@ -13,6 +19,7 @@ void Dagger::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 		createSlashGameObject(playerPos + attackDir);
 
 	}
+	attackPositions.clear();
 }
 
 void Dagger::createSlashGameObject(glm::fvec2 pos)

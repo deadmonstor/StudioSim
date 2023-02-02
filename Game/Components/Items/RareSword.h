@@ -6,8 +6,6 @@ class RareSword :
 public:
     RareSword();
 
-    void createRareSword();
-
     WeaponStats* rareSwordStats{};
 };
 

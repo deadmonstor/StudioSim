@@ -20,7 +20,6 @@
     <ClCompile Include="Components\Items\CommonAxe.cpp" />
     <ClCompile Include="Components\Items\CommonSword.cpp" />
     <ClCompile Include="Components\Items\Axe.cpp" />
-    <ClCompile Include="Components\Items\Consumables.cpp" />
     <ClCompile Include="Components\Items\Dagger.cpp" />
     <ClCompile Include="Components\Items\Hammer.cpp" />
     <ClCompile Include="Components\Items\LegendaryHammer.cpp" />
@@ -37,7 +36,10 @@
     <ClCompile Include="Components\Items\RareSword.cpp" />
     <ClCompile Include="Components\Items\RareAxe.cpp" />
     <ClCompile Include="Components\Items\Sword.cpp" />
-    <ClCompile Include="Tiles\ChestTile.cpp" />
+    <ClCompile Include="Components\Items\HealthPotion.cpp" />
+    <ClCompile Include="Components\Items\ManaPotion.cpp" />
+    <ClCompile Include="Components\Items\ExpPotion.cpp" />
+    <ClCompile Include="Tiles\SpikeTile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -81,6 +83,9 @@
     <ClInclude Include="Components\Items\RareSword.h" />
     <ClInclude Include="Components\Items\RareAxe.h" />
     <ClInclude Include="Components\Items\Sword.h" />
-    <ClInclude Include="Tiles\ChestTile.h" />
+    <ClInclude Include="Components\Items\HealthPotion.h" />
+    <ClInclude Include="Components\Items\ManaPotion.h" />
+    <ClInclude Include="Components\Items\ExpPotion.h" />
+    <ClInclude Include="Tiles\SpikeTile.h" />
   </ItemGroup>
 </Project>
