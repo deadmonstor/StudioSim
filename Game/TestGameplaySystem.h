@@ -21,6 +21,7 @@
 #include "Tiles/LightTile.h"
 #include "Tiles/TestTile.h"
 #include "Tiles/TeleportTile.h"
+#include "Tiles/SpikeTile.h"
 
 class TestGameplaySystem : public SingletonTemplate<TestGameplaySystem>
 {
@@ -129,11 +130,14 @@ public:
 			{ 8, ResourceManager::GetTexture("tile204") },
 			{ 9, ResourceManager::GetTexture("tile26") },
 			{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
-			{ 11, ResourceManager::GetTexture("tile242") }
+			{ 11, ResourceManager::GetTexture("tile242") },
+			{ 56, ResourceManager::GetTexture("tile218") }
 		});
 		grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
 		{
 			{ 10, [] { return new TestTile(Texture()); } },
+			{ 56, [] { return new SpikeTile(Texture()); } }
+
 		});
 		
 		grid_system->loadFromFile(0, "Grid/Test2.txt");
@@ -170,11 +174,13 @@ public:
 			{ 46, ResourceManager::GetTexture("tile291") }, //skulls
 			{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
 			{ 48, ResourceManager::GetTexture("tile130") },//Jar
-			{ 49, ResourceManager::GetTexture("tile154") }
+			{ 49, ResourceManager::GetTexture("tile154") },
+			{ 56, ResourceManager::GetTexture("tile60") }
 		});
 		grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile*()>>
 		{
 			{ 37, [] { return new LightTile(Texture()); } },
+			//{ 56, [] { return new SpikeTile(Texture()); } }
 		});
 		
 		grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
@@ -261,6 +267,8 @@ public:
 			{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
 		});
 		
+		
+		
 		grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
 
 		grid_system->setEmptyTileIDs(1, std::vector<int>{});
@@ -295,7 +303,14 @@ public:
 			{ 46, ResourceManager::GetTexture("tile291") }, //skulls
 			{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
 			{ 48, ResourceManager::GetTexture("tile130") },//Jar
-			{ 49, ResourceManager::GetTexture("tile154") }
+			{ 49, ResourceManager::GetTexture("tile154") },
+			{ 56, ResourceManager::GetTexture("tile60") } //Spikes
+		});
+
+		grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile* ()>>
+		{
+			{ 56, [] { return new SpikeTile(Texture()); } }, //Change Values so aren't hard coded
+
 		});
 
 		grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");
