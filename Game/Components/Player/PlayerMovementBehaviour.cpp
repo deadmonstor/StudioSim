@@ -12,7 +12,7 @@ PlayerMovementBehaviour::PlayerMovementBehaviour()
 {
 	isInFSM = false; 
 	map = CreateFunctionMap(); 
-	origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
+	origPos = GridSystem::Instance()->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
 	AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
 	attackBehaviour = new PlayerAttackBehaviour();
 }
@@ -20,7 +20,7 @@ PlayerMovementBehaviour::PlayerMovementBehaviour()
 PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
-	origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition())/GridSystem::Instance()->getTileSize();
+	origPos = GridSystem::Instance()->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
 	AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
 	map = CreateFunctionMap();
 	attackBehaviour = new PlayerAttackBehaviour();
@@ -28,14 +28,16 @@ PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 
 void PlayerMovementBehaviour::Act()
 {
-	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, origPos + moveDir);
+	GridSystem* gridSystem = GridSystem::Instance();
+	TileHolder* curTileHolder = gridSystem->getTileHolder(0, origPos + moveDir);
+
 	
 	if (curTileHolder == nullptr)
 		return;
 	
 	GameObject* gameObjectOnTile = curTileHolder->gameObjectSatOnTile;
-	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
-	const bool isWallTile = GridSystem::Instance()->isWallTile(origPos + moveDir);
+	glm::fvec2 tileSize = gridSystem->getTileSize();
+	const bool isWallTile = gridSystem->isWallTile(origPos + moveDir);
 		
 	if (curTileHolder->tile != nullptr && (!isWallTile || TurnManager::gNoclipMode))
 	{
@@ -53,18 +55,18 @@ void PlayerMovementBehaviour::Act()
 		else
 		{
 			PlayerController::Instance()->playerPTR->getTransform()->
-				setPosition(tileSize * (origPos + moveDir));
+				setPosition(GridSystem::Instance()->getWorldPosition(origPos + moveDir));
 
 			//Set grid system "satOnTile" values
-			GridSystem::Instance()->resetSatOnTile(0, origPos/tileSize);
-			GridSystem::Instance()->setSatOnTile(0, PlayerController::Instance()->playerPTR->getTransform()->getPosition() / tileSize,
+			gridSystem->resetSatOnTile(0, origPos);
+			gridSystem->setSatOnTile(0, gridSystem->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition()),
 				PlayerController::Instance()->playerPTR);
 
 
 			if(curTileHolder->tile->canInteractWith())
 				curTileHolder->tile->onInteractedWith(curTileHolder);
 
-			origPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
+			origPos = gridSystem->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
 		
 			AudioEngine::Instance()->playSound("Sounds\\softStep.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 			

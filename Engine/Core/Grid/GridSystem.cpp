@@ -224,7 +224,7 @@ std::vector<TileHolder*> GridSystem::getPathfindingNeighbours(int id, TileHolder
 
 glm::vec2 GridSystem::getTilePosition(const glm::vec2 vec) const
 {
-	return {floor(vec.x / tileSize.x), floor(vec.y / tileSize.y)};
+	return {round(vec.x / tileSize.x), round(vec.y / tileSize.y)};
 }
 
 glm::vec2 GridSystem::getWorldPosition(const glm::vec2 vec) const

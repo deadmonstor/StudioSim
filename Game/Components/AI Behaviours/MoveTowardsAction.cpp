@@ -32,6 +32,7 @@ void MoveTowardsAction::Act()
 		{
 			shouldLerp = true;
 			
+
 			GridSystem* instance = GridSystem::Instance();
 			instance->resetSatOnTile(0,  instance->getTilePosition(parentObject->getTransform()->getPosition()));
 			lerpPosition(parentObject, instance->getWorldPosition(path.front()->position));
