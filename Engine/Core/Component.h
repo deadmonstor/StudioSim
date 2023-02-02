@@ -13,7 +13,7 @@ public:
 	virtual void lateUpdate();
 	virtual void destroy();
 	virtual void getDebugInfo(std::string*);
-	~Component();
+	virtual ~Component();
 
 	void setOwner(GameObject* owner) { this->owner = owner; }
 	GameObject* getOwner() const { return owner; }

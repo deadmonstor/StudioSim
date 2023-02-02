@@ -51,6 +51,7 @@ void Behaviour::destroy()
 		Griddy::Events::unsubscribe(this, &Behaviour::EventResponse, eventResponseID);
 		eventResponseID = -1;
 	}
+	initialized = false;
 	
 	Component::destroy();
 }

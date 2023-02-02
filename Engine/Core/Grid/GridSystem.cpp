@@ -8,6 +8,14 @@
 #include "Util/Logger.h"
 #include "Util/Events/Events.h"
 
+void GridSystem::createTile(const int id, Tile* tile)
+{
+	tile->createBuffers();
+	tile->setSortingLayer(orderSortingMap.at(id));
+	tile->setLit(true);
+	tile->setPivot(Pivot::Center);
+}
+
 void GridSystem::clearGrid(const int id)
 {
 	if (gridLayers[id])
@@ -25,14 +33,12 @@ void GridSystem::clearGrid(const int id)
 		for(int y = 0; y < gridSize.y; y++)
 		{
 			TileHolder* grid_holder = gridLayers[id]->internalMap[x][y] = new TileHolder();
+			grid_holder->position = glm::vec2(x, y);
 			grid_holder->isSpawned = false;
 
 			const auto tile = new Tile(Texture());
-			tile->createBuffers();
-			tile->setSortingLayer(orderSortingMap.at(id));
-			tile->setLit(true);
-			tile->setPivot(Pivot::Center);
-
+			createTile(id, tile);
+			tile->init(grid_holder);
 			gridLayers[id]->internalMap[x][y]->tile = tile;
 		}
 	}
@@ -42,6 +48,7 @@ void GridSystem::init(const glm::fvec2 _tileSize, const glm::ivec2 _gridSize)
 {
 	tileSize = _tileSize;
 	gridSize = _gridSize;
+	hasLoaded = false;
 
 	// subscribe to the event
 	Griddy::Events::subscribe(this, &GridSystem::onDebugEvent);
@@ -66,7 +73,7 @@ void GridSystem::renderInternal(const int id)
 			const float tileY = y * tileHeight;
 			const auto pos = glm::vec2{tileX, tileY};
 
-			if (!holder->isSpawned) continue;
+			if (holder == nullptr || !holder->isSpawned) continue;
 			if (holder->tile->getTexture().Height == 0 && holder->tile->getTexture().Width == 0)
 				continue;
 			
@@ -76,6 +83,8 @@ void GridSystem::renderInternal(const int id)
 			                                   {tileWidth, tileHeight},
 			                                   0
 			);
+
+			hasLoaded = true;
 		}
 	}
 }
@@ -131,16 +140,17 @@ void GridSystem::refreshLightData(const LightUpdateRequest lightUpdateRequest)
 		auto internalMap = gridLayers[id]->internalMap;
 		if (internalMap.empty()) return;
 		
-		for(auto [x, pointer] : internalMap)
+		for(auto pointer : internalMap | std::views::values)
 		{
-			for(auto [y, holder] : pointer)
+			for(const auto holder : pointer | std::views::values)
 			{
-				if (!holder->isSpawned) continue;
+				if (holder == nullptr || !holder->isSpawned) continue;
 				if (holder->tile->getTexture().Height == 0 && holder->tile->getTexture().Width == 0)
 					continue;
 
 				// TODO: This is really bad, can we only do this when they are in the view of the camera or something?
-				Lighting::Instance()->refreshLightData(holder->tile, lightUpdateRequest);
+				if (!holder->tile->wasInFrame)
+					Lighting::Instance()->refreshLightData(holder->tile, lightUpdateRequest);
 			}
 		}
 	}
@@ -185,6 +195,30 @@ std::vector<std::pair<glm::vec2, Tile*>> GridSystem::getNeighbours(const int id,
 		}
 	}
 	
+	return neighbours;
+}
+
+std::vector<TileHolder*> GridSystem::getPathfindingNeighbours(int id, TileHolder* tile)
+{
+	auto& internalMap = gridLayers[id]->internalMap;
+	std::vector<TileHolder*> neighbours;
+
+	for (int x = -1; x < 2; x++)
+	{
+		for (int y = -1; y < 2; y++)
+		{
+			if (x == 0 && y == 0) continue;
+			//If diagonal neighbour then ignore
+			if (abs(x) == abs(y)) continue;
+
+			glm::vec2 neighbour = tile->position + glm::vec2(x, y);
+			if (neighbour.x < 0 || neighbour.y < 0) continue;
+			if (neighbour.x >= gridSize.x || neighbour.y >= gridSize.y) continue;
+
+			TileHolder* tile = internalMap[neighbour.x][neighbour.y];
+			neighbours.emplace_back(tile);
+		}
+	}
 	return neighbours;
 }
 
@@ -259,10 +293,20 @@ void GridSystem::loadFromFile(const int mapID, const std::string& fileName)
 			GridLayer* layer = gridLayers[mapID];
 			TileHolder* grid_holder = layer->internalMap[x][y];
 
-			if (Texture texture = gridLayers[mapID]->textureMap[i]; texture.Height != 0 && texture.Width != 0)
+			if (layer->tileFunctions.contains(i))
 			{
-				grid_holder->tile->SetTexture(texture);
+				delete grid_holder->tile;
+				const auto tile = layer->tileFunctions[i]();
+				createTile(mapID, tile);
+				tile->init(grid_holder);
+				grid_holder->tile = tile;
 			}
+
+			if (Texture texture = gridLayers[mapID]->textureMap[i]; texture.Height != 0 && texture.Width != 0)
+				grid_holder->tile->SetTexture(texture);
+
+			if (std::function<void(glm::vec2)> spawnFunction = gridLayers[mapID]->spawnFunctions[i]; spawnFunction != nullptr)
+				spawnFunction({x, y});
 
 			grid_holder->isSpawned = std::ranges::find(layer->emptyTiles, i) == layer->emptyTiles.end();
 			grid_holder->isWall =std::ranges::find(layer->wallIDs, i) != layer->wallIDs.end();

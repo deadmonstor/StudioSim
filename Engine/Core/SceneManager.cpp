@@ -20,8 +20,6 @@ void SceneManager::destroyScene(const Scene* scene)
 	}
 
 	addPendingObjects();
-	Renderer::Instance()->setCamera(nullptr);
-	deleteAllPendingObjects();
 }
 
 bool SceneManager::changeScene(const std::string& scene)
@@ -29,26 +27,18 @@ bool SceneManager::changeScene(const std::string& scene)
 	if (isLoadingScene()) return false;
 	
 	loadingScene = true;
-	if (currentScene != nullptr)
-	{
-		LOG_INFO("Destroy current scene " + currentScene->name);
-		destroyScene(currentScene);
-	}
-
-	shuttingDown = false;
-	LOG_INFO("Changed scene to " + scene);
-	currentScene = new Scene();
-	currentScene->name = scene;
-
-	Griddy::Events::invoke<OnSceneChanged>(scene);
-	loadingScene = false;
+	loadNextScene = new Scene();
+	loadNextScene->name = scene;
+	shuttingDown = true;
 	return true;
 }
 
 bool SceneManager::init()
 {
 	Griddy::Events::subscribe(this, &SceneManager::onSceneChanged);
-	return changeScene("debugScene");
+	changeScene("debugScene1");
+	lateShutdown();
+	return true;
 }
 
 GameObject* SceneManager::createGameObject(const std::string name, const glm::vec2 position)
@@ -146,6 +136,27 @@ void SceneManager::deleteAllPendingObjects() const
 	#endif
 }
 
+void SceneManager::lateShutdown()
+{
+	if (shuttingDown)
+	{
+		if (currentScene != nullptr)
+		{
+			LOG_INFO("Destroy current scene " + currentScene->name);
+			destroyScene(currentScene);
+		}
+		
+		Renderer::Instance()->setCamera(nullptr);
+
+		shuttingDown = false;
+		LOG_INFO("Changed scene to " + loadNextScene->name);
+		currentScene = loadNextScene;
+
+		Griddy::Events::invoke<OnSceneChanged>(currentScene->name);
+		loadingScene = false;
+	}
+}
+
 void SceneManager::lateUpdate()
 {
 	for (auto i : currentScene->gameObjects)
@@ -156,8 +167,9 @@ void SceneManager::lateUpdate()
 	Renderer::Instance()->sortRenderQueue();
 	deleteAllPendingObjects();
 	addPendingObjects();
-}
 
+	lateShutdown();
+}
 
 void SceneManager::render() const
 {
