@@ -9,6 +9,7 @@
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
+#include "../../System/Inventory.h"
 
 PlayerAttackBehaviour::PlayerAttackBehaviour()
 {
@@ -44,12 +45,18 @@ void PlayerAttackBehaviour::Act()
 	TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, currentPlayerPos + attackDir);
 	glm::fvec2 tileSize = GridSystem::Instance()->getTileSize();
 	const bool isWallTile = GridSystem::Instance()->isWallTile(currentPlayerPos + attackDir);
-
+	/*for (Item* item : PlayerController::Instance()->myInventory->items)
+	{
+		if (item->isEquipped && item->name == "Dagger")
+		{
+			PlayerController::Instance()->daggerClass->Attack(currentPlayerPos, attackDir);
+		}
+	}*/
 	if (curTileHolder->tile != nullptr)
 	{
 		switch (weaponClassEquipped)
 		{
-			case Dagger:
+			case dagger:
 			{
 				if (!isWallTile)
 				{
@@ -58,7 +65,7 @@ void PlayerAttackBehaviour::Act()
 				}
 				break;
 			}
-			case Sword:
+			case sword:
 			{
 				if (attackDir == glm::fvec2{ 0,1 } || attackDir == glm::fvec2{ 0,-1 })
 				{
@@ -96,7 +103,7 @@ void PlayerAttackBehaviour::Act()
 				}
 				break;
 			}
-			case Axe:
+			case axe:
 			{
 				std::vector<glm::fvec2> attackPosAxe = { (currentPlayerPos + attackDir),
 					(currentPlayerPos + attackDir + attackDir) };
@@ -113,7 +120,7 @@ void PlayerAttackBehaviour::Act()
 				}
 				break;
 			}
-			case Hammer:
+			case hammer:
 			{
 				glm::fvec2 firstTileinAttackDir = (currentPlayerPos + attackDir);
 				glm::fvec2 secondTileinAttackDir = (currentPlayerPos + attackDir + attackDir);
@@ -178,19 +185,19 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 
 	if (eventCasted->key == GLFW_KEY_E)
 	{
-		weaponClassEquipped = Dagger;
+		weaponClassEquipped = dagger;
 	}
 	else if (eventCasted->key == GLFW_KEY_R)
 	{
-		weaponClassEquipped = Sword;
+		weaponClassEquipped = sword;
 	}
 	else if (eventCasted->key == GLFW_KEY_T)
 	{
-		weaponClassEquipped = Hammer;
+		weaponClassEquipped = hammer;
 	}
 	else if (eventCasted->key == GLFW_KEY_Y)
 	{
-		weaponClassEquipped = Axe;
+		weaponClassEquipped = axe;
 	}
 
 	if (eventCasted->key == GLFW_KEY_W)

@@ -44,6 +44,11 @@ void PlayerController::createPlayer()
 	playerStats->critChance = 0.0f;
 	playerStats->coinsHeld = 0;
 	
+	daggerClass = new Dagger();
+	swordClass = new Sword();
+	axeClass = new Axe();
+	hammerClass = new Hammer();
+
 	myInventory = playerPTR->addComponent<Inventory>(20);
 	Light* light = playerPTR->addComponent<Light>();
 	light->setFalloff({0.75f, 0.75f, 7.5f});
