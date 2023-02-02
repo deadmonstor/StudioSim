@@ -8,4 +8,5 @@ LegendaryArmour::LegendaryArmour()
 	legendaryArmourStats->health = 10;
 	legendaryArmourStats->mana = 10;
 	legendaryArmourStats->costInShop = 20;
+
 }
