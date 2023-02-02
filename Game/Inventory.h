@@ -17,6 +17,7 @@ struct Item
 	int getPrice() { return price; }
 	bool isUsable;
 	bool isEquipped;
+	bool getWeaponEquip;
 	virtual ~Item() {}; // added virtual destructor
 };
 

@@ -143,18 +143,18 @@ public:
 		grid_system->setTextureMap(1, std::map<int, Texture>
 		{
 			{ 21, ResourceManager::GetTexture("tile12")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
-			{ 22, ResourceManager::GetTexture("tile36")},//tile111 skulls
-			{ 23, ResourceManager::GetTexture("tile11")},//tile223 rocks
-			{ 24, ResourceManager::GetTexture("tile35")}, //Pillars : 20 44 68, 21 45 69, 22 46 70,
-			{ 25, ResourceManager::GetTexture("tile13")}, //104 105
-			{ 26, ResourceManager::GetTexture("tile37")}, //stair case/window
-			{ 27, ResourceManager::GetTexture("tile111")}, //skulls
-			{ 28, ResourceManager::GetTexture("tile223")}, //rocks
-			{ 29, ResourceManager::GetTexture("tile20")},
-			{ 30, ResourceManager::GetTexture("tile44")},
-			{ 31, ResourceManager::GetTexture("tile68")},
-			{ 32, ResourceManager::GetTexture("tile129")},	//vases
-			{ 33, ResourceManager::GetTexture("tile153")},	//vases
+			{ 22, ResourceManager::GetTexture("tile36") },//tile111 skulls
+			{ 23, ResourceManager::GetTexture("tile11") },//tile223 rocks
+			{ 24, ResourceManager::GetTexture("tile35") }, //Pillars : 20 44 68, 21 45 69, 22 46 70,
+			{ 25, ResourceManager::GetTexture("tile13") }, //104 105
+			{ 26, ResourceManager::GetTexture("tile37") }, //stair case/window
+			{ 27, ResourceManager::GetTexture("tile111") }, //skulls
+			{ 28, ResourceManager::GetTexture("tile223") }, //rocks
+			{ 29, ResourceManager::GetTexture("tile20") },
+			{ 30, ResourceManager::GetTexture("tile44") },
+			{ 31, ResourceManager::GetTexture("tile68") },
+			{ 32, ResourceManager::GetTexture("tile129") },	//vases
+			{ 33, ResourceManager::GetTexture("tile153") },	//vases
 			{ 34, ResourceManager::GetTexture("tile57") }, //lattice
 			{ 35, ResourceManager::GetTexture("tile127") },//barrels
 			{ 36, ResourceManager::GetTexture("tile151") },
@@ -170,7 +170,11 @@ public:
 			{ 46, ResourceManager::GetTexture("tile291") }, //skulls
 			{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
 			{ 48, ResourceManager::GetTexture("tile130") },//Jar
-			{ 49, ResourceManager::GetTexture("tile154") }
+			{ 49, ResourceManager::GetTexture("tile154") },
+			{ 95, ResourceManager::GetTexture("tile290") },
+			{ 95, ResourceManager::GetTexture("tile291") },
+			{ 95, ResourceManager::GetTexture("tile292") }
+
 		});
 		grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile*()>>
 		{
@@ -196,6 +200,13 @@ public:
 			{
 				// TODO: Create a chest
 			} }
+			});
+		grid_system->setTextureMap(2, std::map<int, Texture>
+		{
+			{ 94, ResourceManager::GetTexture("tile289") },
+			{ 95, ResourceManager::GetTexture("tile290") },
+			{ 96, ResourceManager::GetTexture("tile291") },
+			{ 97, ResourceManager::GetTexture("tile292") }
 		});
 		
 		grid_system->loadFromFile(2, "Grid/LevelDesignSP.txt");
@@ -215,6 +226,29 @@ public:
 		CreateFireball(glm::vec2{ 1000, 500 });
 		TurnManager::Instance()->startTurnSystem();
 	}
+
+	void onTile(const std::map<int, Texture>& tileID) 
+	{
+		if (tileID == std::map<int, Texture> { {8, ResourceManager::GetTexture("tile204")}})
+		{
+			activateShop();
+		}
+	}
+
+	void activateShop()
+	{
+		Inventory myInv(10);
+		std::vector<Item*> shopItems;
+		Weapon sword;
+		sword.name = "Bastard Sword";
+		sword.atk = 200;
+		sword.price = 20;
+		shopItems.push_back(&sword);
+		myInv.add_item(&sword);
+		
+		Shop myShop = Shop(shopItems, "Gold", myInv);
+	}
+
 
 	void TestFuncScene2(const OnSceneChanged* event) 
 	{
@@ -311,13 +345,14 @@ public:
 			} },
 			{ 92, [this](glm::vec2 pos)
 			{
-				createEnemy(pos);
+				createEnemy(pos); 
 			} },
 			{ 93, [this](glm::vec2 pos)
 			{
 				// TODO: Create a chest
 			} }
-		});
+			});
+
 		
 		grid_system->loadFromFile(2, "Grid/SecondLevelDesignSP.txt");
 		
