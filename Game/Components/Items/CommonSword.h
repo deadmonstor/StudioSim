@@ -6,7 +6,6 @@ class CommonSword :
 public:
     CommonSword();
 
-
     WeaponStats* commonSwordStats{};
 };
 
