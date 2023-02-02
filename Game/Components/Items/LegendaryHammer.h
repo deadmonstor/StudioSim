@@ -6,7 +6,9 @@ class LegendaryHammer : public Hammer
 public:
     LegendaryHammer();
 
-    void createLegendaryHammer();
+    std::string name() override { return "Legendary Hammer"; }
+    std::string itemDescription() override { return "A legendary hammer";}
+    std::string rarity() override { return "Legendary"; }
 
     WeaponStats* legendaryHammerStats{};
 };

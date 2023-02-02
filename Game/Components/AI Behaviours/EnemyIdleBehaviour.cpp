@@ -3,6 +3,7 @@
 #include "EnemyCombatBehaviour.h"
 #include "../TurnManager.h"
 #include "../Player/PlayerController.h"
+#include "../DelayTask.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
 #include "Core/Components/AI/StateMachine.h"
@@ -33,9 +34,13 @@ void EnemyIdleBehaviour::Act()
 			{
 				//Enemy can sense player here. engage combat.
 				Griddy::Events::invoke<StateTransition>(parentFSM, new EnemyCombatBehaviour(parentFSM));
+				TurnManager::Instance()->endTurn();
 			}
 		}
 	}
 
-	TurnManager::Instance()->endTurn();
+	DelayTask::createTask(parentFSM->getOwner(), 1.0f, [this]()
+	{
+		TurnManager::Instance()->endTurn();
+	});
 }

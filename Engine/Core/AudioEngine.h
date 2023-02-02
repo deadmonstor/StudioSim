@@ -42,16 +42,25 @@ public:
 	bool set3DAttributeChannelGroup(std::string channelGroupName, FMOD_VECTOR pos, FMOD_VECTOR vel);
 	bool setMinMaxChannelGroup(std::string channelGroupName, float min, float max);
 	int getNumberOfChannelsInGroup(std::string channelGroupName);
+	float getChannelVolume(std::string channelGroupName);
 
 	//Channel Stuff
 	FMOD::ChannelGroup* masterChannel;
 	FMOD::ChannelGroup* audioEffectsChannel;
 	FMOD::ChannelGroup* backgroundMusicChannel;
 
+	//Background Channel
+	FMOD::Channel* backgroundChannel;
+	FMOD::Channel* backgroundChannel2;
+
 	//Reverb zones
 	std::map<const int, FMOD::Reverb3D*> reverbZones;
 	bool createReverbZone(const int zone);
 	bool setReverbPos(const int zone, const float posX, const float posY, const float minX, const float minY);
 	bool deleteReverbZone(const int zone);
+
+	bool firstRun = false;
+
+	int backgroundChannelIndex = 0, backgroundChannel2Index = 0;
 };
 

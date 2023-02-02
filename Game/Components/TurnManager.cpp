@@ -70,6 +70,11 @@ void TurnManager::nextTurn()
 			nextTurn();
 			return; //We don't want to invoke the event if the object is not in the camera's frustum.
 		}
+
+		if (auto* cam = m_CurrentTurnObject->getComponent<Camera>(); cam != nullptr)
+		{
+			//6Renderer::Instance()->setCamera(cam);
+		}
 		
 		Griddy::Events::invoke<onStartTurn>(m_CurrentTurnObject);
 	}

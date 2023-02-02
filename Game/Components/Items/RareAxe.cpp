@@ -2,12 +2,8 @@
 
 RareAxe::RareAxe()
 {
-}
-
-void RareAxe::createRareAxe()
-{
-	rareAxeStats->name = "rare axe";
-	rareAxeStats->rarity = "rare";
+	rareAxeStats = new WeaponStats();
 	rareAxeStats->costInShop = 35;
 	rareAxeStats->attack = 25;
 }
+

@@ -74,12 +74,15 @@ glm::vec2 Renderer::getCameraPos() const
 
 glm::vec2 Renderer::getCameraPosScreenSpace() const
 {
+	const glm::vec2 result = Renderer::getWindowSize();
+	const float aspectRatio = Renderer::Instance()->getAspectRatio();
+	
 	// TODO: Fix these MAGIC numbers again
 	if (mainCam == nullptr  || mainCam->getOwner() == nullptr || !mainCam->getOwner()->isValidTransform() )
-		return {-(1080 / 2), -(600 / 2)};
+		return {-((result.x / aspectRatio) / 2) , -((result.y / aspectRatio) / 2)};
 		
 	// TODO: Fix these MAGIC numbers again
-	return mainCam->getOwner()->getTransform()->getPosition() + glm::vec2{-(1080 / 2), -(600 / 2)};
+	return mainCam->getOwner()->getTransform()->getPosition() + glm::vec2{-((result.x / aspectRatio) / 2), -((result.y / aspectRatio) / 2)};
 }
 
 void Renderer::setupCommonShader(const std::string& name, const glm::ivec2 value, const glm::mat4 projection, const glm::mat4 view)
@@ -247,8 +250,6 @@ void Renderer::renderUI(SpriteComponent* spriteRenderer, const glm::vec2 positio
 	
 	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);
 	glm::mat4 model;
-
-	// TODO: This is probably wrong (position - camera position)
 	getModelMatrix(position + getCameraPosScreenSpace(), size, rotation, pivot, model);
 	spriteRenderer->getShader().SetMatrix4("uModelMatrix", model, true);
 	spriteRenderer->getShader().SetMatrix4("uProjectionMatrix", mainCam->getViewProjectMatrix(), true);

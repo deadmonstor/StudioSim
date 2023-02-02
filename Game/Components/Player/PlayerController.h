@@ -3,6 +3,10 @@
 #include "Core/Components/Camera.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
+#include "../Items/Dagger.h"
+#include "../Items/Axe.h"
+#include "../Items/Hammer.h"
+#include "../Items/Sword.h"
 
 class Inventory;
 class PlayerFSM;
@@ -15,7 +19,6 @@ public:
 	void onKeyDown(const OnKeyDown* keyDown);
 	void onKeyHold(const OnKeyRepeat* keyHold);
 	void onKeyUp(const OnKeyUp* keyUp);
-
 	void UpdateStats();
 
 	SpriteComponent* playerSprite{};

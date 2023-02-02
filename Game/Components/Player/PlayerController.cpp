@@ -2,6 +2,10 @@
 #include "PlayerFSM.h"
 #include "../TurnManager.h"
 #include "../../System/Inventory.h"
+#include "../Items/HealthPotion.h"
+#include "../Items/LegendaryArmour.h"
+#include "../Items/LegendaryHammer.h"
+#include "../Items/RareSword.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
@@ -11,6 +15,10 @@
 
 PlayerController::PlayerController()
 {
+	Griddy::Events::subscribe(this, &PlayerController::onKeyDown);
+	Griddy::Events::subscribe(this, &PlayerController::onKeyUp);
+	Griddy::Events::subscribe(this, &PlayerController::onKeyHold);
+	
 	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
 	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
@@ -49,8 +57,6 @@ void PlayerController::createPlayer()
 	light->setFalloff({0.75f, 0.75f, 7.5f});
 	light->setColor({1.0f, 1.0f, 1.0f, 1.0f});
 	Renderer::Instance()->setCamera(cameraComponent);
-
-	//std::cout << "Adding playerPTR to queue";
 }
 
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
@@ -63,6 +69,11 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		glm::vec2 goal = start + glm::vec2(0 * gridSize.x, -30 * gridSize.y);
 		//PathfindingMachine::Instance()->FindPath(start, goal);
 		bool sight = PathfindingMachine::Instance()->LineOfSight(start, goal);
+
+		myInventory->add_item(new LegendaryHammer());
+		myInventory->add_item(new RareSword());
+		myInventory->add_item(new HealthPotion());
+		myInventory->add_item(new LegendaryArmour());
 	}
 	
 	//find the input and send it to the state machine
@@ -84,5 +95,8 @@ void PlayerController::onKeyUp(const OnKeyUp* keyUp)
 
 void PlayerController::UpdateStats()
 {
-
+	if (playerStats->currentHealth <= 0)
+	{
+		SceneManager::Instance()->changeScene("defeatScreen");
+	}
 }

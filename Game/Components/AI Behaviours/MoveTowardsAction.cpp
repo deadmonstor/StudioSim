@@ -3,6 +3,7 @@
 #include "../TurnManager.h"
 #include "Core/Components/Transform.h"
 #include "../Flash.h"
+#include "../DelayTask.h"
 #include "../LerpPosition.h"
 
 MoveTowardsAction::MoveTowardsAction()
@@ -31,6 +32,7 @@ void MoveTowardsAction::Act()
 		{
 			shouldLerp = true;
 			
+
 			GridSystem* instance = GridSystem::Instance();
 			instance->resetSatOnTile(0,  instance->getTilePosition(parentObject->getTransform()->getPosition()));
 			lerpPosition(parentObject, instance->getWorldPosition(path.front()->position));
@@ -41,7 +43,10 @@ void MoveTowardsAction::Act()
 
 	if (!shouldLerp)
 	{
-		endTurn();
+		DelayTask::createTask(parentObject, 1.0f, [this]()
+		{
+			TurnManager::Instance()->endTurn();
+		});
 	}
 }
 
@@ -60,7 +65,10 @@ void MoveTowardsAction::lerpPosition(GameObject* object, const glm::vec2 targetP
 	const auto lerpPosition = object->getComponent<LerpPosition>();
 	lerpPosition->onLerpComplete = [this]
 	{
-		endTurn();
+		DelayTask::createTask(parentObject, 1.0f, [this]()
+		{
+			endTurn();
+		});
 	};
 	lerpPosition->setSpeed(3);
 	lerpPosition->setPosition(targetPosition);

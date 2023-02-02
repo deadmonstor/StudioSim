@@ -4,6 +4,11 @@
 #include "../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
 
+Axe::Axe()
+{
+	axeStats = new WeaponStats();
+}
+
 void Axe::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 {
 	std::vector<glm::fvec2> attackPosAxe = { (playerPos + attackDir),
@@ -19,6 +24,7 @@ void Axe::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 			createSlashGameObject(attackPos);
 		}
 	}
+	attackPositions.clear();
 }
 
 void Axe::createSlashGameObject(glm::fvec2 pos)

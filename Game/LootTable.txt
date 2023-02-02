@@ -1,0 +1,9 @@
+commonArmour-15
+rareArmour-10
+legendaryArmour-5
+commonDagger-15
+commonSword-15
+rareSword-10
+commonAxe-15
+rareAxe-10
+legendaryHammer-5

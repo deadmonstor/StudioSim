@@ -1,8 +1,9 @@
 #include "Inventory.h"
 #include <iostream>
+#include "../Components/Items/ArmourItem.h"
+#include "../Components/Items/Weapon.h"
 #include "imgui/imgui.h"
 #include "Util/Logger.h"
-
 
 bool Inventory::add_item(Item* item)
 {
@@ -13,7 +14,7 @@ bool Inventory::add_item(Item* item)
 	}
 	
 	items.push_back(item);
-	std::cout << "You added a " << item->name << std::endl;
+	LOG_INFO("You added a " + item->name());
 	return true;
 }
 
@@ -21,10 +22,14 @@ bool Inventory::remove_item(Item* item)
 {
 	for (int i = 0; i < items.size(); i++)
 	{
-		if (items[i]->name == item->name)
+		// TODO: Check if item is the same as the one in the inventory
+		// This could fail and remove two of the same item but with different stats?
+		// Probably a good idea to do some hash code lookup here
+		
+		if (items[i]->name() == item->name())
 		{
 			items.erase(items.begin() + i);
-			std::cout << "You have removed a " << item->name << std::endl;
+			LOG_INFO("You have removed a " + item->name());
 			return true;
 		}
 	}
@@ -33,28 +38,48 @@ bool Inventory::remove_item(Item* item)
 	return false;
 }
 
-void Inventory::draw_inventory() {
+void Inventory::draw_inventory()
+{
 	std::cout << "Inventory:\n";
 	for (int i = 0; i < items.size(); i++)
 	{
-		std::cout << i + 1 << ". " << items[i]->name;
-		if (dynamic_cast<Weapon*>(items[i])) {
-			auto item = dynamic_cast<Weapon*>(items[i]);
-			std::cout << " (Atk:" << item->getAtk() << " / Crit:" << item->getCrit() << ")";
+		std::cout << i + 1 << ". " << items[i]->name();
+		
+		switch(items[i]->getItemType())
+		{
+			case ItemType::WEAPON:
+			{
+				const auto item = dynamic_cast<WeaponItem*>(items[i]);
+				std::cout << " (Atk:" << item->getAtk() << " / Crit:" << item->getCrit() << ")";
+				break;
+			}
+			case ItemType::SPELL:
+			{
+				const auto item = dynamic_cast<SpellItem*>(items[i]);
+				std::cout << " (Spell Power:" << item->getSpellAtk() << " / Mana Cost:" << item->getManaCost() << " / Effect Duration:" << item->getEffectDuration() << ")";
+				break;
+			}
+			case ItemType::ARMOUR:
+			{
+				const auto item = dynamic_cast<ArmourItem*>(items[i]);
+				std::cout << " (Def:" << item->armour->defence << " )";
+				break;
+			}
+			case ItemType::CONSUMABLE:
+			case ItemType::NOTSET:
+			{
+				break;
+			}
 		}
-		else if (dynamic_cast<Armour*>(items[i])) {
-			auto item = dynamic_cast<Armour*>(items[i]);
-			std::cout << " (Def:" << item->getDef() << " )";
-		}
-		else if (dynamic_cast<Spell*>(items[i])) {
-			auto item = dynamic_cast<Spell*>(items[i]);
-			std::cout << " (Spell Power:" << item->getSpellAtk() << " / Mana Cost:" << item->getManaCost() << " / Effect Duration:" << item->getEffectDuration() << ")";
-		}
-		if (items[i]->isEquipped) {
+		
+		if (items[i]->isEquipped)
+		{
 			std::cout << " (equipped) ";
 		}
+		
 		std::cout << std::endl;
 	}
+	
 	std::cout << std::endl;
 }
 
@@ -63,27 +88,55 @@ void Inventory::getDebugInfo(std::string* basic_string)
 	ImGui::Indent();
 	for (int i = 0; i < items.size(); i++)
 	{
-		/*ImGui::Text("%d. %s", i + 1, items[i].name.c_str());
+		ImGui::PushID(i);
+		
+		ImGui::Text("%d. %s", i + 1, items[i]->name().c_str());
 		ImGui::Indent();
-		if (items[i].type == "Weapon")
+		
+		if (items[i]->getItemType() == ItemType::WEAPON)
 		{
-			ImGui::Text("Atk: %d / Crit: %d", items[i].atk, items[i].crit);
+			const auto item = dynamic_cast<WeaponItem*>(items[i]);
+			ImGui::Text("Atk: %d / Crit: %d", item->atk, item->crit);
 		}
-		else if (items[i].type == "Armour")
+		else if (items[i]->getItemType() == ItemType::ARMOUR)
 		{
-			ImGui::Text("Def: %d", items[i].def);
+			const auto item = dynamic_cast<ArmourItem*>(items[i]);
+			ImGui::Text("Def: %d", item->armour->defence);
 		}
-		else if (items[i].type == "Spell")
+		else if (items[i]->getItemType() == ItemType::SPELL)
 		{
-			ImGui::Text("Spell Power: %d / Mana Cost: %d / Effect Duration: %d", items[i].spellAtk, items[i].manaCost, items[i].effectDuration);
+			const auto item = dynamic_cast<SpellItem*>(items[i]);
+			ImGui::Text("Spell Power: %d / Mana Cost: %d / Effect Duration: %d", item->spellAtk, item->manaCost, item->effectDuration);
 		}
 		
-		if (items[i].isEquipped)
+		if (items[i]->isEquipped)
 		{
 			ImGui::Text("Equipped");
-		}*/
+			
+			if (ImGui::Button("Un-equip"))
+			{
+				unequip_item(items[i]->name());
+			}
+		}
+		else if (items[i]->isEquipable())
+		{
+			if (ImGui::Button("Equip"))
+				equip_item(items[i]->name());
+		}
+
+		if (items[i]->isUsable())
+		{
+			if (ImGui::Button("Use Item"))
+			{
+				use_item(items[i]->name());
+			}
+		}
+		
+		ImGui::PopID();
+		
 		ImGui::Unindent();
 	}
+	
 	ImGui::Unindent();
 	
 	Component::getDebugInfo(basic_string);
@@ -91,19 +144,20 @@ void Inventory::getDebugInfo(std::string* basic_string)
 
 void Inventory::use_item(const std::string& item_name)
 {
-	for (auto& item : items)
+	for (const auto& item : items)
 	{
-		if (item->name == item_name)
+		if (item->name() == item_name)
 		{
-			if (item->type == "Potion")
+			if (item->isUsable())
 			{
-				LOG_INFO("You used a " + item->name + " and recovered 20 HP.");
+				item->use();
+				remove_item(item);
 			}
 			else
 			{
-				LOG_INFO("You used a " + item->name + ".");
+				LOG_ERROR(item_name + " is not usable.");
 			}
-
+			
 			return;
 		}
 	}
@@ -113,91 +167,92 @@ void Inventory::use_item(const std::string& item_name)
 
 void Inventory::equip_item(const std::string& item_name)
 {
-	for (auto item : items)
+	for (const auto item : items)
 	{
-		if (item->name == item_name)
+		if (item->name() == item_name)
 		{
-			if (dynamic_cast<Weapon*>(item) != nullptr) // check if item is a weapon
+			if (item->getEquipSlot() != EquipSlot::NOTSET)
 			{
-				Weapon* weapon = dynamic_cast<Weapon*>(item);
-				weapon->isEquipped = true; // set isEquipped to true for the weapon
-				std::cout << weapon->name << " equipped." << std::endl;
+				if (Item* equippedItem = getFirstItemWithEquipSlot(item->getEquipSlot()); equippedItem != nullptr)
+					unequip_item(equippedItem->name());
+			}
+			
+			item->isEquipped = true;
+
+			if (!item->isEquipable())
+			{
+				LOG_INFO(item->name() + " is not equippable.");
 				break;
 			}
-			else if (dynamic_cast<Armour*>(item) != nullptr) // check if item is an armor
+			
+			switch(item->getItemType())
 			{
-				Armour* armor = dynamic_cast<Armour*>(item);
-				armor->isEquipped = true; // set isEquipped to true for the armor
-				std::cout << armor->name << " equipped." << std::endl;
-				break;
-			}
-			else if (dynamic_cast<Spell*>(item) != nullptr)
-			{
-				Spell* spell = dynamic_cast<Spell*>(item);
-				spell->isEquipped = true; // set isEquipped to true for the spell
-				std::cout << spell->name << " equipped." << std::endl;
-				break;
+				case ItemType::WEAPON:
+				case ItemType::SPELL:
+				case ItemType::ARMOUR:
+				case ItemType::CONSUMABLE:
+				{
+					LOG_INFO(item->name() + " equipped.");
+					break;
+				}
+				case ItemType::NOTSET:
+				{
+					std::cout << item_name << " is not equippable." << std::endl;
+					break;
+				}
 			}
 
-			else
-			{
-				std::cout << item_name << " is not equippable." << std::endl;
-				break;
-			}
+			break;
 		}
 	}
 }
 
 void Inventory::unequip_item(const std::string& item_name)
 {
-	for (auto item : items)
+	for (const auto item : items)
 	{
-		if (item->name == item_name)
+		if (item->name() == item_name)
 		{
-			if (dynamic_cast<Weapon*>(item) != nullptr) // check if item is a weapon
+			if (!item->isEquipped)
 			{
-				Weapon* weapon = dynamic_cast<Weapon*>(item);
-				if (weapon->isEquipped) {
-					weapon->isEquipped = false; // set isEquipped to false for the weapon
-					std::cout << weapon->name << " unequipped." << std::endl;
-				}
-				else {
-					std::cout << weapon->name << " was not equipped." << std::endl;
-				}
+				LOG_INFO(item->name() + " is not equipped");
 				break;
 			}
-			else if (dynamic_cast<Armour*>(item) != nullptr) // check if item is an armor
+			
+			switch(item->getItemType())
 			{
-				Armour* armor = dynamic_cast<Armour*>(item);
-				if (armor->isEquipped) {
-					armor->isEquipped = false; // set isEquipped to false for the armor
-					std::cout << armor->name << " unequipped." << std::endl;
-				}
-				else {
-					std::cout << armor->name << " was not equipped." << std::endl;
-				}
-				break;
-			}
-			else if (dynamic_cast<Spell*>(item) != nullptr)
-			{
-				Spell* spell = dynamic_cast<Spell*>(item);
-				if (spell->isEquipped) {
-					spell->isEquipped = false;
-					std::cout << spell->name << " unequipped." << std::endl;
-				}
-				else
+				case ItemType::WEAPON:
+				case ItemType::SPELL:
+				case ItemType::ARMOUR:
+				case ItemType::CONSUMABLE:
 				{
-					std::cout << spell->name << " was not equipped." << std::endl;
+					item->isEquipped = false;
+					LOG_INFO(item->name() + " unequipped");
+					break;
 				}
-				break;
+				case ItemType::NOTSET:
+				{
+					LOG_INFO(item->name() + " is not unequipable.");
+					break;
+				}
 			}
-			else
-			{
-				std::cout << item_name << " is not equippable." << std::endl;
-				break;
-			}
+
+			break;
 		}
 	}
+}
+
+Item* Inventory::getFirstItemWithEquipSlot(const EquipSlot slot)
+{
+	for (const auto item : items)
+	{
+		if (item->isEquipped && item->getEquipSlot() == slot)
+		{
+			return item;
+		}
+	}
+	
+	return nullptr;
 }
 
 

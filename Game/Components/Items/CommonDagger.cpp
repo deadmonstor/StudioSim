@@ -2,12 +2,7 @@
 
 CommonDagger::CommonDagger()
 {
-}
-
-void CommonDagger::createCommonDagger()
-{
-	commonDaggerStats->name = "common dagger";
-	commonDaggerStats->rarity = "common";
+	commonDaggerStats = new WeaponStats();
 	commonDaggerStats->costInShop = 5;
 	commonDaggerStats->attack = 10;
 }
