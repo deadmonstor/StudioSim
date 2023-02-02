@@ -1,6 +1,9 @@
 #include "MoveTowardsAction.h"
-#include "Core/Components/Transform.h"
 
+#include "../TurnManager.h"
+#include "Core/Components/Transform.h"
+#include "../Flash.h"
+#include "../LerpPosition.h"
 
 MoveTowardsAction::MoveTowardsAction()
 	: target(glm::vec2())
@@ -18,19 +21,47 @@ MoveTowardsAction::MoveTowardsAction(GameObject* parentObjectArg)
 
 void MoveTowardsAction::Act()
 {
+	bool shouldLerp = false;
+	
 	if (parentObject != nullptr)
 	{
 		currentPos = parentObject->getTransform()->getPosition();
-		std::deque<TileHolder*> path = PathfindingMachine::Instance()->FindPath(currentPos, target);
+		const std::deque<TileHolder*> path = PathfindingMachine::Instance()->FindPath(currentPos, target);
 		if (!path.empty())
 		{
-			glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
-			GridSystem::Instance()->resetSatOnTile(0, parentObject->getTransform()->getPosition()/tileSize);
-			parentObject->getTransform()->setPosition(path.front()->position * tileSize);
-			//Set grid system "satOnTile" values
-
-			GridSystem::Instance()->setSatOnTile(0, parentObject->getTransform()->getPosition()/tileSize,parentObject);
+			shouldLerp = true;
+			
+			GridSystem* instance = GridSystem::Instance();
+			instance->resetSatOnTile(0,  instance->getTilePosition(parentObject->getTransform()->getPosition()));
+			lerpPosition(parentObject, instance->getWorldPosition(path.front()->position));
+			instance->setSatOnTile(0, path.front()->position, parentObject);
 		}
 	}
-	
+
+
+	if (!shouldLerp)
+	{
+		endTurn();
+	}
+}
+
+void MoveTowardsAction::endTurn()
+{
+	TurnManager::Instance()->endTurn();
+}
+
+void MoveTowardsAction::lerpPosition(GameObject* object, const glm::vec2 targetPosition)
+{
+	if (!object->hasComponent(typeid(LerpPosition)))
+	{
+		object->addComponent<LerpPosition>(targetPosition, 3);
+	}
+
+	const auto lerpPosition = object->getComponent<LerpPosition>();
+	lerpPosition->onLerpComplete = [this]
+	{
+		endTurn();
+	};
+	lerpPosition->setSpeed(3);
+	lerpPosition->setPosition(targetPosition);
 }

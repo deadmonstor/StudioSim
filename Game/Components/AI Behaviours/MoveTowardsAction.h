@@ -1,6 +1,6 @@
 #pragma once
-#include "Core/Components/AI/Behaviour.h"
-#include "Core/Grid/PathfindingMachine.h"
+#include "Core\Components\AI\Behaviour.h"
+#include "Core\Grid\PathfindingMachine.h"
 
 class MoveTowardsAction :
     public Behaviour
@@ -14,5 +14,8 @@ private:
     glm::vec2 target;
     glm::vec2 currentPos;
     GameObject* parentObject;
+
+    void endTurn();
+    void lerpPosition(GameObject* object, glm::vec2 targetPosition);
 };
 
