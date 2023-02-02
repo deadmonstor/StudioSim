@@ -25,50 +25,57 @@ EnemyCombatBehaviour::EnemyCombatBehaviour(StateMachine* parentFSMArg)
 
 void EnemyCombatBehaviour::WorldAnalysis()
 {
-	
+	int attackDistance = 1; //Get the attack distance from the Attack behaviour
+
 }
 
 void EnemyCombatBehaviour::ActionAnalysis()
 {
 	PlannedBehaviour::ActionAnalysis();
 
-	//Set the closest available tile to the player as the target for the move towards action
-	const glm::vec2 playerPos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
-	const glm::vec2 myPos = parentFSM->getOwner()->getTransform()->getPosition();
-	const glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
-	const TileHolder* targetTile = nullptr;
-	int depth = 0;
-	while (targetTile == nullptr)
+	if (fittestAction == availableActions["MoveTowards"].second)
 	{
-		//int startDepth = (depth - 1 < 0) ? 0 : depth - 1;
-		const TileHolder* closestEmptyTile = PathfindingMachine::Instance()->FindClosestEmptyTile(myPos, playerPos, depth, 0);
-		
-		if (closestEmptyTile != nullptr)
-			targetTile = closestEmptyTile;
-		
-		depth++;
-	}
-	
-	static_cast<MoveTowardsAction*>(availableActions["MoveTowards"].second)->SetTarget(targetTile->position * tileSize);
-}
+		//Set the closest available tile to the player as the target for the move towards action
+		const glm::vec2 playerPos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
+		const glm::vec2 myPos = parentFSM->getOwner()->getTransform()->getPosition();
+		const glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
+		const TileHolder* targetTile = nullptr;
+		int depth = 0;
+		while (targetTile == nullptr)
+		{
+			//int startDepth = (depth - 1 < 0) ? 0 : depth - 1;
+			const TileHolder* closestEmptyTile = PathfindingMachine::Instance()->FindClosestEmptyTile(myPos, playerPos, depth, 0);
 
+			if (closestEmptyTile != nullptr)
+				targetTile = closestEmptyTile;
+
+			depth++;
+		}
+
+		static_cast<MoveTowardsAction*>(availableActions["MoveTowards"].second)->SetTarget(targetTile->position * tileSize);
+	}
+}
+//Create and initialize behaviours
 void EnemyCombatBehaviour::GenerateBehaviourList()
 {
-	//Create and initialize move towards behaviour
+	
 	availableActions["MoveTowards"] = std::make_pair(0, new MoveTowardsAction(parentFSM->getOwner()));
-	if (!availableActions["MoveTowards"].second->GetInitValue())
+	availableActions["Attack"] = std::make_pair(0, new Behaviour());
+	for (auto action : availableActions)
 	{
-		availableActions["MoveTowards"].second->start();
+		if (!action.second.second->GetInitValue())
+		{
+			availableActions["MoveTowards"].second->start();
+		}
 	}
-
-	DelayTask::createTask(parentFSM->getOwner(), 1.0f, [this]()
-	{
-		TurnManager::Instance()->endTurn();
-	});
 }
 
 void EnemyCombatBehaviour::GenerateEffects()
 {
+	//Add the inRange effect which will put influence on the attack action
+	effects["InRange"] = Effect();
+	effects["InRange"].influencedActions["Attack"] = std::make_pair(5, availableActions["Attack"].second);
+	effects["InRange"].influencedActions["MoveTowards"] = std::make_pair(-5, availableActions["MoveTowards"].second);
 }
 
 void EnemyCombatBehaviour::endTurn()

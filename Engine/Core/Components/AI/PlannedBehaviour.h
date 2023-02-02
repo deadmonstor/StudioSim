@@ -8,6 +8,7 @@ typedef std::pair<int, Behaviour*> FitAction;
 class PlannedBehaviour :
     public Behaviour
 {
+protected:
 //Internal struct defining effects on the fitness of available behaviours
     struct Effect
     {
@@ -26,10 +27,11 @@ protected:
     //Dictionary of effects which affect the fitness of behaviours. Searched by name.
     std::unordered_map<std::string, Effect> effects;
    
-    
+    Behaviour* fittestAction;
+
 //Methods
 public:
-    PlannedBehaviour() { isInFSM = false; /*map = CreateFunctionMap()*/ }
+    PlannedBehaviour();
     PlannedBehaviour(bool isInFSMParam);
     void destroy() override;
     void start() override;
@@ -49,9 +51,12 @@ public:
     //examines effects to find fitness values of available behaviours
     virtual void ActionAnalysis();
 
+    //Examines the fittness values to find the most fit action
+    Behaviour* FindFittestAction();
+
 protected:
 
-    //Create the list of available behaviours
+    //Create and initialize behaviours
     virtual void GenerateBehaviourList();
 
     //Create the list of possible effects
