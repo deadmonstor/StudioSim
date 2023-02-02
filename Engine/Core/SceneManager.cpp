@@ -36,7 +36,7 @@ bool SceneManager::changeScene(const std::string& scene)
 bool SceneManager::init()
 {
 	Griddy::Events::subscribe(this, &SceneManager::onSceneChanged);
-	changeScene("debugScene1");
+	changeScene("mainMenu");
 	lateShutdown();
 	return true;
 }

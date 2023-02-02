@@ -2,6 +2,7 @@
 #include <Util/Logger.h>
 #include "TestGameplaySystem.h"
 #include "Core/Renderer/Renderer.h"
+#include "Scenes/MainMenu.h"
 #include "Util/Events/Events.h"
 
 int main(int, char**)
@@ -40,8 +41,9 @@ int main(int, char**)
 	ResourceManager::LoadTexture("Sprites\\background.png", "background");
 	ResourceManager::LoadTexture("Sprites\\UE.png", "troll");
 	ResourceManager::LoadTexture("Sprites\\image.png", "buttonTest");
-
-
+	
+	MainMenu::Instance()->init();
+	
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFunc);
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncScene1);
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestFuncScene2);

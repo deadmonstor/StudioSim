@@ -98,7 +98,7 @@ public:
 	
 	void TestFuncScene1(const OnSceneChanged* event) 
 	{
-		if (event->key != "debugScene1")
+		if (event->key != "level1")
 			return;
 
 		auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
@@ -218,7 +218,7 @@ public:
 
 	void TestFuncScene2(const OnSceneChanged* event) 
 	{
-		if (event->key != "debugScene2")
+		if (event->key != "level2")
 			return;
 
 		auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);

@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Scenes\MainMenu.h" />
     <ClInclude Include="Tiles\ChestTile.h" />
     <ClInclude Include="Components\Items\CommonAxe.h" />
     <ClInclude Include="Components\Items\CommonSword.h" />
@@ -60,6 +61,7 @@
     <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scenes\MainMenu.cpp" />
     <ClCompile Include="Tiles\ChestTile.cpp" />
     <ClCompile Include="Components\Items\CommonAxe.cpp" />
     <ClCompile Include="Components\Items\CommonSword.cpp" />

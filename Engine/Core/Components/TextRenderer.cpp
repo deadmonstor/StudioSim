@@ -64,6 +64,8 @@ void TextRenderer::init()
 
 void TextRenderer::renderText(std::string text, float screenPosX, float screenPosY, const float scale, const glm::vec3 colour, const glm::vec2 pivot)
 {
+	if (Renderer::Instance()->getCamera() == nullptr) return;
+	
 	internalSpriteComponent->getShader().SetVector3f("spriteColor", colour.x, colour.y, colour.z, true);
 	//Lighting::Instance()->refreshLightData(internalSpriteComponent, LightUpdateRequest::All);
 
@@ -113,6 +115,8 @@ void TextRenderer::renderText(std::string text, float screenPosX, float screenPo
 
 glm::vec2 TextRenderer::renderTextSize(std::string text, float scale)
 {
+	if (Renderer::Instance()->getCamera() == nullptr) return {0,0};
+	
 	float screenPosX = 0;
 	float screenPosY = 0;
 	
