@@ -59,12 +59,14 @@ void Level2Scene::init()
 			{ 11, ResourceManager::GetTexture("tile242") },
 			{ 12, ResourceManager::GetTexture("tile57") },
 			{ 13, ResourceManager::GetTexture("tile57") },
-			{ 15, ResourceManager::GetTexture("tile57") }
+			{ 15, ResourceManager::GetTexture("tile57") },
+			{ 14, ResourceManager::GetTexture("tile270") }
 		});
 
 		grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile* ()>>
 		{
 			{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
+			{ 14, [] { return new TestTile(Texture(), "victoryScreen"); } },
 			{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
 			{ 56, [] { return new SpikeTile(Texture()); } }
 		});

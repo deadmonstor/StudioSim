@@ -62,7 +62,7 @@ void Level1Scene::init()
 	});
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
 	{
-		{ 10, [] { return new TestTile(Texture()); } },
+		{ 10, [] { return new TestTile(Texture(), "level2"); } },
 		{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	
