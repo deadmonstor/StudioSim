@@ -15,9 +15,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Scenes\DefeatScene.h" />
+    <ClInclude Include="Scenes\Level1Scene.h" />
+    <ClInclude Include="Scenes\Level2Scene.h" />
+    <ClInclude Include="Scenes\MainMenu.h" />
+    <ClInclude Include="Scenes\VictoryScene.h" />
+    <ClInclude Include="Tiles\ChestTile.h" />
     <ClInclude Include="Components\Items\CommonAxe.h" />
     <ClInclude Include="Components\Items\CommonSword.h" />
     <ClInclude Include="Components\Items\Axe.h" />
+    <ClInclude Include="Components\DelayTask.h" />
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
     <ClInclude Include="Components\EnemyTest.h" />
     <ClInclude Include="Components\FireballComponent.h" />
@@ -51,6 +58,7 @@
     <ClInclude Include="Components\AI Behaviours\MoveTowardsAction.h" />
     <ClInclude Include="Components\AI Behaviours\NormalEnemyFSM.h" />
     <ClInclude Include="Components\Items\ManaPotion.h" />
+    <ClInclude Include="Components\Player\PlayerSpellBehaviour.h" />
     <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="Components\Items\Sword.h" />
     <ClInclude Include="Shop.h" />
@@ -62,8 +70,15 @@
     <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scenes\DefeatScene.cpp" />
+    <ClCompile Include="Scenes\Level1Scene.cpp" />
+    <ClCompile Include="Scenes\Level2Scene.cpp" />
+    <ClCompile Include="Scenes\MainMenu.cpp" />
+    <ClCompile Include="Scenes\VictoryScene.cpp" />
+    <ClCompile Include="Tiles\ChestTile.cpp" />
     <ClCompile Include="Components\Items\CommonAxe.cpp" />
     <ClCompile Include="Components\Items\CommonSword.cpp" />
+    <ClCompile Include="Components\DelayTask.cpp" />
     <ClCompile Include="Components\Items\Axe.cpp" />
     <ClCompile Include="Components\AI Behaviours\EnemyIdleBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\EnemyCombatBehaviour.cpp" />
@@ -91,6 +106,7 @@
     <ClCompile Include="Components\Items\RareSword.cpp" />
     <ClCompile Include="Components\Items\RareAxe.cpp" />
     <ClCompile Include="Components\Items\ManaPotion.cpp" />
+    <ClCompile Include="Components\Player\PlayerSpellBehaviour.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Components\TurnManager.cpp" />
     <ClCompile Include="Components\Items\Sword.cpp" />

@@ -11,6 +11,10 @@
 
 PlayerController::PlayerController()
 {
+	Griddy::Events::subscribe(this, &PlayerController::onKeyDown);
+	Griddy::Events::subscribe(this, &PlayerController::onKeyUp);
+	Griddy::Events::subscribe(this, &PlayerController::onKeyHold);
+	
 	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
 	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
@@ -89,5 +93,8 @@ void PlayerController::onKeyUp(const OnKeyUp* keyUp)
 
 void PlayerController::UpdateStats()
 {
-
+	if (playerStats->currentHealth <= 0)
+	{
+		SceneManager::Instance()->changeScene("defeatScreen");
+	}
 }

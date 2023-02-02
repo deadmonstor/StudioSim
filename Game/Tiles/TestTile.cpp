@@ -10,5 +10,5 @@ bool TestTile::canInteractWith()
 void TestTile::onInteractedWith(TileHolder* curTileHolder)
 {
     // change scene
-    SceneManager::Instance()->changeScene("debugScene2");
+    SceneManager::Instance()->changeScene("level2");
 }
