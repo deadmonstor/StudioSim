@@ -2,11 +2,11 @@
 #include <Core/Grid/GridSystem.h>
 #include <Util/Events/EngineEvents.h>
 #include "PlayerAttackBehaviour.h"
-#include "Core/Components/Transform.h"
+#include "../EnemyTest.h"
+#include "../TurnManager.h"
 #include "Core/AudioEngine.h"
-#include <Core/Components/Health.h>
-#include "TurnManager.h"
-#include "EnemyTest.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
+#include "Core/Components/Transform.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour()
 {
@@ -39,6 +39,12 @@ void PlayerMovementBehaviour::Act()
 		
 	if (curTileHolder->tile != nullptr && (!isWallTile || TurnManager::gNoclipMode))
 	{
+		// TODO: Remove this before release
+		if (TurnManager::gNoclipMode)
+			PlayerController::Instance()->playerPTR->getComponent<AnimatedSpriteRenderer>()->setColor({ 0.3, 0.3 , 0.3 });
+		else
+			PlayerController::Instance()->playerPTR->getComponent<AnimatedSpriteRenderer>()->setColor({ 1, 1, 1 });
+		
 		if (gameObjectOnTile != nullptr && gameObjectOnTile->hasComponent(typeid(EnemyTest)))
 		{
 			attackBehaviour->AttackOnMovement(moveDir);
@@ -63,7 +69,7 @@ void PlayerMovementBehaviour::Act()
 			AudioEngine::Instance()->playSound("Sounds\\softStep.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 			
 			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
-				TurnManager::Instance()->EndTurn();
+				TurnManager::Instance()->endTurn();
 		}
 	}
 	

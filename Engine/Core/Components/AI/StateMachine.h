@@ -1,8 +1,5 @@
 #pragma once
-
-
 #include "Core/Components/AI/Behaviour.h"
-#include "Core/Components/AI//PlannedBehaviour.h"
 
 //Class interface used for Behaviour Selection based on FSMTransition Events. Derive this class into unique AI state machines for the games.
 class StateMachine : public Behaviour
@@ -25,7 +22,7 @@ public:
 	void lateUpdate() override;
 
 	//performs Act() on the current state.
-	virtual void Act() override;
+	void Act() override;
 
 	//Exits current state, and tells update to wait till its ready for the change.
 	virtual void ChangeState(Behaviour* behaviourParam);

@@ -13,7 +13,7 @@ int main(int, char**)
 	}
 
 	const auto Renderer = Renderer::Instance();
-	Renderer->setWindowTitle("Game Name Here");
+	Renderer->setWindowTitle("Into The Crypt");
 	Renderer->setWindowSize({ 1920, 1080 });
 
 	ResourceManager::LoadTextureArray("Sprites\\Blue-Slime-Idle\\", "Blue-Slime-Idle", 7);
@@ -43,7 +43,6 @@ int main(int, char**)
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testKeyDown);
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testKeyUp);
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testGameObjectDestroy);
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::testRender);
 	
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestMouseDown);
 	Griddy::Events::subscribe(PlayerController::Instance(), &PlayerController::onKeyDown);

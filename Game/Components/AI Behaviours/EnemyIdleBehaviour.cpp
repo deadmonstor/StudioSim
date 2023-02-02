@@ -1,9 +1,12 @@
 #include "EnemyIdleBehaviour.h"
-#include "Core\Grid\PathfindingMachine.h"
-#include "Core\GameObject.h"
-#include "Core\Components\Transform.h"
-#include "..\PlayerController.h"
+
 #include "EnemyCombatBehaviour.h"
+#include "../TurnManager.h"
+#include "../Player/PlayerController.h"
+#include "Core/GameObject.h"
+#include "Core/Components/Transform.h"
+#include "Core/Components/AI/StateMachine.h"
+#include "Core/Grid/PathfindingMachine.h"
 
 EnemyIdleBehaviour::EnemyIdleBehaviour()
 {
@@ -21,18 +24,18 @@ void EnemyIdleBehaviour::Act()
 {
 	if (parentFSM != nullptr)
 	{
-		glm::vec2 myPos = parentFSM->getOwner()->getTransform()->getPosition();
-		glm::vec2 playerPos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
-		
-		float distance = PathfindingMachine::Instance()->EstimateDistance(myPos, playerPos);
-		if (distance < 600)
+		const glm::vec2 myPos = parentFSM->getOwner()->getTransform()->getPosition();
+		const glm::vec2 playerPos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
+
+		if (const float distance = PathfindingMachine::Instance()->EstimateDistance(myPos, playerPos); distance < 600)
 		{
 			if (PathfindingMachine::Instance()->LineOfSight(myPos, playerPos))
 			{
-
 				//Enemy can sense player here. engage combat.
 				Griddy::Events::invoke<StateTransition>(parentFSM, new EnemyCombatBehaviour(parentFSM));
 			}
 		}
 	}
+
+	TurnManager::Instance()->endTurn();
 }

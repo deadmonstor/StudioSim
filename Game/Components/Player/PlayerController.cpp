@@ -1,15 +1,18 @@
 #include "PlayerController.h"
 #include "PlayerFSM.h"
-#include "../System/Inventory.h"
+#include "../TurnManager.h"
+#include "../../System/Inventory.h"
+#include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
+#include "Core/Grid/PathfindingMachine.h"
 #include "Core/Renderer/ResourceManager.h"
-#include "TurnManager.h"
-#include "Core//Grid//PathfindingMachine.h"
 
 PlayerController::PlayerController()
 {
+	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 void PlayerController::createPlayer()

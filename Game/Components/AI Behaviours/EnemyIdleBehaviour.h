@@ -1,12 +1,14 @@
 #pragma once
-#include "Core\Components\AI\Behaviour.h"
-#include "Core\Components\AI\StateMachine.h"
+#include "Core/Components/AI/Behaviour.h"
+
+class StateMachine;
+
 class EnemyIdleBehaviour :
     public Behaviour
 {
 public:
     EnemyIdleBehaviour();
-    EnemyIdleBehaviour(StateMachine* parentFSM);
+    explicit EnemyIdleBehaviour(StateMachine* parentFSM);
     void Act() override;
 private:
     StateMachine* parentFSM;

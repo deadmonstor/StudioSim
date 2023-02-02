@@ -51,12 +51,12 @@ public:
 	//Estimates the distance between 2 points
 	float EstimateDistance(glm::vec2 startPos, glm::vec2 endPos);
 
-	PathfindingData FindClosestEmptyTile(PathfindingData& dataOut, TileHolder* goal, int depth);
-	PathfindingData FindClosestEmptyTile(PathfindingData& dataOut, glm::vec2 goal, int depth);
 
-	PathfindingData FindClosestEmptyTile(PathfindingData& dataOut, TileHolder* start, TileHolder* goal, int depth);
 
-	PathfindingData FindClosestEmptyTile(PathfindingData& dataOut, glm::vec2 start, glm::vec2 goal, int depth);
+	TileHolder* FindClosestEmptyTile(TileHolder* start, TileHolder* goal, int maxDepth, int startDepth);
+	TileHolder* FindClosestEmptyTile(glm::vec2 startPos, glm::vec2 goalPos, int maxDepth, int startDepth);
+	TileHolder* FindClosestEmptyTile(TileHolder* goal, int maxDepth, int startDepth);
+	TileHolder* FindClosestEmptyTile(glm::vec2 goalPos, int maxDepth, int startDepth);
 
 	//breadcrumb pathfinding implementation here also
 };

@@ -86,6 +86,8 @@ void Lighting::refreshLightData(const LightUpdateRequest lightUpdateRequest) con
 {
 	for(const auto& spriteRenderer : Renderer::Instance()->spriteRenderQueue)
 	{
+		if (!spriteRenderer->wasInFrame) continue;
+		
 		refreshLightData(spriteRenderer, lightUpdateRequest);
 	}
 
