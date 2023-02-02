@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClInclude Include="Components\Items\CommonArmour.h" />
     <ClInclude Include="Components\Items\Armour.h" />
+    <ClInclude Include="Components\UI\PauseButton.h" />
     <ClInclude Include="Scenes\DefeatScene.h" />
     <ClInclude Include="Scenes\Level1Scene.h" />
     <ClInclude Include="Scenes\Level2Scene.h" />
@@ -77,6 +78,7 @@
   <ItemGroup>
     <ClCompile Include="Components\Items\CommonArmour.cpp" />
     <ClCompile Include="Components\Items\Armour.cpp" />
+    <ClCompile Include="Components\UI\PauseButton.cpp" />
     <ClCompile Include="Scenes\DefeatScene.cpp" />
     <ClCompile Include="Scenes\Level1Scene.cpp" />
     <ClCompile Include="Scenes\Level2Scene.cpp" />

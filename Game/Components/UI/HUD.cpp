@@ -54,6 +54,10 @@ void HUD::createHUD()
 
 	audioText = UIManager::Instance()->createUIElement<TextComponent>("audioText");
 
+	//Pause Button
+	ResourceManager::LoadTexture("Sprites\\pauseButton.png", "pauseButton");
+	pauseButton = UIManager::Instance()->createUIElement<PauseButton>("plusAudioButton", ResourceManager::GetTexture("pauseButton"));
+
 	hasLoaded = true;
 }
 
@@ -131,6 +135,12 @@ void HUD::updateHUD()
 	coinsIcon->getTransform()->setSize({50, 50});
 	coinsIcon->setTexture(ResourceManager::GetTexture("coinsIcon"));
 	coinsIcon->setPivot(Pivot::TopRight);
+	// =============================================Update pause icon=============================================
+	pauseButton->getTransform()->setPosition(topLeft - glm::vec2{ -50, 110 });
+	pauseButton->getTransform()->setSize({ 30, 30 });
+	pauseButton->setTexture(ResourceManager::GetTexture("pauseButton"));
+	pauseButton->setPivot(Pivot::TopLeft);
+
 	// =============================================Update health text=============================================
 	const int health = playerStats->currentHealth;
 	const int maxHealth = playerStats->maxHealth;
