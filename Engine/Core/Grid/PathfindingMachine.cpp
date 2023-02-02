@@ -31,7 +31,7 @@ std::deque<TileHolder*> PathfindingMachine::FindPath(TileHolder* start, TileHold
 	}
 	bool foundPath = false;
 
-	while (!foundPath || !frontier.empty())
+	while (!foundPath && !frontier.empty())
 	{
 		//Inspect the top node of frontier
 		Node currentNode = frontier.top();
