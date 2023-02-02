@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "ButtonComponent.h"
 #include "TextComponent.h"
 #include "Util/SingletonTemplate.h"
 
@@ -12,7 +13,13 @@ private:
 	TextComponent* healthText;
 	TextComponent* levelText;
 
+	ButtonComponent* inventoryButton;
+	ButtonComponent* weaponButton;
+	ButtonComponent* spellsButton;
+	Panel* healthIcon;
+	Panel* manaIcon;
 	Panel* coinsIcon;
+
 	bool hasLoaded = false;
 
 	int sceneChangeID = -1;

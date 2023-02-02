@@ -15,71 +15,30 @@ void HUD::createHUD()
 
 	if (sceneChangeID != -1)
 		sceneChangeID = Griddy::Events::subscribe(this, &HUD::onSceneChange);
-	
-	const auto topLeft =
-					glm::vec2(0, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
-
-	const auto topRight =
-					glm::vec2(Renderer::getWindowSize().x, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
-
-	const auto topMiddle =
-					glm::vec2((Renderer::getWindowSize().x / 2), Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
-	
-	const auto bottomLeft =
-		glm::vec2(0, 0);
-
-	const auto bottomRight =
-		glm::vec2(Renderer::getWindowSize().x, 0) / Renderer::Instance()->getAspectRatio();
 
 	ResourceManager::LoadTexture("Sprites\\Armour\\BasicArmourChest.png", "BasicArmourChestInventoryUI");
-	ButtonComponent* inventoryButton =
+	inventoryButton =
 		UIManager::Instance()->createUIElement<ButtonComponent>("inventoryButton", ResourceManager::GetTexture("BasicArmourChestInventoryUI"));
 	
-	inventoryButton->getTransform()->setPosition(bottomRight);
-	inventoryButton->getTransform()->setSize(glm::vec2(100, 100));
-	inventoryButton->setPivot(Pivot::BottomRight);
-	
 	ResourceManager::LoadTexture("Sprites\\Weapons\\Spellbook4.png", "SpellbookInventoryUI");
-	ButtonComponent* spellsButton =
+	spellsButton =
 		UIManager::Instance()->createUIElement<ButtonComponent>("spellsButton", ResourceManager::GetTexture("SpellbookInventoryUI"));
-	
-	spellsButton->getTransform()->setPosition(bottomRight - glm::vec2{100, 0});
-	spellsButton->getTransform()->setSize(glm::vec2(100, 100));
-	spellsButton->setPivot(Pivot::BottomRight);
 
 	ResourceManager::LoadTexture("Sprites\\Weapons\\Sword.png", "SwordInventoryUI");
-	ButtonComponent* weaponButton =
+	weaponButton =
 		UIManager::Instance()->createUIElement<ButtonComponent>("weaponButton", ResourceManager::GetTexture("SwordInventoryUI"));
-	
-	weaponButton->getTransform()->setPosition(bottomRight - glm::vec2{200, 0});
-	weaponButton->getTransform()->setSize(glm::vec2(100, 100));
-	weaponButton->setPivot(Pivot::BottomRight);
 
 	ResourceManager::LoadTexture("Sprites\\Weapons\\Potion1.png", "healthIcon");
-	auto* healthIcon = UIManager::Instance()->createUIElement<Panel>("healthIcon");
-	healthIcon->getTransform()->setPosition(topLeft - glm::vec2{-20, 35});
-	healthIcon->getTransform()->setSize({50, 50});
-	healthIcon->setTexture(ResourceManager::GetTexture("healthIcon"));
-	healthIcon->setPivot(Pivot::TopLeft);
-	
+	healthIcon = UIManager::Instance()->createUIElement<Panel>("healthIcon");
 	healthText = UIManager::Instance()->createUIElement<TextComponent>("healthText");
 	
 	ResourceManager::LoadTexture("Sprites\\Weapons\\Potion2.png", "ManaIcon");
-	auto* manaIcon = UIManager::Instance()->createUIElement<Panel>("manaIcon");
-	manaIcon->getTransform()->setPosition(topLeft - glm::vec2{-20, 110});
-	manaIcon->getTransform()->setSize({50, 50});
-	manaIcon->setTexture(ResourceManager::GetTexture("ManaIcon"));
-	manaIcon->setPivot(Pivot::TopLeft);
-	
+	manaIcon = UIManager::Instance()->createUIElement<Panel>("manaIcon");
 	manaText = UIManager::Instance()->createUIElement<TextComponent>("manaText");
 	coinsText = UIManager::Instance()->createUIElement<TextComponent>("coinsText");
 	
 	ResourceManager::LoadTexture("Sprites\\Weapons\\Potion3.png", "coinsIcon");
 	coinsIcon = UIManager::Instance()->createUIElement<Panel>("coinsIcon");
-	coinsIcon->getTransform()->setSize({50, 50});
-	coinsIcon->setTexture(ResourceManager::GetTexture("coinsIcon"));
-	coinsIcon->setPivot(Pivot::TopRight);
-
 	xpText = UIManager::Instance()->createUIElement<TextComponent>("xpText");
 	levelText = UIManager::Instance()->createUIElement<TextComponent>("levelText");
 
@@ -117,6 +76,38 @@ void HUD::updateHUD()
 	const auto topMiddle =
 					glm::vec2((Renderer::getWindowSize().x / 2), Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
 
+	// =============================================Update Inventory Button ======================================
+	inventoryButton->getTransform()->setPosition(bottomRight);
+	inventoryButton->getTransform()->setSize(glm::vec2(100, 100));
+	inventoryButton->setPivot(Pivot::BottomRight);
+
+	// =============================================Update Spells Button ==========================================
+	spellsButton->getTransform()->setPosition(bottomRight - glm::vec2{100, 0});
+	spellsButton->getTransform()->setSize(glm::vec2(100, 100));
+	spellsButton->setPivot(Pivot::BottomRight);
+	
+	// =============================================Update Weapon Button =========================================
+	weaponButton->getTransform()->setPosition(bottomRight - glm::vec2{200, 0});
+	weaponButton->getTransform()->setSize(glm::vec2(100, 100));
+	weaponButton->setPivot(Pivot::BottomRight);
+	
+	// =============================================Update health icon=============================================
+	healthIcon->getTransform()->setPosition(topLeft - glm::vec2{-20, 35});
+	healthIcon->getTransform()->setSize({50, 50});
+	healthIcon->setTexture(ResourceManager::GetTexture("healthIcon"));
+	healthIcon->setPivot(Pivot::TopLeft);
+	
+	// =============================================Update mana icon===============================================
+	manaIcon->getTransform()->setPosition(topLeft - glm::vec2{-20, 110});
+	manaIcon->getTransform()->setSize({50, 50});
+	manaIcon->setTexture(ResourceManager::GetTexture("ManaIcon"));
+	manaIcon->setPivot(Pivot::TopLeft);
+	
+	// =============================================Update coins icon=============================================
+	coinsIcon->getTransform()->setSize({50, 50});
+	coinsIcon->setTexture(ResourceManager::GetTexture("coinsIcon"));
+	coinsIcon->setPivot(Pivot::TopRight);
+	
 	// =============================================Update health text=============================================
 	const int health = playerStats->currentHealth;
 	const int maxHealth = playerStats->maxHealth;
