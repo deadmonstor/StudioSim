@@ -32,6 +32,7 @@ struct WeaponStats : public items
 {
 	int attack;
 	int costInShop;
+	int crit = 2;
 };
 
 struct ConsumableStats : public items

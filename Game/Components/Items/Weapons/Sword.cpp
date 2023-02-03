@@ -3,6 +3,7 @@
 #include <Core/Components/Health.h>
 #include "../../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
+#include "../../EnemyComponent.h"
 
 Sword::Sword()
 {
@@ -56,12 +57,24 @@ void Sword::createSlashGameObject(glm::fvec2 pos)
 
 	if (gameObject != nullptr)
 	{
-		if (gameObject->hasComponent(typeid(Health)))
+		if (gameObject->hasComponent(typeid(EnemyComponent)))
 		{
+			auto* enemyInfo = gameObject->getComponent<EnemyComponent>();
+			int atkDamage = stats->attack - enemyInfo->getStats().defence;
+			if (atkDamage < 0)
+			{
+				atkDamage = 0;
+			}
 
+			//number between 0 and 1
+			float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+			if (r < stats->crit)
+			{
+				atkDamage *= 2; //double damage
+			}
 
-			auto* health = gameObject->getComponent<Health>();
-			health->setHealth(health->getHealth() - 50);
+			int newHealth = enemyInfo->getStats().currentHealth - atkDamage;
+			gameObject->getComponent<Health>()->setHealth(newHealth);
 
 			// TODO: This is probably shitty 
 			if (gameObject->isBeingDeleted())

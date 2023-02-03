@@ -11,12 +11,8 @@ public:
 	const std::vector<Texture> textureListRST = ResourceManager::GetTexturesContaining("RedSlashThin");
 	virtual void Attack(glm::fvec2 playerPos, glm::fvec2 attackDir) {}
 	virtual void createSlashGameObject(glm::fvec2 pos) {}
-	
-	int atk; // Added on to health and strength
-	int getAtk() { return atk; }
 
-	int crit;
-	int getCrit() { return crit; }
+	WeaponStats* stats = new WeaponStats();
 
 	bool isEquipable() override { return true; }
 	ItemType getItemType() override { return ItemType::WEAPON; }

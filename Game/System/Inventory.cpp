@@ -51,7 +51,7 @@ void Inventory::draw_inventory()
 			case ItemType::WEAPON:
 			{
 				const auto item = dynamic_cast<WeaponItem*>(items[i]);
-				std::cout << " (Atk:" << item->getAtk() << " / Crit:" << item->getCrit() << ")";
+				std::cout << " (Atk:" << item->stats->attack << " / Crit:" << item->stats->crit << ")";
 				break;
 			}
 			case ItemType::SPELL:
@@ -97,7 +97,7 @@ void Inventory::getDebugInfo(std::string* basic_string)
 		if (items[i]->getItemType() == ItemType::WEAPON)
 		{
 			const auto item = dynamic_cast<WeaponItem*>(items[i]);
-			ImGui::Text("Atk: %d / Crit: %d", item->atk, item->crit);
+			ImGui::Text("Atk: %d / Crit: %d", item->stats->attack, item->stats->crit);
 		}
 		else if (items[i]->getItemType() == ItemType::ARMOUR)
 		{

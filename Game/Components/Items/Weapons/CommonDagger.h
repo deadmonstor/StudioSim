@@ -6,10 +6,5 @@ class CommonDagger :
 {
 public:
     CommonDagger();
-
-
-    //GameObject* daggerPTR{};
-    WeaponStats* commonDaggerStats{};
-    
 };
 
