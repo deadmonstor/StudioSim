@@ -46,7 +46,7 @@
     <ClInclude Include="Tiles\ChestTile.h" />
     <ClInclude Include="Components\DelayTask.h" />
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
-    <ClInclude Include="Components\EnemyTest.h" />
+    <ClInclude Include="Components\EnemyComponent.h" />
     <ClInclude Include="Components\FireballComponent.h" />
     <ClInclude Include="Components\Flash.h" />
     <ClInclude Include="Components\Items\CharacterStats.h" />
@@ -60,6 +60,7 @@
     <ClInclude Include="Components\TurnManager.h" />
     <ClInclude Include="Components\AI Behaviours\EnemyIdleBehaviour.h" />
     <ClInclude Include="Components\AI Behaviours\EnemyCombatBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
     <ClInclude Include="Components\UI\ButtonComponent.h" />
     <ClInclude Include="Components\UI\HUD.h" />
     <ClInclude Include="Components\UI\TextComponent.h" />
@@ -107,8 +108,9 @@
     <ClCompile Include="Components\AI Behaviours\EnemyCombatBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\MoveTowardsAction.cpp" />
     <ClCompile Include="Components\AI Behaviours\NormalEnemyFSM.cpp" />
+    <ClCompile Include="Components\AI Behaviours\AttackAction.cpp" />
     <ClCompile Include="Components\DestroyAfterAnimation.cpp" />
-    <ClCompile Include="Components\EnemyTest.cpp" />
+    <ClCompile Include="Components\EnemyComponent.cpp" />
     <ClCompile Include="Components\FireballComponent.cpp" />
     <ClCompile Include="Components\Flash.cpp" />
     <ClCompile Include="Components\LerpPosition.cpp" />

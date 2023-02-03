@@ -7,7 +7,6 @@ class EnemyIdleBehaviour :
     public Behaviour
 {
 public:
-    EnemyIdleBehaviour();
     explicit EnemyIdleBehaviour(StateMachine* parentFSM);
     void Act() override;
 private:

@@ -1,4 +1,4 @@
-﻿#include "EnemyTest.h"
+﻿#include "EnemyComponent.h"
 
 #include "TurnManager.h"
 #include "Core/GameObject.h"
@@ -12,13 +12,26 @@
 #include "../LootTable.h"
 #include "Core/Components/Transform.h"
 
-void EnemyTest::start()
+
+EnemyComponent::EnemyComponent()
+{
+	enemyFSM = nullptr;
+	stats = EnemyStats();
+	spriteName = "";
+}
+
+EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsArg, std::string spriteNameArg)
+{
+	enemyFSM = stateMachineArg;
+	stats = statsArg;
+	spriteName = spriteNameArg;
+}
+
+void EnemyComponent::start()
 {
 	getOwner()->addComponent<Health>();
 	getOwner()->addComponent<Camera>();
-	enemyFSM = getOwner()->addComponent<NormalEnemyFSM>();
-	
-	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+	const std::vector textureList = ResourceManager::GetTexturesContaining(spriteName);
 	auto sprite = getOwner()->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 	sprite->setColor(glm::vec3(1, 1, 1));
 	sprite->setLit(true);
@@ -27,15 +40,15 @@ void EnemyTest::start()
 	TurnManager::Instance()->addToTurnQueue(getOwner());
 
 	if (onStartTurnID == -1)
-		Griddy::Events::subscribe(this, &EnemyTest::onTurnChanged);
+		Griddy::Events::subscribe(this, &EnemyComponent::onTurnChanged);
 	
 	Component::start();
 }
 
-void EnemyTest::destroy()
+void EnemyComponent::destroy()
 {
 	if (onStartTurnID != -1)
-		Griddy::Events::unsubscribe(this, &EnemyTest::onTurnChanged, onStartTurnID);
+		Griddy::Events::unsubscribe(this, &EnemyComponent::onTurnChanged, onStartTurnID);
 	
 	int expGained = 5;
 	PlayerController::Instance()->playerStats->currentEXP += expGained;
@@ -59,7 +72,7 @@ void EnemyTest::destroy()
 	Component::destroy();
 }
 
-void EnemyTest::onTurnChanged(const onStartTurn* event)
+void EnemyComponent::onTurnChanged(const onStartTurn* event)
 {
 	if (event->objectToStart == getOwner())
 	{

@@ -2,7 +2,7 @@
 #include <string>
 #include "ScoreSystem.h"
 #include "Shop.h"
-#include "Components/EnemyTest.h"
+#include "Components/EnemyComponent.h"
 #include "Components/FireballComponent.h"
 #include "Core/Input.h"
 #include "Core/SceneManager.h"
