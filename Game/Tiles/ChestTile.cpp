@@ -1,5 +1,6 @@
 #include "ChestTile.h"
 #include "../LootTable.h"
+#include <string>
 
 
 bool ChestTile::canInteractWith()
@@ -17,9 +18,9 @@ void ChestTile::onInteractedWith(TileHolder* curTileHolder)
 	{
 		//Add Chest Opening and dropping item from loot table and changing it to an open chest or removing the chest.
 	}
-	else
+	else if (!chestOpened)
 	{
-
+		std::string itemToSpawn = LootTable::Instance()->RollLoot();
 	}
 	//else do nothing
 }
