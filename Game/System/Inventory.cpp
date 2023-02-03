@@ -1,7 +1,8 @@
 #include "Inventory.h"
 #include <iostream>
-#include "../Components/Items/ArmourItem.h"
-#include "../Components/Items/Weapon.h"
+#include "../Components/Items/Armour/ArmourItem.h"
+#include "../Components/Items/Weapons/Weapon.h"
+#include "../Components/Items/Spells/SpellItem.h"
 #include "imgui/imgui.h"
 #include "Util/Logger.h"
 #include "../Components/Items/Spell.h"
