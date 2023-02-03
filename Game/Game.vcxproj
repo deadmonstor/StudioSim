@@ -38,6 +38,7 @@
     <ClInclude Include="Components\Items\Weapons\WeaponEnum.h" />
     <ClInclude Include="Components\Items\FireBallSpell.h" />
     <ClInclude Include="Components\UI\PauseButton.h" />
+    <ClInclude Include="Components\PickUp.h" />
     <ClInclude Include="Scenes\DefeatScene.h" />
     <ClInclude Include="Scenes\Level1Scene.h" />
     <ClInclude Include="Scenes\Level2Scene.h" />
@@ -97,6 +98,7 @@
     <ClCompile Include="Components\Items\Weapons\Sword.cpp" />
     <ClCompile Include="Components\Items\FireBallSpell.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
+    <ClCompile Include="Components\PickUp.cpp" />
     <ClCompile Include="Scenes\DefeatScene.cpp" />
     <ClCompile Include="Scenes\Level1Scene.cpp" />
     <ClCompile Include="Scenes\Level2Scene.cpp" />
