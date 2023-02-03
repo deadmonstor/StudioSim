@@ -19,6 +19,7 @@ int main(int, char**)
 
 	const auto Renderer = Renderer::Instance();
 	Renderer->setWindowTitle("Into The Crypt");
+	Renderer->setWindowIcon("Sprites\\engine.png");
 	Renderer->setWindowSize({ 1920, 1080 });
 
 	ResourceManager::LoadTextureArray("Sprites\\Blue-Slime-Idle\\", "Blue-Slime-Idle", 7);
