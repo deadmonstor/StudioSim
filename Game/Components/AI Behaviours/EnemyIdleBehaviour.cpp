@@ -39,7 +39,7 @@ void EnemyIdleBehaviour::Act()
 		}
 	}
 
-	DelayTask::createTask(parentFSM->getOwner(), 1.0f, [this]()
+	DelayTask::createTask(parentFSM->getOwner(), 0.5f, [this]()
 	{
 		TurnManager::Instance()->endTurn();
 	});
