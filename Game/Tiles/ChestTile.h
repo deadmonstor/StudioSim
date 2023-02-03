@@ -17,6 +17,7 @@ public:
     double m_x, m_y;
 private:
     bool chestOpened = false;
+    void ChangeTexture(class TileHolder* curTileHolder);
 };
 
 

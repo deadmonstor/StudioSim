@@ -15,9 +15,9 @@ public:
 	void start() override;
 	void update() override;
 	void destroy() override;
-	static void createTask(GameObject* object, int speed, const std::function<void()>& _onComplete);
+	static void createTask(GameObject* object, float speed, const std::function<void()>& _onComplete);
 
-	void setSpeed(int speed) { internalTimer = 0.0f; this->speed = speed; hasFinished = false;}
+	void setSpeed(float speed) { this->speed = speed;}
 	
 	std::function<void()> onComplete;
 };

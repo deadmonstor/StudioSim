@@ -12,6 +12,7 @@ struct PlayerStats : public character
 	int currentEXP;
 	int maxEXP;
 	int spellPower;
+	int level;
 };
 
 struct EnemyStats : public character
