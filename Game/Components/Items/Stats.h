@@ -55,7 +55,6 @@ struct WeaponStats : public Item
 {
 	int attack;
 	int costInShop;
-	std::string weaponClass;
 };
 
 struct ConsumableStats : public Item

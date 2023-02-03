@@ -8,10 +8,7 @@ struct Item
 	std::string itemDescription;
 	std::string rarity;
 	bool isEquipped;
-	int price;
-	int getPrice() { return price; }
-
-	bool isUsable;
-	virtual ~Item() {}; // added virtual destructor
+	int cost;
+	std::string name;
 };
 

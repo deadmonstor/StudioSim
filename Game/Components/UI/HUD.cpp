@@ -7,6 +7,7 @@
 #include "Core/Components/TextRenderer.h"
 #include "Core/Components/Transform.h"
 #include "Core/Renderer/ResourceManager.h"
+#include "Core/AudioEngine.h"
 
 void HUD::createHUD()
 {
@@ -42,12 +43,27 @@ void HUD::createHUD()
 	xpText = UIManager::Instance()->createUIElement<TextComponent>("xpText");
 	levelText = UIManager::Instance()->createUIElement<TextComponent>("levelText");
 
+	//Audio Controls
+	ResourceManager::LoadTexture("Sprites\\Audio\\Plus.png", "plusIcon");
+	plusAudioButton =
+		UIManager::Instance()->createUIElement<ButtonComponent>("plusAudioButton", ResourceManager::GetTexture("plusIcon"));
+
+	ResourceManager::LoadTexture("Sprites\\Audio\\Minus.png", "minusIcon");
+	minusAudioButton =
+		UIManager::Instance()->createUIElement<ButtonComponent>("minusAudioButton", ResourceManager::GetTexture("minusIcon"));
+
+	audioText = UIManager::Instance()->createUIElement<TextComponent>("audioText");
+
+	//Pause Button
+	ResourceManager::LoadTexture("Sprites\\pauseButton.png", "pauseButton");
+	pauseButton = UIManager::Instance()->createUIElement<PauseButton>("pauseButton", ResourceManager::GetTexture("pauseButton"));
+
 	hasLoaded = true;
 }
 
 void HUD::updateHUD()
 {
-	if (healthText == nullptr || manaText == nullptr || coinsText == nullptr || coinsIcon == nullptr || xpText == nullptr || levelText == nullptr)
+	if (healthText == nullptr || manaText == nullptr || coinsText == nullptr || coinsIcon == nullptr || xpText == nullptr || levelText == nullptr || audioText == nullptr)
 	{
 		return;
 	}
@@ -67,6 +83,9 @@ void HUD::updateHUD()
 	const auto topLeft =
 					glm::vec2(0, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
 
+	const auto MiddleLeft =
+					glm::vec2(0, Renderer::getWindowSize().y / 2) / Renderer::Instance()->getAspectRatio();
+
 	const auto topRight =
 					glm::vec2(Renderer::getWindowSize().x, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
 
@@ -75,7 +94,19 @@ void HUD::updateHUD()
 
 	const auto topMiddle =
 					glm::vec2((Renderer::getWindowSize().x / 2), Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
+                    
+    const auto bottomLeft = 
+                    glm::vec2(0, 0) / Renderer::Instance()->getAspectRatio();
 
+	// =============================================Update Audio Text ==========================================
+	plusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -60, -35 });
+	plusAudioButton->getTransform()->setSize(glm::vec2(50, 50));
+	plusAudioButton->setPivot(Pivot::BottomRight);
+
+	minusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -120, -35 });
+	minusAudioButton->getTransform()->setSize(glm::vec2(50, 50));
+	minusAudioButton->setPivot(Pivot::BottomRight);
+	
 	// =============================================Update Inventory Button ======================================
 	inventoryButton->getTransform()->setPosition(bottomRight);
 	inventoryButton->getTransform()->setSize(glm::vec2(100, 100));
@@ -107,7 +138,12 @@ void HUD::updateHUD()
 	coinsIcon->getTransform()->setSize({50, 50});
 	coinsIcon->setTexture(ResourceManager::GetTexture("coinsIcon"));
 	coinsIcon->setPivot(Pivot::TopRight);
-	
+	// =============================================Update pause icon=============================================
+	pauseButton->getTransform()->setPosition(MiddleLeft + glm::vec2{45, 125});
+	pauseButton->getTransform()->setSize({ 30, 30 });
+	pauseButton->setTexture(ResourceManager::GetTexture("pauseButton"));
+	pauseButton->setPivot(Pivot::Center);
+
 	// =============================================Update health text=============================================
 	const int health = playerStats->currentHealth;
 	const int maxHealth = playerStats->maxHealth;
@@ -165,6 +201,17 @@ void HUD::updateHUD()
 	levelText->getTransform()->setPosition(position);
 	levelText->getTransform()->setSize(sizeOfText);
 	levelText->setText(" Level: " + std::to_string(level));
+
+	// =============================================Update audio text===============================================
+	const float audioLevel = AudioEngine::Instance()->getChannelVolume("Master Channel") * 100 / 100;
+	
+	sizeOfText = TextRenderer::Instance()->renderTextSize("Volume: " + std::format("{:.2f}", audioLevel), 0.5);
+	position = bottomLeft - glm::vec2{ -5, sizeOfText.y } - glm::vec2{ 0, -120 };
+
+	audioText = UIManager::Instance()->createUIElement<TextComponent>("audioText");
+	audioText->getTransform()->setPosition(position);
+	audioText->getTransform()->setSize(sizeOfText);
+	audioText->setText("Volume: " + std::format("{:.2f}", audioLevel));
 }
 
 void HUD::onSceneChange(OnSceneChanged*)

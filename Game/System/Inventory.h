@@ -1,5 +1,4 @@
-#ifndef INVENTORY_H
-#define INVENTORY_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -26,7 +25,22 @@
 #include "../Components/Items/Stats.h"
 #include "../Components/Items/Weapon.h"
 
+enum class ItemType
+{
+	WEAPON,
+	SPELL,
+	ARMOUR,
+	CONSUMABLE,
+	NOTSET
+};
 
+enum class EquipSlot
+{
+	ARMOUR,
+	WEAPON,
+	SPELL,
+	NOTSET
+};
 
 
 //struct Weapon : public Item
@@ -59,19 +73,19 @@
 //	int getDef() { return def; }
 //};
 
-//struct Item
-//{
-//	std::string name;
-//	std::string type;
-//	std::string itemDescription;
-//	std::string equipSlot;
-//	std::string rarity;
-//	int price;
-//	int getPrice() { return price; }
-//	bool isUsable;
-//	bool isEquipped;
-//	virtual ~Item() {}; // added virtual destructor
-//};
+struct Item
+{
+	std::string name;
+	std::string type;
+	std::string itemDescription;
+	std::string equipSlot;
+	std::string rarity;
+	int price;
+	int getPrice() { return price; }
+	bool isUsable;
+	bool isEquipped;
+	virtual ~Item() {}; // added virtual destructor
+};
 
 class Inventory : public Component
 {
@@ -82,6 +96,7 @@ public:
 	{
 		this->max_items = max;
 	}
+	
 	std::vector<Item*> items;
 	bool add_item(Item* item);
 	bool remove_item(Item* item);
@@ -109,7 +124,7 @@ public:
 		for (auto item : items)
 		{
 			ArmourStats* armour = dynamic_cast<ArmourStats*>(item);
-			if (armour && armour-> isEquipped)
+			if (armour && armour->isEquipped)
 			{
 				return armour;
 			}
