@@ -17,7 +17,7 @@ public:
     double m_x, m_y;
 private:
     bool chestOpened = false;
-    void ChangeTexture(class TileHolder* curTileHolder);
+    void ChangeTexture(class TileHolder* curTileHolder, std::string itemToSpawn);
 };
 
 
