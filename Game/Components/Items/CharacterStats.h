@@ -1,5 +1,5 @@
 #pragma once
-struct character
+struct Character
 {
 	int currentHealth;
 	int maxHealth;

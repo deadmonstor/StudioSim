@@ -40,7 +40,7 @@ void Inventory::draw_inventory() {
 	//	std::cout << i + 1 << ". " << items[i]->name;
 	//	if (dynamic_cast<WeaponStats*>(items[i])) {
 	//		auto item = dynamic_cast<WeaponStats*>(items[i]);
-	//		std::cout << " (Atk:" << item->attack << " / Crit:" << item->getCrit() << ")";
+	//		std::cout << " (Atk:" << item->attack;
 	//	}
 	//	else if (dynamic_cast<ArmourStats*>(items[i])) {
 	//		auto item = dynamic_cast<ArmourStats*>(items[i]);
@@ -48,7 +48,7 @@ void Inventory::draw_inventory() {
 	//	}
 	//	else if (dynamic_cast<SpellsStats*>(items[i])) {
 	//		auto item = dynamic_cast<SpellsStats*>(items[i]);
-	//		std::cout << " (Spell Power:" << item->getSpellPow() << " / Mana Cost:" << item->getManaCost() << " / Effect Duration:" << item->getEffectDuration() << ")";
+	//		std::cout << " (Spell Attack:" << item->getSpellDamage() << " / Mana Cost:" << item->getManaCost() <</* " / Effect Duration:" << item->getEffectDuration() << */")";
 	//	}
 	//	//if (items[i]->isEquipped) {
 	//	//	std::cout << " (equipped) ";

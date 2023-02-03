@@ -1,8 +1,17 @@
 #pragma once
 #include <string>
-struct items
+
+struct Item
 {
-	bool isEquipped;
-	int cost;
 	std::string name;
+	std::string type;
+	std::string itemDescription;
+	std::string rarity;
+	bool isEquipped;
+	int price;
+	int getPrice() { return price; }
+
+	bool isUsable;
+	virtual ~Item() {}; // added virtual destructor
 };
+

@@ -59,19 +59,19 @@
 //	int getDef() { return def; }
 //};
 
-struct Item
-{
-	std::string name;
-	std::string type;
-	std::string itemDescription;
-	std::string equipSlot;
-	std::string rarity;
-	int price;
-	int getPrice() { return price; }
-	bool isUsable;
-	bool isEquipped;
-	virtual ~Item() {}; // added virtual destructor
-};
+//struct Item
+//{
+//	std::string name;
+//	std::string type;
+//	std::string itemDescription;
+//	std::string equipSlot;
+//	std::string rarity;
+//	int price;
+//	int getPrice() { return price; }
+//	bool isUsable;
+//	bool isEquipped;
+//	virtual ~Item() {}; // added virtual destructor
+//};
 
 class Inventory : public Component
 {
@@ -109,7 +109,7 @@ public:
 		for (auto item : items)
 		{
 			ArmourStats* armour = dynamic_cast<ArmourStats*>(item);
-			if (armour && armour->isEquipped)
+			if (armour && armour-> isEquipped)
 			{
 				return armour;
 			}
