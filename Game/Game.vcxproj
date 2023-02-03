@@ -36,6 +36,7 @@
     <ClInclude Include="Components\Items\Weapons\Sword.h" />
     <ClInclude Include="Components\Items\Weapons\Weapon.h" />
     <ClInclude Include="Components\Items\Weapons\WeaponEnum.h" />
+    <ClInclude Include="Components\Items\FireBallSpell.h" />
     <ClInclude Include="Components\UI\PauseButton.h" />
     <ClInclude Include="Scenes\DefeatScene.h" />
     <ClInclude Include="Scenes\Level1Scene.h" />
@@ -93,6 +94,7 @@
     <ClCompile Include="Components\Items\Weapons\RareAxe.cpp" />
     <ClCompile Include="Components\Items\Weapons\RareSword.cpp" />
     <ClCompile Include="Components\Items\Weapons\Sword.cpp" />
+    <ClCompile Include="Components\Items\FireBallSpell.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
     <ClCompile Include="Scenes\DefeatScene.cpp" />
     <ClCompile Include="Scenes\Level1Scene.cpp" />
@@ -134,6 +136,9 @@
       <Project>{7c2d4dd9-fd6c-4a38-927c-34af0d158458}</Project>
       <Name>Engine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Font\Pixel.ttf" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

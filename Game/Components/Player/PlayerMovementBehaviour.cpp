@@ -64,12 +64,18 @@ void PlayerMovementBehaviour::Act()
 				PlayerController::Instance()->playerPTR);
 
 
-			if(curTileHolder->tile->canInteractWith())
-				curTileHolder->tile->onInteractedWith(curTileHolder);
+			for (int i = 0; i < gridSystem->getOrderMap().size(); i++)
+			{
+				TileHolder* tileHolder = gridSystem->getTileHolder(i, origPos + moveDir);
+
+				if (tileHolder->tile->canInteractWith())
+					tileHolder->tile->onInteractedWith(tileHolder);
+			}
 
 			origPos = gridSystem->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
 		
 			AudioEngine::Instance()->playSound("Sounds\\softStep.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
+			
 			
 			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 				TurnManager::Instance()->endTurn();

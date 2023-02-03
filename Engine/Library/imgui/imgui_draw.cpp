@@ -171,6 +171,49 @@ using namespace IMGUI_STB_NAMESPACE;
 // [SECTION] Style functions
 //-----------------------------------------------------------------------------
 
+void ImGui::StyleCustom(ImGuiStyle* dst)
+{
+    ImGuiStyle* style = dst ? dst : &ImGui::GetStyle();
+    ImVec4* colors = style->Colors;
+
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->AddFontFromFileTTF("../Game/Fonts/arial.ttf", 20.0f);
+    
+    style->Alpha = 1.0f;
+    style->FramePadding = ImVec2(4, 2);
+    style->FrameRounding = 2.0f;
+    style->ItemSpacing = ImVec2(6, 2);
+    style->ItemInnerSpacing = ImVec2(6, 4);
+    style->ItemInnerSpacing = ImVec2(2, 4);
+    style->WindowRounding = 10.0f;
+    style->WindowPadding = ImVec2(15.0f, 15.0f);
+    style->ScrollbarSize = 20.0f;
+    style->ScrollbarRounding = 16.0f;
+    style->FrameBorderSize = 4.0f;
+    style->FramePadding = ImVec2(10.0f, 10.0f);
+    style->ColumnsMinSpacing = 50.0f;
+    style->GrabRounding = 16.0f;
+    style->IndentSpacing = 60.0f;
+ 
+    colors[ImGuiCol_Text]                   = ImVec4(255.0f, 255.0f, 255.0f, 1.0f);
+    colors[ImGuiCol_WindowBg]               = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
+    colors[ImGuiCol_ChildBg]                = ImVec4(0.07f, 0.07f, 0.07f, 1.0f);
+
+    colors[ImGuiCol_Header]                 = ImVec4(255.0f, 0.0f, 0.0f, 1.0f);
+    colors[ImGuiCol_HeaderHovered]          = ImVec4(50.0f, 0.0f, 50.0f, 1.0f);
+    colors[ImGuiCol_HeaderActive]           = ImVec4(180.0f, 0.0f, 0.0f, 1.0f);
+
+    colors[ImGuiCol_TitleBg]                = ImVec4(0.99f, 0.0f, 0.0f, 1.0f);
+    colors[ImGuiCol_TitleBgActive]          = ImVec4(0.0f, 0.0f, 1.0f, 1.0f);
+    colors[ImGuiCol_TitleBgCollapsed]       = ImVec4(0.99f, 0.0f, 0.0f, 1.0f);
+
+    colors[ImGuiCol_ScrollbarBg]            = ImVec4(0.40f, 0.62f, 0.80f, 0.15f);
+    colors[ImGuiCol_ScrollbarGrab]          = ImVec4(0.39f, 0.64f, 0.80f, 0.30f);
+    colors[ImGuiCol_ScrollbarGrabHovered]   = ImVec4(0.28f, 0.67f, 0.80f, 0.59f);
+    colors[ImGuiCol_ScrollbarGrabActive]    = ImVec4(0.25f, 0.48f, 0.53f, 0.67f);
+    
+}
+
 void ImGui::StyleColorsDark(ImGuiStyle* dst)
 {
     ImGuiStyle* style = dst ? dst : &ImGui::GetStyle();
