@@ -7,6 +7,7 @@
 #include "Scenes/Level2Scene.h"
 #include "Scenes/MainMenu.h"
 #include "Scenes/VictoryScene.h"
+#include "Scenes/ScoreScene.h"
 #include "Util/Events/Events.h"
 
 int main(int, char**)
@@ -71,6 +72,11 @@ int main(int, char**)
 			{
 				return new DefeatScene();
 			}
+		},
+		{"scoreScene", []
+			{
+				return new ScoreScene();
+			}		
 		},
 	};
 	

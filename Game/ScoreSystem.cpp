@@ -13,8 +13,6 @@ ScoreSystem::ScoreSystem()
 
 void ScoreSystem::SaveScore(std::string Username)
 {
-
-	Username.resize(3);
 	file.open("Score.txt", std::ios::app);
 	if (file)
 	{

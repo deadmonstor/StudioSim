@@ -23,6 +23,7 @@
     <ClInclude Include="Scenes\Level2Scene.h" />
     <ClInclude Include="Scenes\MainMenu.h" />
     <ClInclude Include="Scenes\VictoryScene.h" />
+    <ClInclude Include="Scenes\ScoreScene.h" />
     <ClInclude Include="Tiles\ChestTile.h" />
     <ClInclude Include="Components\Items\CommonAxe.h" />
     <ClInclude Include="Components\Items\CommonSword.h" />
@@ -84,6 +85,7 @@
     <ClCompile Include="Scenes\Level2Scene.cpp" />
     <ClCompile Include="Scenes\MainMenu.cpp" />
     <ClCompile Include="Scenes\VictoryScene.cpp" />
+    <ClCompile Include="Scenes\ScoreScene.cpp" />
     <ClCompile Include="Tiles\ChestTile.cpp" />
     <ClCompile Include="Components\Items\CommonAxe.cpp" />
     <ClCompile Include="Components\Items\CommonSword.cpp" />
