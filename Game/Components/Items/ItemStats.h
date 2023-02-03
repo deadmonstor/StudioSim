@@ -9,6 +9,7 @@ struct Item
 	std::string rarity;
 	bool isEquipped;
 	int cost;
+	int price;
 	std::string name;
 };
 
