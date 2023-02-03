@@ -89,7 +89,7 @@ void TurnManager::nextTurn()
 
 		if (auto* cam = m_CurrentTurnObject->getComponent<Camera>(); cam != nullptr)
 		{
-			//6Renderer::Instance()->setCamera(cam);
+			//Renderer::Instance()->setCamera(cam);
 		}
 		
 		Griddy::Events::invoke<onStartTurn>(m_CurrentTurnObject);

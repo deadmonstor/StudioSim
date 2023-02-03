@@ -4,6 +4,13 @@
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
 
+class OnPlayerControllerFSMUpdate : public Griddy::Event
+{
+public:
+	OnPlayerControllerFSMUpdate(const std::string key) : key(key) {}
+	std::string key;
+};
+
 class Inventory;
 class PlayerFSM;
 class PlayerController : public SingletonTemplate<PlayerController>

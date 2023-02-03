@@ -75,12 +75,14 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 
 	if (eventCasted->key == GLFW_KEY_Q)
 	{
+		Griddy::Events::invoke<OnPlayerControllerFSMUpdate>("PlayerMovementBehaviour");
 		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerMovementBehaviour(true));
 		return;
 	}
 
 	if (eventCasted->key == GLFW_KEY_E)
 	{
+		Griddy::Events::invoke<OnPlayerControllerFSMUpdate>("PlayerSpellBehaviour");
 		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerSpellBehaviour(true));
 	}
 
