@@ -3,7 +3,7 @@
 #include "PlayerMovementBehaviour.h"
 #include "PlayerSpellBehaviour.h"
 #include "../DestroyAfterAnimation.h"
-#include "../EnemyTest.h"
+#include "../EnemyComponent.h"
 #include "../Flash.h"
 #include "../TurnManager.h"
 #include "../../System/Inventory.h"

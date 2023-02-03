@@ -10,7 +10,7 @@
 #include "../Tiles/TestTile.h"
 #include "../Tiles/LightTile.h"
 #include "../Components/Player/PlayerController.h"
-#include "../Components/EnemyTest.h"
+#include "../Components/EnemyComponent.h"
 #include "../ScoreSystem.h"
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
@@ -24,7 +24,15 @@ void Level1Scene::createEnemy(const glm::vec2 pos)
 		
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy", tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
-	enemy->addComponent<EnemyTest>();
+	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
+	EnemyStats slimeStats = EnemyStats();
+	slimeStats.attack = 2;
+	slimeStats.critChance = 0.2f;
+	slimeStats.maxHealth = 10;
+	slimeStats.currentHealth = 10;
+	slimeStats.defence = 2;
+	EnemyComponent component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
+	enemy->addComponent<EnemyComponent>(component);
 
 	GridSystem::Instance()->setSatOnTile(0, pos, enemy);
 }
