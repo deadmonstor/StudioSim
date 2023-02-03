@@ -1,6 +1,7 @@
 #include "PlayerSpellBehaviour.h"
 #include "PlayerMovementBehaviour.h"
 #include "../TurnManager.h"
+#include "../../System/Inventory.h"
 
 PlayerSpellBehaviour::PlayerSpellBehaviour()
 {
@@ -16,9 +17,15 @@ PlayerSpellBehaviour::PlayerSpellBehaviour(bool isInFSMParam)
 
 void PlayerSpellBehaviour::Act()
 {
+	if (willFlashOnce) return;
 	canThrowSpell = false;
 	if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) && !willFlashOnce)
 		TurnManager::Instance()->endTurn();
+}
+
+void PlayerSpellBehaviour::update()
+{
+	
 }
 
 void PlayerSpellBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -52,9 +59,16 @@ void PlayerSpellBehaviour::onKeyDownResponse(Griddy::Event* event)
 	if (canThrowSpell && (eventCasted->key == GLFW_KEY_W || eventCasted->key == GLFW_KEY_S ||
 		eventCasted->key == GLFW_KEY_A || eventCasted->key == GLFW_KEY_D))
 	{
-		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		Item* spell = PlayerController::Instance()->myInventory->getFirstItemWithEquipSlot(EquipSlot::SPELL);
+		
+		if ((TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR)) &&
+			 spell != nullptr)
 		{
-			Act();
+			const auto spellCasted = dynamic_cast<SpellItem*>(spell);
+			if (spellCasted->getCoolDown() != 0)
+			{
+				Act();
+			}
 		}
 	}
 }
