@@ -1,5 +1,9 @@
 #include "AttackAction.h"
 #include "Core\Grid\GridSystem.h"
+#include "..\EnemyComponent.h"
+#include "../DestroyAfterAnimation.h"
+#include "../TurnManager.h"
+#include "../Flash.h"
 
 AttackAction::AttackAction(GameObject* parentObjectArg)
 	: parentObject(parentObjectArg)
@@ -11,17 +15,18 @@ AttackAction::AttackAction(GameObject* parentObjectArg)
 void AttackAction::Act()
 {
 	GridSystem* gridSystem = GridSystem::Instance();
-	glm::vec2 attackPosition = gridSystem->getTilePosition(currentPos + attackDirection);
+	glm::vec2 attackPosition = gridSystem->getTilePosition(currentPos) + attackDirection;
 	createSlashGameObject(attackPosition);
+	flashPlayer(PlayerController::Instance()->playerPTR, glm::vec3(1, 0, 0));
 }
 
 bool AttackAction::IsInRange()
 {
 	GridSystem* gridSystem = GridSystem::Instance();
 	attackDirection = FindAttackDirection();
-	glm::vec2 attackPosition = gridSystem->getTilePosition(currentPos + attackDirection);
+	glm::vec2 attackPosition = gridSystem->getTilePosition(currentPos) + attackDirection;
 	TileHolder* tile = gridSystem->getTileHolder(0, attackPosition);
-	if (tile != nullptr && tile->gameObjectSatOnTile->getName() == "Player")
+	if (tile != nullptr && tile->gameObjectSatOnTile != nullptr && tile->gameObjectSatOnTile->getName() == "Player")
 		return true;
 	else
 		return false;
@@ -56,31 +61,36 @@ glm::vec2 AttackAction::FindAttackDirection()
 
 void AttackAction::createSlashGameObject(glm::vec2 pos)
 {
-	const TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, pos);
-	GameObject* gameObject = curTileHolder->gameObjectSatOnTile;
+	const TileHolder* tile = GridSystem::Instance()->getTileHolder(0, pos);
 
-	if (gameObject != nullptr)
+	if (tile != nullptr && tile->gameObjectSatOnTile->getName() == "Player")
 	{
-		if (gameObject->hasComponent(typeid(PlayerStats)))
-		{
+		GameObject* player = tile->gameObjectSatOnTile;
+		PlayerStats* playerInfo = PlayerController::Instance()->playerStats;
+		EnemyStats myStats = parentObject->getComponent<EnemyComponent>()->getStats();
+		int attackDamage = myStats.attack - playerInfo->defence;
 
+		//number betewen 0 and 1
+		float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+		if (r < myStats.critChance)
+			attackDamage *= 2; //double damage!
 
-			PlayerStats playerInfo = 
-			//health->setHealth(health->getHealth() - 50);
-			int newHealth = enemyInfo->getStats().currentHealth - atk; //or something like this, use the defence and crit values too.
-			gameObject->getComponent<Health>()->setHealth(newHealth);
-
-			// TODO: This is probably shitty 
-			if (gameObject->isBeingDeleted())
-				GridSystem::Instance()->resetSatOnTile(0, pos);
-		}
+		playerInfo->currentHealth -= attackDamage;
+		PlayerController::Instance()->UpdateStats();
 	}
-
 	// get world position from grid position
 	const glm::fvec2 worldPos = GridSystem::Instance()->getWorldPosition(pos);
 	GameObject* slash = SceneManager::Instance()->createGameObject("Slash", worldPos);
 	slash->getTransform()->setSize(glm::vec2(48, 48));
+
 	AnimatedSpriteRenderer* slashSprite = slash->addComponent<AnimatedSpriteRenderer>(textureListRST, 0.05f);
 	slashSprite->setPivot(Pivot::Center);
 	slash->addComponent<DestroyAfterAnimation>();
+}
+void AttackAction::flashPlayer(GameObject* object, const glm::vec3 targetColor)
+{
+	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [this]
+		{
+			TurnManager::Instance()->endTurn();
+		});
 }

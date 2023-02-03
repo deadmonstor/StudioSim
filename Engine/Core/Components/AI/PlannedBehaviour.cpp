@@ -69,9 +69,9 @@ void PlannedBehaviour::Act()
 	}
 
 	//reset fitness values
-	for (auto i : availableActions)
+	for (std::pair<std::string, FitAction> action : availableActions)
 	{
-		i.second.first = 0;
+		availableActions[action.first] = std::make_pair(0, action.second.second);
 	}
 	//end turn
 }

@@ -6,7 +6,6 @@
 #include "Core/Components/Transform.h"
 #include "Core/Grid/PathfindingMachine.h"
 #include "../TurnManager.h"
-#include "../Flash.h"
 #include "../Core/Components/AnimatedSpriteRenderer.h"
 #include "AttackAction.h"
 
@@ -28,10 +27,16 @@ EnemyCombatBehaviour::EnemyCombatBehaviour(StateMachine* parentFSMArg)
 void EnemyCombatBehaviour::WorldAnalysis()
 {
 	//Check collisions with the attack behaviour's attack tiles and the player. This toggles between the InRange and OutOfRange effects
-
-	effects["OutOfRange"].active = true;
-
-
+	bool inRange = static_cast<AttackAction*>(availableActions["Attack"].second)->IsInRange();
+	if (inRange)
+	{
+		effects["OutOfRange"].active = false;
+		effects["InRange"].active = true;
+	}
+	else {
+		effects["OutOfRange"].active = true;
+		effects["InRange"].active = false;
+	}
 }
 
 void EnemyCombatBehaviour::ActionAnalysis()
@@ -88,12 +93,4 @@ void EnemyCombatBehaviour::GenerateEffects()
 void EnemyCombatBehaviour::endTurn()
 {
 	TurnManager::Instance()->endTurn();
-}
-
-void EnemyCombatBehaviour::flashPlayer(GameObject* object, const glm::vec3 targetColor)
-{
-	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [this]
-	{
-		endTurn();
-	});
 }
