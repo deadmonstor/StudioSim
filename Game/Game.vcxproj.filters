@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Components\DestroyAfterAnimation.cpp" />
-    <ClCompile Include="Components\EnemyTest.cpp" />
+    <ClCompile Include="Components\EnemyComponent.cpp" />
     <ClCompile Include="Components\FireballComponent.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
@@ -55,10 +55,11 @@
     <ClCompile Include="Components\UI\PauseButton.cpp" />
     <ClCompile Include="Components\Items\ArmourItem.cpp" />
     <ClCompile Include="Components\Items\FireBallSpell.cpp" />
+    <ClCompile Include="Components\AI Behaviours\AttackAction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
-    <ClInclude Include="Components\EnemyTest.h" />
+    <ClInclude Include="Components\EnemyComponent.h" />
     <ClInclude Include="Components\FireballComponent.h" />
     <ClInclude Include="Components\TurnManager.h" />
     <ClInclude Include="MainGame.h" />
@@ -117,6 +118,7 @@
     <ClInclude Include="Components\Items\ArmourItem.h" />
     <ClInclude Include="Components\Items\ConsumableItem.h" />
     <ClInclude Include="Components\Items\FireBallSpell.h" />
+    <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />
