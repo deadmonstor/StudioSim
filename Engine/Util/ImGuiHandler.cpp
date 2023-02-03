@@ -21,7 +21,8 @@ void ImGuiHandler::init()
 	
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGui::StyleColorsDark();
+	/*ImGui::StyleColorsDark();*/
+	ImGui::StyleCustom();
 	ImGui_ImplOpenGL3_Init("#version 330");
 	ImGui_ImplGlfw_InitForOpenGL(Renderer::getWindow(), true);
 

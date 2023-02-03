@@ -39,7 +39,6 @@
     <ClCompile Include="Components\Items\HealthPotion.cpp" />
     <ClCompile Include="Components\Items\ManaPotion.cpp" />
     <ClCompile Include="Components\Items\ExpPotion.cpp" />
-    <ClCompile Include="Components\Items\Armour.cpp" />
     <ClCompile Include="Components\Items\CommonArmour.cpp" />
     <ClCompile Include="Components\Items\RareArmour.cpp" />
     <ClCompile Include="Components\Items\LegendaryArmour.cpp" />
@@ -54,6 +53,8 @@
     <ClCompile Include="Tiles\ChestTile.cpp" />
     <ClCompile Include="Components\DelayTask.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
+    <ClCompile Include="Components\Items\ArmourItem.cpp" />
+    <ClCompile Include="Components\Items\FireBallSpell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -78,7 +79,6 @@
     <ClInclude Include="Components\Flash.h" />
     <ClInclude Include="Components\Items\CharacterStats.h" />
     <ClInclude Include="Components\Items\CommonDagger.h" />
-    <ClInclude Include="Components\Items\Consumables.h" />
     <ClInclude Include="Components\Items\ItemStats.h" />
     <ClInclude Include="Components\Items\Stats.h" />
     <ClInclude Include="Components\Items\Weapon.h" />
@@ -100,7 +100,6 @@
     <ClInclude Include="Components\Items\HealthPotion.h" />
     <ClInclude Include="Components\Items\ManaPotion.h" />
     <ClInclude Include="Components\Items\ExpPotion.h" />
-    <ClInclude Include="Components\Items\Armour.h" />
     <ClInclude Include="Components\Items\CommonArmour.h" />
     <ClInclude Include="Components\Items\RareArmour.h" />
     <ClInclude Include="Components\Items\LegendaryArmour.h" />
@@ -115,5 +114,11 @@
     <ClInclude Include="Tiles\ChestTile.h" />
     <ClInclude Include="Components\DelayTask.h" />
     <ClInclude Include="Components\UI\PauseButton.h" />
+    <ClInclude Include="Components\Items\ArmourItem.h" />
+    <ClInclude Include="Components\Items\ConsumableItem.h" />
+    <ClInclude Include="Components\Items\FireBallSpell.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Font\Pixel.ttf" />
   </ItemGroup>
 </Project>
