@@ -21,6 +21,7 @@ void ChestTile::onInteractedWith(TileHolder* curTileHolder)
 	else if (!chestOpened)
 	{
 		std::string itemToSpawn = LootTable::Instance()->RollLoot();
+		//Pass in the item(s) name to be dropped
 	}
 	//else do nothing
 }
