@@ -3,6 +3,7 @@
 #include "../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
+#include "..\EnemyComponent.h"
 
 Dagger::Dagger()
 {
@@ -27,12 +28,14 @@ void Dagger::createSlashGameObject(glm::fvec2 pos)
 
 	if (gameObject != nullptr)
 	{
-		if (gameObject->hasComponent(typeid(Health)))
+		if (gameObject->hasComponent(typeid(EnemyComponent)))
 		{
 			
 
-			auto* health = gameObject->getComponent<Health>();
-			health->setHealth(health->getHealth() - 50);
+			auto* enemyInfo = gameObject->getComponent<EnemyComponent>();
+			//health->setHealth(health->getHealth() - 50);
+			int newHealth = enemyInfo->getStats().currentHealth - atk;
+			gameObject->getComponent<Health>()->setHealth(newHealth);
 
 			// TODO: This is probably shitty 
 			if (gameObject->isBeingDeleted())

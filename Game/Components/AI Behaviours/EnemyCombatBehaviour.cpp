@@ -8,6 +8,7 @@
 #include "../TurnManager.h"
 #include "../Flash.h"
 #include "../Core/Components/AnimatedSpriteRenderer.h"
+#include "AttackAction.h"
 
 EnemyCombatBehaviour::EnemyCombatBehaviour()
 	: PlannedBehaviour()
@@ -21,6 +22,7 @@ EnemyCombatBehaviour::EnemyCombatBehaviour(StateMachine* parentFSMArg)
 {
 	parentFSM = parentFSMArg;
 	isInFSM = true;
+	
 }
 
 void EnemyCombatBehaviour::WorldAnalysis()
@@ -61,9 +63,8 @@ void EnemyCombatBehaviour::ActionAnalysis()
 //Create and initialize behaviours
 void EnemyCombatBehaviour::GenerateBehaviourList()
 {
-	
+	availableActions["Attack"] = std::make_pair(0, new AttackAction(parentFSM->getOwner()));
 	availableActions["MoveTowards"] = std::make_pair(0, new MoveTowardsAction(parentFSM->getOwner()));
-	availableActions["Attack"] = std::make_pair(0, new Behaviour());
 	for (auto action : availableActions)
 	{
 		if (!action.second.second->GetInitValue())

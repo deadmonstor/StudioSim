@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
     <ClInclude Include="Components\Items\CommonArmour.h" />
     <ClInclude Include="Components\Items\ArmourItem.h" />
     <ClInclude Include="Components\UI\PauseButton.h" />
@@ -76,6 +77,7 @@
     <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\AI Behaviours\AttackAction.cpp" />
     <ClCompile Include="Components\Items\CommonArmour.cpp" />
     <ClCompile Include="Components\Items\ArmourItem.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />

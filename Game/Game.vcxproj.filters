@@ -54,6 +54,7 @@
     <ClCompile Include="Components\DelayTask.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
     <ClCompile Include="Components\Items\ArmourItem.cpp" />
+    <ClCompile Include="Components\AI Behaviours\AttackAction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -115,5 +116,6 @@
     <ClInclude Include="Components\UI\PauseButton.h" />
     <ClInclude Include="Components\Items\ArmourItem.h" />
     <ClInclude Include="Components\Items\ConsumableItem.h" />
+    <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
   </ItemGroup>
 </Project>

@@ -8,12 +8,7 @@
 #include "Core/Components/Transform.h"
 #include "Core/Components/AI/StateMachine.h"
 #include "Core/Grid/PathfindingMachine.h"
-
-EnemyIdleBehaviour::EnemyIdleBehaviour()
-{
-	isInFSM = false;
-	parentFSM = nullptr;
-}
+#include "AttackAction.h"
 
 EnemyIdleBehaviour::EnemyIdleBehaviour(StateMachine* parentFSMArg)
 {
