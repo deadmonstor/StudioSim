@@ -7,6 +7,7 @@
 #include "../Flash.h"
 #include "../TurnManager.h"
 #include "../../System/Inventory.h"
+#include "../Items/Weapons/Weapon.h"
 #include "Core/AudioEngine.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"

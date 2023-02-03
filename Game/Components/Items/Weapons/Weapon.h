@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
 #include <Core/Renderer/ResourceManager.h>
-#include "Stats.h"
-#include "../../System/Inventory.h"
+#include "../Stats.h"
+#include "../../../System/Inventory.h"
 #include "glm/fwd.hpp"
 
 class WeaponItem : public Item
