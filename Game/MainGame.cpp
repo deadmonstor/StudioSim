@@ -40,6 +40,7 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_", 4);
 	ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_open_", 4);
 	ResourceManager::LoadTextureArray("Sprites\\Coins\\", "coin", 10);
+	ResourceManager::LoadTextureArray("Sprites\\Weapons\\", "Potion", 3);
 	
 	ResourceManager::LoadTexture("Sprites\\whitetexture.png", "whitetexture");
 	ResourceManager::LoadTexture("Sprites\\image.png", "buttonTest");
