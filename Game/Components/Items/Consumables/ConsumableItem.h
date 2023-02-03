@@ -1,6 +1,6 @@
 #pragma once
-#include "Stats.h"
-#include "../../System/Inventory.h"
+#include "../Stats.h"
+#include "../../../System/Inventory.h"
 #include "Util/Logger.h"
 
 class ConsumableItem :

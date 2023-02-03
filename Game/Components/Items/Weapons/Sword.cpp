@@ -1,7 +1,7 @@
 #include "Sword.h"
 #include "Core/Grid/GridSystem.h"
 #include <Core/Components/Health.h>
-#include "../DestroyAfterAnimation.h"
+#include "../../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
 
 Sword::Sword()

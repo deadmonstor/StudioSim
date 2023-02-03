@@ -1,7 +1,8 @@
 #include "Inventory.h"
 #include <iostream>
-#include "../Components/Items/ArmourItem.h"
-#include "../Components/Items/Weapon.h"
+#include "../Components/Items/Armour/ArmourItem.h"
+#include "../Components/Items/Weapons/Weapon.h"
+#include "../Components/Items/Spells/SpellItem.h"
 #include "imgui/imgui.h"
 #include "Util/Logger.h"
 
@@ -56,7 +57,7 @@ void Inventory::draw_inventory()
 			case ItemType::SPELL:
 			{
 				const auto item = dynamic_cast<SpellItem*>(items[i]);
-				std::cout << " (Spell Power:" << item->getSpellAtk() << " / Mana Cost:" << item->getManaCost() << " / Effect Duration:" << item->getEffectDuration() << ")";
+				std::cout << " (Spell Power:" << item->getSpellAtk() << " / Mana Cost:" << item->getManaCost() << " / Cooldown:" << item->getCoolDown() << ")";
 				break;
 			}
 			case ItemType::ARMOUR:
@@ -106,7 +107,7 @@ void Inventory::getDebugInfo(std::string* basic_string)
 		else if (items[i]->getItemType() == ItemType::SPELL)
 		{
 			const auto item = dynamic_cast<SpellItem*>(items[i]);
-			ImGui::Text("Spell Power: %d / Mana Cost: %d / Effect Duration: %d", item->spellAtk, item->manaCost, item->effectDuration);
+			ImGui::Text("Spell Power: %d / Mana Cost: %d / Cool down: %d", item->getSpellAtk(), item->getManaCost(), item->getCoolDown());
 		}
 		
 		if (items[i]->isEquipped)
