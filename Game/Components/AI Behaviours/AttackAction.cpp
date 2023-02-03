@@ -66,16 +66,18 @@ void AttackAction::createSlashGameObject(glm::vec2 pos)
 	if (tile != nullptr && tile->gameObjectSatOnTile->getName() == "Player")
 	{
 		GameObject* player = tile->gameObjectSatOnTile;
-		PlayerStats* playerInfo = PlayerController::Instance()->playerStats;
+		PlayerStats* targetStats = PlayerController::Instance()->playerStats;
 		EnemyStats myStats = parentObject->getComponent<EnemyComponent>()->getStats();
-		int attackDamage = myStats.attack - playerInfo->defence;
+		int attackDamage = myStats.attack - targetStats->defence;
+		if (attackDamage < 0)
+			attackDamage = 0;
 
 		//number betewen 0 and 1
 		float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		if (r < myStats.critChance)
 			attackDamage *= 2; //double damage!
 
-		playerInfo->currentHealth -= attackDamage;
+		targetStats->currentHealth -= attackDamage;
 		PlayerController::Instance()->UpdateStats();
 	}
 	// get world position from grid position
