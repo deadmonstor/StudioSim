@@ -4,60 +4,37 @@
 #include <iostream>
 #include <string>
 
-struct PlayerStats : public Character
+struct PlayerStats : public character
 {
-	Character character;
-	PlayerStats() 
-	{
-		character.currentHealth;
-	}
-	//int strength = currentHealth +;
-	//if (strength <= 1) strength = 1;
-	/*int getStrength() { return strength; };*/
-
-
-
 	int currentMana;
-	int getCurrentMana() { return currentMana; }
-
 	int maxMana;
-	int getMaxMana() { return maxMana; }
-
 	int coinsHeld;
-	int getCoinsHeld() { return coinsHeld; }
-
 	int currentEXP;
-	int getCurrentEXP() { return currentEXP; }
-
 	int maxEXP;
-	int getMaxExp() { return maxEXP; }
-
 	int spellPower;
-	int getSpellPower() { return spellPower; }
-
-
 };
 
-struct EnemyStats : public Character
+struct EnemyStats : public character
 {
 	int EXPDropped;
 };
 
-struct ArmourStats : public Item
+struct ArmourStats : public items
 { 
 	int defence;
-	int costInShop;
-	int mana;
 	int health;
+	int mana;
+	int costInShop;
 };
 
-struct WeaponStats : public Item
+struct WeaponStats : public items
 {
 	int attack;
+	std::string rarity;
 	int costInShop;
 };
 
-struct ConsumableStats : public Item
+struct ConsumableStats : public items
 {
 	int healthGained;
 	int manaGained;
@@ -65,26 +42,18 @@ struct ConsumableStats : public Item
 	int costInShop;
 };
 
-struct SpellsStats : public Item
+struct SpellsStats : public items
 {
 	int manaCost;
-	int getManaCost() { return manaCost; }
-
-	int spellDamage;
-	int getSpellDamage() { return spellDamage; }
-
+	int spellPower;
 	int cooldown;
-	int getCoolDown() { return cooldown; }
-
 	int range;
-	int getRange() { return range; }
-
 	int damagePerTurn;
-	int getDamagePerTurn() { return damagePerTurn; }
+	int spellCooldown;
 	
 };
 
-struct LootTables : public Item
+struct LootTables : public items
 {
 	std::string itemName;
 	float dropChance;

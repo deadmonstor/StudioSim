@@ -1,15 +1,12 @@
 #pragma once
 #include <string>
-
-struct Item
+struct items
 {
-	std::string name;
-	std::string type;
-	std::string itemDescription;
-	std::string rarity;
 	bool isEquipped;
 	int cost;
+<<<<<<< HEAD
 	int price;
+=======
+>>>>>>> parent of a9e5822... Inventory stuff
 	std::string name;
 };
-

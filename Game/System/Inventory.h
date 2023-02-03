@@ -85,10 +85,13 @@ struct Item
 	bool isUsable;
 	bool isEquipped;
 	virtual ~Item() {}; // added virtual destructor
+<<<<<<< HEAD
 
 	virtual void use() {}
 	virtual EquipSlot getEquipSlot() { return EquipSlot::NOTSET; }
 	virtual ItemType getItemType() { return ItemType::NOTSET; }
+=======
+>>>>>>> parent of a9e5822... Inventory stuff
 };
 
 class Inventory : public Component
