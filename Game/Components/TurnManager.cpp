@@ -78,7 +78,7 @@ void TurnManager::nextTurn()
 			const auto playerPos = m_CurrentTurnObject->getTransform()->getPosition();
 			const auto enemyPos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
 			
-			if (!PathfindingMachine::LineOfSight(GridSystem::Instance()->getTilePosition(playerPos), GridSystem::Instance()->getTilePosition(enemyPos)))
+			if (!PathfindingMachine::Instance()->LineOfSight(GridSystem::Instance()->getTilePosition(playerPos), GridSystem::Instance()->getTilePosition(enemyPos)))
 			{
 				canMakeATurn.push(m_CurrentTurnObject);
 				m_CurrentTurnObject = nullptr;
