@@ -4,6 +4,7 @@
 #include "../Components/Items/Weapon.h"
 #include "imgui/imgui.h"
 #include "Util/Logger.h"
+#include "../Components/Items/Spell.h"
 
 bool Inventory::add_item(Item* item)
 {
@@ -56,7 +57,7 @@ void Inventory::draw_inventory()
 			case ItemType::SPELL:
 			{
 				const auto item = dynamic_cast<SpellItem*>(items[i]);
-				std::cout << " (Spell Power:" << item->getSpellAtk() << " / Mana Cost:" << item->getManaCost() << " / Effect Duration:" << item->getEffectDuration() << ")";
+				std::cout << " (Spell Power:" << item->spellStats->spellPower << " / Mana Cost:" << item->spellStats->manaCost << " / Effect Duration:" << item->spellStats->maxCooldown << ")";
 				break;
 			}
 			case ItemType::ARMOUR:
@@ -106,7 +107,7 @@ void Inventory::getDebugInfo(std::string* basic_string)
 		else if (items[i]->getItemType() == ItemType::SPELL)
 		{
 			const auto item = dynamic_cast<SpellItem*>(items[i]);
-			ImGui::Text("Spell Power: %d / Mana Cost: %d / Effect Duration: %d", item->spellAtk, item->manaCost, item->effectDuration);
+			ImGui::Text("Spell Power: %d / Mana Cost: %d / Effect Duration: %d", item->spellStats->spellPower, item->spellStats->manaCost, item->spellStats->maxCooldown);
 		}
 		
 		if (items[i]->isEquipped)

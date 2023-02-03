@@ -18,6 +18,7 @@
     <ClInclude Include="Components\Items\CommonArmour.h" />
     <ClInclude Include="Components\Items\ArmourItem.h" />
     <ClInclude Include="Components\Items\FireBallSpell.h" />
+    <ClInclude Include="Components\Items\Spell.h" />
     <ClInclude Include="Components\UI\PauseButton.h" />
     <ClInclude Include="Scenes\DefeatScene.h" />
     <ClInclude Include="Scenes\Level1Scene.h" />
@@ -80,6 +81,7 @@
     <ClCompile Include="Components\Items\CommonArmour.cpp" />
     <ClCompile Include="Components\Items\ArmourItem.cpp" />
     <ClCompile Include="Components\Items\FireBallSpell.cpp" />
+    <ClCompile Include="Components\Items\Spell.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
     <ClCompile Include="Scenes\DefeatScene.cpp" />
     <ClCompile Include="Scenes\Level1Scene.cpp" />

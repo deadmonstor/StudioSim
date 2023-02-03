@@ -65,7 +65,11 @@ void PlayerAttackBehaviour::Act()
 	canAttack = false;
 	
 	if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) && !willFlashOnce)
+	{
+		PlayerController::Instance()->ReduceSpellCooldown();
 		TurnManager::Instance()->endTurn();
+	}
+		
 }
 
 void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)

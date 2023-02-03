@@ -73,7 +73,10 @@ void PlayerMovementBehaviour::Act()
 			
 			
 			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+			{
+				PlayerController::Instance()->ReduceSpellCooldown();
 				TurnManager::Instance()->endTurn();
+			}
 		}
 	}
 	

@@ -20,6 +20,7 @@ public:
 	void onKeyHold(const OnKeyRepeat* keyHold);
 	void onKeyUp(const OnKeyUp* keyUp);
 	void UpdateStats();
+	void ReduceSpellCooldown();
 
 	SpriteComponent* playerSprite{};
 	GameObject* playerPTR{};

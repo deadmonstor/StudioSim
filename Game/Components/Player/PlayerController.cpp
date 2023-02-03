@@ -6,6 +6,7 @@
 #include "../Items/LegendaryArmour.h"
 #include "../Items/LegendaryHammer.h"
 #include "../Items/RareSword.h"
+#include "../Items/FireBallSpell.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
@@ -74,6 +75,8 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		myInventory->add_item(new RareSword());
 		myInventory->add_item(new HealthPotion());
 		myInventory->add_item(new LegendaryArmour());
+		myInventory->add_item(new FireBallSpell());
+		
 	}
 	
 	//find the input and send it to the state machine
@@ -98,5 +101,17 @@ void PlayerController::UpdateStats()
 	if (playerStats->currentHealth <= 0)
 	{
 		SceneManager::Instance()->changeScene("defeatScreen");
+	}
+}
+
+void PlayerController::ReduceSpellCooldown()
+{
+	if (Item* spell = PlayerController::Instance()->myInventory->getFirstItemWithEquipSlot(EquipSlot::SPELL); spell != nullptr)
+	{
+		const auto spellCasted = dynamic_cast<SpellItem*>(spell);
+		if (spellCasted->spellStats->currentCooldown != spellCasted->spellStats->maxCooldown)
+		{
+			spellCasted->spellStats->currentCooldown += 1;
+		}
 	}
 }
