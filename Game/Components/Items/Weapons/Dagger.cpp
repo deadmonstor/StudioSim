@@ -3,7 +3,7 @@
 #include "../../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
-#include "..\EnemyComponent.h"
+#include "../../EnemyComponent.h"
 
 Dagger::Dagger()
 {

@@ -1,6 +1,8 @@
 #include "FireBallSpell.h"
 #include "../../DestroyAfterAnimation.h"
 #include "../../FireballComponent.h"
+#include "../../EnemyComponent.h"
+#include "../../Player/PlayerController.h"
 
 FireBallSpell::FireBallSpell()
 {
@@ -8,9 +10,8 @@ FireBallSpell::FireBallSpell()
 	//fireBallStats->name = "Fire Ball";
 	spellStats->cost = 10;
 	spellStats->manaCost = 1;
-	spellStats->damagePerTurn = 1;
 	spellStats->maxCooldown = 1;
-	spellStats->spellPower = 1;
+	spellStats->spellPower = 10;
 	spellStats->currentCooldown = spellStats->maxCooldown;
 	spellStats->range = 3;
 }
@@ -42,15 +43,53 @@ void FireBallSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 	}
 	
 	glm::fvec2 targetPos = GridSystem::Instance()->getWorldPosition(playerPos + glm::fvec2(attackDir.x * spellStats->range, attackDir.y * spellStats->range));
-	
-	const auto lerpComponent = spell->addComponent<LerpPosition>(targetPos, 3);
-	lerpComponent->onLerpComplete = [spell]
+	std::vector<TileHolder*> tilesAffected = PathfindingMachine::Instance()->LineIntersection(GridSystem::Instance()->getWorldPosition(playerPos), targetPos);
+
+	for (TileHolder* tile : tilesAffected)
 	{
+		if (tile->gameObjectSatOnTile != nullptr && tile->gameObjectSatOnTile->hasComponent(typeid(EnemyComponent)))
+		{
+			targetPos = GridSystem::Instance()->getWorldPosition(tile->position);
+			/*lerp = spell->addComponent<LerpPosition>(GridSystem::Instance()->getWorldPosition(tile->position), 3);*/
+			break;
+		}
+		else if (tile->isWall)
+		{
+			targetPos = GridSystem::Instance()->getWorldPosition(tile->position) ;
+			/*lerp = spell->addComponent<LerpPosition>(GridSystem::Instance()->getWorldPosition(tile->position), 3);*/
+			break;
+		}
+	}
+
+
+	lerp = spell->addComponent<LerpPosition>(targetPos, 3);
+	lerp->onLerpComplete = [spell]
+	{
+		TurnManager::Instance()->endTurn();
 		SceneManager::Instance()->destroyGameObject(spell);
 	};
 
+	TileHolder* lastTile = GridSystem::Instance()->getTileHolder(0, GridSystem::Instance()->getTilePosition(targetPos));
+	if (lastTile != nullptr && lastTile->gameObjectSatOnTile != nullptr && lastTile->gameObjectSatOnTile->hasComponent(typeid(EnemyComponent)))
+	{
+		EnemyStats targetStats = lastTile->gameObjectSatOnTile->getComponent<EnemyComponent>()->getStats();
+		int spellDMG = spellStats->spellPower - targetStats.defence;
+		if (spellDMG < 0)
+		{
+			spellDMG = 0;
+		}
 
+		float r = static_cast<float> (rand()) / static_cast<float> (RAND_MAX);
+		if (r < PlayerController::Instance()->playerStats->critChance)
+		{
+			spellDMG *= 2;
+		}
 
+		targetStats.currentHealth -= spellDMG;
+		LOG_INFO(targetStats.currentHealth);
+	}
+	
+	
 	//if (spell->getTransform()->getPosition() == (playerPos + glm::fvec2(attackDir.x * range, attackDir.y * range)))
 	//{
 	//	SceneManager::Instance()->destroyGameObject(spell);

@@ -63,14 +63,12 @@ void PlayerAttackBehaviour::Act()
 		}
 	}
 	
-	canAttack = false;
-	
 	if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) && !willFlashOnce)
 	{
-		PlayerController::Instance()->ReduceSpellCooldown();
+		/*PlayerController::Instance()->ReduceSpellCooldown();*/
 		TurnManager::Instance()->endTurn();
 	}
-		
+	canAttack = false;
 }
 
 void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -113,6 +111,7 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 		{
 			Act();
+			PlayerController::Instance()->ReduceSpellCooldown();
 		}
 	}
 	
@@ -136,7 +135,7 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 			if (!willFlashOnce && !TurnManager::gNoclipMode)
 			{
 				Flash::createFlash(gameObject, gameObject->getComponent<AnimatedSpriteRenderer>(), {1, 0, 0}, 5,
-					[this, gameObject, pos]
+				[this, gameObject, pos]
 				{
 					TurnManager::Instance()->endTurn();
 

@@ -30,7 +30,7 @@ void PlayerSpellBehaviour::Act()
 		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) && !willFlashOnce)
 		{
 			spellCasted->spellStats->currentCooldown = 0;
-			TurnManager::Instance()->endTurn();
+			//TurnManager::Instance()->endTurn();
 		}
 	}
 	/*fireBall = new FireBallSpell();
