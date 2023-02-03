@@ -4,6 +4,8 @@
 #include "PauseButton.h"
 #include "Util/SingletonTemplate.h"
 
+class OnPlayerControllerFSMUpdate;
+
 class HUD : public SingletonTemplate<HUD>
 {
 private:
@@ -30,11 +32,14 @@ private:
 	bool hasLoaded = false;
 
 	int sceneChangeID = -1;
+	int playerChangedID = -1;
 	
+
 public:
 	void createHUD();
 	void updateHUD();
 	void onSceneChange(OnSceneChanged* event);
+	void onPlayerChanged(const OnPlayerControllerFSMUpdate* event);
 
 	bool getHasLoaded() const { return hasLoaded; }
 };

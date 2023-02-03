@@ -71,6 +71,7 @@ void PlayerMovementBehaviour::Act()
 		
 			AudioEngine::Instance()->playSound("Sounds\\softStep.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 			
+			
 			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 				TurnManager::Instance()->endTurn();
 		}
@@ -87,12 +88,14 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 	
 	if (eventCasted->key == GLFW_KEY_Q)
 	{
+		Griddy::Events::invoke<OnPlayerControllerFSMUpdate>("PlayerAttackBehaviour");
 		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerAttackBehaviour(true));
 		return;
 	}
 
 	if (eventCasted->key == GLFW_KEY_E)
 	{
+		Griddy::Events::invoke<OnPlayerControllerFSMUpdate>("PlayerSpellBehaviour");
 		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerSpellBehaviour(true));
 		return;
 	}
