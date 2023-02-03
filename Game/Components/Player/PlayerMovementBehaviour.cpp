@@ -3,7 +3,7 @@
 #include <Util/Events/EngineEvents.h>
 #include "PlayerAttackBehaviour.h"
 #include "PlayerSpellBehaviour.h"
-#include "../EnemyTest.h"
+#include "../EnemyComponent.h"
 #include "../TurnManager.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
@@ -48,7 +48,7 @@ void PlayerMovementBehaviour::Act()
 		else
 			PlayerController::Instance()->playerPTR->getComponent<AnimatedSpriteRenderer>()->setColor({ 1, 1, 1 });
 		
-		if (gameObjectOnTile != nullptr && gameObjectOnTile->hasComponent(typeid(EnemyTest)))
+		if (gameObjectOnTile != nullptr && gameObjectOnTile->hasComponent(typeid(EnemyComponent)))
 		{
 			attackBehaviour->AttackOnMovement(moveDir);
 			canAttackWhileMoving = false;

@@ -3,7 +3,7 @@
 #include "Core/Component.h"
 #include "AI Behaviours/NormalEnemyFSM.h"
 
-class EnemyTest : public Component
+class EnemyComponent : public Component
 {
 	int onStartTurnID = -1;
 	

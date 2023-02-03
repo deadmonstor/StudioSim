@@ -10,7 +10,7 @@
 #include "../Tiles/TestTile.h"
 #include "../Tiles/TeleportTile.h"
 #include "../Components/Player/PlayerController.h"
-#include "../Components/EnemyTest.h"
+#include "../Components/EnemyComponent.h"
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
@@ -22,7 +22,7 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 		
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy", tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
-	enemy->addComponent<EnemyTest>();
+	enemy->addComponent<EnemyComponent>();
 
 	GridSystem::Instance()->setSatOnTile(0, pos, enemy);
 }

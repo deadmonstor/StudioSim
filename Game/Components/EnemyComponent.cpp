@@ -1,4 +1,4 @@
-﻿#include "EnemyTest.h"
+﻿#include "EnemyComponent.h"
 
 #include "TurnManager.h"
 #include "Core/GameObject.h"
@@ -7,8 +7,9 @@
 #include "Core/Renderer/ResourceManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Util/Events/Events.h"
+#include "..\Components\Items\Stats.h"
 
-void EnemyTest::start()
+void EnemyComponent::start()
 {
 	getOwner()->addComponent<Health>();
 	getOwner()->addComponent<Camera>();
@@ -23,20 +24,20 @@ void EnemyTest::start()
 	TurnManager::Instance()->addToTurnQueue(getOwner());
 
 	if (onStartTurnID == -1)
-		Griddy::Events::subscribe(this, &EnemyTest::onTurnChanged);
+		Griddy::Events::subscribe(this, &EnemyComponent::onTurnChanged);
 	
 	Component::start();
 }
 
-void EnemyTest::destroy()
+void EnemyComponent::destroy()
 {
 	if (onStartTurnID != -1)
-		Griddy::Events::unsubscribe(this, &EnemyTest::onTurnChanged, onStartTurnID);
+		Griddy::Events::unsubscribe(this, &EnemyComponent::onTurnChanged, onStartTurnID);
 	
 	Component::destroy();
 }
 
-void EnemyTest::onTurnChanged(const onStartTurn* event)
+void EnemyComponent::onTurnChanged(const onStartTurn* event)
 {
 	if (event->objectToStart == getOwner())
 	{
