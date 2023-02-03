@@ -82,7 +82,7 @@ std::string EnemyDropLootTable::EnemyDropRollLoot()
 	srand(time(0));
 
 	//random number
-	int random = (rand() % 100) + 1;
+	int random = 34; //(rand() % 100) + 1;
 	int temp = 0;
 	for (int i = 0; i < 4; i++)
 	{
@@ -94,6 +94,12 @@ std::string EnemyDropLootTable::EnemyDropRollLoot()
 			std::cout << random;
 			std::string rolledLoot = m_EnemyDropLootTableData[i].ItemName;// this string return ting
 			std::cout << "\n";
+			if (m_EnemyDropLootTableData[i].ItemName == "money")
+			{
+				int random = (rand() % 16) +1;
+				rolledLoot.append(std::to_string(random));
+				std::cout << rolledLoot;
+			}
 			return rolledLoot;
 			break;
 		}
