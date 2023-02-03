@@ -16,6 +16,8 @@
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
 #include "../LootTable.h"
+#include "../Tiles/ChestTile.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
 
 void Level1Scene::createEnemy(const glm::vec2 pos)
 {
@@ -39,7 +41,8 @@ void Level1Scene::createEnemy(const glm::vec2 pos)
 void Level1Scene::init()
 {
 	LootTable::Instance()->LoadingIntoLootTableArray();
-	
+	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
+
 	auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
 	auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);
 	auto enemySortingLayer = Renderer::addSortingLayer("Top Grid", 1);
@@ -68,13 +71,13 @@ void Level1Scene::init()
 		{ 8, ResourceManager::GetTexture("tile204") },
 		{ 9, ResourceManager::GetTexture("tile26") },
 		{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
-		{ 11, ResourceManager::GetTexture("tile242") },
-		{ 56, ResourceManager::GetTexture("tile218") } // Spike
+		{ 11, ResourceManager::GetTexture("tile242") }
+		//{ 56, ResourceManager::GetTexture("tile218") } // Spike
 	});
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
 	{
 		{ 10, [] { return new TestTile(Texture(), "level2"); } },
-		{ 56, [] { return new SpikeTile(Texture()); } }
+		//{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	
 	grid_system->loadFromFile(0, "Grid/Test2.txt");
@@ -112,11 +115,14 @@ void Level1Scene::init()
 		{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
 		{ 48, ResourceManager::GetTexture("tile130") },//Jar
 		{ 49, ResourceManager::GetTexture("tile154") },
-		{ 56, ResourceManager::GetTexture("tile60") } // Spike
+		{ 56, ResourceManager::GetTexture("tile60") }, // Spike
+		{ 93, ResourceManager::GetTexture("chest_2") }, //Chest
 	});
 	grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile*()>>
 	{
 		{ 37, [] { return new LightTile(Texture()); } },
+		{ 56, [] { return new SpikeTile(Texture()); } },
+		{ 93, [] { return new ChestTile(Texture()); } }
 	});
 	
 	grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
@@ -137,6 +143,17 @@ void Level1Scene::init()
 		{ 93, [this](glm::vec2 pos)
 		{
 			// TODO: Create a chest
+		} },
+		{ 98, [this](glm::vec2 pos)
+		{
+			//Crab Anim
+			auto* Crab = SceneManager::Instance()->createGameObject("Crab", pos * GridSystem::Instance()->getTileSize());
+			Crab->getTransform()->setSize(glm::vec2(256, 256));
+
+			const std::vector textureListCrab = ResourceManager::GetTexturesContaining("crab");
+			auto sprite = Crab->addComponent<AnimatedSpriteRenderer>(textureListCrab, 0.075f);
+			sprite->setColor(glm::vec3(1, 1, 1));
+			sprite->setLit(false);
 		} }
 	});
 	

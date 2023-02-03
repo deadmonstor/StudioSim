@@ -23,5 +23,7 @@ public:
 
 	EnemyStats getStats() { return stats; }
 
-	
+private:
+	void DropLoot();
+
 };

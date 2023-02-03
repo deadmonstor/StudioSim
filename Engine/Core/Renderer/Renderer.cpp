@@ -1,6 +1,7 @@
 ﻿#include <glad/glad.h>
 #include "Renderer.h"
 #include <Windows.h>
+#include <Util/stb_image.h>
 
 #include "Core/Input.h"
 #include "Lighting.h"
@@ -215,6 +216,9 @@ void Renderer::getModelMatrix(const glm::vec2 position, const glm::vec2 size, co
 
 void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation)
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	if (mainCam == nullptr)
 		return;
 
@@ -281,6 +285,19 @@ void Renderer::removeFromRenderQueue(const OnSpriteRendererComponentRemoved* eve
 {
 	spriteRenderQueue.erase(std::ranges::remove(spriteRenderQueue, event->spriteRenderer).begin(), spriteRenderQueue.end());
 	Lighting::Instance()->refreshLightData(event->spriteRenderer, LightUpdateRequest::All);
+}
+
+void Renderer::setWindowIcon(const std::string& icon)
+{
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load(icon.c_str(), &width, &height, &nrChannels, 0);
+	
+	GLFWimage iconImage[1];
+	iconImage[0].width = width;
+	iconImage[0].height = height;
+	iconImage[0].pixels = data;
+	
+	glfwSetWindowIcon(window, 1, iconImage);
 }
 
 void Renderer::sortRenderQueue()

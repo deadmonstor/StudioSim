@@ -1,6 +1,8 @@
 #include "PlayerSpellBehaviour.h"
 #include "PlayerMovementBehaviour.h"
 #include "../TurnManager.h"
+#include "../../Components/Items/Spells/SpellItem.h"
+#include "../../System/Inventory.h"
 
 PlayerSpellBehaviour::PlayerSpellBehaviour()
 {
@@ -16,18 +18,31 @@ PlayerSpellBehaviour::PlayerSpellBehaviour(bool isInFSMParam)
 
 void PlayerSpellBehaviour::Act()
 {
+	if (willFlashOnce) return;
 	canThrowSpell = false;
 	if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) && !willFlashOnce)
 		TurnManager::Instance()->endTurn();
+}
+
+void PlayerSpellBehaviour::update()
+{
+	
 }
 
 void PlayerSpellBehaviour::onKeyDownResponse(Griddy::Event* event)
 {
 	OnKeyDown* eventCasted = static_cast<OnKeyDown*>(event);
 
+	if (eventCasted->key == GLFW_KEY_Q)
+	{
+		Griddy::Events::invoke<OnPlayerControllerFSMUpdate>("PlayerMovementBehaviour");
+		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerMovementBehaviour(true));
+	}
+
 	if (eventCasted->key == GLFW_KEY_E)
 	{
-		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerMovementBehaviour(true));
+		Griddy::Events::invoke<OnPlayerControllerFSMUpdate>("PlayerAttackBehaviour");
+		Griddy::Events::invoke<StateTransition>((StateMachine*)PlayerController::Instance()->playerFSM, new PlayerAttackBehaviour(true));
 	}
 
 	if (eventCasted->key == GLFW_KEY_W)
@@ -52,9 +67,16 @@ void PlayerSpellBehaviour::onKeyDownResponse(Griddy::Event* event)
 	if (canThrowSpell && (eventCasted->key == GLFW_KEY_W || eventCasted->key == GLFW_KEY_S ||
 		eventCasted->key == GLFW_KEY_A || eventCasted->key == GLFW_KEY_D))
 	{
-		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+		Item* spell = PlayerController::Instance()->myInventory->getFirstItemWithEquipSlot(EquipSlot::SPELL);
+		
+		if ((TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR)) &&
+			 spell != nullptr)
 		{
-			Act();
+			const auto spellCasted = dynamic_cast<SpellItem*>(spell);
+			if (spellCasted->getCoolDown() != 0)
+			{
+				Act();
+			}
 		}
 	}
 }

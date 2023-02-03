@@ -1,7 +1,7 @@
 #include "Axe.h"
 #include "Core/Grid/GridSystem.h"
 #include <Core/Components/Health.h>
-#include "../DestroyAfterAnimation.h"
+#include "../../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
 
 Axe::Axe()
@@ -38,8 +38,10 @@ void Axe::createSlashGameObject(glm::fvec2 pos)
 		{
 
 
-			auto* health = gameObject->getComponent<Health>();
-			health->setHealth(health->getHealth() - 50);
+			//auto* enemyInfo = gameObject->getComponent<EnemyComponent>();
+			//health->setHealth(health->getHealth() - 50);
+			//int newHealth = enemyInfo->getStats().currentHealth - atk;
+			//gameObject->getComponent<Health>()->setHealth(newHealth);
 
 			// TODO: This is probably shitty 
 			if (gameObject->isBeingDeleted())

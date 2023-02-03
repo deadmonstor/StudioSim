@@ -17,6 +17,10 @@ void HUD::createHUD()
 	if (sceneChangeID == -1)
 		sceneChangeID = Griddy::Events::subscribe(this, &HUD::onSceneChange);
 
+	if (playerChangedID == -1)
+		playerChangedID = Griddy::Events::subscribe(this, &HUD::onPlayerChanged);
+
+	
 	ResourceManager::LoadTexture("Sprites\\Armour\\BasicArmourChest.png", "BasicArmourChestInventoryUI");
 	inventoryButton =
 		UIManager::Instance()->createUIElement<ButtonComponent>("inventoryButton", ResourceManager::GetTexture("BasicArmourChestInventoryUI"));
@@ -25,9 +29,10 @@ void HUD::createHUD()
 	spellsButton =
 		UIManager::Instance()->createUIElement<ButtonComponent>("spellsButton", ResourceManager::GetTexture("SpellbookInventoryUI"));
 
+	ResourceManager::LoadTexture("Sprites\\Armour\\TopArmourBoots.png", "TopArmourBoots");
 	ResourceManager::LoadTexture("Sprites\\Weapons\\Sword.png", "SwordInventoryUI");
 	weaponButton =
-		UIManager::Instance()->createUIElement<ButtonComponent>("weaponButton", ResourceManager::GetTexture("SwordInventoryUI"));
+		UIManager::Instance()->createUIElement<ButtonComponent>("weaponButton", ResourceManager::GetTexture("TopArmourBoots"));
 
 	ResourceManager::LoadTexture("Sprites\\Weapons\\Potion1.png", "healthIcon");
 	healthIcon = UIManager::Instance()->createUIElement<Panel>("healthIcon");
@@ -193,7 +198,7 @@ void HUD::updateHUD()
 	xpText->setText(" XP: " + std::to_string(xp) + "/" + std::to_string(maxXp));
 
 	// =============================================Update level text=============================================
-	const int level = 0 ; //playerStats->level;
+	const int level = playerStats->level;
 
 	sizeOfText = TextRenderer::Instance()->renderTextSize("Level: " + std::to_string(level), 1);
 	position = bottomRight - glm::vec2{200, -75} + glm::vec2{sizeOfText.x / 2, sizeOfText.y};
@@ -217,4 +222,21 @@ void HUD::updateHUD()
 void HUD::onSceneChange(OnSceneChanged*)
 {
 	hasLoaded = false;
+}
+
+void HUD::onPlayerChanged(const OnPlayerControllerFSMUpdate* event)
+{
+	if (event->key ==  "PlayerMovementBehaviour")
+	{
+		weaponButton->setTexture(ResourceManager::GetTexture("TopArmourBoots"));
+	}
+	else if (event->key ==  "PlayerAttackBehaviour")
+	{
+		weaponButton->setTexture(ResourceManager::GetTexture("SwordInventoryUI"));
+	}
+	else if (event->key ==  "PlayerSpellBehaviour")
+	{
+		weaponButton->setTexture(ResourceManager::GetTexture("Fireball1"));
+	}
+
 }

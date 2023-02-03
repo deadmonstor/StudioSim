@@ -19,6 +19,7 @@ int main(int, char**)
 
 	const auto Renderer = Renderer::Instance();
 	Renderer->setWindowTitle("Into The Crypt");
+	Renderer->setWindowIcon("Sprites\\engine.png");
 	Renderer->setWindowSize({ 1920, 1080 });
 
 	ResourceManager::LoadTextureArray("Sprites\\Blue-Slime-Idle\\", "Blue-Slime-Idle", 7);
@@ -36,13 +37,11 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\player\\", "hero", 5);
 	ResourceManager::LoadTextureArray("Sprites\\TileMap\\", "tile", 293);
 	//Coins and chest
-	//ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_", 4);
-	//ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_open_", 4);
-	//ResourceManager::LoadTextureArray("Sprites\\Coins\\", "coin", 10);
+	ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_", 4);
+	ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_open_", 4);
+	ResourceManager::LoadTextureArray("Sprites\\Coins\\", "coin", 10);
 	
-
-	ResourceManager::LoadTexture("Sprites\\rock.png", "rock");
-	ResourceManager::LoadTexture("Sprites\\background.png", "background");
+	ResourceManager::LoadTexture("Sprites\\whitetexture.png", "whitetexture");
 	ResourceManager::LoadTexture("Sprites\\image.png", "buttonTest");
 
 	SceneManager::Instance()->sceneToTypeID = std::map<std::string, std::function<Scene*()>>

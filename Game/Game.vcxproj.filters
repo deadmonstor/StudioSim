@@ -54,6 +54,7 @@
     <ClCompile Include="Components\DelayTask.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
     <ClCompile Include="Components\Items\ArmourItem.cpp" />
+    <ClCompile Include="Components\Items\FireBallSpell.cpp" />
     <ClCompile Include="Components\AI Behaviours\AttackAction.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +117,10 @@
     <ClInclude Include="Components\UI\PauseButton.h" />
     <ClInclude Include="Components\Items\ArmourItem.h" />
     <ClInclude Include="Components\Items\ConsumableItem.h" />
+    <ClInclude Include="Components\Items\FireBallSpell.h" />
     <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Font\Pixel.ttf" />
   </ItemGroup>
 </Project>

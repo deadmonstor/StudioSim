@@ -23,3 +23,16 @@ private:
 	LootTableData m_LootTableData[9];
 };
 
+class EnemyDropLootTable : public SingletonTemplate<EnemyDropLootTable>
+{
+public:
+	void EnemyDropLoadingIntoLootTableArray();
+	std::string EnemyDropRollLoot();
+
+private:
+
+	std::fstream file;
+
+	LootTableData m_EnemyDropLootTableData[4];
+};
+

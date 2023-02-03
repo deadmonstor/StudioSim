@@ -2,6 +2,7 @@
 #include <string>
 
 #include "SortingLayer.h"
+#include "texture.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Camera.h"
 #include "Core/Components/Light.h"
@@ -71,6 +72,7 @@ public:
 
 	void addToRenderQueue(const OnSpriteRendererComponentStarted*);
 	void removeFromRenderQueue(const OnSpriteRendererComponentRemoved*);
+	void setWindowIcon(const std::string& icon);
 
 	static SortingLayer& getDefaultSortingLayer();
 	static SortingLayer& getSortingLayer(const std::string& layerName);

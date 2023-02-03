@@ -64,6 +64,7 @@ void StateMachine::ChangeState(Behaviour* behaviourParam)
 	{
 		delete currentState;
 	}
+	
 	currentState = nullptr;
 	currentState = behaviourParam;
 	if (currentState->GetInitValue() == false)
