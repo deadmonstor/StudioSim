@@ -51,6 +51,7 @@ void PlayerController::createPlayer()
 	playerStats->defence = 1;
 	playerStats->critChance = 0.0f;
 	playerStats->coinsHeld = 0;
+	playerStats->level = 1;
 	
 	myInventory = playerPTR->addComponent<Inventory>(20);
 	Light* light = playerPTR->addComponent<Light>();
@@ -98,5 +99,14 @@ void PlayerController::UpdateStats()
 	if (playerStats->currentHealth <= 0)
 	{
 		SceneManager::Instance()->changeScene("defeatScreen");
+	}
+	else if (playerStats->currentEXP >= 100)
+	{
+		playerStats->level++;
+		playerStats->currentEXP = 0;
+		playerStats->maxHealth += 5;
+		playerStats->maxMana += 5;
+		playerStats->currentHealth = playerStats->maxHealth;
+		playerStats->currentMana = playerStats->maxMana;
 	}
 }
