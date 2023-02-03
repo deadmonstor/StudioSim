@@ -40,7 +40,8 @@ void Level1Scene::createEnemy(const glm::vec2 pos)
 void Level1Scene::init()
 {
 	LootTable::Instance()->LoadingIntoLootTableArray();
-	
+	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
+
 	auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
 	auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);
 	auto enemySortingLayer = Renderer::addSortingLayer("Top Grid", 1);
