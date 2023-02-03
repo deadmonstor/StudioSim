@@ -16,6 +16,7 @@ public:
 
 private:
 	void Act() override;
+	void update() override;
 	void onKeyDownResponse(Griddy::Event*);
 	void onKeyUpResponse(Griddy::Event*);
 	bool willFlashOnce = false;
