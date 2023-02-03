@@ -23,7 +23,6 @@
     <ClInclude Include="Components\Items\Consumables\ExpPotion.h" />
     <ClInclude Include="Components\Items\Consumables\HealthPotion.h" />
     <ClInclude Include="Components\Items\Consumables\ManaPotion.h" />
-    <ClInclude Include="Components\Items\Spells\SpellItem.h" />
     <ClInclude Include="Components\Items\Weapons\Axe.h" />
     <ClInclude Include="Components\Items\Weapons\CommonAxe.h" />
     <ClInclude Include="Components\Items\Weapons\CommonDagger.h" />
@@ -36,8 +35,8 @@
     <ClInclude Include="Components\Items\Weapons\Sword.h" />
     <ClInclude Include="Components\Items\Weapons\Weapon.h" />
     <ClInclude Include="Components\Items\Weapons\WeaponEnum.h" />
-    <ClInclude Include="Components\Items\FireBallSpell.h" />
-    <ClInclude Include="Components\Items\Spell.h" />
+    <ClInclude Include="Components\Items\Spells\FireBallSpell.h" />
+    <ClInclude Include="Components\Items\Spells\Spell.h" />
     <ClInclude Include="Components\UI\PauseButton.h" />
     <ClInclude Include="Scenes\DefeatScene.h" />
     <ClInclude Include="Scenes\Level1Scene.h" />
@@ -95,8 +94,8 @@
     <ClCompile Include="Components\Items\Weapons\RareAxe.cpp" />
     <ClCompile Include="Components\Items\Weapons\RareSword.cpp" />
     <ClCompile Include="Components\Items\Weapons\Sword.cpp" />
-    <ClCompile Include="Components\Items\FireBallSpell.cpp" />
-    <ClCompile Include="Components\Items\Spell.cpp" />
+    <ClCompile Include="Components\Items\Spells\FireBallSpell.cpp" />
+    <ClCompile Include="Components\Items\Spells\Spell.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
     <ClCompile Include="Scenes\DefeatScene.cpp" />
     <ClCompile Include="Scenes\Level1Scene.cpp" />

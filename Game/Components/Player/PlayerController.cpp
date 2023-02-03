@@ -5,6 +5,7 @@
 #include "../Items/Armour/LegendaryArmour.h"
 #include "../Items/Weapons/LegendaryHammer.h"
 #include "../Items/Weapons/RareSword.h"
+#include "../Items/Spells/FireBallSpell.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"

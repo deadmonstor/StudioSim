@@ -2,10 +2,9 @@
 #include <iostream>
 #include "../Components/Items/Armour/ArmourItem.h"
 #include "../Components/Items/Weapons/Weapon.h"
-#include "../Components/Items/Spells/SpellItem.h"
+#include "../Components/Items/Spells/Spell.h"
 #include "imgui/imgui.h"
 #include "Util/Logger.h"
-#include "../Components/Items/Spell.h"
 
 bool Inventory::add_item(Item* item)
 {

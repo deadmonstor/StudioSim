@@ -1,6 +1,6 @@
 #include "FireBallSpell.h"
-#include "../DestroyAfterAnimation.h"
-#include "../FireballComponent.h"
+#include "../../DestroyAfterAnimation.h"
+#include "../../FireballComponent.h"
 
 FireBallSpell::FireBallSpell()
 {

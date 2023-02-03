@@ -2,7 +2,7 @@
 #include "Core/Components/AI/Behaviour.h"
 #include "PlayerController.h"
 #include "glm/fwd.hpp"  
-#include "../Items/FireBallSpell.h"
+#include "../Items/Spells/FireBallSpell.h"
 
 class PlayerSpellBehaviour : public Behaviour
 {

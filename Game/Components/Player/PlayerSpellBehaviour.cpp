@@ -1,7 +1,7 @@
 #include "PlayerSpellBehaviour.h"
 #include "PlayerMovementBehaviour.h"
 #include "../TurnManager.h"
-#include "../../Components/Items/Spells/SpellItem.h"
+#include "../../Components/Items/Spells/Spell.h"
 #include "../../System/Inventory.h"
 
 PlayerSpellBehaviour::PlayerSpellBehaviour()

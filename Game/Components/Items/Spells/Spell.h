@@ -1,8 +1,9 @@
 #pragma once
-#include "../../System/Inventory.h"
+#include "../../../System/Inventory.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
-#include "Stats.h"
+#include "../Stats.h"
+
 class SpellItem :
     public Item
 {
