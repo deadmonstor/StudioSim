@@ -33,8 +33,10 @@ void Dagger::createSlashGameObject(glm::fvec2 pos)
 			
 
 			auto* enemyInfo = gameObject->getComponent<EnemyComponent>();
-			//health->setHealth(health->getHealth() - 50);
-			int newHealth = enemyInfo->getStats().currentHealth - atk;
+			int atkDamage = atk - enemyInfo->getStats().defence;
+			int random = (rand() % 100) + 1;
+
+			int newHealth = enemyInfo->getStats().currentHealth - atkDamage;
 			gameObject->getComponent<Health>()->setHealth(newHealth);
 
 			// TODO: This is probably shitty 
