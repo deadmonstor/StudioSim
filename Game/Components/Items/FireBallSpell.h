@@ -3,6 +3,7 @@
 #include "Core/Grid/GridSystem.h"
 #include <Core/Components/Health.h>
 #include "Core/Components/Transform.h"
+#include <Core/Renderer/ResourceManager.h>
 
 class FireBallSpell : public SpellsStats
 {

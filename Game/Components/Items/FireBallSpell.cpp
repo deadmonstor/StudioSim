@@ -1,10 +1,11 @@
 #include "FireBallSpell.h"
-#include "FireballComponent.h"
+#include "../DestroyAfterAnimation.h"
+#include "../FireballComponent.h"
 
 FireBallSpell::FireBallSpell()
 {
 	fireBallStats = new SpellsStats();
-	fireBallStats->name = "Fire Ball";
+	//fireBallStats->name = "Fire Ball";
 	fireBallStats->cost = 10;
 	fireBallStats->manaCost = 2;
 	fireBallStats->damagePerTurn = 1;
