@@ -3,10 +3,13 @@
 #include "Core/Components/Camera.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
-#include "../Items/Dagger.h"
-#include "../Items/Axe.h"
-#include "../Items/Hammer.h"
-#include "../Items/Sword.h"
+
+class OnPlayerControllerFSMUpdate : public Griddy::Event
+{
+public:
+	OnPlayerControllerFSMUpdate(const std::string key) : key(key) {}
+	std::string key;
+};
 
 class Inventory;
 class PlayerFSM;

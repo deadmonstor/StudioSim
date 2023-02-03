@@ -1,33 +1,26 @@
-#include "Axe.h"
-#include "Core/Grid/GridSystem.h"
+#include "Dagger.h"
 #include <Core/Components/Health.h>
-#include "../DestroyAfterAnimation.h"
+#include "../../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
+#include "Core/Grid/GridSystem.h"
 
-Axe::Axe()
+Dagger::Dagger()
 {
-	axeStats = new WeaponStats();
 }
 
-void Axe::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
+void Dagger::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 {
-	std::vector<glm::fvec2> attackPosAxe = { (playerPos + attackDir),
-					(playerPos + attackDir + attackDir) };
-
-	attackPositions.assign(attackPosAxe.begin(), attackPosAxe.end());
-	for (glm::fvec2 attackPos : attackPositions)
+	const bool isWallTile = GridSystem::Instance()->isWallTile(playerPos + attackDir);
+	
+	if (!isWallTile)
 	{
-		const bool isWallTile = GridSystem::Instance()->isWallTile(attackPos);
-		TileHolder* attackTile = GridSystem::Instance()->getTileHolder(0, attackPos);
-		if (!isWallTile && attackTile->isSpawned)
-		{
-			createSlashGameObject(attackPos);
-		}
+		createSlashGameObject(playerPos + attackDir);
+
 	}
 	attackPositions.clear();
 }
 
-void Axe::createSlashGameObject(glm::fvec2 pos)
+void Dagger::createSlashGameObject(glm::fvec2 pos)
 {
 	const TileHolder* curTileHolder = GridSystem::Instance()->getTileHolder(0, pos);
 	GameObject* gameObject = curTileHolder->gameObjectSatOnTile;
@@ -36,7 +29,7 @@ void Axe::createSlashGameObject(glm::fvec2 pos)
 	{
 		if (gameObject->hasComponent(typeid(Health)))
 		{
-
+			
 
 			auto* health = gameObject->getComponent<Health>();
 			health->setHealth(health->getHealth() - 50);
