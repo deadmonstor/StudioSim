@@ -64,8 +64,13 @@ void PlayerMovementBehaviour::Act()
 				PlayerController::Instance()->playerPTR);
 
 
-			if(curTileHolder->tile->canInteractWith())
-				curTileHolder->tile->onInteractedWith(curTileHolder);
+			for (int i = 0; i < gridSystem->getOrderMap().size(); i++)
+			{
+				TileHolder* tileHolder = gridSystem->getTileHolder(i, origPos + moveDir);
+
+				if (tileHolder->tile->canInteractWith())
+					tileHolder->tile->onInteractedWith(tileHolder);
+			}
 
 			origPos = gridSystem->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
 		
