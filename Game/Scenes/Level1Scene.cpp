@@ -17,6 +17,7 @@
 #include "../Tiles/SpikeTile.h"
 #include "../LootTable.h"
 #include "../Tiles/ChestTile.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
 
 void Level1Scene::createEnemy(const glm::vec2 pos)
 {
@@ -142,6 +143,17 @@ void Level1Scene::init()
 		{ 93, [this](glm::vec2 pos)
 		{
 			// TODO: Create a chest
+		} },
+		{ 98, [this](glm::vec2 pos)
+		{
+			//Crab Anim
+			auto* Crab = SceneManager::Instance()->createGameObject("Crab", pos * GridSystem::Instance()->getTileSize());
+			Crab->getTransform()->setSize(glm::vec2(256, 256));
+
+			const std::vector textureListCrab = ResourceManager::GetTexturesContaining("crab");
+			auto sprite = Crab->addComponent<AnimatedSpriteRenderer>(textureListCrab, 0.075f);
+			sprite->setColor(glm::vec3(1, 1, 1));
+			sprite->setLit(false);
 		} }
 	});
 	

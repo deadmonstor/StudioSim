@@ -97,7 +97,7 @@ std::string EnemyDropLootTable::EnemyDropRollLoot()
 			if (m_EnemyDropLootTableData[i].ItemName == "money")
 			{
 				int random = (rand() % 16) +1;
-				rolledLoot.append(std::to_string(random));
+				rolledLoot.append("," + std::to_string(random));
 				std::cout << rolledLoot;
 			}
 			return rolledLoot;
