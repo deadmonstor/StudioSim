@@ -35,7 +35,7 @@ void EnemyTest::destroy()
 	if (onStartTurnID != -1)
 		Griddy::Events::unsubscribe(this, &EnemyTest::onTurnChanged, onStartTurnID);
 	
-	int expGained = 50;
+	int expGained = 5;
 	PlayerController::Instance()->playerStats->currentEXP += expGained;
 	PlayerController::Instance()->UpdateStats();
 
