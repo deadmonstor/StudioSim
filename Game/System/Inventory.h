@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Core/Component.h"
+#include "../Components/Items/Stats.h"
 
 enum class ItemType
 {
@@ -21,6 +22,17 @@ enum class EquipSlot
 	SPELL,
 	NOTSET
 };
+
+struct PlayerStats : public Character
+{
+	int currentMana;
+	int maxMana;
+	int coinsHeld;
+	int currentEXP;
+	int maxEXP;
+	int spellPower;
+};
+
 
 class Item
 {
@@ -40,6 +52,7 @@ public:
 	virtual EquipSlot getEquipSlot() { return EquipSlot::NOTSET; }
 	virtual ItemType getItemType() { return ItemType::NOTSET; }
 };
+
 
 class Inventory : public Component
 {
@@ -62,6 +75,7 @@ public:
 	void use_item(const std::string& item_name);
 	void equip_item(const std::string& item_name);
 	void unequip_item(const std::string& item_name);
+	PlayerStats* playerStats;
 
 	Item* getFirstItemWithEquipSlot(EquipSlot slot);
 };

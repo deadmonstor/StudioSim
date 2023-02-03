@@ -6,7 +6,7 @@ FireBallSpell::FireBallSpell()
 {
 	fireBallStats = new SpellsStats();
 	//fireBallStats->name = "Fire Ball";
-	fireBallStats->cost = 10;
+	fireBallStats->price = 10;
 	fireBallStats->manaCost = 2;
 	fireBallStats->damagePerTurn = 1;
 	fireBallStats->cooldown = 1;

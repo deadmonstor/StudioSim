@@ -3,7 +3,7 @@
 LegendaryHammer::LegendaryHammer()
 {
 	legendaryHammerStats = new WeaponStats();
-	legendaryHammerStats->costInShop = 70;
+	legendaryHammerStats->price = 70;
 	legendaryHammerStats->attack = 30;
 }
 

@@ -1,5 +1,6 @@
 #pragma once
-struct items
+struct ItemInfo
 {
-	int cost;
+	int price;
+	int getPrice() { return price; }
 };

@@ -1,7 +1,7 @@
 #include "PlayerController.h"
 #include "PlayerFSM.h"
 #include "../TurnManager.h"
-#include "../../System/Inventory.h"
+
 #include "../Items/Consumables/HealthPotion.h"
 #include "../Items/Armour/LegendaryArmour.h"
 #include "../Items/Weapons/LegendaryHammer.h"
@@ -39,7 +39,11 @@ void PlayerController::createPlayer()
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
 
+	myInventory = playerPTR->addComponent<Inventory>(20);
+	//armourStats = new ArmourStats();
 	playerStats = new PlayerStats();
+
+	
 	playerStats->maxHealth = 10;
 	playerStats->currentHealth = 10;
 	playerStats->currentEXP = 0;
@@ -52,7 +56,6 @@ void PlayerController::createPlayer()
 	playerStats->critChance = 0.0f;
 	playerStats->coinsHeld = 0;
 	
-	myInventory = playerPTR->addComponent<Inventory>(20);
 	Light* light = playerPTR->addComponent<Light>();
 	light->setFalloff({0.75f, 0.75f, 7.5f});
 	light->setColor({1.0f, 1.0f, 1.0f, 1.0f});
@@ -73,7 +76,10 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		myInventory->add_item(new LegendaryHammer());
 		myInventory->add_item(new RareSword());
 		myInventory->add_item(new HealthPotion());
-		myInventory->add_item(new LegendaryArmour());
+
+		LegendaryArmour* armour = new LegendaryArmour();
+		myInventory->add_item(armour);
+		myInventory->equip_item(armour->name());
 	}
 	
 	//find the input and send it to the state machine

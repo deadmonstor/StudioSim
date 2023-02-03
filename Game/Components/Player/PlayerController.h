@@ -3,6 +3,8 @@
 #include "Core/Components/Camera.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
+#include "../../System/Inventory.h"
+
 
 class OnPlayerControllerFSMUpdate : public Griddy::Event
 {
@@ -30,4 +32,5 @@ public:
 	Camera* cameraComponent{};
 	Inventory* myInventory{};
 	PlayerStats* playerStats{};
+	ArmourStats* armourStats{};
 };

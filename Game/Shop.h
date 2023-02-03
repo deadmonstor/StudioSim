@@ -1,6 +1,7 @@
 #pragma once
 
 #include "System/Inventory.h"
+#include "Components/Items/Stats.h"
 #include <iostream>
 
 class Shop {

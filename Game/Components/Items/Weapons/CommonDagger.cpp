@@ -3,6 +3,6 @@
 CommonDagger::CommonDagger()
 {
 	commonDaggerStats = new WeaponStats();
-	commonDaggerStats->costInShop = 5;
+	commonDaggerStats->price = 5;
 	commonDaggerStats->attack = 10;
 }

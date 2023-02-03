@@ -4,44 +4,41 @@
 #include <iostream>
 #include <string>
 
-struct PlayerStats : public character
-{
-	int currentMana;
-	int maxMana;
-	int coinsHeld;
-	int currentEXP;
-	int maxEXP;
-	int spellPower;
-};
+//struct PlayerStats : public Character
+//{
+//	int currentMana;
+//	int maxMana;
+//	int coinsHeld;
+//	int currentEXP;
+//	int maxEXP;
+//	int spellPower;
+//};
 
-struct EnemyStats : public character
+struct EnemyStats : public Character
 {
 	int EXPDropped;
 };
 
-struct ArmourStats : public items
+struct ArmourStats : public ItemInfo
 { 
 	int defence;
 	int health;
 	int mana;
-	int costInShop;
 };
 
-struct WeaponStats : public items
+struct WeaponStats : public ItemInfo
 {
 	int attack;
-	int costInShop;
 };
 
-struct ConsumableStats : public items
+struct ConsumableStats : public ItemInfo
 {
 	int healthGained;
 	int manaGained;
 	int EXPGained;
-	int costInShop;
 };
 
-struct SpellsStats : public items
+struct SpellsStats : public ItemInfo
 {
 	int manaCost;
 	int spellPower;
@@ -52,7 +49,7 @@ struct SpellsStats : public items
 	
 };
 
-struct LootTables : public items
+struct LootTables : public ItemInfo
 {
 	std::string itemName;
 	float dropChance;
