@@ -1,7 +1,7 @@
 #include "Shop.h"
 
-//Shop::Shop(std::vector<Item*> items, std::string currency, Inventory& inventory) : items_(items), currency_(currency), inventory_(inventory) {}
-Shop::Shop(int items, std::string currency, Inventory& inventory) : items_(items), currency_(currency), inventory_(inventory) {}
+Shop::Shop(std::vector<Item*> items, std::string currency, Inventory& inventory) : items_(items), currency_(currency), inventory_(inventory) {}
+//Shop::Shop(int items, std::string currency, Inventory& inventory) : items_(items), currency_(currency), inventory_(inventory) {}
 
 void Shop::displayItems() {
     // Display a list of all items for sale, their prices, and descriptions

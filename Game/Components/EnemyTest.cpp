@@ -7,8 +7,6 @@
 #include "Core/Renderer/ResourceManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Util/Events/Events.h"
-#include "Items/Stats.h"
-#include "../Components/Player/PlayerController.h"
 
 void EnemyTest::start()
 {
@@ -35,10 +33,6 @@ void EnemyTest::destroy()
 	if (onStartTurnID != -1)
 		Griddy::Events::unsubscribe(this, &EnemyTest::onTurnChanged, onStartTurnID);
 	
-	int expGained = 5;
-	PlayerController::Instance()->playerStats->currentEXP += expGained;
-	PlayerController::Instance()->UpdateStats();
-
 	Component::destroy();
 }
 

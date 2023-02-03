@@ -12,7 +12,6 @@ struct PlayerStats : public character
 	int currentEXP;
 	int maxEXP;
 	int spellPower;
-	int level;
 };
 
 struct EnemyStats : public character
@@ -31,7 +30,6 @@ struct ArmourStats : public items
 struct WeaponStats : public items
 {
 	int attack;
-	std::string rarity;
 	int costInShop;
 };
 

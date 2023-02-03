@@ -22,7 +22,6 @@ public:
 	void onKeyDown(const OnKeyDown* keyDown);
 	void onKeyHold(const OnKeyRepeat* keyHold);
 	void onKeyUp(const OnKeyUp* keyUp);
-	void onEngineRender(const OnEngineRender* render);
 	void UpdateStats();
 
 	SpriteComponent* playerSprite{};

@@ -33,7 +33,7 @@ void DelayTask::destroy()
 
 }
 
-void DelayTask::createTask(GameObject* object, const float speed, const std::function<void()>& _onComplete)
+void DelayTask::createTask(GameObject* object, const int speed, const std::function<void()>& _onComplete)
 {
 	if (!object->hasComponent(typeid(DelayTask)))
 	{
@@ -43,6 +43,4 @@ void DelayTask::createTask(GameObject* object, const float speed, const std::fun
 	auto* flash = object->getComponent<DelayTask>();
 	flash->onComplete = _onComplete;
 	flash->setSpeed(speed);
-	flash->hasFinished = false;
-	flash->internalTimer =0.0f;
 }

@@ -43,7 +43,7 @@ void MoveTowardsAction::Act()
 
 	if (!shouldLerp)
 	{
-		DelayTask::createTask(parentObject, 2, [this]()
+		DelayTask::createTask(parentObject, 1.0f, [this]()
 		{
 			TurnManager::Instance()->endTurn();
 		});
@@ -65,7 +65,7 @@ void MoveTowardsAction::lerpPosition(GameObject* object, const glm::vec2 targetP
 	const auto lerpPosition = object->getComponent<LerpPosition>();
 	lerpPosition->onLerpComplete = [this]
 	{
-		DelayTask::createTask(parentObject, 2, [this]()
+		DelayTask::createTask(parentObject, 1.0f, [this]()
 		{
 			endTurn();
 		});

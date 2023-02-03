@@ -39,77 +39,6 @@ bool Inventory::remove_item(Item* item)
 	return false;
 }
 
-
-// void Inventory::draw_inventory() {
-	//std::cout << "Inventory:\n";
-	//for (int i = 0; i < items.size(); i++)
-	//{
-	//	std::cout << i + 1 << ". " << items[i]->name;
-	//	if (dynamic_cast<WeaponStats*>(items[i])) {
-	//		auto item = dynamic_cast<WeaponStats*>(items[i]);
-	//		std::cout << " (Atk:" << item->attack << " / Crit:" << item->getCrit() << ")";
-	//	}
-	//	else if (dynamic_cast<ArmourStats*>(items[i])) {
-	//		auto item = dynamic_cast<ArmourStats*>(items[i]);
-	//		std::cout << " (Def:" << item->getDef() << " )";
-	//	}
-	//	else if (dynamic_cast<SpellsStats*>(items[i])) {
-	//		auto item = dynamic_cast<SpellsStats*>(items[i]);
-	//		std::cout << " (Spell Power:" << item->getSpellPow() << " / Mana Cost:" << item->getManaCost() << " / Effect Duration:" << item->getEffectDuration() << ")";
-	//	}
-	//	//if (items[i]->isEquipped) {
-	//	//	std::cout << " (equipped) ";
-	//	//}
-	//	std::cout << std::endl;
-	//}
-	//std::cout << std::endl;
-
-//void Inventory::draw_inventory()
-//{
-//	std::cout << "Inventory:\n";
-//	for (int i = 0; i < items.size(); i++)
-//	{
-//		std::cout << i + 1 << ". " << items[i]->name();
-//		
-//		switch(items[i]->getItemType())
-//		{
-//			case ItemType::WEAPON:
-//			{
-//				const auto item = dynamic_cast<WeaponItem*>(items[i]);
-//				std::cout << " (Atk:" << item->getAtk() << " / Crit:" << item->getCrit() << ")";
-//				break;
-//			}
-//			case ItemType::SPELL:
-//			{
-//				const auto item = dynamic_cast<SpellItem*>(items[i]);
-//				std::cout << " (Spell Power:" << item->getSpellAtk() << " / Mana Cost:" << item->getManaCost() << " / Effect Duration:" << item->getEffectDuration() << ")";
-//				break;
-//			}
-//			case ItemType::ARMOUR:
-//			{
-//				const auto item = dynamic_cast<ArmourItem*>(items[i]);
-//				std::cout << " (Def:" << item->armour->defence << " )";
-//				break;
-//			}
-//			case ItemType::CONSUMABLE:
-//			case ItemType::NOTSET:
-//			{
-//				break;
-//			}
-//		}
-//		
-//		if (items[i]->isEquipped)
-//		{
-//			std::cout << " (equipped) ";
-//		}
-//		
-//		std::cout << std::endl;
-//	}
-//	
-//	std::cout << std::endl;
-//
-//}
-
 void Inventory::draw_inventory()
 {
 	std::cout << "Inventory:\n";
@@ -195,66 +124,24 @@ void Inventory::getDebugInfo(std::string* basic_string)
 			if (ImGui::Button("Equip"))
 				equip_item(items[i]->name());
 		}
+
+		if (items[i]->isUsable())
+		{
+			if (ImGui::Button("Use Item"))
+			{
+				use_item(items[i]->name());
+			}
+		}
+		
+		ImGui::PopID();
+		
+		ImGui::Unindent();
 	}
+	
+	ImGui::Unindent();
+	
+	Component::getDebugInfo(basic_string);
 }
-//void Inventory::getDebugInfo(std::string* basic_string)
-//{
-//	ImGui::Indent();
-//	for (int i = 0; i < items.size(); i++)
-//	{
-//		ImGui::PushID(i);
-//		
-//		ImGui::Text("%d. %s", i + 1, items[i]->name().c_str());
-//		ImGui::Indent();
-//		
-//		if (items[i]->getItemType() == ItemType::WEAPON)
-//		{
-//			const auto item = dynamic_cast<WeaponItem*>(items[i]);
-//			ImGui::Text("Atk: %d / Crit: %d", item->atk, item->crit);
-//		}
-//		else if (items[i]->getItemType() == ItemType::ARMOUR)
-//		{
-//			const auto item = dynamic_cast<ArmourItem*>(items[i]);
-//			ImGui::Text("Def: %d", item->armour->defence);
-//		}
-//		else if (items[i]->getItemType() == ItemType::SPELL)
-//		{
-//			const auto item = dynamic_cast<SpellItem*>(items[i]);
-//			ImGui::Text("Spell Power: %d / Mana Cost: %d / Effect Duration: %d", item->spellAtk, item->manaCost, item->effectDuration);
-//		}
-//		
-//		if (items[i]->isEquipped)
-//		{
-//			ImGui::Text("Equipped");
-//			
-//			if (ImGui::Button("Un-equip"))
-//			{
-//				unequip_item(items[i]->name());
-//			}
-//		}
-//		else if (items[i]->isEquipable())
-//		{
-//			if (ImGui::Button("Equip"))
-//				equip_item(items[i]->name());
-//		}
-//
-//		if (items[i]->isUsable())
-//		{
-//			if (ImGui::Button("Use Item"))
-//			{
-//				use_item(items[i]->name());
-//			}
-//		}
-//		
-//		ImGui::PopID();
-//		
-//		ImGui::Unindent();
-//	}
-//	
-//	ImGui::Unindent();
-//	
-//	Component::getDebugInfo(basic_string);
-//}
 
 void Inventory::use_item(const std::string& item_name)
 {

@@ -61,7 +61,7 @@ void EnemyCombatBehaviour::GenerateBehaviourList()
 		availableActions["MoveTowards"].second->start();
 	}
 
-	DelayTask::createTask(parentFSM->getOwner(), 2, [this]()
+	DelayTask::createTask(parentFSM->getOwner(), 1.0f, [this]()
 	{
 		TurnManager::Instance()->endTurn();
 	});
