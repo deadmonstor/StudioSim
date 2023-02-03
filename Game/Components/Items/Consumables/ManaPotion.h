@@ -1,6 +1,6 @@
 #pragma once
 #include "ConsumableItem.h"
-#include "../Player/PlayerController.h"
+#include "../../Player/PlayerController.h"
 
 class ManaPotion :
     public ConsumableItem

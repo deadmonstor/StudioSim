@@ -14,6 +14,7 @@
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
+#include "../Tiles/LightTile.h"
 #include "../LootTable.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
@@ -70,47 +71,53 @@ void Level2Scene::init()
 	{
 		{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
 		{ 14, [] { return new TestTile(Texture(), "victoryScreen"); } },
-		{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
-		{ 56, [] { return new SpikeTile(Texture()); } }
+		{ 15, [] { return new TeleportTile(Texture(), 11, 54); } }
+		//{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	
 	grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
 
-	grid_system->setEmptyTileIDs(1, std::vector<int>{});
-	grid_system->setWallIDs(1, std::vector<int>{35, 36, 41, 42, 43, 44, 31, 32, 33});
-	grid_system->setTextureMap(1, std::map<int, Texture>
-	{
-		{ 21, ResourceManager::GetTexture("tile12")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
-		{ 22, ResourceManager::GetTexture("tile36") },//tile111 skulls
-		{ 23, ResourceManager::GetTexture("tile11") },//tile223 rocks
-		{ 24, ResourceManager::GetTexture("tile35") }, //Pillars : 20 44 68, 21 45 69, 22 46 70,
-		{ 25, ResourceManager::GetTexture("tile13") }, //104 105
-		{ 26, ResourceManager::GetTexture("tile37") }, //stair case/window
-		{ 27, ResourceManager::GetTexture("tile111") }, //skulls
-		{ 28, ResourceManager::GetTexture("tile223") }, //rocks
-		{ 29, ResourceManager::GetTexture("tile20") },
-		{ 30, ResourceManager::GetTexture("tile44") },
-		{ 31, ResourceManager::GetTexture("tile68") },
-		{ 32, ResourceManager::GetTexture("tile129") },	//vases
-		{ 33, ResourceManager::GetTexture("tile153") },	//vases
-		{ 34, ResourceManager::GetTexture("tile57") }, //lattice
-		{ 35, ResourceManager::GetTexture("tile127") },
-		{ 36, ResourceManager::GetTexture("tile151") },
-		{ 37, ResourceManager::GetTexture("tile131") },
-		{ 38, ResourceManager::GetTexture("tile155") },
-		{ 39, ResourceManager::GetTexture("tile288") },
-		{ 40, ResourceManager::GetTexture("tile289") },
-		{ 41, ResourceManager::GetTexture("tile132") },
-		{ 42, ResourceManager::GetTexture("tile133") },
-		{ 43, ResourceManager::GetTexture("tile156") },
-		{ 44, ResourceManager::GetTexture("tile157") },
-		{ 45, ResourceManager::GetTexture("tile290") }, //bones
-		{ 46, ResourceManager::GetTexture("tile291") }, //skulls
-		{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
-		{ 48, ResourceManager::GetTexture("tile130") },//Jar
-		{ 49, ResourceManager::GetTexture("tile154") },
-		{ 56, ResourceManager::GetTexture("tile60") } // spike
-	});
+		grid_system->setEmptyTileIDs(1, std::vector<int>{});
+		grid_system->setWallIDs(1, std::vector<int>{35, 36, 41, 42, 43, 44, 31, 32, 33});
+		grid_system->setTextureMap(1, std::map<int, Texture>
+		{
+			{ 21, ResourceManager::GetTexture("tile12")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
+			{ 22, ResourceManager::GetTexture("tile36") },//tile111 skulls
+			{ 23, ResourceManager::GetTexture("tile11") },//tile223 rocks
+			{ 24, ResourceManager::GetTexture("tile35") }, //Pillars : 20 44 68, 21 45 69, 22 46 70,
+			{ 25, ResourceManager::GetTexture("tile13") }, //104 105
+			{ 26, ResourceManager::GetTexture("tile37") }, //stair case/window
+			{ 27, ResourceManager::GetTexture("tile111") }, //skulls
+			{ 28, ResourceManager::GetTexture("tile223") }, //rocks
+			{ 29, ResourceManager::GetTexture("tile20") },
+			{ 30, ResourceManager::GetTexture("tile44") },
+			{ 31, ResourceManager::GetTexture("tile68") },
+			{ 32, ResourceManager::GetTexture("tile129") },	//vases
+			{ 33, ResourceManager::GetTexture("tile153") },	//vases
+			{ 34, ResourceManager::GetTexture("tile57") }, //lattice
+			{ 35, ResourceManager::GetTexture("tile127") },
+			{ 36, ResourceManager::GetTexture("tile151") },
+			{ 37, ResourceManager::GetTexture("tile131") },
+			{ 38, ResourceManager::GetTexture("tile155") },
+			{ 39, ResourceManager::GetTexture("tile288") },
+			{ 40, ResourceManager::GetTexture("tile289") },
+			{ 41, ResourceManager::GetTexture("tile132") },
+			{ 42, ResourceManager::GetTexture("tile133") },
+			{ 43, ResourceManager::GetTexture("tile156") },
+			{ 44, ResourceManager::GetTexture("tile157") },
+			{ 45, ResourceManager::GetTexture("tile290") }, //bones
+			{ 46, ResourceManager::GetTexture("tile291") }, //skulls
+			{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
+			{ 48, ResourceManager::GetTexture("tile130") },//Jar
+			{ 49, ResourceManager::GetTexture("tile154") },
+			{ 56, ResourceManager::GetTexture("tile60") } // spike
+		});
+		
+		grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile* ()>>
+		{
+			{ 37, [] { return new LightTile(Texture()); } },
+			{ 56, [] { return new SpikeTile(Texture()); } }
+		});
 
 	grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");
 

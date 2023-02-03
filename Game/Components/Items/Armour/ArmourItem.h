@@ -1,6 +1,6 @@
 #pragma once
-#include "Stats.h"
-#include "../../System/Inventory.h"
+#include "../Stats.h"
+#include "../../../System/Inventory.h"
 
 class ArmourItem :
     public Item

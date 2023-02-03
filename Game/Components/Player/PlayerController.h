@@ -3,10 +3,13 @@
 #include "Core/Components/Camera.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
-#include "../Items/Dagger.h"
-#include "../Items/Axe.h"
-#include "../Items/Hammer.h"
-#include "../Items/Sword.h"
+
+class OnPlayerControllerFSMUpdate : public Griddy::Event
+{
+public:
+	OnPlayerControllerFSMUpdate(const std::string key) : key(key) {}
+	std::string key;
+};
 
 class Inventory;
 class PlayerFSM;
@@ -19,6 +22,7 @@ public:
 	void onKeyDown(const OnKeyDown* keyDown);
 	void onKeyHold(const OnKeyRepeat* keyHold);
 	void onKeyUp(const OnKeyUp* keyUp);
+	void onEngineRender(const OnEngineRender* render);
 	void UpdateStats();
 
 	SpriteComponent* playerSprite{};
