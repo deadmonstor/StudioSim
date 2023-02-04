@@ -2,6 +2,9 @@
 #include "ButtonComponent.h"
 #include "TextComponent.h"
 #include "PauseButton.h"
+#include "MasterAudioMinusButton.h"
+#include "MasterAudioPlusButton.h"
+#include "InventoryButton.h"
 #include "Util/SingletonTemplate.h"
 
 class HUD : public SingletonTemplate<HUD>
@@ -15,13 +18,22 @@ private:
 	TextComponent* levelText;
 	TextComponent* audioText;
 
-	ButtonComponent* inventoryButton;
+	//ButtonComponent* inventoryButton;
 	ButtonComponent* weaponButton;
 	ButtonComponent* spellsButton;
-	ButtonComponent* plusAudioButton;
-	ButtonComponent* minusAudioButton;
+	//ButtonComponent* plusAudioButton;
+	//ButtonComponent* minusAudioButton;
 
+	//Pause Button
 	PauseButton* pauseButton;
+	
+	//Audio Controls
+	MasterAudioPlusButton* plusAudioButton;
+	MasterAudioMinusButton* minusAudioButton;
+
+	//Inventory Button
+	InventoryButton* inventoryButton;
+
 
 	Panel* healthIcon;
 	Panel* manaIcon;
