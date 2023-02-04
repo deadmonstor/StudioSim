@@ -18,7 +18,13 @@
     <ClInclude Include="Components\Items\CommonArmour.h" />
     <ClInclude Include="Components\Items\ArmourItem.h" />
     <ClInclude Include="Components\UI\PauseButton.h" />
+<<<<<<< Updated upstream
     <ClInclude Include="Scenes\LeaderboardScene.h" />
+=======
+    <ClInclude Include="Components\UI\InventoryButton.h" />
+    <ClInclude Include="Components\UI\MasterAudioPlusButton.h" />
+    <ClInclude Include="Components\UI\MasterAudioMinusButton.h" />
+>>>>>>> Stashed changes
     <ClInclude Include="Scenes\DefeatScene.h" />
     <ClInclude Include="Scenes\Level1Scene.h" />
     <ClInclude Include="Scenes\Level2Scene.h" />
@@ -81,7 +87,13 @@
     <ClCompile Include="Components\Items\CommonArmour.cpp" />
     <ClCompile Include="Components\Items\ArmourItem.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
+<<<<<<< Updated upstream
     <ClCompile Include="Scenes\LeaderboardScene.cpp" />
+=======
+    <ClCompile Include="Components\UI\InventoryButton.cpp" />
+    <ClCompile Include="Components\UI\MasterAudioPlusButton.cpp" />
+    <ClCompile Include="Components\UI\MasterAudioMinusButton.cpp" />
+>>>>>>> Stashed changes
     <ClCompile Include="Scenes\DefeatScene.cpp" />
     <ClCompile Include="Scenes\Level1Scene.cpp" />
     <ClCompile Include="Scenes\Level2Scene.cpp" />
