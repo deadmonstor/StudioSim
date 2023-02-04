@@ -6,6 +6,7 @@
 #include "../Items/Weapons/LegendaryHammer.h"
 #include "../Items/Weapons/RareSword.h"
 #include "../Items/Spells/FireBallSpell.h"
+#include "../Items/Spells/IceSpell.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
@@ -75,6 +76,7 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		myInventory->add_item(new HealthPotion());
 		myInventory->add_item(new LegendaryArmour());
 		myInventory->add_item(new FireBallSpell());
+		myInventory->add_item(new IceSpell());
 		
 	}
 	

@@ -55,6 +55,8 @@
     <ClCompile Include="Components\Items\Weapons\RareAxe.cpp" />
     <ClCompile Include="Components\Items\Weapons\RareSword.cpp" />
     <ClCompile Include="Components\Items\Weapons\Sword.cpp" />
+    <ClCompile Include="Components\AI Behaviours\AttackAction.cpp" />
+    <ClCompile Include="Components\Items\Spells\IceSpell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -118,6 +120,8 @@
     <ClInclude Include="Components\Items\Weapons\Sword.h" />
     <ClInclude Include="Components\Items\Weapons\Weapon.h" />
     <ClInclude Include="Components\Items\Weapons\WeaponEnum.h" />
+    <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
+    <ClInclude Include="Components\Items\Spells\IceSpell.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />

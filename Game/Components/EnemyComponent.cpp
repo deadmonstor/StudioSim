@@ -51,8 +51,21 @@ void EnemyComponent::destroy()
 
 void EnemyComponent::onTurnChanged(const onStartTurn* event)
 {
-	if (event->objectToStart == getOwner())
+	if (roundsFreeze == 0)
 	{
-		enemyFSM->Act();
+		getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
+		if (event->objectToStart == getOwner())
+		{
+			enemyFSM->Act();
+		}
 	}
+	else
+	{
+		if (TurnManager::Instance()->isCurrentTurnObject(getOwner()))
+		{
+			roundsFreeze -= 1;
+			TurnManager::Instance()->endTurn();
+		}
+	}
+	
 }

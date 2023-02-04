@@ -105,7 +105,7 @@ void PlayerSpellBehaviour::onKeyDownResponse(Griddy::Event* event)
 
 void PlayerSpellBehaviour::onKeyUpResponse(Griddy::Event*)
 {
-	canThrowSpell = true;
+	//canThrowSpell = true;
 }
 
 FunctionMap PlayerSpellBehaviour::CreateFunctionMap()
