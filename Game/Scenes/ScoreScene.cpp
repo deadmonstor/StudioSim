@@ -34,19 +34,53 @@ void ScoreScene::onEngineRender(const OnEngineRender* event)
         SceneManager::Instance()->isShuttingDown() ||
         SceneManager::Instance()->getScene()->name != "scoreScene") return;
 
+    const auto MiddleTop =
+        glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y)) / Renderer::Instance()->getAspectRatio();
+
     const auto MiddleTopHalf =
         glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y / 1.5)) / Renderer::Instance()->getAspectRatio();
 
     const auto MiddleMiddle =
         glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y / 2.5)) / Renderer::Instance()->getAspectRatio();
 
-    glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize(playerName, 1);
-    TextRenderer::Instance()->renderText(playerName, MiddleTopHalf.x - (sizeOfText.x / 2),
-        MiddleTopHalf.y - (sizeOfText.y / 2), 1, glm::vec3{ 1, 1, 1 }, glm::vec2{ 0, 0 });
+    const auto MiddleBottom =
+        glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y / 5)) / Renderer::Instance()->getAspectRatio();
 
+    //Player Name
+    glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize(playerName, 1);
+    TextRenderer::Instance()->renderText(playerName, MiddleBottom.x - (sizeOfText.x / 2),
+        MiddleBottom.y - (sizeOfText.y / 2), 1, glm::vec3{ 1, 1, 1 }, glm::vec2{ 0, 0 });
+
+    //Enter Name Text
     sizeOfText = TextRenderer::Instance()->renderTextSize("Enter Your Name:", 1);
-    TextRenderer::Instance()->renderText("Enter Your Name:", MiddleTopHalf.x - (sizeOfText.x / 2),
-        MiddleTopHalf.y - (sizeOfText.y / 2) + 50, 1, glm::vec3{1, 1, 1}, glm::vec2{0, 0});
+    TextRenderer::Instance()->renderText("Enter Your Name:", MiddleBottom.x - (sizeOfText.x / 2),
+        MiddleBottom.y - (sizeOfText.y / 2) + 50, 1, glm::vec3{1, 1, 1}, glm::vec2{0, 0});
+
+    //Score Details
+    sizeOfText = TextRenderer::Instance()->renderTextSize("Your Score Breakdown:", 1);
+    TextRenderer::Instance()->renderText("Your Score Breakdown:", MiddleTop.x - (sizeOfText.x / 2),
+        MiddleTop.y - (sizeOfText.y / 2) - 50, 1, glm::vec3{ 1, 1, 1 }, glm::vec2{ 0, 0 });
+
+    //Total Score
+    sizeOfText = TextRenderer::Instance()->renderTextSize("Total Score: " + std::format("{:.2f}", ScoreSystem::Instance()->getScore()), 1);
+    TextRenderer::Instance()->renderText("Total Score: " + std::format("{:.0f}", ScoreSystem::Instance()->getScore()), MiddleTop.x - (sizeOfText.x / 2),
+        MiddleTop.y - (sizeOfText.y / 2) - 100, 1, glm::vec3{ 1, 1, 1 }, glm::vec2{ 0, 0 });
+
+    //Enemies Killed
+    sizeOfText = TextRenderer::Instance()->renderTextSize("Enemies Killed: " + std::to_string(ScoreSystem::Instance()->getEnemiesKilled()), 1);
+    TextRenderer::Instance()->renderText("Enemies Killed: " + std::to_string(ScoreSystem::Instance()->getEnemiesKilled()), MiddleTop.x - (sizeOfText.x / 2),
+        MiddleTop.y - (sizeOfText.y / 2) - 150, 1, glm::vec3{ 1, 1, 1 }, glm::vec2{ 0, 0 });
+
+    //Enemies Killed
+    sizeOfText = TextRenderer::Instance()->renderTextSize("Tiles Moved: " + std::to_string(ScoreSystem::Instance()->getTilesMoved()), 1);
+    TextRenderer::Instance()->renderText("Tiles Moved: " + std::to_string(ScoreSystem::Instance()->getTilesMoved()), MiddleTop.x - (sizeOfText.x / 2),
+        MiddleTop.y - (sizeOfText.y / 2) - 200, 1, glm::vec3{ 1, 1, 1 }, glm::vec2{ 0, 0 });
+
+    //Enemies Killed
+    sizeOfText = TextRenderer::Instance()->renderTextSize("Damage Taken: " + std::to_string(ScoreSystem::Instance()->getDamageTaken()), 1);
+    TextRenderer::Instance()->renderText("Damage Taken: " + std::to_string(ScoreSystem::Instance()->getDamageTaken()), MiddleTop.x - (sizeOfText.x / 2),
+        MiddleTop.y - (sizeOfText.y / 2) - 250, 1, glm::vec3{ 1, 1, 1 }, glm::vec2{ 0, 0 });
+
 }
 
 void ScoreScene::OnCharacterKeyDown(const OnCharacterDown* event)
@@ -72,6 +106,7 @@ void ScoreScene::OnActualDown(const OnKeyDown* event)
     {
         ScoreSystem::Instance()->SaveScore(playerName.c_str());
         hasSaved = true;
+        SceneManager::Instance()->changeScene("leaderboardScene");
     }
 }
 

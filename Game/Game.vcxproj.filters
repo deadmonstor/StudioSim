@@ -55,6 +55,7 @@
     <ClCompile Include="Components\UI\PauseButton.cpp" />
     <ClCompile Include="Components\Items\ArmourItem.cpp" />
     <ClCompile Include="Scenes\ScoreScene.cpp" />
+    <ClCompile Include="Scenes\LeaderboardScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -117,5 +118,6 @@
     <ClInclude Include="Components\Items\ArmourItem.h" />
     <ClInclude Include="Components\Items\ConsumableItem.h" />
     <ClInclude Include="Scenes\ScoreScene.h" />
+    <ClInclude Include="Scenes\LeaderboardScene.h" />
   </ItemGroup>
 </Project>

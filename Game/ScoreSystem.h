@@ -25,9 +25,27 @@ public:
 	void SortScores();
 	void UpdateScoreFile();
 
+	//Update Score Trackers
+	void setEnemiesKilled(int scoreToSet) { enemiesKilled = scoreToSet; }
+	void addEnemiesKilled(int scoreToSet) { enemiesKilled += scoreToSet; }
+	int getEnemiesKilled() { return enemiesKilled; }
+
+	void setDamageTaken(int scoreToSet) { damageTaken = scoreToSet; }
+	void addDamageTaken(int scoreToSet) { damageTaken += scoreToSet; }
+	int getDamageTaken() { return damageTaken; }
+
+	void setTilesMoved(int scoreToSet) { tilesMoved = scoreToSet; }
+	void addTilesMoved(int scoreToSet) { tilesMoved += scoreToSet; }
+	int getTilesMoved() { return tilesMoved; }
+
+	//Calculate Final Score (Do this on player killed or victory)
+	void calcFinalScore();
+
 private:
 	int currentScore;
-
+	int enemiesKilled;
+	int damageTaken;
+	int tilesMoved;
 
 	std::fstream file;
 
