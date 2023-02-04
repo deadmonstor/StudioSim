@@ -19,7 +19,7 @@ void HUD::createHUD()
 
 	ResourceManager::LoadTexture("Sprites\\Armour\\BasicArmourChest.png", "BasicArmourChestInventoryUI");
 	inventoryButton =
-		UIManager::Instance()->createUIElement<InventoryButton>("inventoryButton", ResourceManager::GetTexture("BasicArmourChestInventoryUI"));
+		UIManager::Instance()->createUIElement<ButtonComponent>("inventoryButton", ResourceManager::GetTexture("BasicArmourChestInventoryUI"));
 	
 	ResourceManager::LoadTexture("Sprites\\Weapons\\Spellbook4.png", "SpellbookInventoryUI");
 	spellsButton =
@@ -46,11 +46,11 @@ void HUD::createHUD()
 	//Audio Controls
 	ResourceManager::LoadTexture("Sprites\\Audio\\Plus.png", "plusIcon");
 	plusAudioButton =
-		UIManager::Instance()->createUIElement<MasterAudioPlusButton>("plusAudioButton", ResourceManager::GetTexture("plusIcon"));
+		UIManager::Instance()->createUIElement<ButtonComponent>("plusAudioButton", ResourceManager::GetTexture("plusIcon"));
 
 	ResourceManager::LoadTexture("Sprites\\Audio\\Minus.png", "minusIcon");
 	minusAudioButton =
-		UIManager::Instance()->createUIElement<MasterAudioMinusButton>("minusAudioButton", ResourceManager::GetTexture("minusIcon"));
+		UIManager::Instance()->createUIElement<ButtonComponent>("minusAudioButton", ResourceManager::GetTexture("minusIcon"));
 
 	audioText = UIManager::Instance()->createUIElement<TextComponent>("audioText");
 
