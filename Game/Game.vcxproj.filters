@@ -56,6 +56,9 @@
     <ClCompile Include="Components\Items\ArmourItem.cpp" />
     <ClCompile Include="Scenes\ScoreScene.cpp" />
     <ClCompile Include="Scenes\LeaderboardScene.cpp" />
+    <ClCompile Include="Components\InventoryButton.cpp" />
+    <ClCompile Include="Components\MasterAudioPlusButton.cpp" />
+    <ClCompile Include="Components\MasterAudioMinusButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -119,5 +122,8 @@
     <ClInclude Include="Components\Items\ConsumableItem.h" />
     <ClInclude Include="Scenes\ScoreScene.h" />
     <ClInclude Include="Scenes\LeaderboardScene.h" />
+    <ClInclude Include="Components\UI\InventoryButton.h" />
+    <ClInclude Include="Components\UI\MasterAudioPlusButton.h" />
+    <ClInclude Include="Components\UI\MasterAudioMinusButton.h" />
   </ItemGroup>
 </Project>

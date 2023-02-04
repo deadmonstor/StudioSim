@@ -18,6 +18,9 @@
     <ClInclude Include="Components\Items\CommonArmour.h" />
     <ClInclude Include="Components\Items\ArmourItem.h" />
     <ClInclude Include="Components\UI\PauseButton.h" />
+    <ClInclude Include="Components\UI\InventoryButton.h" />
+    <ClInclude Include="Components\UI\MasterAudioMinusButton.h" />
+    <ClInclude Include="Components\UI\MasterAudioPlusButton.h" />
     <ClInclude Include="Scenes\LeaderboardScene.h" />
     <ClInclude Include="Scenes\DefeatScene.h" />
     <ClInclude Include="Scenes\Level1Scene.h" />
@@ -81,6 +84,9 @@
     <ClCompile Include="Components\Items\CommonArmour.cpp" />
     <ClCompile Include="Components\Items\ArmourItem.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
+    <ClCompile Include="Components\InventoryButton.cpp" />
+    <ClCompile Include="Components\MasterAudioMinusButton.cpp" />
+    <ClCompile Include="Components\MasterAudioPlusButton.cpp" />
     <ClCompile Include="Scenes\LeaderboardScene.cpp" />
     <ClCompile Include="Scenes\DefeatScene.cpp" />
     <ClCompile Include="Scenes\Level1Scene.cpp" />
