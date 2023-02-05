@@ -46,11 +46,10 @@ struct SpellsStats : public items
 {
 	int manaCost;
 	int spellPower;
-	int cooldown;
+	int currentCooldown;
+	int maxCooldown;
 	int range;
 	int damagePerTurn;
-	int spellCooldown;
-	
 };
 
 struct LootTables : public items

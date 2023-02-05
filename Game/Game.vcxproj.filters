@@ -38,6 +38,24 @@
     <ClCompile Include="Components\DelayTask.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
     <ClCompile Include="Components\Items\FireBallSpell.cpp" />
+    <ClCompile Include="Components\Items\Spells\FireBallSpell.cpp" />
+    <ClCompile Include="Components\Items\Spells\Spell.cpp" />
+    <ClCompile Include="Components\Items\Armour\CommonArmour.cpp" />
+    <ClCompile Include="Components\Items\Armour\LegendaryArmour.cpp" />
+    <ClCompile Include="Components\Items\Armour\RareArmour.cpp" />
+    <ClCompile Include="Components\Items\Consumables\ExpPotion.cpp" />
+    <ClCompile Include="Components\Items\Consumables\HealthPotion.cpp" />
+    <ClCompile Include="Components\Items\Consumables\ManaPotion.cpp" />
+    <ClCompile Include="Components\Items\Weapons\Axe.cpp" />
+    <ClCompile Include="Components\Items\Weapons\CommonAxe.cpp" />
+    <ClCompile Include="Components\Items\Weapons\CommonDagger.cpp" />
+    <ClCompile Include="Components\Items\Weapons\CommonSword.cpp" />
+    <ClCompile Include="Components\Items\Weapons\Dagger.cpp" />
+    <ClCompile Include="Components\Items\Weapons\Hammer.cpp" />
+    <ClCompile Include="Components\Items\Weapons\LegendaryHammer.cpp" />
+    <ClCompile Include="Components\Items\Weapons\RareAxe.cpp" />
+    <ClCompile Include="Components\Items\Weapons\RareSword.cpp" />
+    <ClCompile Include="Components\Items\Weapons\Sword.cpp" />
     <ClCompile Include="Components\AI Behaviours\AttackAction.cpp" />
     <ClCompile Include="Components\Items\Armour\CommonArmour.cpp" />
     <ClCompile Include="Components\Items\Armour\LegendaryArmour.cpp" />
@@ -56,6 +74,7 @@
     <ClCompile Include="Components\Items\Weapons\RareSword.cpp" />
     <ClCompile Include="Components\Items\Weapons\Sword.cpp" />
     <ClCompile Include="Components\PickUp.cpp" />
+    <ClCompile Include="Components\Items\Spells\IceSpell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -121,6 +140,30 @@
     <ClInclude Include="Components\Items\Weapons\Weapon.h" />
     <ClInclude Include="Components\Items\Weapons\WeaponEnum.h" />
     <ClInclude Include="Components\PickUp.h" />
+    <ClInclude Include="Components\Items\Spells\FireBallSpell.h" />
+    <ClInclude Include="Components\Items\Spells\Spell.h" />
+    <ClInclude Include="Components\Items\Armour\ArmourItem.h" />
+    <ClInclude Include="Components\Items\Armour\CommonArmour.h" />
+    <ClInclude Include="Components\Items\Armour\LegendaryArmour.h" />
+    <ClInclude Include="Components\Items\Armour\RareArmour.h" />
+    <ClInclude Include="Components\Items\Consumables\ConsumableItem.h" />
+    <ClInclude Include="Components\Items\Consumables\ExpPotion.h" />
+    <ClInclude Include="Components\Items\Consumables\HealthPotion.h" />
+    <ClInclude Include="Components\Items\Consumables\ManaPotion.h" />
+    <ClInclude Include="Components\Items\Weapons\Axe.h" />
+    <ClInclude Include="Components\Items\Weapons\CommonAxe.h" />
+    <ClInclude Include="Components\Items\Weapons\CommonDagger.h" />
+    <ClInclude Include="Components\Items\Weapons\CommonSword.h" />
+    <ClInclude Include="Components\Items\Weapons\Dagger.h" />
+    <ClInclude Include="Components\Items\Weapons\Hammer.h" />
+    <ClInclude Include="Components\Items\Weapons\LegendaryHammer.h" />
+    <ClInclude Include="Components\Items\Weapons\RareAxe.h" />
+    <ClInclude Include="Components\Items\Weapons\RareSword.h" />
+    <ClInclude Include="Components\Items\Weapons\Sword.h" />
+    <ClInclude Include="Components\Items\Weapons\Weapon.h" />
+    <ClInclude Include="Components\Items\Weapons\WeaponEnum.h" />
+    <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
+    <ClInclude Include="Components\Items\Spells\IceSpell.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />

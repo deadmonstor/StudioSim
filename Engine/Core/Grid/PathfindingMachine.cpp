@@ -146,6 +146,35 @@ bool PathfindingMachine::LineOfSight(glm::vec2 startPos, glm::vec2 endPos)
 	return LineOfSight(tile1, tile2);
 }
 
+std::vector<TileHolder*> PathfindingMachine::LineIntersection(TileHolder* start, TileHolder* end)
+{
+	int distance = EstimateDistance(start->position, end->position);
+	std::vector<TileHolder*> outputTiles;
+	for (int i = 0; i <= distance; i++)
+	{
+		//Finds the lerp fraction
+		float t = (distance == 0) ? 0.0f : float(i) / distance;
+		//Interpolates over the line to find intersecting points
+		float xlerp = std::lerp(start->position.x, end->position.x, t);
+		float ylerp = std::lerp(start->position.y, end->position.y, t);
+		xlerp = std::round(xlerp);
+		ylerp = std::round(ylerp);
+
+		outputTiles.push_back(GridSystem::Instance()->getTileHolder(0, glm::vec2(xlerp, ylerp)));
+	}
+	return outputTiles;
+}
+
+std::vector<TileHolder*> PathfindingMachine::LineIntersection(glm::vec2 startPos, glm::vec2 endPos)
+{
+	GridSystem* gridSystem = GridSystem::Instance();
+	TileHolder* tile1 = gridSystem->getTileHolder(0, gridSystem->getTilePosition(startPos));
+	TileHolder* tile2 = gridSystem->getTileHolder(0, gridSystem->getTilePosition(endPos));
+	if (tile1 == nullptr || tile2 == nullptr)
+		return std::vector<TileHolder*>();
+	return LineIntersection(tile1, tile2);
+}
+
 float PathfindingMachine::EstimateDistance(glm::vec2 startPos, glm::vec2 endPos)
 {
 	return std::max(std::abs(endPos.x - startPos.x), std::abs(endPos.y - startPos.y));

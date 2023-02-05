@@ -23,7 +23,7 @@
     <ClInclude Include="Components\Items\Consumables\ExpPotion.h" />
     <ClInclude Include="Components\Items\Consumables\HealthPotion.h" />
     <ClInclude Include="Components\Items\Consumables\ManaPotion.h" />
-    <ClInclude Include="Components\Items\Spells\SpellItem.h" />
+    <ClInclude Include="Components\Items\Spells\IceSpell.h" />
     <ClInclude Include="Components\Items\Weapons\Axe.h" />
     <ClInclude Include="Components\Items\Weapons\CommonAxe.h" />
     <ClInclude Include="Components\Items\Weapons\CommonDagger.h" />
@@ -36,7 +36,7 @@
     <ClInclude Include="Components\Items\Weapons\Sword.h" />
     <ClInclude Include="Components\Items\Weapons\Weapon.h" />
     <ClInclude Include="Components\Items\Weapons\WeaponEnum.h" />
-    <ClInclude Include="Components\Items\FireBallSpell.h" />
+    <ClInclude Include="Components\Items\Spells\Spell.h" />
     <ClInclude Include="Components\UI\PauseButton.h" />
     <ClInclude Include="Components\PickUp.h" />
     <ClInclude Include="Scenes\DefeatScene.h" />
@@ -86,6 +86,7 @@
     <ClCompile Include="Components\Items\Consumables\ExpPotion.cpp" />
     <ClCompile Include="Components\Items\Consumables\HealthPotion.cpp" />
     <ClCompile Include="Components\Items\Consumables\ManaPotion.cpp" />
+    <ClCompile Include="Components\Items\Spells\IceSpell.cpp" />
     <ClCompile Include="Components\Items\Weapons\Axe.cpp" />
     <ClCompile Include="Components\Items\Weapons\CommonAxe.cpp" />
     <ClCompile Include="Components\Items\Weapons\CommonDagger.cpp" />
@@ -96,7 +97,9 @@
     <ClCompile Include="Components\Items\Weapons\RareAxe.cpp" />
     <ClCompile Include="Components\Items\Weapons\RareSword.cpp" />
     <ClCompile Include="Components\Items\Weapons\Sword.cpp" />
-    <ClCompile Include="Components\Items\FireBallSpell.cpp" />
+    <ClCompile Include="Components\Items\Spells\FireBallSpell.cpp" />
+    <ClCompile Include="Components\Items\Spells\Spell.cpp" />
+    <ClCompile Include="Components\AI Behaviours\AttackAction.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
     <ClCompile Include="Components\PickUp.cpp" />
     <ClCompile Include="Scenes\DefeatScene.cpp" />

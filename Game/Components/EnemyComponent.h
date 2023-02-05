@@ -11,6 +11,7 @@ private:
 	StateMachine* enemyFSM;
 	EnemyStats stats;
 	std::string spriteName;
+	
 public:
 	EnemyComponent();
 	explicit EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsArg, std::string spriteNameArg);
@@ -22,6 +23,7 @@ public:
 	void die();
 
 	EnemyStats getStats() { return stats; }
+	int roundsFreeze = 0;
 
 private:
 	void DropLoot();

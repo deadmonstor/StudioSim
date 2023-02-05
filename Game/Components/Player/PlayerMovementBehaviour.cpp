@@ -78,7 +78,10 @@ void PlayerMovementBehaviour::Act()
 			
 			
 			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+			{
+				
 				TurnManager::Instance()->endTurn();
+			}
 		}
 	}
 	
@@ -126,6 +129,7 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 	{
 		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 		{
+			PlayerController::Instance()->ReduceSpellCooldown();
 			Act();
 		}
 	}

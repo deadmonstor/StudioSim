@@ -24,6 +24,7 @@ public:
 	void onKeyUp(const OnKeyUp* keyUp);
 	void onEngineRender(const OnEngineRender* render);
 	void UpdateStats();
+	void ReduceSpellCooldown();
 	void AddCoins(int Amount);
 
 	SpriteComponent* playerSprite{};

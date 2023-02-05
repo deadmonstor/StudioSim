@@ -16,5 +16,7 @@ private:
     glm::vec2 attackDirection;
     glm::vec2 currentPos;
     GameObject* parentObject;
+
+    void createSlashGameObject(glm::vec2 pos);
 };
 

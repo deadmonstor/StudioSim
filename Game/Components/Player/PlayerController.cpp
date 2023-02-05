@@ -1,4 +1,3 @@
-#include "PlayerController.h"
 #include "PlayerFSM.h"
 #include "../TurnManager.h"
 #include "../../System/Inventory.h"
@@ -6,6 +5,8 @@
 #include "../Items/Armour/LegendaryArmour.h"
 #include "../Items/Weapons/LegendaryHammer.h"
 #include "../Items/Weapons/RareSword.h"
+#include "../Items/Spells/FireBallSpell.h"
+#include "../Items/Spells/IceSpell.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
@@ -76,6 +77,9 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		myInventory->add_item(new RareSword());
 		myInventory->add_item(new HealthPotion());
 		myInventory->add_item(new LegendaryArmour());
+		myInventory->add_item(new FireBallSpell());
+		myInventory->add_item(new IceSpell());
+		
 	}
 	
 	//find the input and send it to the state machine
@@ -137,4 +141,16 @@ void PlayerController::UpdateStats()
 void PlayerController::AddCoins(int Amount)
 {
 	playerStats->coinsHeld += Amount;
+}
+
+void PlayerController::ReduceSpellCooldown()
+{
+	if (Item* spell = PlayerController::Instance()->myInventory->getFirstItemWithEquipSlot(EquipSlot::SPELL); spell != nullptr)
+	{
+		const auto spellCasted = dynamic_cast<SpellItem*>(spell);
+		if (spellCasted->spellStats->currentCooldown != spellCasted->spellStats->maxCooldown)
+		{
+			spellCasted->spellStats->currentCooldown += 1;
+		}
+	}
 }
