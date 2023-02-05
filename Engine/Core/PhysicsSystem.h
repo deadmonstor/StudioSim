@@ -7,7 +7,7 @@
 class PhysicsSystem : public SingletonTemplate<PhysicsSystem>
 {
 public:
-	bool checkBoxCollision(Transform &gameObject1, Transform &gameObject2)
+	bool checkBoxCollision(const Transform &gameObject1, const Transform &gameObject2)
 	{
 		//AABB - AABB Collision
 		//To Do Cache Position to reduce calls
