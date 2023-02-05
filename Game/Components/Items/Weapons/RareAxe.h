@@ -6,8 +6,6 @@ class RareAxe :
 public:
     RareAxe();
 
-    void createRareAxe();
-
     WeaponStats* rareAxeStats{};
 };
 

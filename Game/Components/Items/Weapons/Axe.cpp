@@ -6,7 +6,6 @@
 
 Axe::Axe()
 {
-	axeStats = new WeaponStats();
 }
 
 void Axe::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)

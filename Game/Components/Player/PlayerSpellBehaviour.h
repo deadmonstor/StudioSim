@@ -12,8 +12,6 @@ public:
 	
 	glm::fvec2 attackDir;
 	glm::fvec2 currentPlayerPos;
-	bool canThrowSpell = true;
-	FireBallSpell* fireBall;
 
 private:
 	void Act() override;

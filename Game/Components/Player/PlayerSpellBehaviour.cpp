@@ -70,10 +70,8 @@ void PlayerSpellBehaviour::onKeyDownResponse(Griddy::Event* event)
 		attackDir.x = 1;
 	}
 
-	
-
-	if (canThrowSpell && (eventCasted->key == GLFW_KEY_W || eventCasted->key == GLFW_KEY_S ||
-		eventCasted->key == GLFW_KEY_A || eventCasted->key == GLFW_KEY_D))
+	if (eventCasted->key == GLFW_KEY_W || eventCasted->key == GLFW_KEY_S ||
+		eventCasted->key == GLFW_KEY_A || eventCasted->key == GLFW_KEY_D)
 	{
 		Item* spell = PlayerController::Instance()->myInventory->getFirstItemWithEquipSlot(EquipSlot::SPELL);
 		
