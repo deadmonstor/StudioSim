@@ -34,11 +34,11 @@ void HUD::createHUD()
 	weaponButton =
 		UIManager::Instance()->createUIElement<ButtonComponent>("weaponButton", ResourceManager::GetTexture("TopArmourBoots"));
 
-	ResourceManager::LoadTexture("Sprites\\Weapons\\Potion1.png", "healthIcon");
+	ResourceManager::LoadTexture("Sprites\\Weapons\\Potion0.png", "healthIcon");
 	healthIcon = UIManager::Instance()->createUIElement<Panel>("healthIcon");
 	healthText = UIManager::Instance()->createUIElement<TextComponent>("healthText");
 	
-	ResourceManager::LoadTexture("Sprites\\Weapons\\Potion2.png", "ManaIcon");
+	ResourceManager::LoadTexture("Sprites\\Weapons\\Potion1.png", "ManaIcon");
 	manaIcon = UIManager::Instance()->createUIElement<Panel>("manaIcon");
 	manaText = UIManager::Instance()->createUIElement<TextComponent>("manaText");
 	coinsText = UIManager::Instance()->createUIElement<TextComponent>("coinsText");
