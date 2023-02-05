@@ -2,6 +2,9 @@
 #include "ButtonComponent.h"
 #include "TextComponent.h"
 #include "PauseButton.h"
+#include "MasterAudioPlusButton.h"
+#include "MasterAudioMinusButton.h"
+#include "InventoryButton.h"
 #include "Util/SingletonTemplate.h"
 
 class OnPlayerControllerFSMUpdate;
@@ -17,13 +20,17 @@ private:
 	TextComponent* levelText;
 	TextComponent* audioText;
 
-	ButtonComponent* inventoryButton;
+	//ButtonComponent* inventoryButton;
 	ButtonComponent* weaponButton;
 	ButtonComponent* spellsButton;
-	ButtonComponent* plusAudioButton;
-	ButtonComponent* minusAudioButton;
+	//ButtonComponent* plusAudioButton;
+	//ButtonComponent* minusAudioButton;
 
+	//Buttons
 	PauseButton* pauseButton;
+	InventoryButton* inventoryButton;
+	MasterAudioPlusButton* plusAudioButton;
+	MasterAudioMinusButton* minusAudioButton;
 
 	Panel* healthIcon;
 	Panel* manaIcon;

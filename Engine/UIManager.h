@@ -2,6 +2,8 @@
 #include <map>
 #include <string>
 #include "Util/SingletonTemplate.h"
+#include <iostream>
+#include <type_traits>
 
 class Panel;
 
@@ -13,9 +15,8 @@ public:
 	void render();
 	void clear();
 
-	// TODO: Make this only work for classes that inherit from Panel
 	template<typename T, typename... Args>
-	T* createUIElement(const std::string& name, Args... args)
+	std::enable_if_t<std::is_base_of_v<Panel, T>, T*> createUIElement(const std::string& name, Args... args)
 	{
 		UIElements[name] = new T(args...);
 		return static_cast<T*>(UIElements[name]);

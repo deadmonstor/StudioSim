@@ -75,6 +75,11 @@
     <ClCompile Include="Components\Items\Weapons\Sword.cpp" />
     <ClCompile Include="Components\PickUp.cpp" />
     <ClCompile Include="Components\Items\Spells\IceSpell.cpp" />
+    <ClCompile Include="Scenes\ScoreScene.cpp" />
+    <ClCompile Include="Scenes\LeaderboardScene.cpp" />
+    <ClCompile Include="Components\InventoryButton.cpp" />
+    <ClCompile Include="Components\MasterAudioPlusButton.cpp" />
+    <ClCompile Include="Components\MasterAudioMinusButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -164,6 +169,11 @@
     <ClInclude Include="Components\Items\Weapons\WeaponEnum.h" />
     <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
     <ClInclude Include="Components\Items\Spells\IceSpell.h" />
+    <ClInclude Include="Scenes\ScoreScene.h" />
+    <ClInclude Include="Scenes\LeaderboardScene.h" />
+    <ClInclude Include="Components\UI\InventoryButton.h" />
+    <ClInclude Include="Components\UI\MasterAudioPlusButton.h" />
+    <ClInclude Include="Components\UI\MasterAudioMinusButton.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />
