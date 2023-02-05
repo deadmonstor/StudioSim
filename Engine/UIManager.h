@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include "Util/SingletonTemplate.h"
+#include <iostream>
 
 class Panel;
 
@@ -17,8 +18,15 @@ public:
 	template<typename T, typename... Args>
 	T* createUIElement(const std::string& name, Args... args)
 	{
-		UIElements[name] = new T(args...);
-		return static_cast<T*>(UIElements[name]);
+		if (std::derived_from<T, Panel>)
+		{
+			UIElements[name] = new T(args...);
+			return static_cast<T*>(UIElements[name]);
+		}
+		else
+		{
+			std::cout << "ERROR: Trying to create UI element that is not a panel\n";
+		}
 	}
 };
 
