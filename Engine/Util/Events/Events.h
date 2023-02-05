@@ -2,6 +2,8 @@
 #include <map>
 #include <ranges>
 #include <typeindex>
+
+#include "EngineEvents.h"
 #include "FunctionHandler.h"
 #include "../Logger.h"
 #include "../SingletonTemplate.h"

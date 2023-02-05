@@ -64,9 +64,9 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 {
 	if (roundsFreeze == 0)
 	{
-		getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
 		if (event->objectToStart == getOwner())
 		{
+			getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
 			enemyFSM->Act();
 		}
 	}
@@ -84,6 +84,9 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 
 void EnemyComponent::DropLoot()
 {
+	if (SceneManager::Instance()->isLoadingScene() || SceneManager::Instance()->isShuttingDown())
+		return;
+	
 	std::string itemToSpawn = EnemyDropLootTable::Instance()->EnemyDropRollLoot();
 	Texture m_ItemTexture;
 
@@ -94,6 +97,7 @@ void EnemyComponent::DropLoot()
 	GameObject* Item = SceneManager::Instance()->createGameObject(itemToSpawn, tileWorldSpace);
 	Item->getTransform()->setSize(glm::vec2(32, 32));
 	int Amount = 1;
+	
 	if (itemToSpawn.contains("money"))
 	{
 		std::string delim = ",";
