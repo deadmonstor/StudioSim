@@ -82,7 +82,7 @@ std::string EnemyDropLootTable::EnemyDropRollLoot()
 	srand(time(0));
 
 	//random number
-	int random = (rand() % 100) + 1;
+	int random = 95;//(rand() % 100) + 1;
 	int temp = 0;
 	for (int i = 0; i < 4; i++)
 	{
