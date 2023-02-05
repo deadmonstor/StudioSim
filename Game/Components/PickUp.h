@@ -20,5 +20,6 @@ private:
 	int Amount = 1;
 	std::string ItemName;
 	int Counter = 0;
+	GameObject* m_playerPTR;
 };
 

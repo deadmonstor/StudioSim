@@ -133,3 +133,8 @@ void PlayerController::UpdateStats()
 		playerStats->currentMana = playerStats->maxMana;
 	}
 }
+
+void PlayerController::AddCoins(int Amount)
+{
+	playerStats->coinsHeld += Amount;
+}

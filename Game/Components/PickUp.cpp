@@ -31,7 +31,7 @@ void PickUp::SetItemName(std::string inputName)
 
 PickUp::PickUp()
 {
-	
+	m_playerPTR = PlayerController::Instance()->playerPTR;
 	//this->getOwner()
 	//Add a collision box to the item the size of one tile (48*48)
 	//Add a collision box on the player, when they overlap the item is picked up added to the inventory and the game objected is deleted.
@@ -39,12 +39,6 @@ PickUp::PickUp()
 
 void PickUp::update()
 {
-	//PhysicsSystem::Instance()->checkBoxCollision(*getOwner(), *PlayerController::Instance()->playerPTR);
-	/*if (PhysicsSystem::Instance()->checkBoxCollision(*getOwner(), *PlayerController::Instance()->playerPTR))
-	{
-		std::cout << "CollidedWith\n";
-	}*/
-	//std::cout << "CollidedWith\n";
 	if (getOwner() == nullptr || PlayerController::Instance()->playerPTR == nullptr)
 	{
 		std::cout << "NullPtr\n";
@@ -53,23 +47,23 @@ void PickUp::update()
 	{
 		CheckCollisions();
 	}
-	/*else if (PhysicsSystem::Instance()->checkBoxCollision(*getOwner(), *PlayerController::Instance()->playerPTR))
-	{
-		std::cout << "CollidedWith\n";
-	}*/
 }
 
 
 void PickUp::CheckCollisions()
 {
-	/*if (getOwner() == nullptr || PlayerController::Instance()->playerPTR == nullptr)
-	{
-		std::cout << "NullPtr\n";
-	}*/
-	if (PhysicsSystem::Instance()->checkBoxCollision(*getOwner()->getTransform(), *PlayerController::Instance()->playerPTR->getTransform()))
+	
+	if (PhysicsSystem::Instance()->checkBoxCollision(*getOwner()->getTransform(), *m_playerPTR->getTransform())) //PlayerController::Instance()->playerPTR->
 	{
 		std::cout << "CollidedWith\n";
+		if (getOwner()->getName().contains("money"))
+		{
+			PlayerController::Instance()->AddCoins(Amount);
+			SceneManager::Instance()->destroyGameObject(getOwner());
+		}
+
+
 		return;
 	}
-	std::cout << "Stopped Colliding\n";
+	//std::cout << "Stopped Colliding\n";
 }
