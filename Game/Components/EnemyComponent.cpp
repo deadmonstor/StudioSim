@@ -133,12 +133,13 @@ void EnemyComponent::DropLoot()
 		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Potion2.png", itemToSpawn);
 	}
 
-	Item->addComponent<PickUp>();
-	Item->getComponent<PickUp>()->SetAmount(Amount);
+
 	Item->addComponent<SpriteComponent>();
 	Item->getComponent<SpriteComponent>()->setPivot(Pivot::Center);
 	Item->getComponent<SpriteComponent>()->setTexture(m_ItemTexture);
 	Item->getComponent<SpriteComponent>()->setLit(false);
 	Item->getComponent<SpriteComponent>()->setSortingLayer(Renderer::getSortingLayer("Background Grid"));
+	Item->addComponent<PickUp>();
+	Item->getComponent<PickUp>()->SetAmount(Amount);
 }
 

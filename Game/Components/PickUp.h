@@ -2,6 +2,7 @@
 #include <string>
 #include "Core/Component.h"
 
+
 class PickUp : public Component
 {
 public:
@@ -11,8 +12,13 @@ public:
 	void SetItemName(std::string inputName);
 	PickUp();
 
+	void update();
+
+	void CheckCollisions();
+
 private:
-	int Amount;
+	int Amount = 1;
 	std::string ItemName;
+	int Counter = 0;
 };
 
