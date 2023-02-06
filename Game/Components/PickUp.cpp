@@ -67,6 +67,9 @@ void PickUp::CheckCollisions()
 		{
 			if (PlayerController::Instance()->myInventory->add_item(Inventory::getItemByName[getOwner()->getName()]()))
 			{
+				if (!ResourceManager::HasSound("Sounds\\pickUpSound.wav"))
+					AudioEngine::Instance()->loadSound("Sounds\\pickUpSound.wav", FMOD_3D);
+				AudioEngine::Instance()->playSound("Sounds\\pickUpSound.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 				SceneManager::Instance()->destroyGameObject(getOwner());
 			}
 		}
