@@ -116,10 +116,13 @@ void Level1Scene::init()
 		{ 48, ResourceManager::GetTexture("tile130") },//Jar
 		{ 49, ResourceManager::GetTexture("tile154") },
 		{ 56, ResourceManager::GetTexture("tile60") } // Spike
+		{ 93, ResourceManager::GetTexture("chest_2") }, //Chest
 	});
 	grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile*()>>
 	{
 		{ 37, [] { return new LightTile(Texture()); } },
+		{ 56, [] { return new SpikeTile(Texture()); } },
+		{ 93, [] { return new ChestTile(Texture()); } }
 	});
 	
 	grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");

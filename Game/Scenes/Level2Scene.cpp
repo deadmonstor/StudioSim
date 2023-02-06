@@ -80,7 +80,6 @@ void Level2Scene::init()
 		{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
 		{ 14, [] { return new TestTile(Texture(), "victoryScreen"); } },
 		{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
-		{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	
 	grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
@@ -118,12 +117,15 @@ void Level2Scene::init()
 			{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
 			{ 48, ResourceManager::GetTexture("tile130") },//Jar
 			{ 49, ResourceManager::GetTexture("tile154") },
-			{ 56, ResourceManager::GetTexture("tile60") } // spike
+			{ 56, ResourceManager::GetTexture("tile60") } // Spike
+			{ 93, ResourceManager::GetTexture("chest_2") }, //Chest
 		});
 		
 		grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile* ()>>
 		{
 			{ 37, [] { return new LightTile(Texture()); } },
+			{ 56, [] { return new SpikeTile(Texture()); } },
+			{ 93, [] { return new ChestTile(Texture()); } }
 		});
 
 	grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");
