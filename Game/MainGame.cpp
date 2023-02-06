@@ -23,6 +23,7 @@
 #include "Scenes/ScoreScene.h"
 #include "Scenes/LeaderboardScene.h"
 #include "Util/Events/Events.h"
+#include <Core/AudioEngine.h>
 
 int main(int, char**)
 {
@@ -61,7 +62,8 @@ int main(int, char**)
 	ResourceManager::LoadTexture("Sprites\\rock.png", "rock");
 	ResourceManager::LoadTexture("Sprites\\background.png", "background");
 	ResourceManager::LoadTexture("Sprites\\image.png", "buttonTest");
-
+	AudioEngine::Instance()->loadSound("Sounds\\MainTheme.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Defeat.wav", FMOD_3D);
 	SceneManager::Instance()->sceneToTypeID = std::map<std::string, std::function<Scene*()>>
 	{
 		{"mainMenu", []
@@ -71,6 +73,7 @@ int main(int, char**)
 		},
 		{"level1", []
 			{
+				AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 				return new Level1Scene();
 			}
 		},
@@ -86,6 +89,7 @@ int main(int, char**)
 		},
 		{"defeatScreen", []
 			{
+				AudioEngine::Instance()->playSound("Sounds\\Defeat.wav", false, 0.2f, 0, 0, AudioType::SoundEffect);
 				return new DefeatScene();
 			}
 		},
@@ -125,7 +129,6 @@ int main(int, char**)
 		{"rareArmour", []() { return new RareArmour(); }},
 		{"legendaryArmour", []() { return new LegendaryArmour(); }},
 	};
-	
 	MainGame::Instance()->run();
 	return 0;
 }
