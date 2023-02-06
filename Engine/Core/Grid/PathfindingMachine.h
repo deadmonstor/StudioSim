@@ -48,6 +48,10 @@ public:
 	//Find whether a line intersects a wall between point A and point B
 	bool LineOfSight(glm::vec2 startPos, glm::vec2 endPos);
 
+
+	std::vector<TileHolder*> LineIntersection(TileHolder* start, TileHolder* end);
+	std::vector<TileHolder*> LineIntersection(glm::vec2 startPos, glm::vec2 endPos);
+
 	//Estimates the distance between 2 points
 	float EstimateDistance(glm::vec2 startPos, glm::vec2 endPos);
 

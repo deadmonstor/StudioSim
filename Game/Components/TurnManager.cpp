@@ -1,6 +1,7 @@
 #include "TurnManager.h"
 #include "Core/GameObject.h"
 #include "Core/Components/Transform.h"
+#include "Core/Grid/PathfindingMachine.h"
 #include "Core/Renderer/Renderer.h"
 #include "Player/PlayerController.h"
 #include "Util/Events/Events.h"
@@ -71,9 +72,24 @@ void TurnManager::nextTurn()
 			return; //We don't want to invoke the event if the object is not in the camera's frustum.
 		}
 
+		// check line of sight from player to the enemy
+		if (m_CurrentTurnObject != PlayerController::Instance()->playerPTR)
+		{
+			const auto playerPos = m_CurrentTurnObject->getTransform()->getPosition();
+			const auto enemyPos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
+			
+			if (!PathfindingMachine::Instance()->LineOfSight(GridSystem::Instance()->getTilePosition(playerPos), GridSystem::Instance()->getTilePosition(enemyPos)))
+			{
+				canMakeATurn.push(m_CurrentTurnObject);
+				m_CurrentTurnObject = nullptr;
+				nextTurn();
+				return; //We don't want to invoke the event if the object is not in the camera's frustum.
+			}
+		}
+
 		if (auto* cam = m_CurrentTurnObject->getComponent<Camera>(); cam != nullptr)
 		{
-			//6Renderer::Instance()->setCamera(cam);
+			//Renderer::Instance()->setCamera(cam);
 		}
 		
 		Griddy::Events::invoke<onStartTurn>(m_CurrentTurnObject);

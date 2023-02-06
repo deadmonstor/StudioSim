@@ -32,6 +32,13 @@ namespace Griddy
 		ImGuiHandler::Instance()->onKeyDown(key, scancode, action, mods);
 	}
 
+	void char_key_callback(GLFWwindow* window, unsigned int key)
+	{
+		if (!Engine::isPaused())
+			Input::Instance()->charKeyCallback(window, key);
+	}
+
+
 	void mouse_callback(GLFWwindow* window, const int button, const int action, const int mods)
 	{
 #if (!NDEBUG)
@@ -92,6 +99,7 @@ namespace Griddy
 		*/
 
 		glfwSetKeyCallback(Renderer::getWindow(), key_callback);
+		glfwSetCharCallback(Renderer::getWindow(), char_key_callback);
 		glfwSetMouseButtonCallback(Renderer::getWindow(), mouse_callback);
 		glfwSetDropCallback(Renderer::getWindow(), drop_callback);
 
@@ -169,10 +177,6 @@ namespace Griddy
 		m_Running = true;
 
 		Renderer::Instance()->init();
-		ResourceManager::LoadTexture("Sprites\\image.png", "face");
-		ResourceManager::LoadTexture("Sprites\\rock_n.png", "normals");
-		ResourceManager::LoadTexture("Sprites\\image2.png", "face2");
-		ResourceManager::LoadTexture("Sprites\\engine.png", "engine");
 
 		if (!SceneManager::Instance()->init())
 		{

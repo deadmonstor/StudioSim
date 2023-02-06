@@ -2,7 +2,12 @@
 #include "ButtonComponent.h"
 #include "TextComponent.h"
 #include "PauseButton.h"
+#include "MasterAudioPlusButton.h"
+#include "MasterAudioMinusButton.h"
+#include "InventoryButton.h"
 #include "Util/SingletonTemplate.h"
+
+class OnPlayerControllerFSMUpdate;
 
 class HUD : public SingletonTemplate<HUD>
 {
@@ -15,13 +20,17 @@ private:
 	TextComponent* levelText;
 	TextComponent* audioText;
 
-	ButtonComponent* inventoryButton;
+	//ButtonComponent* inventoryButton;
 	ButtonComponent* weaponButton;
 	ButtonComponent* spellsButton;
-	ButtonComponent* plusAudioButton;
-	ButtonComponent* minusAudioButton;
+	//ButtonComponent* plusAudioButton;
+	//ButtonComponent* minusAudioButton;
 
+	//Buttons
 	PauseButton* pauseButton;
+	InventoryButton* inventoryButton;
+	MasterAudioPlusButton* plusAudioButton;
+	MasterAudioMinusButton* minusAudioButton;
 
 	Panel* healthIcon;
 	Panel* manaIcon;
@@ -30,11 +39,14 @@ private:
 	bool hasLoaded = false;
 
 	int sceneChangeID = -1;
+	int playerChangedID = -1;
 	
+
 public:
 	void createHUD();
 	void updateHUD();
 	void onSceneChange(OnSceneChanged* event);
+	void onPlayerChanged(const OnPlayerControllerFSMUpdate* event);
 
 	bool getHasLoaded() const { return hasLoaded; }
 };

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 
+class Inventory;
+
 struct PlayerStats : public character
 {
 	int currentMana;
@@ -12,6 +14,9 @@ struct PlayerStats : public character
 	int currentEXP;
 	int maxEXP;
 	int spellPower;
+	int level;
+
+	Inventory* myInventory;
 };
 
 struct EnemyStats : public character
@@ -31,6 +36,7 @@ struct WeaponStats : public items
 {
 	int attack;
 	int costInShop;
+	int crit = 2;
 };
 
 struct ConsumableStats : public items
@@ -45,11 +51,10 @@ struct SpellsStats : public items
 {
 	int manaCost;
 	int spellPower;
-	int cooldown;
+	int currentCooldown;
+	int maxCooldown;
 	int range;
 	int damagePerTurn;
-	int spellCooldown;
-	
 };
 
 struct LootTables : public items

@@ -21,6 +21,8 @@ void SceneManager::destroyScene(Scene* scene)
 		destroyGameObject(object);
 	}
 	
+	deleteAllPendingObjects();
+	
 	UIManager::Instance()->clear();
 	scene->destroy();
 }

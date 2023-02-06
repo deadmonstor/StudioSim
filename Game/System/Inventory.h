@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -41,27 +43,6 @@ public:
 	virtual ItemType getItemType() { return ItemType::NOTSET; }
 };
 
-class SpellItem : public Item
-{
-public:
-	int manaCost;// Added on to intelligence and spell power
-	int getManaCost() { return manaCost; }
-
-	int coolDown;
-	int getCoolDown() { return coolDown; }
-
-	int effectDuration;
-	int getEffectDuration() { return effectDuration; }
-
-	int spellAtk;
-	int getSpellAtk() { return spellAtk; }
-
-	bool isEquipable() override { return true; }
-	
-	ItemType getItemType() override { return ItemType::SPELL; }
-	EquipSlot getEquipSlot() override { return EquipSlot::SPELL; }
-};
-
 class Inventory : public Component
 {
 	int max_items;
@@ -85,4 +66,6 @@ public:
 	void unequip_item(const std::string& item_name);
 
 	Item* getFirstItemWithEquipSlot(EquipSlot slot);
+	
+	inline static std::map<std::string, std::function<Item*()>> getItemByName = {};
 };
