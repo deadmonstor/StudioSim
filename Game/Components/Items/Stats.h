@@ -6,7 +6,7 @@
 
 class Inventory;
 
-struct PlayerStats : public character
+struct PlayerStats : public Character
 {
 	int currentMana;
 	int maxMana;

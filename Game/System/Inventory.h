@@ -25,16 +25,6 @@ enum class EquipSlot
 	NOTSET
 };
 
-struct PlayerStats : public Character
-{
-	int currentMana;
-	int maxMana;
-	int coinsHeld;
-	int currentEXP;
-	int maxEXP;
-	int spellPower;
-};
-
 
 class Item
 {
