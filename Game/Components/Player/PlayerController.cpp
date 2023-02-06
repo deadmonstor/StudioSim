@@ -41,8 +41,13 @@ void PlayerController::createPlayer()
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
 
-	if (playerStats == nullptr)
+	if (playerStats == nullptr || SceneManager::Instance()->getScene()->name == "level1")
 	{
+		if (playerStats != nullptr && playerStats->myInventory != nullptr)
+			delete playerStats->myInventory;
+		
+		delete playerStats;
+		
 		playerStats = new PlayerStats();
 		playerStats->maxHealth = 10;
 		playerStats->currentHealth = 10;
@@ -56,7 +61,7 @@ void PlayerController::createPlayer()
 		playerStats->critChance = 0.0f;
 		playerStats->coinsHeld = 0;
 		playerStats->level = 1;
-
+		
 		playerStats->myInventory = new Inventory(20);
 	}
 	
