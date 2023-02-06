@@ -14,6 +14,7 @@
 #include "Components/Items/Weapons/CommonSword.h"
 #include "Components/Items/Weapons/LegendaryHammer.h"
 #include "Components/Items/Weapons/RareAxe.h"
+#include "Components/Items/Weapons/RareSword.h"
 #include "Core/Renderer/Renderer.h"
 #include "Scenes/DefeatScene.h"
 #include "Scenes/Level1Scene.h"
@@ -106,6 +107,7 @@ int main(int, char**)
 		{"commonSword", []() { return new CommonSword(); }},
 		{"legendaryHammer", []() { return new LegendaryHammer(); }},
 		{"rareAxe", []() { return new RareAxe(); }},
+		{"rareSword", []() { return new RareSword(); }},
 
 		// SPELLS
 		{"fireBallSpell", []() { return new FireBallSpell(); }},

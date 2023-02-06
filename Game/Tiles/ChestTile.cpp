@@ -26,7 +26,6 @@ void ChestTile::onInteractedWith(TileHolder* curTileHolder)
 	else
 	{
 		std::string itemToSpawn = LootTable::Instance()->RollLoot();
-		std::cout << itemToSpawn << std::endl;
 		chestOpened = true;
 		ChangeTexture(curTileHolder, itemToSpawn);
 		//Pass in the item(s) name to be dropped

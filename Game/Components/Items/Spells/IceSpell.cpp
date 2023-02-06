@@ -27,11 +27,20 @@ void IceSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 		spell->addComponent<DestroyAfterAnimation>();
 		spell->getTransform()->setRotation(90);
 
-		TileHolder* affectedTile = GridSystem::Instance()->getTileHolder(0, neighbour.first);
+		const TileHolder* affectedTile = GridSystem::Instance()->getTileHolder(0, neighbour.first);
 		if (affectedTile != nullptr && affectedTile->gameObjectSatOnTile != nullptr && affectedTile->gameObjectSatOnTile->hasComponent(typeid(EnemyComponent)))
 		{
-			affectedTile->gameObjectSatOnTile->getComponent<EnemyComponent>()->roundsFreeze = turnsFreeze;
-			affectedTile->gameObjectSatOnTile->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(0, 1, 255));
+			GameObject* enemy = affectedTile->gameObjectSatOnTile;
+			const glm::vec3 color = glm::vec3(0, 0, 1);
+			
+			enemy->getComponent<EnemyComponent>()->roundsFreeze = turnsFreeze;
+			enemy->getComponent<AnimatedSpriteRenderer>()->setColor(color);
+
+			PlayerController::Instance()->hitmarkers->addHitmarker(
+			"STUNNED",
+			1.0,
+			enemy->getTransform()->getPosition(),
+			color);
 		}
 	}
 }

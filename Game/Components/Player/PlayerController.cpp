@@ -110,12 +110,22 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		bool sight = PathfindingMachine::Instance()->LineOfSight(start, goal);
 
 		myInventory->add_item(new LegendaryHammer());
+		Item* hammer = new LegendaryHammer();
+		myInventory->add_item(hammer);
+		myInventory->equip_item(hammer->name());
+		
 		myInventory->add_item(new RareSword());
 		myInventory->add_item(new HealthPotion());
-		myInventory->add_item(new LegendaryArmour());
-		myInventory->add_item(new FireBallSpell());
-		myInventory->add_item(new IceSpell());
 		
+		Item* armour = new LegendaryArmour();
+		myInventory->add_item(armour);
+		myInventory->equip_item(armour->name());
+		
+		myInventory->add_item(new FireBallSpell());
+
+		Item* iceSpell = new IceSpell();
+		myInventory->add_item(iceSpell);
+		myInventory->equip_item(iceSpell->name());
 	}
 	
 	//find the input and send it to the state machine

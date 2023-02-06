@@ -69,6 +69,9 @@ void PickUp::CheckCollisions()
 			{
 				SceneManager::Instance()->destroyGameObject(getOwner());
 			}
+		}else
+		{
+			LOG_ERROR("Item cannot be added to inventory " + getOwner()->getName());
 		}
 	}
 }
