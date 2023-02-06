@@ -62,7 +62,7 @@ void EnemyComponent::destroy()
 
 void EnemyComponent::onTurnChanged(const onStartTurn* event)
 {
-	if (roundsFreeze == 0)
+	if (roundsFreeze <= 0)
 	{
 		if (event->objectToStart == getOwner())
 		{
@@ -72,11 +72,11 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 	}
 	else
 	{
-		if (TurnManager::Instance()->isCurrentTurnObject(getOwner()))
+		if (event->objectToStart == getOwner())
 		{
 			roundsFreeze -= 1;
 			TurnManager::Instance()->endTurn();
-			LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn()");
+			LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn() -> " + std::to_string(roundsFreeze));
 		}
 	}
 	
