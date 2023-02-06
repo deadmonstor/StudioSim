@@ -26,7 +26,9 @@ EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsAr
 	enemyFSM = stateMachineArg;
 	stats = statsArg;
 	spriteName = spriteNameArg;
-	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
+
+	if (!ResourceManager::HasSound("Sounds\\Damage.wav"))
+		AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 void EnemyComponent::start()
