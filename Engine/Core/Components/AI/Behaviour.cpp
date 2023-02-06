@@ -36,9 +36,6 @@ void Behaviour::start()
 			eventResponseID = Griddy::Events::subscribe(this, &Behaviour::EventResponse);
 	}
 
-
-
-
 	initialized = true;
 
 	Component::start();
@@ -51,7 +48,7 @@ void Behaviour::destroy()
 		Griddy::Events::unsubscribe(this, &Behaviour::EventResponse, eventResponseID);
 		eventResponseID = -1;
 	}
-	initialized = false;
 	
+	initialized = false;
 	Component::destroy();
 }

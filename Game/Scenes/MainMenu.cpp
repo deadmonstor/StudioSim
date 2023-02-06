@@ -12,7 +12,7 @@ void MainMenu::init()
     engineRenderID = Griddy::Events::subscribe(this, &MainMenu::onEngineRender);
     keyDownID = Griddy::Events::subscribe(this, &MainMenu::onKeyDown);
 
-    GameObject* cam = SceneManager::Instance()->createGameObject("test", glm::vec2{0, 0});
+    GameObject* cam = SceneManager::Instance()->createGameObject("camera", glm::vec2{0, 0});
     cam->addComponent<Camera>();
     Renderer::Instance()->setCamera(cam->getComponent<Camera>());
 }

@@ -18,9 +18,11 @@ PlayerController::PlayerController()
 {
 	Griddy::Events::subscribe(this, &PlayerController::onKeyDown);
 	Griddy::Events::subscribe(this, &PlayerController::onKeyUp);
+	Griddy::Events::subscribe(this, &PlayerController::onEngineRender);
 	Griddy::Events::subscribe(this, &PlayerController::onKeyHold);
 }
 
+int lastHealth = 0;
 void PlayerController::createPlayer()
 {
 	const glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
@@ -48,6 +50,7 @@ void PlayerController::createPlayer()
 		playerStats = new PlayerStats();
 		playerStats->maxHealth = 10;
 		playerStats->currentHealth = 10;
+		lastHealth = 10;
 		playerStats->currentEXP = 0;
 		playerStats->maxEXP = 100;
 		playerStats->currentMana = 10;
@@ -69,8 +72,34 @@ void PlayerController::createPlayer()
 	Renderer::Instance()->setCamera(cameraComponent);
 }
 
+void PlayerController::onEngineRender(const OnEngineRender* render)
+{
+	if (playerPTR == nullptr || playerPTR->isBeingDeleted()) return;
+	
+	static SpriteComponent* spriteComponent = new SpriteComponent();
+	spriteComponent->setSortingOrder(1);
+	spriteComponent->setTexture(ResourceManager::GetTexture("whitetexture"));
+	spriteComponent->setLit(false);
+	spriteComponent->setColor(TurnManager::Instance()->isCurrentTurnObject(playerPTR) ? glm::vec3(0, 1, 0) : glm::vec3(1, 0, 0));
+	
+	const glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
+	const float tileWidth = tileSize.x;
+	const float tileHeight = tileSize.y;
+
+	glm::vec2 pos = playerPTR->getTransform()->getPosition();
+	pos = GridSystem::Instance()->getTilePosition(pos);
+	pos = GridSystem::Instance()->getWorldPosition(pos);
+	
+	Renderer::Instance()->renderSprite(spriteComponent,
+											   pos - glm::vec2{ tileWidth / 2, tileHeight / 2 },
+											   {tileWidth, tileHeight},
+											   0);
+}
+
+
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
+#ifdef _DEBUG
 	if (keyDown->key == GLFW_KEY_P)
 	{
 		//Testing pathfinding
@@ -81,13 +110,24 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		bool sight = PathfindingMachine::Instance()->LineOfSight(start, goal);
 
 		myInventory->add_item(new LegendaryHammer());
+		Item* hammer = new LegendaryHammer();
+		myInventory->add_item(hammer);
+		myInventory->equip_item(hammer->name());
+		
 		myInventory->add_item(new RareSword());
 		myInventory->add_item(new HealthPotion());
-		myInventory->add_item(new LegendaryArmour());
-		myInventory->add_item(new FireBallSpell());
-		myInventory->add_item(new IceSpell());
 		
+		Item* armour = new LegendaryArmour();
+		myInventory->add_item(armour);
+		myInventory->equip_item(armour->name());
+		
+		myInventory->add_item(new FireBallSpell());
+
+		Item* iceSpell = new IceSpell();
+		myInventory->add_item(iceSpell);
+		myInventory->equip_item(iceSpell->name());
 	}
+#endif
 	
 	//find the input and send it to the state machine
 	const std::type_index eventType = typeid(OnKeyDown);
@@ -113,6 +153,13 @@ void PlayerController::UpdateStats()
 		SceneManager::Instance()->changeScene("defeatScreen");
 	}
 
+	// get difference
+	const int difference = playerStats->currentHealth - lastHealth;
+	lastHealth = playerStats->currentHealth;
+
+	if (difference != 0)
+		hitmarkers->addHitmarker(std::to_string(difference), 1, playerPTR->getTransform()->getPosition(), {1, 1, 1}, 25);
+
 	while (playerStats->currentEXP >= 100)
 	{
 		playerStats->level++;
@@ -121,6 +168,8 @@ void PlayerController::UpdateStats()
 		playerStats->maxMana += 5;
 		playerStats->currentHealth = playerStats->maxHealth;
 		playerStats->currentMana = playerStats->maxMana;
+
+		lastHealth = playerStats->currentHealth;
 	}
 }
 

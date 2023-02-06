@@ -14,6 +14,7 @@
 #include "Components/Items/Weapons/CommonSword.h"
 #include "Components/Items/Weapons/LegendaryHammer.h"
 #include "Components/Items/Weapons/RareAxe.h"
+#include "Components/Items/Weapons/RareSword.h"
 #include "Core/Renderer/Renderer.h"
 #include "Scenes/DefeatScene.h"
 #include "Scenes/Level1Scene.h"
@@ -35,7 +36,7 @@ int main(int, char**)
 
 	const auto Renderer = Renderer::Instance();
 	Renderer->setWindowTitle("Into The Crypt");
-	Renderer->setWindowIcon("Sprites\\engine.png");
+	Renderer->setWindowIcon("Sprites\\icon.png");
 	Renderer->setWindowSize({ 1920, 1080 });
 
 	ResourceManager::LoadTextureArray("Sprites\\Blue-Slime-Idle\\", "Blue-Slime-Idle", 7);
@@ -57,11 +58,7 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_open_", 4);
 	ResourceManager::LoadTextureArray("Sprites\\Coins\\", "coin", 10);
 	ResourceManager::LoadTextureArray("Sprites\\Weapons\\", "Potion", 3);
-	
-
-	ResourceManager::LoadTexture("Sprites\\rock.png", "rock");
-	ResourceManager::LoadTexture("Sprites\\background.png", "background");
-	ResourceManager::LoadTexture("Sprites\\image.png", "buttonTest");
+	ResourceManager::LoadTexture("Sprites\\whitetexture.png", "whitetexture");
 
 	AudioEngine::Instance()->loadSound("Sounds\\MainTheme.wav", FMOD_3D);
 	AudioEngine::Instance()->loadSound("Sounds\\Defeat.wav", FMOD_3D);
@@ -82,25 +79,21 @@ int main(int, char**)
 		},
 		{"level1", []
 			{
-				AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.2f, 0, 0, AudioType::BackgroundMusic);
 				return new Level1Scene();
 			}
 		},
 		{"level2", []
 			{
-				AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 				return new Level2Scene();
 			}
 		},
 		{"victoryScreen", []
 			{
-				AudioEngine::Instance()->playSound("Sounds\\Victory.wav", false, 0.2f, 0, 0, AudioType::SoundEffect);
 				return new VictoryScene();
 			}
 		},
 		{"defeatScreen", []
 			{
-				AudioEngine::Instance()->playSound("Sounds\\Defeat.wav", false, 0.2f, 0, 0, AudioType::SoundEffect);
 				return new DefeatScene();
 			}
 		},
@@ -125,6 +118,7 @@ int main(int, char**)
 		{"commonSword", []() { return new CommonSword(); }},
 		{"legendaryHammer", []() { return new LegendaryHammer(); }},
 		{"rareAxe", []() { return new RareAxe(); }},
+		{"rareSword", []() { return new RareSword(); }},
 
 		// SPELLS
 		{"fireBallSpell", []() { return new FireBallSpell(); }},

@@ -98,7 +98,7 @@ void Inventory::getDebugInfo(std::string* basic_string)
 	{
 		ImGui::PushID(i);
 		
-		ImGui::Text("%d. %s", i + 1, items[i]->name().c_str());
+		ImGui::Text("%s", items[i]->name().c_str());
 		ImGui::Indent();
 		
 		if (items[i]->getItemType() == ItemType::WEAPON)
@@ -195,18 +195,19 @@ void Inventory::equip_item(const std::string& item_name)
 			
 			switch(item->getItemType())
 			{
-				case ItemType::WEAPON:
-				case ItemType::SPELL:
 				case ItemType::ARMOUR:
 				{
-					auto armour = dynamic_cast<ArmourStats*>(item);
-					/*playerStats->maxHealth += armour->health;*/
+					/*auto armour = dynamic_cast<ArmourStats*>(item);
+					playerStats->maxHealth += armour->health;*/
+					break;
 				}
 				case ItemType::CONSUMABLE:
 				{
 					LOG_INFO(item->name() + " equipped.");
 					break;
 				}
+				case ItemType::WEAPON:
+				case ItemType::SPELL:
 				case ItemType::NOTSET:
 				{
 					std::cout << item_name << " is not equippable." << std::endl;
@@ -237,8 +238,8 @@ void Inventory::unequip_item(const std::string& item_name)
 				case ItemType::SPELL:
 				case ItemType::ARMOUR:
 				{
-					auto armour = dynamic_cast<ArmourStats*>(item);
-					/*playerStats->maxHealth -= armour->health;*/
+					/*auto armour = dynamic_cast<ArmourStats*>(item);
+					playerStats->maxHealth -= armour->health;*/
 				}
 				case ItemType::CONSUMABLE:
 				{

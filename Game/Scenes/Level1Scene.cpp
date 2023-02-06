@@ -17,6 +17,7 @@
 #include "../Tiles/SpikeTile.h"
 #include "../LootTable.h"
 #include "../Tiles/ChestTile.h"
+#include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 
 void Level1Scene::createEnemy(const glm::vec2 pos)
@@ -40,6 +41,7 @@ void Level1Scene::createEnemy(const glm::vec2 pos)
 
 void Level1Scene::init()
 {
+	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 	LootTable::Instance()->LoadingIntoLootTableArray();
 	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
 
@@ -57,7 +59,6 @@ void Level1Scene::init()
 	});
 	
 	grid_system->setEmptyTileIDs(0, std::vector<int>{0});
-	// TODO: Fill these out lol
 	grid_system->setWallIDs(0, std::vector<int>{1,9,3,4,5,6});
 	grid_system->setTextureMap(0, std::map<int, Texture>
 	{
@@ -140,10 +141,6 @@ void Level1Scene::init()
 		{ 92, [this](glm::vec2 pos)
 		{
 			createEnemy(pos);
-		} },
-		{ 93, [this](glm::vec2 pos)
-		{
-			// TODO: Create a chest
 		} },
 		{ 98, [this](glm::vec2 pos)
 		{

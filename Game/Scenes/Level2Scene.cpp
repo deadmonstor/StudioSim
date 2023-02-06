@@ -17,9 +17,12 @@
 #include "../Tiles/SpikeTile.h"
 #include "../Tiles/LightTile.h"
 #include "../LootTable.h"
+#include "Core/AudioEngine.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
 {
+	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
+	
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
 		
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy", tileWorldSpace);
@@ -55,7 +58,6 @@ void Level2Scene::init()
 	});
 	
 	grid_system->setEmptyTileIDs(0, std::vector<int>{0});
-	// TODO: Fill these out lol
 	grid_system->setWallIDs(0, std::vector<int>{1,9,3,4,5,6});
 	grid_system->setTextureMap(0, std::map<int, Texture>
 	{
@@ -143,10 +145,6 @@ void Level2Scene::init()
 		{ 92, [this](glm::vec2 pos)
 		{
 			createEnemy(pos);
-		} },
-		{ 93, [this](glm::vec2 pos)
-		{
-			// TODO: Create a chest
 		} }
 	});
 	

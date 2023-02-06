@@ -223,6 +223,9 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 		return;
 	}
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	const glm::vec2 pivot = spriteRenderer->getPivot();
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 

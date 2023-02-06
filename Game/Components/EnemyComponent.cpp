@@ -26,7 +26,9 @@ EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsAr
 	enemyFSM = stateMachineArg;
 	stats = statsArg;
 	spriteName = spriteNameArg;
-	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
+
+	if (!ResourceManager::HasSound("Sounds\\Damage.wav"))
+		AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 void EnemyComponent::start()
@@ -63,21 +65,24 @@ void EnemyComponent::destroy()
 
 void EnemyComponent::onTurnChanged(const onStartTurn* event)
 {
-	if (roundsFreeze == 0)
+	if (roundsFreeze <= 0)
 	{
 		if (event->objectToStart == getOwner())
 		{
 			getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
-			enemyFSM->Act();
+			if (enemyFSM != nullptr)
+				enemyFSM->Act();
+			else
+				LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
 		}
 	}
 	else
 	{
-		if (TurnManager::Instance()->isCurrentTurnObject(getOwner()))
+		if (event->objectToStart == getOwner())
 		{
 			roundsFreeze -= 1;
 			TurnManager::Instance()->endTurn();
-			LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn()");
+			LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn() -> " + std::to_string(roundsFreeze));
 		}
 	}
 	

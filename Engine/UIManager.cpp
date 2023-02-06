@@ -14,6 +14,9 @@ void UIManager::render()
 	
 	for (const auto& panel : UIElements | std::views::values)
 	{
+		if (!panel->shouldRender)
+			continue;
+		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			panel->render();
