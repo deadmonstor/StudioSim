@@ -3,6 +3,7 @@
 #include "../../FireballComponent.h"
 #include "../../EnemyComponent.h"
 #include "../../Player/PlayerController.h"
+#include "Core/AudioEngine.h"
 
 FireBallSpell::FireBallSpell()
 {
@@ -18,7 +19,7 @@ FireBallSpell::FireBallSpell()
 
 void FireBallSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 {
-
+	AudioEngine::Instance()->playSound("Sounds\\FireBall.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 	GameObject* spell = SceneManager::Instance()->createGameObject("FireballSpell", GridSystem::Instance()->getWorldPosition(playerPos));
 	spell->getTransform()->setSize(glm::vec2(48, 48));
 	const std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");

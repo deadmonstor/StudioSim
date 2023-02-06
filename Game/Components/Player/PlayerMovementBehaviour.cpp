@@ -15,9 +15,6 @@ PlayerMovementBehaviour::PlayerMovementBehaviour()
 	map = CreateFunctionMap(); 
 	origPos = GridSystem::Instance()->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
 	
-	if (!ResourceManager::HasSound("Sounds\\softStep.wav"))
-		AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
-	
 	attackBehaviour = new PlayerAttackBehaviour();
 }
 
@@ -25,9 +22,6 @@ PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
 	origPos = GridSystem::Instance()->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
-
-	if (!ResourceManager::HasSound("Sounds\\softStep.wav"))
-		AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
 	
 	map = CreateFunctionMap();
 	attackBehaviour = new PlayerAttackBehaviour();
@@ -77,7 +71,7 @@ void PlayerMovementBehaviour::Act()
 
 			origPos = gridSystem->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
 		
-			AudioEngine::Instance()->playSound("Sounds\\softStep.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
+			AudioEngine::Instance()->playSound("Sounds\\softStep.wav", false, 0.4f, 0, 0, AudioType::SoundEffect);
 			
 			
 			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))

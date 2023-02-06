@@ -3,6 +3,7 @@
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
+#include "Core/AudioEngine.h"
 
 ButtonComponent::ButtonComponent(const Texture& _texture): Panel()
 {
@@ -10,6 +11,7 @@ ButtonComponent::ButtonComponent(const Texture& _texture): Panel()
 		eventID = Griddy::Events::subscribe(this, &ButtonComponent::onMouseDown);
 	
 	SetTexture(_texture);
+	
 }
 
 void ButtonComponent::render()
@@ -57,5 +59,6 @@ void ButtonComponent::onMouseDown(const OnMouseDown* event)
 
 void ButtonComponent::onClick()
 {
+	AudioEngine::Instance()->playSound("Sounds\\Click.wav", false, 0.2f, 0, 0, AudioType::SoundEffect);
 	setColor({1, 0, 0});
 }

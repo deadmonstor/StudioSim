@@ -9,10 +9,7 @@
 
 Sword::Sword()
 {
-	if (!ResourceManager::HasSound("Sounds\\AirSlash.wav"))
-		AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
-	if (!ResourceManager::HasSound("Sounds\\Damage.wav"))
-		AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
+	
 }
 
 void Sword::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)

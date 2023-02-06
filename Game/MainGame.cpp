@@ -62,8 +62,17 @@ int main(int, char**)
 	ResourceManager::LoadTexture("Sprites\\rock.png", "rock");
 	ResourceManager::LoadTexture("Sprites\\background.png", "background");
 	ResourceManager::LoadTexture("Sprites\\image.png", "buttonTest");
+
 	AudioEngine::Instance()->loadSound("Sounds\\MainTheme.wav", FMOD_3D);
 	AudioEngine::Instance()->loadSound("Sounds\\Defeat.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Victory.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Click.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\FireBall.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Ice.wav", FMOD_3D);
+
 	SceneManager::Instance()->sceneToTypeID = std::map<std::string, std::function<Scene*()>>
 	{
 		{"mainMenu", []
@@ -73,17 +82,19 @@ int main(int, char**)
 		},
 		{"level1", []
 			{
-				AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
+				AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.2f, 0, 0, AudioType::BackgroundMusic);
 				return new Level1Scene();
 			}
 		},
 		{"level2", []
 			{
+				AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 				return new Level2Scene();
 			}
 		},
 		{"victoryScreen", []
 			{
+				AudioEngine::Instance()->playSound("Sounds\\Victory.wav", false, 0.2f, 0, 0, AudioType::SoundEffect);
 				return new VictoryScene();
 			}
 		},

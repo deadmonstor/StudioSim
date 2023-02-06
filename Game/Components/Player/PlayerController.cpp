@@ -19,9 +19,6 @@ PlayerController::PlayerController()
 	Griddy::Events::subscribe(this, &PlayerController::onKeyDown);
 	Griddy::Events::subscribe(this, &PlayerController::onKeyUp);
 	Griddy::Events::subscribe(this, &PlayerController::onKeyHold);
-	
-	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
-	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 void PlayerController::createPlayer()
