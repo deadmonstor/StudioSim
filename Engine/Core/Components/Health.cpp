@@ -10,11 +10,11 @@ void Health::setHealth(const float healthToSet)
 	if (!getOwner()->hasComponent(typeid(Hitmarkers)))
 		getOwner()->addComponent<Hitmarkers>();
 	
-	//currentHealth = healthToSet;
+	currentHealth = healthToSet;
 
 	if (currentHealth <= 0)
 	{
-		//die();
+		die();
 		getOwner()->getComponent<Hitmarkers>()->addHitmarker("DIED!", 1.0, getOwner()->getTransform()->getPosition());
 	}
 	else
