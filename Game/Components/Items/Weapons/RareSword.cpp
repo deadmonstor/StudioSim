@@ -2,7 +2,7 @@
 
 RareSword::RareSword()
 {
-	stats->costInShop = 30;
+	stats->price = 30;
 	stats->attack = 20;
 }
 

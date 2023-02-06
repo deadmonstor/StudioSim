@@ -4,7 +4,8 @@
 #include "../Components/PickUp.h"
 #include "../Engine/Core/SceneManager.h"
 #include "Core/Components/Transform.h"
-
+#include "Core/Grid/GridSystem.h"
+#include "Core/Renderer/ResourceManager.h"
 
 
 bool ChestTile::canInteractWith()

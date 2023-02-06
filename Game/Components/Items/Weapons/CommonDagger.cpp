@@ -2,6 +2,6 @@
 
 CommonDagger::CommonDagger()
 {
-	stats->costInShop = 5;
+	stats->price = 5;
 	stats->attack = 10;
 }

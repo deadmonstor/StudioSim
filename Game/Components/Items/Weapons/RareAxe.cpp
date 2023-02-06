@@ -2,7 +2,7 @@
 
 RareAxe::RareAxe()
 {
-	stats->costInShop = 35;
+	stats->price = 35;
 	stats->attack = 25;
 }
 

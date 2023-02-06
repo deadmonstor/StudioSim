@@ -34,7 +34,6 @@ struct ArmourStats : public ItemInfo
 struct WeaponStats : public ItemInfo
 {
 	int attack;
-	int costInShop;
 	int crit = 2;
 };
 
