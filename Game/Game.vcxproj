@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\Hitmarkers.h" />
     <ClInclude Include="Components\Items\Armour\ArmourItem.h" />
     <ClInclude Include="Components\Items\Armour\CommonArmour.h" />
     <ClInclude Include="Components\Items\Armour\LegendaryArmour.h" />
@@ -85,6 +86,7 @@
     <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\Hitmarkers.cpp" />
     <ClCompile Include="Components\Items\Armour\CommonArmour.cpp" />
     <ClCompile Include="Components\Items\Armour\LegendaryArmour.cpp" />
     <ClCompile Include="Components\Items\Armour\RareArmour.cpp" />

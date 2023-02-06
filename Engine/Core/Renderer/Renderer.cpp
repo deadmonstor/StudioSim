@@ -77,12 +77,10 @@ glm::vec2 Renderer::getCameraPosScreenSpace() const
 {
 	const glm::vec2 result = Renderer::getWindowSize();
 	const float aspectRatio = Renderer::Instance()->getAspectRatio();
-	
-	// TODO: Fix these MAGIC numbers again
+
 	if (mainCam == nullptr  || mainCam->getOwner() == nullptr || !mainCam->getOwner()->isValidTransform() )
 		return {-((result.x / aspectRatio) / 2) , -((result.y / aspectRatio) / 2)};
-		
-	// TODO: Fix these MAGIC numbers again
+
 	return mainCam->getOwner()->getTransform()->getPosition() + glm::vec2{-((result.x / aspectRatio) / 2), -((result.y / aspectRatio) / 2)};
 }
 
