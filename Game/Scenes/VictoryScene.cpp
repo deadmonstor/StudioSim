@@ -1,5 +1,6 @@
 ﻿#include "VictoryScene.h"
 
+#include "Core/AudioEngine.h"
 #include "Core/SceneManager.h"
 #include "Core/Components/Camera.h"
 #include "Core/Components/TextRenderer.h"
@@ -8,10 +9,12 @@
 
 void VictoryScene::init()
 {
+    AudioEngine::Instance()->stopChannelGroup("Master Channel");
+    
     engineRenderID = Griddy::Events::subscribe(this, &VictoryScene::onEngineRender);
     keyDownID = Griddy::Events::subscribe(this, &VictoryScene::onKeyDown);
 
-    GameObject* cam = SceneManager::Instance()->createGameObject("test", glm::vec2{0, 0});
+    GameObject* cam = SceneManager::Instance()->createGameObject("camera", glm::vec2{0, 0});
     cam->addComponent<Camera>();
     Renderer::Instance()->setCamera(cam->getComponent<Camera>());
 }
