@@ -19,7 +19,9 @@ void AttackAction::Act()
 	GridSystem* gridSystem = GridSystem::Instance();
 	glm::vec2 attackPosition = gridSystem->getTilePosition(currentPos) + attackDirection;
 	createSlashGameObject(attackPosition);
+	
 	flashPlayer(PlayerController::Instance()->playerPTR, glm::vec3(1, 0, 0));
+	TurnManager::Instance()->endTurn();
 }
 
 bool AttackAction::IsInRange()
@@ -94,9 +96,8 @@ void AttackAction::createSlashGameObject(glm::vec2 pos)
 }
 void AttackAction::flashPlayer(GameObject* object, const glm::vec3 targetColor)
 {
-	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [object]
+	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [this, object]
 	{
 		LOG_INFO("AttackAction -> flashPlayer -> End Turn " + object->getName());
-		TurnManager::Instance()->endTurn();
 	});
 }

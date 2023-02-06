@@ -44,7 +44,7 @@ void EnemyComponent::start()
 	TurnManager::Instance()->addToTurnQueue(getOwner());
 
 	if (onStartTurnID == -1)
-		Griddy::Events::subscribe(this, &EnemyComponent::onTurnChanged);
+		onStartTurnID = Griddy::Events::subscribe(this, &EnemyComponent::onTurnChanged);
 	
 	Component::start();
 }

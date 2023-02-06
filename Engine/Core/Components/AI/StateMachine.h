@@ -10,8 +10,8 @@ protected:
 	//The base state that the state machine can return into.
 	Behaviour* baseState = nullptr;
 	Behaviour* currentState = nullptr;
-	int8_t eventResponseID = -1;
-	int8_t onTransitionReceivedID = -1;
+	int eventResponseID = -1;
+	int onTransitionReceivedID = -1;
 
 //Public Methods
 public:
