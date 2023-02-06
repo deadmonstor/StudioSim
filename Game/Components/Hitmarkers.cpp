@@ -7,7 +7,7 @@
 
 void Hitmarkers::onEngineRender(OnEngineRender* event)
 {
-	for (auto& [text, time, pos] : hitmarkerTexts)
+	for (auto& [text, pos, color, time, direction] : hitmarkerTexts)
 	{
 		const auto screenSpace = pos - Renderer::Instance()->getCameraPosScreenSpace();
 		const glm::vec2 size = TextRenderer::Instance()->renderTextSize(text, 0.4f);
@@ -17,10 +17,11 @@ void Hitmarkers::onEngineRender(OnEngineRender* event)
 			screenSpace.x - size.x / 2,
 			screenSpace.y - size.y,
 			0.4f,
-			{ 1,1,1 },
+			color,
 			{ 0,0 });
 
 		time -= Time::getDeltaTime();
+		pos = pos + direction;
 	}
 }
 
@@ -49,11 +50,14 @@ void Hitmarkers::destroy()
 		Griddy::Events::unsubscribe(this, &Hitmarkers::onEngineRender, onEngineRenderID);
 }
 
-void Hitmarkers::addHitmarker(const std::string text, const double time, const glm::vec2 pos)
+void Hitmarkers::addHitmarker(const std::string text, const double time, const glm::vec2 pos, const glm::vec3 color)
 {
 	// add random value to pos to make it look more natural
 	const auto random = [](const float min, const float max) { return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min))); };
 	const auto randomPos = glm::vec2(random(-25, 25), random(-25, 25));
+
+	// TODO: Unsure if I like this
+	const auto randomDirection = glm::vec2{0,0};// glm::vec2(random(-1, 1), random(-1, 1));
 	
-	hitmarkerTexts.push_back({ text, time, pos + randomPos });
+	hitmarkerTexts.push_back({ text, pos + randomPos, color, time, randomDirection});
 }

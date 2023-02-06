@@ -13,7 +13,12 @@ void Health::setHealth(const float healthToSet)
 	if (currentHealth <= 0)
 	{
 		die();
-		PlayerController::Instance()->hitmarkers->addHitmarker("DIED!", 1.0, getOwner()->getTransform()->getPosition());
+		
+		PlayerController::Instance()->hitmarkers->addHitmarker(
+			"DIED!",
+			2.5,
+			getOwner()->getTransform()->getPosition(),
+			glm::vec3(1, 0, 0));
 	}
 	else
 	{

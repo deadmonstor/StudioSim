@@ -5,8 +5,10 @@
 struct HitmarkerInfo
 {
 	std::string text;
-	double time;
 	glm::vec2 pos;
+	glm::vec3 color;
+	double time;
+	glm::vec2 direction;
 };
 
 class Hitmarkers : public Component
@@ -22,5 +24,5 @@ public:
 	void update() override;
 	void destroy() override;
 
-	void addHitmarker(const std::string text, const double time = 1.0, const glm::vec2 pos = { 0,0 });
+	void addHitmarker(std::string text, double time = 1.0, glm::vec2 pos = { 0,0 }, glm::vec3 color = { 1,1,1 });
 };
