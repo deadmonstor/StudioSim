@@ -38,5 +38,8 @@ void LeaderboardScene::onEngineRender(const OnEngineRender* event)
 
 void LeaderboardScene::OnActualDown(const OnKeyDown* event)
 {
-
+    if (event->key == GLFW_KEY_ENTER)
+    {
+        SceneManager::Instance()->changeScene("mainMenu");
+    }
 }

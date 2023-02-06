@@ -38,8 +38,8 @@ void DefeatScene::onEngineRender(const OnEngineRender* event)
     TextRenderer::Instance()->renderText(" Defeat!", MiddleTopHalf.x - (sizeOfText.x / 2),
         MiddleTopHalf.y - (sizeOfText.y / 2), 1, glm::vec3{1, 1, 1}, glm::vec2{0, 0});
 
-    sizeOfText = TextRenderer::Instance()->renderTextSize( "Press Enter to Start Again", 1);
-    TextRenderer::Instance()->renderText(" Press Enter to Start Again", MiddleMiddle.x - (sizeOfText.x / 2),
+    sizeOfText = TextRenderer::Instance()->renderTextSize( "Press Enter to Submit Score", 1);
+    TextRenderer::Instance()->renderText(" Press Enter to Submit Score", MiddleMiddle.x - (sizeOfText.x / 2),
         MiddleMiddle.y - (sizeOfText.y / 2), 1, glm::vec3{1, 1, 1}, glm::vec2{0, 0});
 }
 
@@ -47,6 +47,6 @@ void DefeatScene::onKeyDown(const OnKeyDown* event)
 {
     if (event->key == GLFW_KEY_ENTER)
     {
-        SceneManager::Instance()->changeScene("level1");
+        SceneManager::Instance()->changeScene("leaderboardScene");
     }
 }
