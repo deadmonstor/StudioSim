@@ -6,5 +6,5 @@ RareArmour::RareArmour()
 	rareArmourStats->defence = 2;
 	rareArmourStats->health = 5;
 	rareArmourStats->mana = 5;
-	rareArmourStats->costInShop = 10;
+	rareArmourStats->price = 10;
 }

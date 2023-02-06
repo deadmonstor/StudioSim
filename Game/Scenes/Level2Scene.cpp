@@ -79,8 +79,8 @@ void Level2Scene::init()
 	{
 		{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
 		{ 14, [] { return new TestTile(Texture(), "victoryScreen"); } },
-		{ 15, [] { return new TeleportTile(Texture(), 11, 54); } }
-		//{ 56, [] { return new SpikeTile(Texture()); } }
+		{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
+		{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	
 	grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
@@ -124,7 +124,6 @@ void Level2Scene::init()
 		grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile* ()>>
 		{
 			{ 37, [] { return new LightTile(Texture()); } },
-			{ 56, [] { return new SpikeTile(Texture()); } }
 		});
 
 	grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");

@@ -1,6 +1,6 @@
 #include "PlayerFSM.h"
 #include "../TurnManager.h"
-#include "../../System/Inventory.h"
+
 #include "../Items/Consumables/HealthPotion.h"
 #include "../Items/Armour/LegendaryArmour.h"
 #include "../Items/Weapons/LegendaryHammer.h"
@@ -18,7 +18,6 @@ PlayerController::PlayerController()
 {
 	Griddy::Events::subscribe(this, &PlayerController::onKeyDown);
 	Griddy::Events::subscribe(this, &PlayerController::onKeyUp);
-	Griddy::Events::subscribe(this, &PlayerController::onEngineRender);
 	Griddy::Events::subscribe(this, &PlayerController::onKeyHold);
 	
 	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
@@ -108,28 +107,6 @@ void PlayerController::onKeyUp(const OnKeyUp* keyUp)
 {
 	const std::type_index eventType = typeid(OnKeyUp);
 	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyUp(keyUp->key, keyUp->scancode), eventType);
-}
-
-void PlayerController::onEngineRender(const OnEngineRender* render)
-{
-	static SpriteComponent* spriteComponent = new SpriteComponent();
-	spriteComponent->setSortingOrder(1);
-	spriteComponent->setTexture(ResourceManager::GetTexture("whitetexture"));
-	spriteComponent->setLit(false);
-	spriteComponent->setColor(TurnManager::Instance()->isCurrentTurnObject(playerPTR) ? glm::vec3(0, 1, 0) : glm::vec3(1, 0, 0));
-	
-	const glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
-	const float tileWidth = tileSize.x;
-	const float tileHeight = tileSize.y;
-
-	glm::vec2 pos = playerPTR->getTransform()->getPosition();
-	pos = GridSystem::Instance()->getTilePosition(pos);
-	pos = GridSystem::Instance()->getWorldPosition(pos);
-	
-	Renderer::Instance()->renderSprite(spriteComponent,
-											   pos - glm::vec2{ tileWidth / 2, tileHeight / 2 },
-											   {tileWidth, tileHeight},
-											   0);
 }
 
 void PlayerController::UpdateStats()

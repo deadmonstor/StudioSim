@@ -2,7 +2,7 @@
 
 CommonSword::CommonSword()
 {
-	stats->costInShop = 20;
+	stats->price = 20;
 	stats->attack = 15;
 }
 

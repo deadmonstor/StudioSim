@@ -4,6 +4,8 @@
 #include "Core/Components/Camera.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
+#include "../../System/Inventory.h"
+
 
 class OnPlayerControllerFSMUpdate : public Griddy::Event
 {
@@ -23,7 +25,6 @@ public:
 	void onKeyDown(const OnKeyDown* keyDown);
 	void onKeyHold(const OnKeyRepeat* keyHold);
 	void onKeyUp(const OnKeyUp* keyUp);
-	void onEngineRender(const OnEngineRender* render);
 	void UpdateStats();
 	void ReduceSpellCooldown();
 	void AddCoins(int Amount);

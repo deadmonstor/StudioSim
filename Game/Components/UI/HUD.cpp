@@ -198,7 +198,7 @@ void HUD::updateHUD()
 	xpText->setText(" XP: " + std::to_string(xp) + "/" + std::to_string(maxXp));
 
 	// =============================================Update level text=============================================
-	const int level = playerStats->level;
+	const int level = 0 ; //playerStats->level;
 
 	sizeOfText = TextRenderer::Instance()->renderTextSize("Level: " + std::to_string(level), 1);
 	position = bottomRight - glm::vec2{200, -75} + glm::vec2{sizeOfText.x / 2, sizeOfText.y};

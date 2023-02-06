@@ -214,9 +214,6 @@ void Renderer::getModelMatrix(const glm::vec2 position, const glm::vec2 size, co
 
 void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 position, const glm::vec2 size, const float rotation)
 {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
 	if (mainCam == nullptr)
 		return;
 

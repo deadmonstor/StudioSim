@@ -198,6 +198,10 @@ void Inventory::equip_item(const std::string& item_name)
 				case ItemType::WEAPON:
 				case ItemType::SPELL:
 				case ItemType::ARMOUR:
+				{
+					auto armour = dynamic_cast<ArmourStats*>(item);
+					playerStats->maxHealth += armour->health;
+				}
 				case ItemType::CONSUMABLE:
 				{
 					LOG_INFO(item->name() + " equipped.");
@@ -232,6 +236,10 @@ void Inventory::unequip_item(const std::string& item_name)
 				case ItemType::WEAPON:
 				case ItemType::SPELL:
 				case ItemType::ARMOUR:
+				{
+					auto armour = dynamic_cast<ArmourStats*>(item);
+					playerStats->maxHealth -= armour->health;
+				}
 				case ItemType::CONSUMABLE:
 				{
 					item->isEquipped = false;
