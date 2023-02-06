@@ -47,6 +47,6 @@ void VictoryScene::onKeyDown(const OnKeyDown* event)
 {
     if (event->key == GLFW_KEY_ENTER)
     {
-        SceneManager::Instance()->changeScene("leaderboardScene");
+        SceneManager::Instance()->changeScene("scoreScene");
     }
 }
