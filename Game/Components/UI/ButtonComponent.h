@@ -4,7 +4,7 @@
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
 
-class ButtonComponent  : public Panel
+class ButtonComponent : public Panel
 {
 public:
 	ButtonComponent(const Texture& _texture);

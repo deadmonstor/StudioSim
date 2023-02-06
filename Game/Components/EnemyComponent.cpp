@@ -44,7 +44,7 @@ void EnemyComponent::start()
 	TurnManager::Instance()->addToTurnQueue(getOwner());
 
 	if (onStartTurnID == -1)
-		Griddy::Events::subscribe(this, &EnemyComponent::onTurnChanged);
+		onStartTurnID = Griddy::Events::subscribe(this, &EnemyComponent::onTurnChanged);
 	
 	Component::start();
 }
@@ -81,8 +81,8 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 		if (event->objectToStart == getOwner())
 		{
 			roundsFreeze -= 1;
-			TurnManager::Instance()->endTurn();
 			LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn() -> " + std::to_string(roundsFreeze));
+			TurnManager::Instance()->endTurn();
 		}
 	}
 	

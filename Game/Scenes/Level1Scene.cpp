@@ -16,6 +16,7 @@
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
 #include "../LootTable.h"
+#include "../Components/UI/InventoryHUD.h"
 #include "../Tiles/ChestTile.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
@@ -23,8 +24,9 @@
 void Level1Scene::createEnemy(const glm::vec2 pos)
 {
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
+	int random = rand() % 10000000;
 		
-	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy", tileWorldSpace);
+	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
 	EnemyStats slimeStats = EnemyStats();
@@ -180,6 +182,14 @@ void Level1Scene::update()
 			HUD::Instance()->createHUD();
 
 		HUD::Instance()->updateHUD();
+	}
+
+	if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
+	{
+		if (!InventoryHUD::Instance()->getHasLoaded())
+			InventoryHUD::Instance()->createHUD();
+
+		InventoryHUD::Instance()->updateHUD();
 	}
 }
 
