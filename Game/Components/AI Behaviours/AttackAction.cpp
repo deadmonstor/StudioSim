@@ -94,8 +94,9 @@ void AttackAction::createSlashGameObject(glm::vec2 pos)
 }
 void AttackAction::flashPlayer(GameObject* object, const glm::vec3 targetColor)
 {
-	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [this]
+	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [object]
 	{
+		LOG_INFO("AttackAction -> flashPlayer -> End Turn " + object->getName());
 		TurnManager::Instance()->endTurn();
 	});
 }

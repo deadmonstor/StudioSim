@@ -8,8 +8,10 @@ public:
 
 	void render() override;
 	void setText(const std::string& _text) { text = _text; }
+	void setScale(const float _size) { size = _size; }
 protected:
 	//Text 
 	std::string text;
+	float size = 1;
 };
 

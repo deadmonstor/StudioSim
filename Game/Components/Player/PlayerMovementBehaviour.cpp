@@ -81,8 +81,8 @@ void PlayerMovementBehaviour::Act()
 			
 			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 			{
-				TurnManager::Instance()->endTurn();
 				LOG_INFO("PlayerMovementBehaviour::Act() -> TurnManager::Instance()->endTurn()");
+				TurnManager::Instance()->endTurn();
 			}
 		}
 	}

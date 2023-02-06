@@ -92,6 +92,6 @@ void EnemyCombatBehaviour::GenerateEffects()
 
 void EnemyCombatBehaviour::endTurn()
 {
-	TurnManager::Instance()->endTurn();
 	LOG_INFO("EnemyCombatBehaviour::endTurn() - Enemy turn ended");
+	TurnManager::Instance()->endTurn();
 }
