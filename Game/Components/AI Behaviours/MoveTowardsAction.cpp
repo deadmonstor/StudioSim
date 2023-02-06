@@ -32,7 +32,6 @@ void MoveTowardsAction::Act()
 		{
 			shouldLerp = true;
 			
-
 			GridSystem* instance = GridSystem::Instance();
 			instance->resetSatOnTile(0,  instance->getTilePosition(parentObject->getTransform()->getPosition()));
 			lerpPosition(parentObject, instance->getWorldPosition(path.front()->position));
@@ -46,6 +45,7 @@ void MoveTowardsAction::Act()
 		DelayTask::createTask(parentObject, 1.0f, [this]()
 		{
 			TurnManager::Instance()->endTurn();
+			LOG_INFO("!shouldLerp -> DelayTask::createTask() -> TurnManager::Instance()->endTurn()");
 		});
 	}
 }
@@ -53,6 +53,7 @@ void MoveTowardsAction::Act()
 void MoveTowardsAction::endTurn()
 {
 	TurnManager::Instance()->endTurn();
+	LOG_INFO("MoveTowardsAction::endTurn() -> TurnManager::Instance()->endTurn()");
 }
 
 void MoveTowardsAction::lerpPosition(GameObject* object, const glm::vec2 targetPosition)

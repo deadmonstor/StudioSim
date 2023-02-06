@@ -10,12 +10,14 @@
 #include "../Tiles/TestTile.h"
 #include "../Tiles/LightTile.h"
 #include "../Components/Player/PlayerController.h"
-#include "../Components/EnemyTest.h"
+#include "../Components/EnemyComponent.h"
 #include "../ScoreSystem.h"
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
 #include "../LootTable.h"
+#include "../Tiles/ChestTile.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
 
 void Level1Scene::createEnemy(const glm::vec2 pos)
 {
@@ -23,7 +25,15 @@ void Level1Scene::createEnemy(const glm::vec2 pos)
 		
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy", tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
-	enemy->addComponent<EnemyTest>();
+	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
+	EnemyStats slimeStats = EnemyStats();
+	slimeStats.attack = 2;
+	slimeStats.critChance = 0.2f;
+	slimeStats.maxHealth = 10;
+	slimeStats.currentHealth = 10;
+	slimeStats.defence = 2;
+	EnemyComponent component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
+	enemy->addComponent<EnemyComponent>(component);
 
 	GridSystem::Instance()->setSatOnTile(0, pos, enemy);
 }
@@ -31,7 +41,8 @@ void Level1Scene::createEnemy(const glm::vec2 pos)
 void Level1Scene::init()
 {
 	LootTable::Instance()->LoadingIntoLootTableArray();
-	
+	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
+
 	auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
 	auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);
 	auto enemySortingLayer = Renderer::addSortingLayer("Top Grid", 1);
@@ -129,6 +140,17 @@ void Level1Scene::init()
 		{ 93, [this](glm::vec2 pos)
 		{
 			// TODO: Create a chest
+		} },
+		{ 98, [this](glm::vec2 pos)
+		{
+			//Crab Anim
+			auto* Crab = SceneManager::Instance()->createGameObject("Crab", pos * GridSystem::Instance()->getTileSize());
+			Crab->getTransform()->setSize(glm::vec2(256, 256));
+
+			const std::vector textureListCrab = ResourceManager::GetTexturesContaining("crab");
+			auto sprite = Crab->addComponent<AnimatedSpriteRenderer>(textureListCrab, 0.075f);
+			sprite->setColor(glm::vec3(1, 1, 1));
+			sprite->setLit(false);
 		} }
 	});
 	

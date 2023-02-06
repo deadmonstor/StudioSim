@@ -3,7 +3,7 @@
 #include <Util/Events/EngineEvents.h>
 #include "PlayerAttackBehaviour.h"
 #include "PlayerSpellBehaviour.h"
-#include "../EnemyTest.h"
+#include "../EnemyComponent.h"
 #include "../TurnManager.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
@@ -14,7 +14,10 @@ PlayerMovementBehaviour::PlayerMovementBehaviour()
 	isInFSM = false; 
 	map = CreateFunctionMap(); 
 	origPos = GridSystem::Instance()->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
-	AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
+	
+	if (!ResourceManager::HasSound("Sounds\\softStep.wav"))
+		AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
+	
 	attackBehaviour = new PlayerAttackBehaviour();
 }
 
@@ -22,7 +25,10 @@ PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
 	origPos = GridSystem::Instance()->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
-	AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
+
+	if (!ResourceManager::HasSound("Sounds\\softStep.wav"))
+		AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
+	
 	map = CreateFunctionMap();
 	attackBehaviour = new PlayerAttackBehaviour();
 }
@@ -42,13 +48,15 @@ void PlayerMovementBehaviour::Act()
 		
 	if (curTileHolder->tile != nullptr && (!isWallTile || TurnManager::gNoclipMode))
 	{
-		// TODO: Remove this before release
+		
+#if _DEBUG
 		if (TurnManager::gNoclipMode)
 			PlayerController::Instance()->playerPTR->getComponent<AnimatedSpriteRenderer>()->setColor({ 0.3, 0.3 , 0.3 });
 		else
 			PlayerController::Instance()->playerPTR->getComponent<AnimatedSpriteRenderer>()->setColor({ 1, 1, 1 });
+#endif
 		
-		if (gameObjectOnTile != nullptr && gameObjectOnTile->hasComponent(typeid(EnemyTest)))
+		if (gameObjectOnTile != nullptr && gameObjectOnTile->hasComponent(typeid(EnemyComponent)))
 		{
 			attackBehaviour->AttackOnMovement(moveDir);
 			canAttackWhileMoving = false;
@@ -73,7 +81,10 @@ void PlayerMovementBehaviour::Act()
 			
 			
 			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
+			{
 				TurnManager::Instance()->endTurn();
+				LOG_INFO("PlayerMovementBehaviour::Act() -> TurnManager::Instance()->endTurn()");
+			}
 		}
 	}
 	
@@ -121,6 +132,7 @@ void PlayerMovementBehaviour::onKeyDownResponse(Griddy::Event* event)
 	{
 		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 		{
+			PlayerController::Instance()->ReduceSpellCooldown();
 			Act();
 		}
 	}

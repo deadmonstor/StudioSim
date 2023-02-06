@@ -2,7 +2,6 @@
 
 CommonAxe::CommonAxe()
 {
-	commonAxeStats = new WeaponStats();
-	commonAxeStats->price = 20;
-	commonAxeStats->attack = 17;
+	stats->costInShop = 20;
+	stats->attack = 17;
 }

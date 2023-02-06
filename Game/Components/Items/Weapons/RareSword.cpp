@@ -2,8 +2,7 @@
 
 RareSword::RareSword()
 {
-	rareSwordStats = new WeaponStats();
-	rareSwordStats->price = 30;
-	rareSwordStats->attack = 20;
+	stats->costInShop = 30;
+	stats->attack = 20;
 }
 

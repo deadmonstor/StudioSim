@@ -72,6 +72,19 @@ public:
 	OnKeyRepeat(const int key, const int scancode) : OnKey(key, scancode) {}
 };
 
+class OnCharacterDown : public OnKey
+{
+public:
+	OnCharacterDown( unsigned int key) : OnKey(key, 0) {}
+};
+
+class OnCharacterUp : public OnKey
+{
+public:
+	OnCharacterUp( unsigned int key) : OnKey(key, 0) {}
+};
+
+
 #pragma endregion 
 #pragma region Mouse Events
 class OnMouse : public Griddy::Event

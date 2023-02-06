@@ -1,0 +1,4 @@
+money-65
+expPotion-25
+healthPotion-5
+manaPotion-5

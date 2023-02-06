@@ -15,7 +15,6 @@ public:
     void GenerateEffects() override;
     
     void endTurn();
-    void flashPlayer(GameObject* object, glm::vec3 targetColor);
 private:
     StateMachine* parentFSM;
 };

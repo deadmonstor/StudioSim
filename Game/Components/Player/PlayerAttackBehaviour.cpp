@@ -3,7 +3,7 @@
 #include "PlayerMovementBehaviour.h"
 #include "PlayerSpellBehaviour.h"
 #include "../DestroyAfterAnimation.h"
-#include "../EnemyTest.h"
+#include "../EnemyComponent.h"
 #include "../Flash.h"
 #include "../TurnManager.h"
 #include "../../System/Inventory.h"
@@ -63,10 +63,13 @@ void PlayerAttackBehaviour::Act()
 		}
 	}
 	
-	canAttack = false;
-	
 	if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) && !willFlashOnce)
+	{
+		/*PlayerController::Instance()->ReduceSpellCooldown();*/
 		TurnManager::Instance()->endTurn();
+		LOG_INFO("Player Attack Behaviour -> Act -> TurnManager::Instance()->endTurn()");
+	}
+	canAttack = false;
 }
 
 void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -109,6 +112,7 @@ void PlayerAttackBehaviour::onKeyDownResponse(Griddy::Event* event)
 		if (TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 		{
 			Act();
+			PlayerController::Instance()->ReduceSpellCooldown();
 		}
 	}
 	
@@ -132,9 +136,10 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 			if (!willFlashOnce && !TurnManager::gNoclipMode)
 			{
 				Flash::createFlash(gameObject, gameObject->getComponent<AnimatedSpriteRenderer>(), {1, 0, 0}, 5,
-					[this, gameObject, pos]
+				[this, gameObject, pos]
 				{
 					TurnManager::Instance()->endTurn();
+					LOG_INFO("PlayerAttackBehaviour::createSlashGameObject() - TurnManager::Instance()->endTurn()");
 
 					auto* health = gameObject->getComponent<Health>();
 					// TODO: Change this

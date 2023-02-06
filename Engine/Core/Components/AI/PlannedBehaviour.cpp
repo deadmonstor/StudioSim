@@ -1,5 +1,12 @@
 #include "PlannedBehaviour.h"
 
+PlannedBehaviour::PlannedBehaviour()
+{
+	isInFSM = false;
+	fittestAction = nullptr;
+	map = CreateFunctionMap();
+}
+
 PlannedBehaviour::PlannedBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
@@ -54,29 +61,19 @@ void PlannedBehaviour::Act()
 	//planning happens in one go, but it'd be more effective to splice it over time
 	WorldAnalysis();
 	ActionAnalysis();
-	std::string fitName;
-	int highestFitness = -1;
 
-	//Find action with highest fitness
-	for (auto& action : availableActions)
-	{
-		if (action.second.first > highestFitness)
-		{
-			highestFitness = action.second.first;
-			fitName = action.first;
-		}
-	}
 	//If the action was found, act the action
-	if (!fitName.empty())
+	if (fittestAction != nullptr)
 	{
-		availableActions[fitName].second->Act();
+		fittestAction->Act();
 	}
 
 	//reset fitness values
-	for (auto i : availableActions)
+	for (std::pair<std::string, FitAction> action : availableActions)
 	{
-		i.second.first = 0;
+		availableActions[action.first] = std::make_pair(0, action.second.second);
 	}
+	//end turn
 }
 
 
@@ -116,6 +113,28 @@ void PlannedBehaviour::ActionAnalysis()
 			}
 		}
 	}
+	fittestAction = FindFittestAction();
+}
+
+Behaviour* PlannedBehaviour::FindFittestAction()
+{
+	std::string fitName;
+	int highestFitness = -1;
+
+	//Find action with highest fitness
+	for (auto& action : availableActions)
+	{
+		if (action.second.first > highestFitness)
+		{
+			highestFitness = action.second.first;
+			fitName = action.first;
+		}
+	}
+	if (!fitName.empty())
+	{
+		return availableActions[fitName].second;
+	}
+	return nullptr;
 }
 
 //Create the list of available behaviours

@@ -1,4 +1,5 @@
 #pragma once
+#include "../Hitmarkers.h"
 #include "../Items/Stats.h"
 #include "Core/Components/Camera.h"
 #include "Util/SingletonTemplate.h"
@@ -25,6 +26,8 @@ public:
 	void onKeyHold(const OnKeyRepeat* keyHold);
 	void onKeyUp(const OnKeyUp* keyUp);
 	void UpdateStats();
+	void ReduceSpellCooldown();
+	void AddCoins(int Amount);
 
 	SpriteComponent* playerSprite{};
 	GameObject* playerPTR{};
@@ -32,5 +35,5 @@ public:
 	Camera* cameraComponent{};
 	Inventory* myInventory{};
 	PlayerStats* playerStats{};
-	ArmourStats* armourStats{};
+	Hitmarkers* hitmarkers {};
 };

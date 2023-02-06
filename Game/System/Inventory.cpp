@@ -2,7 +2,8 @@
 #include <iostream>
 #include "../Components/Items/Armour/ArmourItem.h"
 #include "../Components/Items/Weapons/Weapon.h"
-#include "../Components/Items/Spells/SpellItem.h"
+#include "../Components/Items/Spells/Spell.h"
+#include "../Components/Player/PlayerController.h"
 #include "imgui/imgui.h"
 #include "Util/Logger.h"
 
@@ -13,6 +14,12 @@ bool Inventory::add_item(Item* item)
 		LOG_ERROR("Inventory is full. Can't add more items.");
 		return false;
 	}
+
+	PlayerController::Instance()->hitmarkers->addHitmarker(
+		"+1 " + item->name(),
+		1,
+		PlayerController::Instance()->playerPTR->getTransform()->getPosition(),
+		glm::vec3(0, 1, 0), 50);
 	
 	items.push_back(item);
 	LOG_INFO("You added a " + item->name());
@@ -51,13 +58,13 @@ void Inventory::draw_inventory()
 			case ItemType::WEAPON:
 			{
 				const auto item = dynamic_cast<WeaponItem*>(items[i]);
-				std::cout << " (Atk:" << item->getAtk() << " / Crit:" << item->getCrit() << ")";
+				std::cout << " (Atk:" << item->stats->attack << " / Crit:" << item->stats->crit << ")";
 				break;
 			}
 			case ItemType::SPELL:
 			{
 				const auto item = dynamic_cast<SpellItem*>(items[i]);
-				std::cout << " (Spell Power:" << item->getSpellAtk() << " / Mana Cost:" << item->getManaCost() << " / Cooldown:" << item->getCoolDown() << ")";
+				std::cout << " (Spell Power:" << item->spellStats->spellPower << " / Mana Cost:" << item->spellStats->manaCost << " / Effect Duration:" << item->spellStats->maxCooldown << ")";
 				break;
 			}
 			case ItemType::ARMOUR:
@@ -97,7 +104,7 @@ void Inventory::getDebugInfo(std::string* basic_string)
 		if (items[i]->getItemType() == ItemType::WEAPON)
 		{
 			const auto item = dynamic_cast<WeaponItem*>(items[i]);
-			ImGui::Text("Atk: %d / Crit: %d", item->atk, item->crit);
+			ImGui::Text("Atk: %d / Crit: %d", item->stats->attack, item->stats->crit);
 		}
 		else if (items[i]->getItemType() == ItemType::ARMOUR)
 		{
@@ -107,7 +114,7 @@ void Inventory::getDebugInfo(std::string* basic_string)
 		else if (items[i]->getItemType() == ItemType::SPELL)
 		{
 			const auto item = dynamic_cast<SpellItem*>(items[i]);
-			ImGui::Text("Spell Power: %d / Mana Cost: %d / Cool down: %d", item->getSpellAtk(), item->getManaCost(), item->getCoolDown());
+			ImGui::Text("Spell Power: %d / Mana Cost: %d / Effect Duration: %d", item->spellStats->spellPower, item->spellStats->manaCost, item->spellStats->maxCooldown);
 		}
 		
 		if (items[i]->isEquipped)

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -78,4 +80,6 @@ public:
 	PlayerStats* playerStats;
 
 	Item* getFirstItemWithEquipSlot(EquipSlot slot);
+	
+	inline static std::map<std::string, std::function<Item*()>> getItemByName = {};
 };

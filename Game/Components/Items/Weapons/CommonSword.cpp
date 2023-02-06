@@ -2,8 +2,7 @@
 
 CommonSword::CommonSword()
 {
-	commonSwordStats = new WeaponStats();
-	commonSwordStats->price = 20;
-	commonSwordStats->attack = 15;
+	stats->costInShop = 20;
+	stats->attack = 15;
 }
 
