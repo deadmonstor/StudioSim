@@ -1,4 +1,4 @@
-healthPotion-15
-manaPotion-15
+healthPotion-5
+manaPotion-5
 expPotion-10
 money-100
