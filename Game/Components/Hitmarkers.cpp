@@ -50,11 +50,11 @@ void Hitmarkers::destroy()
 		Griddy::Events::unsubscribe(this, &Hitmarkers::onEngineRender, onEngineRenderID);
 }
 
-void Hitmarkers::addHitmarker(const std::string text, const double time, const glm::vec2 pos, const glm::vec3 color)
+void Hitmarkers::addHitmarker(const std::string text, const double time, const glm::vec2 pos, const glm::vec3 color, const int randomAmount)
 {
 	// add random value to pos to make it look more natural
 	const auto random = [](const float min, const float max) { return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min))); };
-	const auto randomPos = glm::vec2(random(-25, 25), random(-25, 25));
+	const auto randomPos = glm::vec2(random(-randomAmount, randomAmount), random(-randomAmount, randomAmount));
 
 	// TODO: Unsure if I like this
 	const auto randomDirection = glm::vec2{0,0};// glm::vec2(random(-1, 1), random(-1, 1));

@@ -24,5 +24,5 @@ public:
 	void update() override;
 	void destroy() override;
 
-	void addHitmarker(std::string text, double time = 1.0, glm::vec2 pos = { 0,0 }, glm::vec3 color = { 1,1,1 });
+	void addHitmarker(std::string text, double time = 1.0, glm::vec2 pos = { 0,0 }, glm::vec3 color = { 1,1,1 }, int randomAmount = 25);
 };

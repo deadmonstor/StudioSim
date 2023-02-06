@@ -18,11 +18,16 @@ void Health::setHealth(const float healthToSet)
 			"DIED!",
 			2.5,
 			getOwner()->getTransform()->getPosition(),
-			glm::vec3(1, 0, 0));
+			glm::vec3(1, 0, 0),
+			25);
 	}
 	else
 	{
-		PlayerController::Instance()->hitmarkers->addHitmarker(std::format("{:.0f}", difference), 1.0, getOwner()->getTransform()->getPosition());
+		PlayerController::Instance()->hitmarkers->addHitmarker(
+			std::format("{:.0f}", difference),
+			1.0,
+			getOwner()->getTransform()->getPosition(),
+			{1, 1, 1});
 	}
 }
 

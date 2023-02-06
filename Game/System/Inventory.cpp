@@ -3,6 +3,7 @@
 #include "../Components/Items/Armour/ArmourItem.h"
 #include "../Components/Items/Weapons/Weapon.h"
 #include "../Components/Items/Spells/Spell.h"
+#include "../Components/Player/PlayerController.h"
 #include "imgui/imgui.h"
 #include "Util/Logger.h"
 
@@ -13,6 +14,12 @@ bool Inventory::add_item(Item* item)
 		LOG_ERROR("Inventory is full. Can't add more items.");
 		return false;
 	}
+
+	PlayerController::Instance()->hitmarkers->addHitmarker(
+		"+1 " + item->name(),
+		1,
+		PlayerController::Instance()->playerPTR->getTransform()->getPosition(),
+		glm::vec3(0, 1, 0), 50);
 	
 	items.push_back(item);
 	LOG_INFO("You added a " + item->name());
