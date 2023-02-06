@@ -1,6 +1,8 @@
 #include "LootTable.h"
 #include <iostream>
 
+#include "Util/Logger.h"
+
 void LootTable::LoadingIntoLootTableArray()
 {
 	file.open("LootTable.txt");
@@ -28,7 +30,7 @@ std::string LootTable::RollLoot()
 	//Roll random number 0-100. rand % 100
 	srand(time(0));
 
-	const float random = (rand() % 100) + 1;
+	const float random = round(rand() % 100);
 	float temp = 0;
 	for (const auto& [ItemName, DropChance] : m_LootTableData)
 	{
@@ -38,7 +40,8 @@ std::string LootTable::RollLoot()
 			return ItemName;
 		}
 	}
-	
+
+	LOG_ERROR("LootTable::RollLoot() failed to return a loot item");
 }
 
 void EnemyDropLootTable::EnemyDropLoadingIntoLootTableArray()
@@ -68,7 +71,7 @@ std::string EnemyDropLootTable::EnemyDropRollLoot()
 	srand(time(0));
 
 	//random number
-	const float random = (rand() % 100) + 1;
+	const float random = round(rand() % 100);
 	float temp = 0;
 	for (const auto& [ItemName, DropChance] : m_EnemyDropLootTableData)
 	{
@@ -80,11 +83,11 @@ std::string EnemyDropLootTable::EnemyDropRollLoot()
 			{
 				int random = (rand() % 16) +1;
 				rolledLoot.append("," + std::to_string(random));
-				std::cout << rolledLoot;
 			}
 			
 			return rolledLoot;
 		}
 	}
 
+	LOG_ERROR("EnemyDropLootTable::EnemyDropRollLoot() failed to return a loot item");
 }
