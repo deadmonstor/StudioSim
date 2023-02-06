@@ -102,6 +102,7 @@ void PlayerController::onEngineRender(const OnEngineRender* render)
 
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
+#ifdef _DEBUG
 	if (keyDown->key == GLFW_KEY_P)
 	{
 		//Testing pathfinding
@@ -129,6 +130,7 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		myInventory->add_item(iceSpell);
 		myInventory->equip_item(iceSpell->name());
 	}
+#endif
 	
 	//find the input and send it to the state machine
 	const std::type_index eventType = typeid(OnKeyDown);
