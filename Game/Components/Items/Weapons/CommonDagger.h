@@ -10,9 +10,5 @@ public:
     std::string name() override { return "Common Dagger"; }
     std::string itemDescription() override { return "Common Dagger"; }
     std::string rarity() override { return "Common"; }
-    
-    //GameObject* daggerPTR{};
-    WeaponStats* commonDaggerStats{};
-    
 };
 
