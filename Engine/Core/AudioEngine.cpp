@@ -85,7 +85,6 @@ bool AudioEngine::init()
 		return false;
 	}
 
-
 	//Add audio channel groups
 	masterChannel->addGroup(audioEffectsChannel);
 	masterChannel->addGroup(backgroundMusicChannel);
@@ -202,6 +201,8 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 		}
 
 		backgroundChannel->getIndex(&backgroundChannelIndex);
+
+		ResourceManager::GetSound(path)->setLoopCount(-1);
 		fmodSystem->playSound(ResourceManager::GetSound(path), channelGroups["Background Music"], isPaused, &backgroundChannel);
 
 		//Audio source position
@@ -210,6 +211,12 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 		//Enable Channel Modes
 		fmodResult = backgroundChannel->setMode(FMOD_3D);
 		if (!checkResult(fmodResult, "Set Channel Volume"))
+		{
+			return false;
+		}
+
+		fmodResult = backgroundChannel->setMode(FMOD_LOOP_NORMAL);
+		if (!checkResult(fmodResult, "Set Looping"))
 		{
 			return false;
 		}
@@ -241,10 +248,13 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 			return false;
 		}
 
+
+
 		//Loop(0 - Oneshot, 1 - Loop Once and Stop, -1 - Loop Forever
 		fmodResult = backgroundChannel->setLoopCount(-1);
 		if (!checkResult(fmodResult, "Set Loop"))
 		{
+			std::cout << "Loop Set\n";
 			return false;
 		}
 	}
