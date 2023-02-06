@@ -5,6 +5,7 @@
 #include "../Flash.h"
 #include "../Core/Components/AnimatedSpriteRenderer.h"
 #include "../DestroyAfterAnimation.h"
+#include "Core/AudioEngine.h"
 
 AttackAction::AttackAction(GameObject* parentObjectArg)
 	: parentObject(parentObjectArg)
@@ -66,6 +67,7 @@ void AttackAction::createSlashGameObject(glm::vec2 pos)
 
 	if (tile != nullptr && tile->gameObjectSatOnTile == PlayerController::Instance()->playerPTR)
 	{
+		AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 		PlayerStats* targetStats = PlayerController::Instance()->playerStats;
 		const EnemyStats myStats = parentObject->getComponent<EnemyComponent>()->getStats();
 		
@@ -77,12 +79,6 @@ void AttackAction::createSlashGameObject(glm::vec2 pos)
 		const float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		if (r < myStats.critChance)
 			attackDamage *= 2; //double damage!
-
-		PlayerController::Instance()->hitmarkers->addHitmarker(
-			"-" + std::to_string(attackDamage),
-			1.0,
-			 PlayerController::Instance()->playerPTR->getTransform()->getPosition(),
-			{1, 1, 1});
 		
 		targetStats->currentHealth -= attackDamage;
 		PlayerController::Instance()->UpdateStats();

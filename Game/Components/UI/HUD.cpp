@@ -19,7 +19,6 @@ void HUD::createHUD()
 
 	if (playerChangedID == -1)
 		playerChangedID = Griddy::Events::subscribe(this, &HUD::onPlayerChanged);
-
 	
 	ResourceManager::LoadTexture("Sprites\\Armour\\BasicArmourChest.png", "BasicArmourChestInventoryUI");
 	inventoryButton =
@@ -104,11 +103,11 @@ void HUD::updateHUD()
                     glm::vec2(0, 0) / Renderer::Instance()->getAspectRatio();
 
 	// =============================================Update Audio Text ==========================================
-	plusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -60, -35 });
+	plusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -60, -10 });
 	plusAudioButton->getTransform()->setSize(glm::vec2(50, 50));
 	plusAudioButton->setPivot(Pivot::BottomRight);
 
-	minusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -120, -35 });
+	minusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -120, -10 });
 	minusAudioButton->getTransform()->setSize(glm::vec2(50, 50));
 	minusAudioButton->setPivot(Pivot::BottomRight);
 	
@@ -126,15 +125,21 @@ void HUD::updateHUD()
 	weaponButton->getTransform()->setPosition(bottomRight - glm::vec2{200, 0});
 	weaponButton->getTransform()->setSize(glm::vec2(100, 100));
 	weaponButton->setPivot(Pivot::BottomRight);
+
+	int offset = 15;
+
+#ifdef _DEBUG
+	offset = 35;
+#endif
 	
 	// =============================================Update health icon=============================================
-	healthIcon->getTransform()->setPosition(topLeft - glm::vec2{-20, 35});
+	healthIcon->getTransform()->setPosition(topLeft - glm::vec2{-20, offset});
 	healthIcon->getTransform()->setSize({50, 50});
 	healthIcon->setTexture(ResourceManager::GetTexture("healthIcon"));
 	healthIcon->setPivot(Pivot::TopLeft);
 	
 	// =============================================Update mana icon===============================================
-	manaIcon->getTransform()->setPosition(topLeft - glm::vec2{-20, 110});
+	manaIcon->getTransform()->setPosition(topLeft - glm::vec2{-20, 75 + offset});
 	manaIcon->getTransform()->setSize({50, 50});
 	manaIcon->setTexture(ResourceManager::GetTexture("ManaIcon"));
 	manaIcon->setPivot(Pivot::TopLeft);
@@ -143,6 +148,7 @@ void HUD::updateHUD()
 	coinsIcon->getTransform()->setSize({50, 50});
 	coinsIcon->setTexture(ResourceManager::GetTexture("coinsIcon"));
 	coinsIcon->setPivot(Pivot::TopRight);
+
 	// =============================================Update pause icon=============================================
 	pauseButton->getTransform()->setPosition(MiddleLeft + glm::vec2{45, 125});
 	pauseButton->getTransform()->setSize({ 30, 30 });
@@ -154,7 +160,7 @@ void HUD::updateHUD()
 	const int maxHealth = playerStats->maxHealth;
 	
 	auto sizeOfText = TextRenderer::Instance()->renderTextSize(std::to_string(health) + "/" + std::to_string(maxHealth), 1);
-	auto position = topLeft - glm::vec2{-75, sizeOfText.y} - glm::vec2{0, 38};
+	auto position = topLeft - glm::vec2{-75, sizeOfText.y} - glm::vec2{0, offset};
 	
 	healthText->getTransform()->setPosition(position);
 	healthText->getTransform()->setSize(sizeOfText);
@@ -176,14 +182,14 @@ void HUD::updateHUD()
 	const int coins = playerStats->coinsHeld;
 	
 	sizeOfText = TextRenderer::Instance()->renderTextSize(std::to_string(coins), 1);
-	position = topRight - glm::vec2{sizeOfText.x, sizeOfText.y} - glm::vec2{25, 38};
+	position = topRight - glm::vec2{sizeOfText.x, sizeOfText.y} - glm::vec2{25, offset};
 	
 	coinsText->getTransform()->setPosition(position);
 	coinsText->getTransform()->setSize(sizeOfText);
 	coinsText->setText(" " + std::to_string(coins));
 	
 	// =============================================Update coins icon=============================================
-	position = topRight - glm::vec2{sizeOfText.x, 0} - glm::vec2{28, 35};
+	position = topRight - glm::vec2{sizeOfText.x, 0} - glm::vec2{28, offset};
 	coinsIcon->getTransform()->setPosition(position);
 	
 	// =============================================Update xp text===============================================
@@ -191,7 +197,7 @@ void HUD::updateHUD()
 	const int maxXp = playerStats->maxEXP;
 	
 	sizeOfText = TextRenderer::Instance()->renderTextSize("XP: " + std::to_string(xp) + "/" + std::to_string(maxXp), 1);
-	position = topMiddle - glm::vec2{sizeOfText.x / 2, sizeOfText.y} - glm::vec2{0, 31};
+	position = topMiddle - glm::vec2{sizeOfText.x / 2, sizeOfText.y} - glm::vec2{0, offset};
 	
 	xpText->getTransform()->setPosition(position);
 	xpText->getTransform()->setSize(sizeOfText);
@@ -201,7 +207,7 @@ void HUD::updateHUD()
 	const int level = playerStats->level;
 
 	sizeOfText = TextRenderer::Instance()->renderTextSize("Level: " + std::to_string(level), 1);
-	position = bottomRight - glm::vec2{200, -75} + glm::vec2{sizeOfText.x / 2, sizeOfText.y};
+	position = bottomRight - glm::vec2{25, -75} + glm::vec2{-sizeOfText.x, sizeOfText.y};
 	
 	levelText->getTransform()->setPosition(position);
 	levelText->getTransform()->setSize(sizeOfText);
@@ -211,7 +217,7 @@ void HUD::updateHUD()
 	const float audioLevel = AudioEngine::Instance()->getChannelVolume("Master Channel") * 100 / 100;
 	
 	sizeOfText = TextRenderer::Instance()->renderTextSize("Volume: " + std::format("{:.2f}", audioLevel), 0.5);
-	position = bottomLeft - glm::vec2{ -5, sizeOfText.y } - glm::vec2{ 0, -120 };
+	position = bottomLeft - glm::vec2{ -5, sizeOfText.y } - glm::vec2{ -10, -70 - sizeOfText.y };
 
 	audioText = UIManager::Instance()->createUIElement<TextComponent>("audioText");
 	audioText->getTransform()->setPosition(position);
@@ -238,5 +244,4 @@ void HUD::onPlayerChanged(const OnPlayerControllerFSMUpdate* event)
 	{
 		weaponButton->setTexture(ResourceManager::GetTexture("Fireball1"));
 	}
-
 }

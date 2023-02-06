@@ -4,13 +4,17 @@
 #include "../../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
 #include "../../EnemyComponent.h"
+#include "Core/Renderer/ResourceManager.h"
+#include "Core/AudioEngine.h"
 
 Hammer::Hammer()
 {
+	
 }
 
 void Hammer::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 {
+	
 	glm::fvec2 firstTileinAttackDir = (playerPos + attackDir);
 	glm::fvec2 secondTileinAttackDir = (playerPos + attackDir + attackDir);
 	if (attackDir == glm::fvec2{ 0,1 } || attackDir == glm::fvec2{ 0,-1 })
@@ -49,6 +53,7 @@ void Hammer::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 			}
 		}
 	}
+	AudioEngine::Instance()->playSound("Sounds\\AirSlash.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 	attackPositions.clear();
 }
 
@@ -61,6 +66,7 @@ void Hammer::createSlashGameObject(glm::fvec2 pos)
 	{
 		if (gameObject->hasComponent(typeid(EnemyComponent)))
 		{
+			AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 			auto* enemyInfo = gameObject->getComponent<EnemyComponent>();
 			int atkDamage = stats->attack - enemyInfo->getStats().defence;
 			if (atkDamage < 0)
@@ -82,6 +88,7 @@ void Hammer::createSlashGameObject(glm::fvec2 pos)
 				GridSystem::Instance()->resetSatOnTile(0, pos);
 		}
 	}
+
 
 	// get world position from grid position
 	const glm::fvec2 worldPos = GridSystem::Instance()->getWorldPosition(pos);

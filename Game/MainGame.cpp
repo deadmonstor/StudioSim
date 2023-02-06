@@ -24,6 +24,7 @@
 #include "Scenes/ScoreScene.h"
 #include "Scenes/LeaderboardScene.h"
 #include "Util/Events/Events.h"
+#include <Core/AudioEngine.h>
 
 int main(int, char**)
 {
@@ -35,7 +36,7 @@ int main(int, char**)
 
 	const auto Renderer = Renderer::Instance();
 	Renderer->setWindowTitle("Into The Crypt");
-	Renderer->setWindowIcon("Sprites\\engine.png");
+	Renderer->setWindowIcon("Sprites\\icon.png");
 	Renderer->setWindowSize({ 1920, 1080 });
 
 	ResourceManager::LoadTextureArray("Sprites\\Blue-Slime-Idle\\", "Blue-Slime-Idle", 7);
@@ -58,6 +59,16 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\Coins\\", "coin", 10);
 	ResourceManager::LoadTextureArray("Sprites\\Weapons\\", "Potion", 3);
 	ResourceManager::LoadTexture("Sprites\\whitetexture.png", "whitetexture");
+
+	AudioEngine::Instance()->loadSound("Sounds\\MainTheme.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Defeat.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Victory.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Click.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\FireBall.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Ice.wav", FMOD_3D);
 
 	SceneManager::Instance()->sceneToTypeID = std::map<std::string, std::function<Scene*()>>
 	{
@@ -123,7 +134,6 @@ int main(int, char**)
 		{"rareArmour", []() { return new RareArmour(); }},
 		{"legendaryArmour", []() { return new LegendaryArmour(); }},
 	};
-	
 	MainGame::Instance()->run();
 	return 0;
 }

@@ -61,6 +61,7 @@
     <ClInclude Include="Components\TurnManager.h" />
     <ClInclude Include="Components\UI\ButtonComponent.h" />
     <ClInclude Include="Components\UI\HUD.h" />
+    <ClInclude Include="Components\UI\InventoryHUD.h" />
     <ClInclude Include="Components\UI\InventoryButton.h" />
     <ClInclude Include="Components\UI\MasterAudioMinusButton.h" />
     <ClInclude Include="Components\UI\MasterAudioPlusButton.h" />
@@ -129,6 +130,7 @@
     <ClCompile Include="Components\TurnManager.cpp" />
     <ClCompile Include="Components\UI\ButtonComponent.cpp" />
     <ClCompile Include="Components\UI\HUD.cpp" />
+    <ClCompile Include="Components\UI\InventoryHUD.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
     <ClCompile Include="Components\UI\TextComponent.cpp" />
     <ClCompile Include="LootTable.cpp" />

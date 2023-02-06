@@ -20,11 +20,9 @@ PlayerController::PlayerController()
 	Griddy::Events::subscribe(this, &PlayerController::onKeyUp);
 	Griddy::Events::subscribe(this, &PlayerController::onEngineRender);
 	Griddy::Events::subscribe(this, &PlayerController::onKeyHold);
-	
-	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
-	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
+int lastHealth = 0;
 void PlayerController::createPlayer()
 {
 	const glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
@@ -52,6 +50,7 @@ void PlayerController::createPlayer()
 		playerStats = new PlayerStats();
 		playerStats->maxHealth = 10;
 		playerStats->currentHealth = 10;
+		lastHealth = 10;
 		playerStats->currentEXP = 0;
 		playerStats->maxEXP = 100;
 		playerStats->currentMana = 10;
@@ -100,6 +99,7 @@ void PlayerController::onEngineRender(const OnEngineRender* render)
 
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
+#ifdef _DEBUG
 	if (keyDown->key == GLFW_KEY_P)
 	{
 		//Testing pathfinding
@@ -127,6 +127,7 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		myInventory->add_item(iceSpell);
 		myInventory->equip_item(iceSpell->name());
 	}
+#endif
 	
 	//find the input and send it to the state machine
 	const std::type_index eventType = typeid(OnKeyDown);
@@ -152,6 +153,13 @@ void PlayerController::UpdateStats()
 		SceneManager::Instance()->changeScene("defeatScreen");
 	}
 
+	// get difference
+	const int difference = playerStats->currentHealth - lastHealth;
+	lastHealth = playerStats->currentHealth;
+
+	if (difference != 0)
+		hitmarkers->addHitmarker(std::to_string(difference), 1, playerPTR->getTransform()->getPosition(), {1, 1, 1}, 25);
+
 	while (playerStats->currentEXP >= 100)
 	{
 		playerStats->level++;
@@ -160,6 +168,8 @@ void PlayerController::UpdateStats()
 		playerStats->maxMana += 5;
 		playerStats->currentHealth = playerStats->maxHealth;
 		playerStats->currentMana = playerStats->maxMana;
+
+		lastHealth = playerStats->currentHealth;
 	}
 }
 

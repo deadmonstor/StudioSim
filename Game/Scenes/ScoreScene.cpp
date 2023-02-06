@@ -12,7 +12,7 @@ void ScoreScene::init()
 	charKeyDownID = Griddy::Events::subscribe(this, &ScoreScene::OnCharacterKeyDown);
 	keyDownID = Griddy::Events::subscribe(this, &ScoreScene::OnActualDown);
 
-	GameObject* cam = SceneManager::Instance()->createGameObject("test", glm::vec2{0, 0});
+	GameObject* cam = SceneManager::Instance()->createGameObject("camera", glm::vec2{0, 0});
 	cam->addComponent<Camera>();
 	Renderer::Instance()->setCamera(cam->getComponent<Camera>());
 }

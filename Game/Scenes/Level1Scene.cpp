@@ -17,6 +17,7 @@
 #include "../Tiles/SpikeTile.h"
 #include "../LootTable.h"
 #include "../Tiles/ChestTile.h"
+#include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 
 void Level1Scene::createEnemy(const glm::vec2 pos)
@@ -40,6 +41,7 @@ void Level1Scene::createEnemy(const glm::vec2 pos)
 
 void Level1Scene::init()
 {
+	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 	LootTable::Instance()->LoadingIntoLootTableArray();
 	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
 

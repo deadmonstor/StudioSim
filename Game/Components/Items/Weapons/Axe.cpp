@@ -4,9 +4,12 @@
 #include "../../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
 #include "../../EnemyComponent.h"
+#include "Core/Renderer/ResourceManager.h"
+#include "Core/AudioEngine.h"
 
 Axe::Axe()
 {
+	
 }
 
 void Axe::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
@@ -24,6 +27,7 @@ void Axe::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 			createSlashGameObject(attackPos);
 		}
 	}
+	AudioEngine::Instance()->playSound("Sounds\\AirSlash.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 	attackPositions.clear();
 }
 
@@ -36,6 +40,7 @@ void Axe::createSlashGameObject(glm::fvec2 pos)
 	{
 		if (gameObject->hasComponent(typeid(EnemyComponent)))
 		{
+			AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 			auto* enemyInfo = gameObject->getComponent<EnemyComponent>();
 			int atkDamage = stats->attack - enemyInfo->getStats().defence;
 			if (atkDamage < 0)
