@@ -62,6 +62,13 @@ int main(int, char**)
 
 	AudioEngine::Instance()->loadSound("Sounds\\MainTheme.wav", FMOD_3D);
 	AudioEngine::Instance()->loadSound("Sounds\\Defeat.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Victory.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Click.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\AirSlash.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\FireBall.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Ice.wav", FMOD_3D);
 
 	SceneManager::Instance()->sceneToTypeID = std::map<std::string, std::function<Scene*()>>
 	{
@@ -77,11 +84,13 @@ int main(int, char**)
 		},
 		{"level2", []
 			{
+				AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 				return new Level2Scene();
 			}
 		},
 		{"victoryScreen", []
 			{
+				AudioEngine::Instance()->playSound("Sounds\\Victory.wav", false, 0.2f, 0, 0, AudioType::SoundEffect);
 				return new VictoryScene();
 			}
 		},

@@ -12,7 +12,7 @@
 #include "../LootTable.h"
 #include "Core/Components/Transform.h"
 #include "PickUp.h"
-
+#include "Core/AudioEngine.h"
 
 EnemyComponent::EnemyComponent()
 {
@@ -26,6 +26,7 @@ EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsAr
 	enemyFSM = stateMachineArg;
 	stats = statsArg;
 	spriteName = spriteNameArg;
+	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 void EnemyComponent::start()

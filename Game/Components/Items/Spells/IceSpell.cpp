@@ -2,6 +2,7 @@
 #include "../../EnemyComponent.h"
 #include "../../DestroyAfterAnimation.h"
 #include "../../Player/PlayerController.h"
+#include "Core/AudioEngine.h"
 
 IceSpell::IceSpell()
 {
@@ -17,6 +18,7 @@ void IceSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 
 	for (std::pair<glm::vec2, Tile*> neighbour : freezePos)
 	{
+		AudioEngine::Instance()->playSound("Sounds\\Ice.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 		GameObject* spell = SceneManager::Instance()->createGameObject("IceSpell", GridSystem::Instance()->getWorldPosition(neighbour.first));
 		spell->getTransform()->setSize(glm::vec2(48, 48));
 		const std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
