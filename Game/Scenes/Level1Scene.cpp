@@ -115,9 +115,10 @@ void Level1Scene::init()
 		{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
 		{ 48, ResourceManager::GetTexture("tile130") },//Jar
 		{ 49, ResourceManager::GetTexture("tile154") },
-		{ 56, ResourceManager::GetTexture("tile60") } // Spike
+		{ 56, ResourceManager::GetTexture("tile60") }, // Spike
 		{ 93, ResourceManager::GetTexture("chest_2") }, //Chest
 	});
+	
 	grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile*()>>
 	{
 		{ 37, [] { return new LightTile(Texture()); } },

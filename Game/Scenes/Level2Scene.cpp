@@ -8,6 +8,7 @@
 #include "Util/Events/Events.h"
 #include "../Components/TurnManager.h"
 #include "../Tiles/TestTile.h"
+#include "../Tiles/ChestTile.h"
 #include "../Tiles/TeleportTile.h"
 #include "../Components/Player/PlayerController.h"
 #include "../Components/EnemyComponent.h"
@@ -117,7 +118,7 @@ void Level2Scene::init()
 			{ 47, ResourceManager::GetTexture("tile73") }, //window with bars
 			{ 48, ResourceManager::GetTexture("tile130") },//Jar
 			{ 49, ResourceManager::GetTexture("tile154") },
-			{ 56, ResourceManager::GetTexture("tile60") } // Spike
+			{ 56, ResourceManager::GetTexture("tile60") }, // Spike
 			{ 93, ResourceManager::GetTexture("chest_2") }, //Chest
 		});
 		
