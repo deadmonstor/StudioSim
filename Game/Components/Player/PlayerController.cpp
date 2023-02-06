@@ -169,6 +169,8 @@ void PlayerController::UpdateStats()
 		playerStats->maxMana += 5;
 		playerStats->currentHealth = playerStats->maxHealth;
 		playerStats->currentMana = playerStats->maxMana;
+
+		lastHealth = playerStats->currentHealth;
 	}
 }
 

@@ -201,7 +201,7 @@ void HUD::updateHUD()
 	const int level = playerStats->level;
 
 	sizeOfText = TextRenderer::Instance()->renderTextSize("Level: " + std::to_string(level), 1);
-	position = bottomRight - glm::vec2{200, -75} + glm::vec2{sizeOfText.x / 2, sizeOfText.y};
+	position = bottomRight - glm::vec2{25, -75} + glm::vec2{-sizeOfText.x, sizeOfText.y};
 	
 	levelText->getTransform()->setPosition(position);
 	levelText->getTransform()->setSize(sizeOfText);
