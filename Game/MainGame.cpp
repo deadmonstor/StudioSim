@@ -56,11 +56,7 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_open_", 4);
 	ResourceManager::LoadTextureArray("Sprites\\Coins\\", "coin", 10);
 	ResourceManager::LoadTextureArray("Sprites\\Weapons\\", "Potion", 3);
-	
-
-	ResourceManager::LoadTexture("Sprites\\rock.png", "rock");
-	ResourceManager::LoadTexture("Sprites\\background.png", "background");
-	ResourceManager::LoadTexture("Sprites\\image.png", "buttonTest");
+	ResourceManager::LoadTexture("Sprites\\whitetexture.png", "whitetexture");
 
 	SceneManager::Instance()->sceneToTypeID = std::map<std::string, std::function<Scene*()>>
 	{

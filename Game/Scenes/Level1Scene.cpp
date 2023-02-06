@@ -57,7 +57,6 @@ void Level1Scene::init()
 	});
 	
 	grid_system->setEmptyTileIDs(0, std::vector<int>{0});
-	// TODO: Fill these out lol
 	grid_system->setWallIDs(0, std::vector<int>{1,9,3,4,5,6});
 	grid_system->setTextureMap(0, std::map<int, Texture>
 	{
@@ -140,10 +139,6 @@ void Level1Scene::init()
 		{ 92, [this](glm::vec2 pos)
 		{
 			createEnemy(pos);
-		} },
-		{ 93, [this](glm::vec2 pos)
-		{
-			// TODO: Create a chest
 		} },
 		{ 98, [this](glm::vec2 pos)
 		{
