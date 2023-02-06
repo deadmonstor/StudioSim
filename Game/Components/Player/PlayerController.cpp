@@ -25,6 +25,7 @@ PlayerController::PlayerController()
 	AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
+int lastHealth = 0;
 void PlayerController::createPlayer()
 {
 	const glm::vec2 tileSize = GridSystem::Instance()->getTileSize();
@@ -52,6 +53,7 @@ void PlayerController::createPlayer()
 		playerStats = new PlayerStats();
 		playerStats->maxHealth = 10;
 		playerStats->currentHealth = 10;
+		lastHealth = 10;
 		playerStats->currentEXP = 0;
 		playerStats->maxEXP = 100;
 		playerStats->currentMana = 10;
@@ -151,6 +153,13 @@ void PlayerController::UpdateStats()
 	{
 		SceneManager::Instance()->changeScene("defeatScreen");
 	}
+
+	// get difference
+	const int difference = playerStats->currentHealth - lastHealth;
+	lastHealth = playerStats->currentHealth;
+
+	if (difference != 0)
+		hitmarkers->addHitmarker(std::to_string(difference), 1, playerPTR->getTransform()->getPosition(), {1, 1, 1}, 25);
 
 	while (playerStats->currentEXP >= 100)
 	{
