@@ -76,6 +76,7 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 		{
 			roundsFreeze -= 1;
 			TurnManager::Instance()->endTurn();
+			LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn()");
 		}
 	}
 	

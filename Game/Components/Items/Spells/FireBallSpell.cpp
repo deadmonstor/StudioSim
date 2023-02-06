@@ -65,6 +65,7 @@ void FireBallSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 	lerp = spell->addComponent<LerpPosition>(targetPos, 3);
 	lerp->onLerpComplete = [spell]
 	{
+		LOG_INFO("FireBallSpell -> LerpPosition -> TurnManager::Instance()->endTurn()");
 		TurnManager::Instance()->endTurn();
 		SceneManager::Instance()->destroyGameObject(spell);
 	};

@@ -88,6 +88,7 @@ void EnemyCombatBehaviour::GenerateEffects()
 void EnemyCombatBehaviour::endTurn()
 {
 	TurnManager::Instance()->endTurn();
+	LOG_INFO("EnemyCombatBehaviour::endTurn() - Enemy turn ended");
 }
 
 void EnemyCombatBehaviour::flashPlayer(GameObject* object, const glm::vec3 targetColor)
@@ -95,5 +96,6 @@ void EnemyCombatBehaviour::flashPlayer(GameObject* object, const glm::vec3 targe
 	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [this]
 	{
 		endTurn();
+		LOG_INFO("EnemyCombatBehaviour::flashPlayer() - Flash ended");
 	});
 }

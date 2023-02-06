@@ -67,6 +67,7 @@ void PlayerAttackBehaviour::Act()
 	{
 		/*PlayerController::Instance()->ReduceSpellCooldown();*/
 		TurnManager::Instance()->endTurn();
+		LOG_INFO("Player Attack Behaviour -> Act -> TurnManager::Instance()->endTurn()");
 	}
 	canAttack = false;
 }
@@ -138,6 +139,7 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 				[this, gameObject, pos]
 				{
 					TurnManager::Instance()->endTurn();
+					LOG_INFO("PlayerAttackBehaviour::createSlashGameObject() - TurnManager::Instance()->endTurn()");
 
 					auto* health = gameObject->getComponent<Health>();
 					// TODO: Change this
