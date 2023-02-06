@@ -27,8 +27,11 @@ void MoveTowardsAction::Act()
 	if (parentObject != nullptr)
 	{
 		currentPos = parentObject->getTransform()->getPosition();
-		const std::deque<TileHolder*> path = PathfindingMachine::Instance()->FindPath(currentPos, target);
-		if (!path.empty())
+		
+		PathfindingData data = PathfindingData();
+		PathfindingMachine::Instance()->FindPath(data, currentPos, target);
+
+		if (const std::deque<TileHolder*> path = data.tiles; !path.empty())
 		{
 			shouldLerp = true;
 			

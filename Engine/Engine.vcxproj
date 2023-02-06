@@ -15,20 +15,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\Components\AI\Behaviour.h" />
     <ClInclude Include="Core\AudioEngine.h" />
     <ClInclude Include="Core\Component.h" />
+    <ClInclude Include="Core\Components\AI\Behaviour.h" />
+    <ClInclude Include="Core\Components\AI\PlannedBehaviour.h" />
+    <ClInclude Include="Core\Components\AI\StateMachine.h" />
     <ClInclude Include="Core\Components\AnimatedSpriteRenderer.h" />
     <ClInclude Include="Core\Components\Camera.h" />
+    <ClInclude Include="Core\Components\Health.h" />
     <ClInclude Include="Core\Components\Light.h" />
     <ClInclude Include="Core\Components\SpriteComponent.h" />
     <ClInclude Include="Core\Components\TextRenderer.h" />
     <ClInclude Include="Core\Components\Transform.h" />
-    <ClInclude Include="Core\Components\Health.h" />
     <ClInclude Include="Core\Components\UI\Panel.h" />
     <ClInclude Include="Core\GameObject.h" />
     <ClInclude Include="Core\Grid\GridSystem.h" />
+    <ClInclude Include="Core\Grid\PathfindingMachine.h" />
     <ClInclude Include="Core\Grid\Tiles\Tile.h" />
+    <ClInclude Include="Core\Input.h" />
     <ClInclude Include="Core\PhysicsSystem.h" />
     <ClInclude Include="Core\Pivot.h" />
     <ClInclude Include="Core\Renderer\Lighting.h" />
@@ -39,12 +43,17 @@
     <ClInclude Include="Core\Renderer\Texture.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
-    <ClInclude Include="Core\Input.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Library\Aixlog.hpp" />
     <ClInclude Include="Library\glfw3.h" />
     <ClInclude Include="Library\glfw3native.h" />
     <ClInclude Include="Library\glm\common.hpp" />
+    <ClInclude Include="Library\glm\detail\_features.hpp" />
+    <ClInclude Include="Library\glm\detail\_fixes.hpp" />
+    <ClInclude Include="Library\glm\detail\_noise.hpp" />
+    <ClInclude Include="Library\glm\detail\_swizzle.hpp" />
+    <ClInclude Include="Library\glm\detail\_swizzle_func.hpp" />
+    <ClInclude Include="Library\glm\detail\_vectorize.hpp" />
     <ClInclude Include="Library\glm\detail\compute_common.hpp" />
     <ClInclude Include="Library\glm\detail\compute_vector_relational.hpp" />
     <ClInclude Include="Library\glm\detail\func_common.inl" />
@@ -99,14 +108,9 @@
     <ClInclude Include="Library\glm\detail\type_vec4.hpp" />
     <ClInclude Include="Library\glm\detail\type_vec4.inl" />
     <ClInclude Include="Library\glm\detail\type_vec4_simd.inl" />
-    <ClInclude Include="Library\glm\detail\_features.hpp" />
-    <ClInclude Include="Library\glm\detail\_fixes.hpp" />
-    <ClInclude Include="Library\glm\detail\_noise.hpp" />
-    <ClInclude Include="Library\glm\detail\_swizzle.hpp" />
-    <ClInclude Include="Library\glm\detail\_swizzle_func.hpp" />
-    <ClInclude Include="Library\glm\detail\_vectorize.hpp" />
     <ClInclude Include="Library\glm\exponential.hpp" />
     <ClInclude Include="Library\glm\ext.hpp" />
+    <ClInclude Include="Library\glm\ext\_matrix_vectorize.hpp" />
     <ClInclude Include="Library\glm\ext\matrix_clip_space.hpp" />
     <ClInclude Include="Library\glm\ext\matrix_clip_space.inl" />
     <ClInclude Include="Library\glm\ext\matrix_common.hpp" />
@@ -212,9 +216,9 @@
     <ClInclude Include="Library\glm\ext\scalar_common.inl" />
     <ClInclude Include="Library\glm\ext\scalar_constants.hpp" />
     <ClInclude Include="Library\glm\ext\scalar_constants.inl" />
+    <ClInclude Include="Library\glm\ext\scalar_int_sized.hpp" />
     <ClInclude Include="Library\glm\ext\scalar_integer.hpp" />
     <ClInclude Include="Library\glm\ext\scalar_integer.inl" />
-    <ClInclude Include="Library\glm\ext\scalar_int_sized.hpp" />
     <ClInclude Include="Library\glm\ext\scalar_packing.hpp" />
     <ClInclude Include="Library\glm\ext\scalar_packing.inl" />
     <ClInclude Include="Library\glm\ext\scalar_reciprocal.hpp" />
@@ -276,7 +280,6 @@
     <ClInclude Include="Library\glm\ext\vector_uint4_sized.hpp" />
     <ClInclude Include="Library\glm\ext\vector_ulp.hpp" />
     <ClInclude Include="Library\glm\ext\vector_ulp.inl" />
-    <ClInclude Include="Library\glm\ext\_matrix_vectorize.hpp" />
     <ClInclude Include="Library\glm\fwd.hpp" />
     <ClInclude Include="Library\glm\geometric.hpp" />
     <ClInclude Include="Library\glm\glm.hpp" />
@@ -436,11 +439,11 @@
     <ClInclude Include="Library\glm\gtx\type_aligned.inl" />
     <ClInclude Include="Library\glm\gtx\type_trait.hpp" />
     <ClInclude Include="Library\glm\gtx\type_trait.inl" />
+    <ClInclude Include="Library\glm\gtx\vec_swizzle.hpp" />
     <ClInclude Include="Library\glm\gtx\vector_angle.hpp" />
     <ClInclude Include="Library\glm\gtx\vector_angle.inl" />
     <ClInclude Include="Library\glm\gtx\vector_query.hpp" />
     <ClInclude Include="Library\glm\gtx\vector_query.inl" />
-    <ClInclude Include="Library\glm\gtx\vec_swizzle.hpp" />
     <ClInclude Include="Library\glm\gtx\wrap.hpp" />
     <ClInclude Include="Library\glm\gtx\wrap.inl" />
     <ClInclude Include="Library\glm\integer.hpp" />
@@ -479,13 +482,10 @@
     <ClInclude Include="Library\imgui\imstb_rectpack.h" />
     <ClInclude Include="Library\imgui\imstb_textedit.h" />
     <ClInclude Include="Library\imgui\imstb_truetype.h" />
-    <ClInclude Include="Core\Components\AI\StateMachine.h" />
-    <ClInclude Include="Core\Components\AI\PlannedBehaviour.h" />
-    <ClInclude Include="Core\Grid\PathfindingMachine.h" />
     <ClInclude Include="UIManager.h" />
+    <ClInclude Include="Util\Events\EngineEvents.h" />
     <ClInclude Include="Util\Events\Events.h" />
     <ClInclude Include="Util\Events\FunctionHandler.h" />
-    <ClInclude Include="Util\Events\EngineEvents.h" />
     <ClInclude Include="Util\Events\RenderEvents.h" />
     <ClInclude Include="Util\ImGuiHandler.h" />
     <ClInclude Include="Util\Logger.h" />
@@ -493,9 +493,11 @@
     <ClInclude Include="Util\Time.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Components\AI\Behaviour.cpp" />
     <ClCompile Include="Core\AudioEngine.cpp" />
     <ClCompile Include="Core\Component.cpp" />
+    <ClCompile Include="Core\Components\AI\Behaviour.cpp" />
+    <ClCompile Include="Core\Components\AI\PlannedBehaviour.cpp" />
+    <ClCompile Include="Core\Components\AI\StateMachine.cpp" />
     <ClCompile Include="Core\Components\AnimatedSpriteRenderer.cpp" />
     <ClCompile Include="Core\Components\Camera.cpp" />
     <ClCompile Include="Core\Components\Health.cpp" />
@@ -506,6 +508,7 @@
     <ClCompile Include="Core\Components\UI\Panel.cpp" />
     <ClCompile Include="Core\GameObject.cpp" />
     <ClCompile Include="Core\Grid\GridSystem.cpp" />
+    <ClCompile Include="Core\Grid\PathfindingMachine.cpp" />
     <ClCompile Include="Core\Grid\Tiles\Tile.cpp" />
     <ClCompile Include="Core\PhysicsSystem.cpp" />
     <ClCompile Include="Core\Renderer\Lighting.cpp" />
@@ -515,7 +518,6 @@
     <ClCompile Include="Core\Renderer\Texture.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="glad.c" />
     <ClCompile Include="Library\glm\detail\glm.cpp" />
     <ClCompile Include="Library\imgui\imgui.cpp" />
     <ClCompile Include="Library\imgui\imgui_demo.cpp" />
@@ -524,12 +526,10 @@
     <ClCompile Include="Library\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Library\imgui\imgui_tables.cpp" />
     <ClCompile Include="Library\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="Core\Components\AI\StateMachine.cpp" />
-    <ClCompile Include="Core\Components\AI\PlannedBehaviour.cpp" />
-    <ClCompile Include="Core\Grid\PathfindingMachine.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="Util\ImGuiHandler.cpp" />
     <ClCompile Include="Util\Time.cpp" />
+    <ClCompile Include="glad.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\fmod.dll">

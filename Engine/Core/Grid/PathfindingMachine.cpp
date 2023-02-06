@@ -22,7 +22,7 @@ PathfindingData PathfindingMachine::FindPath(PathfindingData& dataOut, TileHolde
 
 	if (start == end)
 	{
-		return path;
+		return dataOut;
 	}
 
 	if (end->isWall || end->gameObjectSatOnTile != nullptr)
@@ -103,7 +103,8 @@ PathfindingData PathfindingMachine::FindPath(PathfindingData& dataOut, TileHolde
 		dataOut.costMap = costMap;
 		dataOut.cameFromMap = cameFromMap;
 	}
-	return path;
+	
+	return dataOut;
 }
 
 PathfindingData PathfindingMachine::FindPath(PathfindingData& dataOut, glm::vec2 startPos, glm::vec2 endPos)
@@ -111,7 +112,7 @@ PathfindingData PathfindingMachine::FindPath(PathfindingData& dataOut, glm::vec2
 	GridSystem* gridSystem = GridSystem::Instance();
 	TileHolder* tile1 = gridSystem->getTileHolder(0, gridSystem->getTilePosition(startPos));
 	TileHolder* tile2 = gridSystem->getTileHolder(0, gridSystem->getTilePosition(endPos));
-	return FindPath(tile1, tile2);
+	return FindPath(dataOut, tile1, tile2);
 }
 
 float PathfindingMachine::FindManhattanDistance(glm::vec2 startPos, glm::vec2 endPos)
