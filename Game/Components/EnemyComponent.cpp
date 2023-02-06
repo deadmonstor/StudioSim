@@ -67,7 +67,10 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 		if (event->objectToStart == getOwner())
 		{
 			getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
-			enemyFSM->Act();
+			if (enemyFSM != nullptr)
+				enemyFSM->Act();
+			else
+				LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
 		}
 	}
 	else

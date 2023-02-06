@@ -40,10 +40,7 @@ void EnemyIdleBehaviour::Act()
 
 	if (shouldEndTurn)
 	{
-		DelayTask::createTask(parentFSM->getOwner(), 5.0f, [this]()
-		{
-			TurnManager::Instance()->endTurn();
-			LOG_INFO("Enemy Idle Behaviour -> DelayTask::createTask -> TurnManager::Instance()->endTurn()");
-		});
+		TurnManager::Instance()->endTurn();
+		LOG_INFO("Enemy Idle Behaviour -> DelayTask::createTask -> TurnManager::Instance()->endTurn()");
 	}
 }
