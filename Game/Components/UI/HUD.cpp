@@ -19,7 +19,6 @@ void HUD::createHUD()
 
 	if (playerChangedID == -1)
 		playerChangedID = Griddy::Events::subscribe(this, &HUD::onPlayerChanged);
-
 	
 	ResourceManager::LoadTexture("Sprites\\Armour\\BasicArmourChest.png", "BasicArmourChestInventoryUI");
 	inventoryButton =
@@ -245,5 +244,4 @@ void HUD::onPlayerChanged(const OnPlayerControllerFSMUpdate* event)
 	{
 		weaponButton->setTexture(ResourceManager::GetTexture("Fireball1"));
 	}
-
 }

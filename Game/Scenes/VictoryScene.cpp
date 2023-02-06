@@ -10,6 +10,7 @@
 void VictoryScene::init()
 {
     AudioEngine::Instance()->stopChannelGroup("Master Channel");
+    AudioEngine::Instance()->playSound("Sounds\\Victory.wav", false, 0.2f, 0, 0, AudioType::SoundEffect);
     
     engineRenderID = Griddy::Events::subscribe(this, &VictoryScene::onEngineRender);
     keyDownID = Griddy::Events::subscribe(this, &VictoryScene::onKeyDown);

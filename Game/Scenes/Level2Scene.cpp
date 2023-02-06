@@ -17,9 +17,12 @@
 #include "../Tiles/SpikeTile.h"
 #include "../Tiles/LightTile.h"
 #include "../LootTable.h"
+#include "Core/AudioEngine.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
 {
+	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
+	
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
 		
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy", tileWorldSpace);

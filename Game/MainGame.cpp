@@ -84,13 +84,11 @@ int main(int, char**)
 		},
 		{"level2", []
 			{
-				AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 				return new Level2Scene();
 			}
 		},
 		{"victoryScreen", []
 			{
-				AudioEngine::Instance()->playSound("Sounds\\Victory.wav", false, 0.2f, 0, 0, AudioType::SoundEffect);
 				return new VictoryScene();
 			}
 		},
