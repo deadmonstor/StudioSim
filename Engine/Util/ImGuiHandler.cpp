@@ -131,7 +131,6 @@ void ImGuiHandler::ImGUILayers() const
 }
 
 static bool showDebugLog;
-static bool showDebugImage;
 static bool showDebugGameObjects;
 static bool showDebugLayers;
 static bool showDebugInventory;
@@ -140,7 +139,6 @@ static bool showDebugLighting;
 static std::map<std::string, bool*> showDebugComponents
 {
 	{"Debug Log", &showDebugLog},
-	{"Debug Image", &showDebugImage},
 	{"Debug Game Objects", &showDebugGameObjects},
 	{"Debug Layers", &showDebugLayers},
 	{"Debug Inventory", &showDebugInventory},
@@ -249,16 +247,6 @@ void ImGuiHandler::update()
 				ImGui::TextUnformatted(sLog.c_str());
 				ImGui::EndChild();
 			}
-		}
-		ImGui::End();
-	}
-	
-	if (showDebugImage) 
-	{
-		if (ImGui::Begin("Image Window", &showDebugImage))
-		{
-			const auto dice = ResourceManager::GetTexture("engine");
-			ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(dice.ID)), ImVec2(static_cast<float>(dice.Width) * 5, static_cast<float>(dice.Height) * 5));
 		}
 		ImGui::End();
 	}
