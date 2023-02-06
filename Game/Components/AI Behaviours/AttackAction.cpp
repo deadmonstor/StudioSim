@@ -3,6 +3,8 @@
 #include "..\EnemyComponent.h"
 #include "../TurnManager.h"
 #include "../Flash.h"
+#include "../Core/Components/AnimatedSpriteRenderer.h"
+#include "../DestroyAfterAnimation.h"
 
 AttackAction::AttackAction(GameObject* parentObjectArg)
 	: parentObject(parentObjectArg)
@@ -62,20 +64,26 @@ void AttackAction::createSlashGameObject(glm::vec2 pos)
 {
 	const TileHolder* tile = GridSystem::Instance()->getTileHolder(0, pos);
 
-	if (tile != nullptr && tile->gameObjectSatOnTile->getName() == "Player")
+	if (tile != nullptr && tile->gameObjectSatOnTile == PlayerController::Instance()->playerPTR)
 	{
-		GameObject* player = tile->gameObjectSatOnTile;
 		PlayerStats* targetStats = PlayerController::Instance()->playerStats;
-		EnemyStats myStats = parentObject->getComponent<EnemyComponent>()->getStats();
+		const EnemyStats myStats = parentObject->getComponent<EnemyComponent>()->getStats();
+		
 		int attackDamage = myStats.attack - targetStats->defence;
 		if (attackDamage < 0)
 			attackDamage = 0;
 
 		//number betewen 0 and 1
-		float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+		const float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		if (r < myStats.critChance)
 			attackDamage *= 2; //double damage!
 
+		PlayerController::Instance()->hitmarkers->addHitmarker(
+			"-" + std::to_string(attackDamage),
+			1.0,
+			 PlayerController::Instance()->playerPTR->getTransform()->getPosition(),
+			{1, 1, 1});
+		
 		targetStats->currentHealth -= attackDamage;
 		PlayerController::Instance()->UpdateStats();
 	}
@@ -91,7 +99,7 @@ void AttackAction::createSlashGameObject(glm::vec2 pos)
 void AttackAction::flashPlayer(GameObject* object, const glm::vec3 targetColor)
 {
 	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [this]
-		{
-			TurnManager::Instance()->endTurn();
-		});
+	{
+		TurnManager::Instance()->endTurn();
+	});
 }

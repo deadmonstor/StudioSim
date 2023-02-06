@@ -6,7 +6,7 @@
 #include "Core/Components/Transform.h"
 #include "Core/Grid/PathfindingMachine.h"
 #include "../TurnManager.h"
-#include "../Core/Components/AnimatedSpriteRenderer.h"
+#include "../../Components/Flash.h"
 #include "AttackAction.h"
 
 EnemyCombatBehaviour::EnemyCombatBehaviour()
@@ -94,13 +94,4 @@ void EnemyCombatBehaviour::endTurn()
 {
 	TurnManager::Instance()->endTurn();
 	LOG_INFO("EnemyCombatBehaviour::endTurn() - Enemy turn ended");
-}
-
-void EnemyCombatBehaviour::flashPlayer(GameObject* object, const glm::vec3 targetColor)
-{
-	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [this]
-	{
-		endTurn();
-		LOG_INFO("EnemyCombatBehaviour::flashPlayer() - Flash ended");
-	});
 }
