@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -64,4 +66,6 @@ public:
 	void unequip_item(const std::string& item_name);
 
 	Item* getFirstItemWithEquipSlot(EquipSlot slot);
+	
+	inline static std::map<std::string, std::function<Item*()>> getItemByName = {};
 };

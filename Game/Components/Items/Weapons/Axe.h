@@ -10,6 +10,5 @@ public:
     void createSlashGameObject(glm::fvec2 pos) override;
     std::list<glm::fvec2> attackPositions;
 
-    WeaponStats* axeStats{};
 };
 

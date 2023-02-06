@@ -28,6 +28,14 @@ public:
 		Griddy::Events::subscribe(this, &Input::DebugEventChanged);
 	}
 	
+	void charKeyCallback(GLFWwindow* window, unsigned int key) const
+	{
+		if (std::isalpha(key))
+		{
+			Griddy::Events::invoke<OnCharacterDown>(key);
+		}
+	}
+
 	void keyCallback(GLFWwindow* window, const int key, const int scancode, const int action, int mods) const
 	{
 		if (action == GLFW_PRESS)
@@ -43,7 +51,7 @@ public:
 		else if (action == GLFW_RELEASE)
 		{
 			Griddy::Events::invoke<OnKeyUp>(key, scancode);
-			
+
 			if (s_DebugKeyEvents)
 			{
 				const std::string strs = getKeyName(key, scancode);

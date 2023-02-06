@@ -18,6 +18,8 @@ EnemyIdleBehaviour::EnemyIdleBehaviour(StateMachine* parentFSMArg)
 
 void EnemyIdleBehaviour::Act()
 {
+	bool shouldEndTurn = true;
+	
 	if (parentFSM != nullptr)
 	{
 		const glm::vec2 myPos = parentFSM->getOwner()->getTransform()->getPosition();
@@ -27,15 +29,21 @@ void EnemyIdleBehaviour::Act()
 		{
 			if (PathfindingMachine::Instance()->LineOfSight(myPos, playerPos))
 			{
+				shouldEndTurn = false;
 				//Enemy can sense player here. engage combat.
 				Griddy::Events::invoke<StateTransition>(parentFSM, new EnemyCombatBehaviour(parentFSM));
 				TurnManager::Instance()->endTurn();
+				LOG_INFO("Enemy Idle Behaviour -> Act -> TurnManager::Instance()->endTurn()");
 			}
 		}
 	}
 
-	DelayTask::createTask(parentFSM->getOwner(), 2, [this]()
+	if (shouldEndTurn)
 	{
-		TurnManager::Instance()->endTurn();
-	});
+		DelayTask::createTask(parentFSM->getOwner(), 2, [this]()
+		{
+			TurnManager::Instance()->endTurn();
+			LOG_INFO("Enemy Idle Behaviour -> DelayTask::createTask -> TurnManager::Instance()->endTurn()");
+		});
+	}
 }

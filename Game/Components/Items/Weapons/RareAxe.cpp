@@ -2,8 +2,7 @@
 
 RareAxe::RareAxe()
 {
-	rareAxeStats = new WeaponStats();
-	rareAxeStats->costInShop = 35;
-	rareAxeStats->attack = 25;
+	stats->costInShop = 35;
+	stats->attack = 25;
 }
 

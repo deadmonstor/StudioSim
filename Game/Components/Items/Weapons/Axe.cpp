@@ -3,10 +3,10 @@
 #include <Core/Components/Health.h>
 #include "../../DestroyAfterAnimation.h"
 #include "Core/Components/Transform.h"
+#include "../../EnemyComponent.h"
 
 Axe::Axe()
 {
-	axeStats = new WeaponStats();
 }
 
 void Axe::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
@@ -34,14 +34,24 @@ void Axe::createSlashGameObject(glm::fvec2 pos)
 
 	if (gameObject != nullptr)
 	{
-		if (gameObject->hasComponent(typeid(Health)))
+		if (gameObject->hasComponent(typeid(EnemyComponent)))
 		{
+			auto* enemyInfo = gameObject->getComponent<EnemyComponent>();
+			int atkDamage = stats->attack - enemyInfo->getStats().defence;
+			if (atkDamage < 0)
+			{
+				atkDamage = 0;
+			}
 
+			//number between 0 and 1
+			float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+			if (r < stats->crit)
+			{
+				atkDamage *= 2; //double damage
+			}
 
-			//auto* enemyInfo = gameObject->getComponent<EnemyComponent>();
-			//health->setHealth(health->getHealth() - 50);
-			//int newHealth = enemyInfo->getStats().currentHealth - atk;
-			//gameObject->getComponent<Health>()->setHealth(newHealth);
+			int newHealth = enemyInfo->getStats().currentHealth - atkDamage;
+			gameObject->getComponent<Health>()->setHealth(newHealth);
 
 			// TODO: This is probably shitty 
 			if (gameObject->isBeingDeleted())

@@ -18,7 +18,6 @@ void Dagger::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 		createSlashGameObject(playerPos + attackDir);
 
 	}
-	attackPositions.clear();
 }
 
 void Dagger::createSlashGameObject(glm::fvec2 pos)
@@ -30,11 +29,19 @@ void Dagger::createSlashGameObject(glm::fvec2 pos)
 	{
 		if (gameObject->hasComponent(typeid(EnemyComponent)))
 		{
-			
-
 			auto* enemyInfo = gameObject->getComponent<EnemyComponent>();
-			int atkDamage = atk - enemyInfo->getStats().defence;
-			int random = (rand() % 100) + 1;
+			int atkDamage = stats->attack - enemyInfo->getStats().defence;
+			if (atkDamage < 0)
+			{
+				atkDamage = 0;
+			}
+
+			//number between 0 and 1
+			float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+			if (r < stats->crit)
+			{
+				atkDamage *= 2; //double damage
+			}
 
 			int newHealth = enemyInfo->getStats().currentHealth - atkDamage;
 			gameObject->getComponent<Health>()->setHealth(newHealth);

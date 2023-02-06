@@ -11,6 +11,7 @@
 #include "../Components/Player/PlayerController.h"
 #include "../LootTable.h"
 #include "Core/Components/Transform.h"
+#include "PickUp.h"
 
 
 EnemyComponent::EnemyComponent()
@@ -61,15 +62,32 @@ void EnemyComponent::destroy()
 
 void EnemyComponent::onTurnChanged(const onStartTurn* event)
 {
-	if (event->objectToStart == getOwner())
+	if (roundsFreeze == 0)
 	{
-		enemyFSM->Act();
+		if (event->objectToStart == getOwner())
+		{
+			getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
+			enemyFSM->Act();
+		}
 	}
+	else
+	{
+		if (TurnManager::Instance()->isCurrentTurnObject(getOwner()))
+		{
+			roundsFreeze -= 1;
+			TurnManager::Instance()->endTurn();
+			LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn()");
+		}
+	}
+	
 }
 
 
 void EnemyComponent::DropLoot()
 {
+	if (SceneManager::Instance()->isLoadingScene() || SceneManager::Instance()->isShuttingDown())
+		return;
+	
 	std::string itemToSpawn = EnemyDropLootTable::Instance()->EnemyDropRollLoot();
 	Texture m_ItemTexture;
 
@@ -79,19 +97,23 @@ void EnemyComponent::DropLoot()
 
 	GameObject* Item = SceneManager::Instance()->createGameObject(itemToSpawn, tileWorldSpace);
 	Item->getTransform()->setSize(glm::vec2(32, 32));
+	int Amount = 1;
+	
 	if (itemToSpawn.contains("money"))
 	{
 		std::string delim = ",";
 		std::string temp = itemToSpawn;
+		std::string nameTemp;
 		size_t pos = 0;
-		int coinAmount;
-		while ((pos = itemToSpawn.find(delim)) != std::string::npos)
+	
+		while ((pos = temp.find(delim)) != std::string::npos)
 		{	
+			itemToSpawn = temp.substr(0, pos);
 			temp.erase(0, pos + delim.length());
-			coinAmount = std::stoi(temp);
+			Amount = std::stoi(temp);
 			break;
 		}
-		switch (coinAmount)
+		switch (Amount)
 		{
 		case 1:
 			m_ItemTexture = ResourceManager::LoadTexture("Sprites/Coins/coin0.png", itemToSpawn);
@@ -116,56 +138,26 @@ void EnemyComponent::DropLoot()
 		
 
 	}
+	else if (itemToSpawn.contains("health"))
+	{
+		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Potion0.png", itemToSpawn);
+	}
+	else if (itemToSpawn.contains("mana"))
+	{
+		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Potion1.png", itemToSpawn);
+	}
+	else if (itemToSpawn.contains("exp"))
+	{
+		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Potion2.png", itemToSpawn);
+	}
 
-	//m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Axe.png", itemToSpawn);
+
 	Item->addComponent<SpriteComponent>();
 	Item->getComponent<SpriteComponent>()->setPivot(Pivot::Center);
 	Item->getComponent<SpriteComponent>()->setTexture(m_ItemTexture);
 	Item->getComponent<SpriteComponent>()->setLit(false);
 	Item->getComponent<SpriteComponent>()->setSortingLayer(Renderer::getSortingLayer("Background Grid"));
+	Item->addComponent<PickUp>();
+	Item->getComponent<PickUp>()->SetAmount(Amount);
 }
 
-
-/*
-	Texture m_ItemTexture;
-	curTileHolder->tile->setTexture(ResourceManager::GetTexture("chest_open_2"));
-	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(curTileHolder->position);
-
-
-	auto* Item = SceneManager::Instance()->createGameObject(itemToSpawn, tileWorldSpace);
-	Item->getTransform()->setSize(glm::vec2(32, 32));
-	if (itemToSpawn.contains("Axe"))
-	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Axe.png", itemToSpawn);
-	}
-	else if (itemToSpawn.contains("Sword"))
-	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Sword.png", itemToSpawn);
-	}
-	else if (itemToSpawn.contains("Dagger"))
-	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Dagger.png", itemToSpawn);
-	}
-	else if (itemToSpawn.contains("Hammer"))
-	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Hammer.png", itemToSpawn);
-	}
-	else if (itemToSpawn.contains("common"))
-	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Armour/BasicArmourChest.png", itemToSpawn);
-	}
-	else if (itemToSpawn.contains("rare"))
-	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Armour/MidArmourChest.png", itemToSpawn);
-	}
-	else if (itemToSpawn.contains("legendary"))
-	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Armour/TopArmourChest.png", itemToSpawn);
-	}
-
-	Item->addComponent<SpriteComponent>();
-	Item->getComponent<SpriteComponent>()->setPivot(Pivot::Center);
-	Item->getComponent<SpriteComponent>()->setTexture(m_ItemTexture);
-	Item->getComponent<SpriteComponent>()->setLit(false);
-	Item->getComponent<SpriteComponent>()->setSortingLayer(Renderer::getSortingLayer("Background Grid"));
-*/

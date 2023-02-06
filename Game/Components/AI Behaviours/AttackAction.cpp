@@ -1,7 +1,6 @@
 #include "AttackAction.h"
 #include "Core\Grid\GridSystem.h"
 #include "..\EnemyComponent.h"
-#include "../DestroyAfterAnimation.h"
 #include "../TurnManager.h"
 #include "../Flash.h"
 

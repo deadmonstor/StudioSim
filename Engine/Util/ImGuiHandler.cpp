@@ -2,6 +2,8 @@
 
 #include "Engine.h"
 #include "../../Game/Components/TurnManager.h"
+#include "../../Game/Components/Player/PlayerController.h"
+#include "../../Game/System/Inventory.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/Lighting.h"
@@ -129,7 +131,6 @@ void ImGuiHandler::ImGUILayers() const
 }
 
 static bool showDebugLog;
-static bool showDebugImage;
 static bool showDebugGameObjects;
 static bool showDebugLayers;
 static bool showDebugInventory;
@@ -138,11 +139,10 @@ static bool showDebugLighting;
 static std::map<std::string, bool*> showDebugComponents
 {
 	{"Debug Log", &showDebugLog},
-	{"Debug Image", &showDebugImage},
 	{"Debug Game Objects", &showDebugGameObjects},
 	{"Debug Layers", &showDebugLayers},
 	{"Debug Inventory", &showDebugInventory},
-	{"Debug Lighting", &showDebugLighting}
+	{"Debug Lighting", &showDebugLighting},
 };
 
 static std::map<std::string, DebugEvent> debugSettings
@@ -250,16 +250,6 @@ void ImGuiHandler::update()
 		}
 		ImGui::End();
 	}
-	
-	if (showDebugImage) 
-	{
-		if (ImGui::Begin("Image Window", &showDebugImage))
-		{
-			const auto dice = ResourceManager::GetTexture("engine");
-			ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(dice.ID)), ImVec2(static_cast<float>(dice.Width) * 5, static_cast<float>(dice.Height) * 5));
-		}
-		ImGui::End();
-	}
 
 	if (showDebugGameObjects)
 	{
@@ -296,7 +286,12 @@ void ImGuiHandler::update()
 	{
 		if (ImGui::Begin("Inventory Window", &showDebugInventory))
 		{
-			
+			if (ImGui::TreeNode("Player Inventory"))
+			{
+				std::string* str = new std::string();
+				PlayerController::Instance()->myInventory->getDebugInfo(str);
+				ImGui::TreePop();
+			}
 		}
 
 		ImGui::End();
