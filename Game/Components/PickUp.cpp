@@ -1,6 +1,7 @@
 #include "PickUp.h"
 #include "Core/PhysicsSystem.h"
 #include "Player/PlayerController.h"
+#include "../System/Inventory.h"
 #include <iostream>
 
 
@@ -16,7 +17,6 @@ void PickUp::SetAmount(int ValueIn)
 	
 }
 
-
 std::string PickUp::GetItemName()
 {
 	return ItemName;
@@ -26,8 +26,6 @@ void PickUp::SetItemName(std::string inputName)
 {
 	ItemName = inputName;
 }
-
-
 
 PickUp::PickUp()
 {
@@ -52,18 +50,19 @@ void PickUp::update()
 
 void PickUp::CheckCollisions()
 {
-	
 	if (PhysicsSystem::Instance()->checkBoxCollision(*getOwner()->getTransform(), *m_playerPTR->getTransform())) //PlayerController::Instance()->playerPTR->
 	{
-		std::cout << "CollidedWith\n";
 		if (getOwner()->getName().contains("money"))
 		{
 			PlayerController::Instance()->AddCoins(Amount);
 			SceneManager::Instance()->destroyGameObject(getOwner());
 		}
-
-
-		return;
+		else if (Inventory::getItemByName.contains(getOwner()->getName()))
+		{
+			if (PlayerController::Instance()->myInventory->add_item(Inventory::getItemByName[getOwner()->getName()]()))
+			{
+				SceneManager::Instance()->destroyGameObject(getOwner());
+			}
+		}
 	}
-	//std::cout << "Stopped Colliding\n";
 }

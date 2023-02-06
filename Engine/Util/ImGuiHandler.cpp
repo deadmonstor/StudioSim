@@ -2,6 +2,8 @@
 
 #include "Engine.h"
 #include "../../Game/Components/TurnManager.h"
+#include "../../Game/Components/Player/PlayerController.h"
+#include "../../Game/System/Inventory.h"
 #include "Core/SceneManager.h"
 #include "Core/Grid/GridSystem.h"
 #include "Core/Renderer/Lighting.h"
@@ -142,7 +144,7 @@ static std::map<std::string, bool*> showDebugComponents
 	{"Debug Game Objects", &showDebugGameObjects},
 	{"Debug Layers", &showDebugLayers},
 	{"Debug Inventory", &showDebugInventory},
-	{"Debug Lighting", &showDebugLighting}
+	{"Debug Lighting", &showDebugLighting},
 };
 
 static std::map<std::string, DebugEvent> debugSettings
@@ -296,7 +298,12 @@ void ImGuiHandler::update()
 	{
 		if (ImGui::Begin("Inventory Window", &showDebugInventory))
 		{
-			
+			if (ImGui::TreeNode("Player Inventory"))
+			{
+				std::string* str = new std::string();
+				PlayerController::Instance()->myInventory->getDebugInfo(str);
+				ImGui::TreePop();
+			}
 		}
 
 		ImGui::End();

@@ -1,6 +1,19 @@
 ﻿#include "MainGame.h"
 #include <Util/Logger.h>
 #include "TestGameplaySystem.h"
+#include "Components/Items/Armour/CommonArmour.h"
+#include "Components/Items/Armour/LegendaryArmour.h"
+#include "Components/Items/Armour/RareArmour.h"
+#include "Components/Items/Consumables/ExpPotion.h"
+#include "Components/Items/Consumables/HealthPotion.h"
+#include "Components/Items/Consumables/ManaPotion.h"
+#include "Components/Items/Spells/FireBallSpell.h"
+#include "Components/Items/Spells/IceSpell.h"
+#include "Components/Items/Weapons/CommonAxe.h"
+#include "Components/Items/Weapons/CommonDagger.h"
+#include "Components/Items/Weapons/CommonSword.h"
+#include "Components/Items/Weapons/LegendaryHammer.h"
+#include "Components/Items/Weapons/RareAxe.h"
 #include "Core/Renderer/Renderer.h"
 #include "Scenes/DefeatScene.h"
 #include "Scenes/Level1Scene.h"
@@ -84,6 +97,31 @@ int main(int, char**)
 				return new LeaderboardScene();
 			}
 		},
+	};
+
+	// TODO: Is there a better way to do this? I don't like having to do this here
+	Inventory::getItemByName =
+	{
+		// WEAPONS
+		{"commonAxe", []() { return new CommonAxe(); }},
+		{"commonDagger", []() { return new CommonDagger(); }},
+		{"commonSword", []() { return new CommonSword(); }},
+		{"legendaryHammer", []() { return new LegendaryHammer(); }},
+		{"rareAxe", []() { return new RareAxe(); }},
+
+		// SPELLS
+		{"fireBallSpell", []() { return new FireBallSpell(); }},
+		{"iceSpell", []() { return new IceSpell(); }},
+
+		// CONSUMABLES
+		{"healthPotion", []() { return new HealthPotion(); }},
+		{"manaPotion", []() { return new ManaPotion(); }},
+		{"expPotion", []() { return new ExpPotion(); }},
+		
+	    // Armour
+		{"commonArmour", []() { return new CommonArmour(); }},
+		{"rareArmour", []() { return new RareArmour(); }},
+		{"legendaryArmour", []() { return new LegendaryArmour(); }},
 	};
 	
 	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestMouseDown);

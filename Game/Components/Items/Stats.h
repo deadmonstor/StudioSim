@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 
+class Inventory;
+
 struct PlayerStats : public character
 {
 	int currentMana;
@@ -13,6 +15,8 @@ struct PlayerStats : public character
 	int maxEXP;
 	int spellPower;
 	int level;
+
+	Inventory* myInventory;
 };
 
 struct EnemyStats : public character

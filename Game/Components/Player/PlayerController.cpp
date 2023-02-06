@@ -41,21 +41,26 @@ void PlayerController::createPlayer()
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
 
-	playerStats = new PlayerStats();
-	playerStats->maxHealth = 10;
-	playerStats->currentHealth = 10;
-	playerStats->currentEXP = 0;
-	playerStats->maxEXP = 100;
-	playerStats->currentMana = 10;
-	playerStats->maxMana = 10;
-	playerStats->attack = 1;
-	playerStats->spellPower = 1;
-	playerStats->defence = 1;
-	playerStats->critChance = 0.0f;
-	playerStats->coinsHeld = 0;
-	playerStats->level = 1;
+	if (playerStats == nullptr)
+	{
+		playerStats = new PlayerStats();
+		playerStats->maxHealth = 10;
+		playerStats->currentHealth = 10;
+		playerStats->currentEXP = 0;
+		playerStats->maxEXP = 100;
+		playerStats->currentMana = 10;
+		playerStats->maxMana = 10;
+		playerStats->attack = 1;
+		playerStats->spellPower = 1;
+		playerStats->defence = 1;
+		playerStats->critChance = 0.0f;
+		playerStats->coinsHeld = 0;
+		playerStats->level = 1;
+
+		playerStats->myInventory = new Inventory(20);
+	}
 	
-	myInventory = playerPTR->addComponent<Inventory>(20);
+	myInventory = playerStats->myInventory;
 	Light* light = playerPTR->addComponent<Light>();
 	light->setFalloff({0.75f, 0.75f, 7.5f});
 	light->setColor({1.0f, 1.0f, 1.0f, 1.0f});
@@ -127,10 +132,11 @@ void PlayerController::UpdateStats()
 	{
 		SceneManager::Instance()->changeScene("defeatScreen");
 	}
-	else if (playerStats->currentEXP >= 100)
+
+	while (playerStats->currentEXP >= 100)
 	{
 		playerStats->level++;
-		playerStats->currentEXP = 0;
+		playerStats->currentEXP = playerStats->currentEXP - 100;
 		playerStats->maxHealth += 5;
 		playerStats->maxMana += 5;
 		playerStats->currentHealth = playerStats->maxHealth;
