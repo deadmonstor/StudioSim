@@ -124,8 +124,6 @@ int main(int, char**)
 		{"legendaryArmour", []() { return new LegendaryArmour(); }},
 	};
 	
-	Griddy::Events::subscribe(TestGameplaySystem::Instance(), &TestGameplaySystem::TestMouseDown);
-	
 	MainGame::Instance()->run();
 	return 0;
 }
