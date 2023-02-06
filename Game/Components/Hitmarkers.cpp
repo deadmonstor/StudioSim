@@ -13,7 +13,7 @@ void Hitmarkers::onEngineRender(OnEngineRender* event)
 		const glm::vec2 size = TextRenderer::Instance()->renderTextSize(text, 0.4f);
 
 		TextRenderer::Instance()->renderText(
-			text,
+			" " + text,
 			screenSpace.x - size.x / 2,
 			screenSpace.y - size.y,
 			0.4f,

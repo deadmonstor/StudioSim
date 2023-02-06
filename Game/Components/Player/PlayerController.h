@@ -1,4 +1,5 @@
 #pragma once
+#include "../Hitmarkers.h"
 #include "../Items/Stats.h"
 #include "Core/Components/Camera.h"
 #include "Util/SingletonTemplate.h"
@@ -33,4 +34,5 @@ public:
 	Camera* cameraComponent{};
 	Inventory* myInventory{};
 	PlayerStats* playerStats{};
+	Hitmarkers* hitmarkers {};
 };

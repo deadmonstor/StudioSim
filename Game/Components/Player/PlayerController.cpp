@@ -40,6 +40,7 @@ void PlayerController::createPlayer()
 
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
+	hitmarkers = playerPTR->addComponent<Hitmarkers>();
 
 	if (playerStats == nullptr || SceneManager::Instance()->getScene()->name == "level1")
 	{
