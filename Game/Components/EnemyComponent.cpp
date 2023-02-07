@@ -54,9 +54,12 @@ void EnemyComponent::destroy()
 	if (onStartTurnID != -1)
 		Griddy::Events::unsubscribe(this, &EnemyComponent::onTurnChanged, onStartTurnID);
 	
-	int expGained = 5;
-	PlayerController::Instance()->playerStats->currentEXP += expGained;
-	PlayerController::Instance()->UpdateStats();
+	if (getOwner()->getComponent<Health>()->getHealth() <= 0)
+	{
+		int expGained = 5;
+		PlayerController::Instance()->playerStats->currentEXP += expGained;
+		PlayerController::Instance()->UpdateStats();
+	}
 
 
 	DropLoot();
