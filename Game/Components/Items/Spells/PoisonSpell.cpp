@@ -8,7 +8,7 @@
 PoisonSpell::PoisonSpell()
 {
 	spellStats->maxCooldown = 5;
-	spellStats->damagePerTurn = 5;
+	spellStats->damagePerTurn = 20;
 	spellStats->range = 4;
 	spellStats->manaCost = 10;
 	spellStats->price = 20;
@@ -17,7 +17,7 @@ PoisonSpell::PoisonSpell()
 
 void PoisonSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 {
-	AudioEngine::Instance()->playSound("Sounds\\PoisonSpell.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
+	AudioEngine::Instance()->playSound("Sounds\\Poison.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 	GameObject* spell = SceneManager::Instance()->createGameObject("PoisonSpell", GridSystem::Instance()->getWorldPosition(playerPos));
 	spell->getTransform()->setSize(glm::vec2(48, 48));
 	const std::vector textureListPosion = ResourceManager::GetTexturesContaining("Fireball");
@@ -58,28 +58,11 @@ void PoisonSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 			break;
 		}
 	}
-
-	lerp = spell->addComponent<LerpPosition>(targetPos, 3);
-	lerp->onLerpComplete = [spell]
-	{
-		LOG_INFO("FireBallSpell -> LerpPosition -> TurnManager::Instance()->endTurn()");
-		TurnManager::Instance()->endTurn();
-		SceneManager::Instance()->destroyGameObject(spell);
-	};
-
+	bool shouldHitmarker = false;
 	TileHolder* lastTile = GridSystem::Instance()->getTileHolder(0, GridSystem::Instance()->getTilePosition(targetPos));
 	if (lastTile != nullptr && lastTile->gameObjectSatOnTile != nullptr && lastTile->gameObjectSatOnTile->hasComponent(typeid(EnemyComponent)))
 	{
-		GameObject* enemy = lastTile->gameObjectSatOnTile;
-		const glm::vec3 poisonColor = glm::vec3(0, 1, 1);
-		enemy->getComponent<EnemyComponent>()->roundsPoisoned = turnsPoisoned;
-		enemy->getComponent<AnimatedSpriteRenderer>()->setColor(poisonColor);
-		
-		PlayerController::Instance()->hitmarkers->addHitmarker(
-			"POISON",
-			1.0,
-			enemy->getTransform()->getPosition(),
-			poisonColor);
+		shouldHitmarker = true;
 
 		/*EnemyStats targetStats = lastTile->gameObjectSatOnTile->getComponent<EnemyComponent>()->getStats();
 		int spellDMG = spellStats->damagePerTurn - targetStats.defence;
@@ -97,4 +80,26 @@ void PoisonSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 		/*int newHealth = targetStats.currentHealth -= spellDMG;
 		lastTile->gameObjectSatOnTile->getComponent<Health>()->setHealth(newHealth);*/
 	}
+
+	lerp = spell->addComponent<LerpPosition>(targetPos, 3);
+	lerp->onLerpComplete = [lastTile, this, shouldHitmarker ,spell]
+	{
+		if (shouldHitmarker)
+		{
+			GameObject* enemy = lastTile->gameObjectSatOnTile;
+			const glm::vec3 poisonColor = glm::vec3(0, 1, 0);
+			enemy->getComponent<EnemyComponent>()->roundsPoisoned = turnsPoisoned;
+			enemy->getComponent<AnimatedSpriteRenderer>()->setColor(poisonColor);
+
+			PlayerController::Instance()->hitmarkers->addHitmarker(
+				"POISON",
+				1.0,
+				spell->getTransform()->getPosition(),
+				glm::vec3(0, 1, 1));
+		}
+
+		LOG_INFO("FireBallSpell -> LerpPosition -> TurnManager::Instance()->endTurn()");
+		TurnManager::Instance()->endTurn();
+		SceneManager::Instance()->destroyGameObject(spell);
+	};
 }

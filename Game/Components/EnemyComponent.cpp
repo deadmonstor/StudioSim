@@ -85,20 +85,21 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 		}
 		else
 		{
-			roundsPoisoned -= 1;
-			PoisonSpell* poison = new PoisonSpell();
-			int spellDMG = poison->spellStats->damagePerTurn - stats.defence;
-			
-			if (spellDMG < 0)
-			{
-				spellDMG = 0;
-			}
-
-			int newHealth = stats.currentHealth -= spellDMG;
-			getOwner()->getComponent<Health>()->setHealth(newHealth);
 
 			if (event->objectToStart == getOwner())
 			{
+				roundsPoisoned -= 1;
+				PoisonSpell* poison = new PoisonSpell();
+				int spellDMG = poison->spellStats->damagePerTurn;
+				float currentHealth = getOwner()->getComponent<Health>()->getHealth();
+				int newHealth = currentHealth -= spellDMG;
+				getOwner()->getComponent<Health>()->setHealth(newHealth);
+				if (getOwner()->isBeingDeleted())
+				{
+					GridSystem::Instance()->resetSatOnTile(0, GridSystem::Instance()->getTilePosition(getOwner()->getTransform()->getPosition()));
+					return;
+				}
+
 				LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn() -> " + std::to_string(roundsPoisoned));
 				if (enemyFSM != nullptr)
 					enemyFSM->Act();

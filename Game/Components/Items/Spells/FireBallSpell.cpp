@@ -13,9 +13,9 @@ FireBallSpell::FireBallSpell()
 	spellStats->price = 10;
 	spellStats->manaCost = 1;
 	spellStats->maxCooldown = 1;
-	spellStats->spellPower = 10;
+	spellStats->spellPower = 20;
 	spellStats->currentCooldown = spellStats->maxCooldown;
-	spellStats->range = 3;
+	spellStats->range = 6;
 }
 
 void FireBallSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
@@ -64,34 +64,35 @@ void FireBallSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 	}
 
 
-	lerp = spell->addComponent<LerpPosition>(targetPos, 3);
-	lerp->onLerpComplete = [spell]
-	{
-		LOG_INFO("FireBallSpell -> LerpPosition -> TurnManager::Instance()->endTurn()");
-		TurnManager::Instance()->endTurn();
-		SceneManager::Instance()->destroyGameObject(spell);
-	};
-
+	
+	bool shouldHitmarker = false;
 	TileHolder* lastTile = GridSystem::Instance()->getTileHolder(0, GridSystem::Instance()->getTilePosition(targetPos));
 	if (lastTile != nullptr && lastTile->gameObjectSatOnTile != nullptr && lastTile->gameObjectSatOnTile->hasComponent(typeid(EnemyComponent)))
 	{
-		EnemyStats targetStats = lastTile->gameObjectSatOnTile->getComponent<EnemyComponent>()->getStats();
-		int spellDMG = spellStats->spellPower - targetStats.defence;
-		if (spellDMG < 0)
-		{
-			spellDMG = 0;
-		}
-
-		float r = static_cast<float> (rand()) / static_cast<float> (RAND_MAX);
-		if (r < PlayerController::Instance()->playerStats->critChance)
-		{
-			spellDMG *= 2;
-		}
-
-		int newHealth = targetStats.currentHealth -= spellDMG;
-		lastTile->gameObjectSatOnTile->getComponent<Health>()->setHealth(newHealth);
+		shouldHitmarker = true;
+		
 	}
 	
+	lerp = spell->addComponent<LerpPosition>(targetPos, 3);
+	lerp->onLerpComplete = [lastTile, spell, this, shouldHitmarker]
+	{
+		LOG_INFO("FireBallSpell -> LerpPosition -> TurnManager::Instance()->endTurn()");
+		if (shouldHitmarker)
+		{
+			EnemyStats targetStats = lastTile->gameObjectSatOnTile->getComponent<EnemyComponent>()->getStats();
+			int spellDMG = spellStats->spellPower;
+			float currentHealth = lastTile->gameObjectSatOnTile->getComponent<Health>()->getHealth();
+			int newHealth = currentHealth -= spellDMG;
+			lastTile->gameObjectSatOnTile->getComponent<Health>()->setHealth(newHealth);
+			if (lastTile->gameObjectSatOnTile->isBeingDeleted())
+			{
+				GridSystem::Instance()->resetSatOnTile(0, GridSystem::Instance()->getTilePosition(lastTile->gameObjectSatOnTile->getTransform()->getPosition()));
+			}
+		}
+		
+		TurnManager::Instance()->endTurn();
+		SceneManager::Instance()->destroyGameObject(spell);
+	};
 	
 	//if (spell->getTransform()->getPosition() == (playerPos + glm::fvec2(attackDir.x * range, attackDir.y * range)))
 	//{
