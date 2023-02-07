@@ -15,6 +15,7 @@
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
+#include "../Tiles/BossRoomEntryTile.h"
 #include "../LootTable.h"
 #include "../Tiles/ChestTile.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
@@ -72,11 +73,17 @@ void Level1Scene::init()
 		{ 9, ResourceManager::GetTexture("tile26") },
 		{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
 		{ 11, ResourceManager::GetTexture("tile242") },
+		{ 19, ResourceManager::GetTexture("tile218") },
 		{ 56, ResourceManager::GetTexture("tile218") } // Spike
 	});
+	std::vector<glm::vec2> bossEntranceTiles;
+	bossEntranceTiles.push_back(glm::vec2(31, 23));
+	bossEntranceTiles.push_back(glm::vec2(31, 22));
+	bossEntranceTiles.push_back(glm::vec2(31, 21));
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
 	{
 		{ 10, [] { return new TestTile(Texture(), "level2"); } },
+		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile26", glm::vec2(30, 22), bossEntranceTiles); } },
 		{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	

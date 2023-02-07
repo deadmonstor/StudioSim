@@ -16,6 +16,7 @@
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
 #include "../Tiles/LightTile.h"
+#include "../Tiles/BossRoomEntryTile.h"
 #include "../LootTable.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
@@ -73,13 +74,18 @@ void Level2Scene::init()
 		{ 12, ResourceManager::GetTexture("tile57") },
 		{ 13, ResourceManager::GetTexture("tile57") },
 		{ 15, ResourceManager::GetTexture("tile57") },
+		{ 19, ResourceManager::GetTexture("tile218") },
 		{ 14, ResourceManager::GetTexture("tile270") }
 	});
+	std::vector<glm::vec2> bossEntranceTilePositions;
+	bossEntranceTilePositions.push_back(glm::vec2(37, 49));
+	bossEntranceTilePositions.push_back(glm::vec2(38, 49));
 
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile* ()>>
 	{
 		{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
 		{ 14, [] { return new TestTile(Texture(), "victoryScreen"); } },
+		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile25", glm::vec2(37, 50), bossEntranceTilePositions); } },
 		{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
 	});
 	
