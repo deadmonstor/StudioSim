@@ -100,15 +100,9 @@ void PlayerController::onEngineRender(const OnEngineRender* render)
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
 #ifdef _DEBUG
-	if (keyDown->key == GLFW_KEY_P)
+	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr)
 	{
 		//Testing pathfinding
-		glm::vec2 gridSize = GridSystem::Instance()->getGridSize();
-		glm::vec2 start = playerPTR->getTransform()->getPosition();
-		glm::vec2 goal = start + glm::vec2(0 * gridSize.x, -30 * gridSize.y);
-		//PathfindingMachine::Instance()->FindPath(start, goal);
-		bool sight = PathfindingMachine::Instance()->LineOfSight(start, goal);
-
 		myInventory->add_item(new LegendaryHammer());
 		Item* hammer = new LegendaryHammer();
 		myInventory->add_item(hammer);
@@ -136,7 +130,7 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 
 void PlayerController::onKeyHold(const OnKeyRepeat* keyHold)
 {
-	std::type_index eventType = typeid(OnKeyRepeat);
+	const std::type_index eventType = typeid(OnKeyRepeat);
 	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyRepeat(keyHold->key, keyHold->scancode), eventType);
 }
 

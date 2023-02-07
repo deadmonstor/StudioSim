@@ -1,6 +1,11 @@
 ﻿#include "InventoryHUD.h"
 
+#include "ButtonComponent.h"
+#include "InventoryButton.h"
+#include "InventoryIconButton.h"
 #include "UIManager.h"
+#include "../Player/PlayerController.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/TextRenderer.h"
 #include "Core/Components/Transform.h"
 #include "Core/Renderer/ResourceManager.h"
@@ -20,6 +25,18 @@ void InventoryHUD::createHUD()
 	backgroundPanelEquip = UIManager::Instance()->createUIElement<Panel>("backgroundPanelEquip");
 	backgroundPanelInventoryText = UIManager::Instance()->createUIElement<TextComponent>("backgroundPanelInventoryText");
 	hasLoaded = true;
+}
+
+ButtonComponent* InventoryHUD::createButton(const glm::vec2& pos, Item* item)
+{
+	ButtonComponent* button = UIManager::Instance()->createUIElement<InventoryIconButton>(
+		"Inventory_" + std::to_string(pos.x) + " " + std::to_string(pos.y),
+		ResourceManager::GetTexture("inventoryBackground"),
+		item);
+	button->getTransform()->setPosition(pos);
+	button->setColor({1, 0, 0});
+	
+	return button;
 }
 
 void InventoryHUD::updateHUD()
@@ -67,10 +84,18 @@ void InventoryHUD::updateHUD()
 	// =============================== BACKGROUND PANEL INVENTORY TEXT ===============================
 	const glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize("Inventory", 0.4f);
 	backgroundPanelInventoryText->shouldRender = shouldRender;
-	backgroundPanelInventoryText->getTransform()->setPosition(MiddleRight + glm::vec2(0, 250) - sizeOfText);
+	backgroundPanelInventoryText->getTransform()->setPosition(MiddleRight - glm::vec2{sizeOfText.x / 2, -50} - (glm::vec2{350, 0} / 2.0f));
 	backgroundPanelInventoryText->getTransform()->setSize(sizeOfText);
 	backgroundPanelInventoryText->setText("Inventory");
 	backgroundPanelInventoryText->setScale(0.4f);
+
+	const auto items = PlayerController::Instance()->myInventory->items;
+
+	for (int i = 0; i < items.size(); i++)
+	{
+		createButton(MiddleRight - glm::vec2{sizeOfText.x / 2, -50} - (glm::vec2{350, 0} / 2.0f), items[i]);
+		break;
+	}
 }
 
 void InventoryHUD::onSceneChange(OnSceneChanged* event)
