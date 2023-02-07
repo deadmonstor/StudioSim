@@ -66,8 +66,8 @@ void PlayerAttackBehaviour::Act()
 	if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) && !willFlashOnce)
 	{
 		/*PlayerController::Instance()->ReduceSpellCooldown();*/
-		TurnManager::Instance()->endTurn();
 		LOG_INFO("Player Attack Behaviour -> Act -> TurnManager::Instance()->endTurn()");
+		TurnManager::Instance()->endTurn();
 	}
 	canAttack = false;
 }
@@ -138,8 +138,8 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 				Flash::createFlash(gameObject, gameObject->getComponent<AnimatedSpriteRenderer>(), {1, 0, 0}, 5,
 				[this, gameObject, pos]
 				{
-					TurnManager::Instance()->endTurn();
 					LOG_INFO("PlayerAttackBehaviour::createSlashGameObject() - TurnManager::Instance()->endTurn()");
+					TurnManager::Instance()->endTurn();
 
 					auto* health = gameObject->getComponent<Health>();
 					// TODO: Change this

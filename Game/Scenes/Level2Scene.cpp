@@ -17,6 +17,7 @@
 #include "../Tiles/SpikeTile.h"
 #include "../Tiles/LightTile.h"
 #include "../LootTable.h"
+#include "../Components/UI/InventoryHUD.h"
 #include "Core/AudioEngine.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
@@ -24,8 +25,9 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 	
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
-		
-	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy", tileWorldSpace);
+	int random = rand() % 10000000;
+	
+	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
 	EnemyStats slimeStats = EnemyStats();
@@ -160,6 +162,14 @@ void Level2Scene::update()
 			HUD::Instance()->createHUD();
 
 		HUD::Instance()->updateHUD();
+	}
+
+	if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
+	{
+		if (!InventoryHUD::Instance()->getHasLoaded())
+			InventoryHUD::Instance()->createHUD();
+
+		InventoryHUD::Instance()->updateHUD();
 	}
 }
 

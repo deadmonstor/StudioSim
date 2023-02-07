@@ -13,6 +13,7 @@
 #include "Core/Components/Transform.h"
 #include "PickUp.h"
 #include "Core/AudioEngine.h"
+#include "../ScoreSystem.h"
 #include "../Components/Items/Spells/PoisonSpell.h"
 
 EnemyComponent::EnemyComponent()
@@ -45,7 +46,7 @@ void EnemyComponent::start()
 	TurnManager::Instance()->addToTurnQueue(getOwner());
 
 	if (onStartTurnID == -1)
-		Griddy::Events::subscribe(this, &EnemyComponent::onTurnChanged);
+		onStartTurnID = Griddy::Events::subscribe(this, &EnemyComponent::onTurnChanged);
 	
 	Component::start();
 }
@@ -55,10 +56,13 @@ void EnemyComponent::destroy()
 	if (onStartTurnID != -1)
 		Griddy::Events::unsubscribe(this, &EnemyComponent::onTurnChanged, onStartTurnID);
 	
-	int expGained = 5;
-	PlayerController::Instance()->playerStats->currentEXP += expGained;
-	PlayerController::Instance()->UpdateStats();
-
+	if (getOwner()->getComponent<Health>()->getHealth() <= 0)
+	{
+		int expGained = 5;
+		PlayerController::Instance()->playerStats->currentEXP += expGained;
+		PlayerController::Instance()->UpdateStats();
+		ScoreSystem::Instance()->addEnemiesKilled(1);
+	}
 
 	DropLoot();
 	Component::destroy();
@@ -108,8 +112,8 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 		if (event->objectToStart == getOwner())
 		{
 			roundsFreeze -= 1;
-			TurnManager::Instance()->endTurn();
 			LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn() -> " + std::to_string(roundsFreeze));
+			TurnManager::Instance()->endTurn();
 		}
 	}
 	

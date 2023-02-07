@@ -25,6 +25,7 @@ public:
         
         stats->currentHealth += healthPotionStats->healthGained;
         stats->currentHealth = glm::clamp(stats->currentHealth, 0, stats->maxHealth);
+        PlayerController::Instance()->UpdateStats();
     }
 
     ConsumableStats* healthPotionStats{};

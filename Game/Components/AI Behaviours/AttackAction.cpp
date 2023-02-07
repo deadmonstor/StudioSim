@@ -6,6 +6,7 @@
 #include "../Core/Components/AnimatedSpriteRenderer.h"
 #include "../DestroyAfterAnimation.h"
 #include "Core/AudioEngine.h"
+#include "../../ScoreSystem.h"
 
 AttackAction::AttackAction(GameObject* parentObjectArg)
 	: parentObject(parentObjectArg)
@@ -19,7 +20,9 @@ void AttackAction::Act()
 	GridSystem* gridSystem = GridSystem::Instance();
 	glm::vec2 attackPosition = gridSystem->getTilePosition(currentPos) + attackDirection;
 	createSlashGameObject(attackPosition);
+	
 	flashPlayer(PlayerController::Instance()->playerPTR, glm::vec3(1, 0, 0));
+	TurnManager::Instance()->endTurn();
 }
 
 bool AttackAction::IsInRange()
@@ -81,6 +84,7 @@ void AttackAction::createSlashGameObject(glm::vec2 pos)
 			attackDamage *= 2; //double damage!
 		
 		targetStats->currentHealth -= attackDamage;
+		ScoreSystem::Instance()->addDamageTaken(attackDamage);
 		PlayerController::Instance()->UpdateStats();
 	}
 	// get world position from grid position
@@ -94,8 +98,8 @@ void AttackAction::createSlashGameObject(glm::vec2 pos)
 }
 void AttackAction::flashPlayer(GameObject* object, const glm::vec3 targetColor)
 {
-	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [this]
+	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [this, object]
 	{
-		TurnManager::Instance()->endTurn();
+		LOG_INFO("AttackAction -> flashPlayer -> End Turn " + object->getName());
 	});
 }

@@ -8,6 +8,7 @@
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
+#include "../../ScoreSystem.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour()
 {
@@ -57,6 +58,8 @@ void PlayerMovementBehaviour::Act()
 		}
 		else
 		{
+			ScoreSystem::Instance()->addTilesMoved(1);
+
 			PlayerController::Instance()->playerPTR->getTransform()->
 				setPosition(GridSystem::Instance()->getWorldPosition(origPos + moveDir));
 
@@ -81,8 +84,8 @@ void PlayerMovementBehaviour::Act()
 			
 			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 			{
-				TurnManager::Instance()->endTurn();
 				LOG_INFO("PlayerMovementBehaviour::Act() -> TurnManager::Instance()->endTurn()");
+				TurnManager::Instance()->endTurn();
 			}
 		}
 	}

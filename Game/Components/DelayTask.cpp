@@ -5,6 +5,8 @@
 
 DelayTask::DelayTask(const int speed, const std::function<void()>& _onComplete)
 {
+	internalTimer = 0;
+	hasFinished = false;
 	this->speed = speed;
 	onComplete = _onComplete;
 }
@@ -39,8 +41,10 @@ void DelayTask::createTask(GameObject* object, const int speed, const std::funct
 	{
 		object->addComponent<DelayTask>(speed, _onComplete);
 	}
-
-	auto* flash = object->getComponent<DelayTask>();
-	flash->onComplete = _onComplete;
-	flash->setSpeed(speed);
+	else
+	{
+		auto* flash = object->getComponent<DelayTask>();
+		flash->onComplete = _onComplete;
+		flash->setSpeed(speed);
+	}
 }
