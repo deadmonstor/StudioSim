@@ -23,6 +23,7 @@
 #include "Scenes/MainMenu.h"
 #include "Scenes/VictoryScene.h"
 #include "Scenes/ScoreScene.h"
+#include "Scenes/TutorialScene.h"
 #include "Scenes/LeaderboardScene.h"
 #include "Util/Events/Events.h"
 #include <Core/AudioEngine.h>
@@ -59,6 +60,8 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\Chest\\", "chest_open_", 4);
 	ResourceManager::LoadTextureArray("Sprites\\Coins\\", "coin", 10);
 	ResourceManager::LoadTextureArray("Sprites\\Weapons\\", "Potion", 3);
+	ResourceManager::LoadTextureArray("Sprites\\GRAttack\\", "GRA", 13);
+	ResourceManager::LoadTextureArray("Sprites\\GRIdle\\", "GRI", 8);
 	ResourceManager::LoadTexture("Sprites\\whitetexture.png", "whitetexture");
 
 	ResourceManager::LoadTexture("Sprites/Weapons/Axe.png", "Inventory-Axe");
@@ -92,6 +95,11 @@ int main(int, char**)
 		{"mainMenu", []
 			{
 				return new MainMenu();
+			}
+		},
+		{"tutorial", []
+			{
+				return new TutorialScene();
 			}
 		},
 		{"level1", []

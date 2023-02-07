@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClInclude Include="Components\AI Behaviours\Boss\BossStateMachine.h" />
     <ClInclude Include="GameEvents.h" />
+    <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Tiles\BossRoomEntryTile.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossIdleBehaviour.h" />
     <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
@@ -96,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Components\AI Behaviours\Boss\BossStateMachine.cpp" />
+    <ClCompile Include="Scenes\TutorialScene.cpp" />
     <ClCompile Include="Tiles\BossRoomEntryTile.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossIdleBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\AttackAction.cpp" />

@@ -110,7 +110,11 @@ void ScoreScene::onEngineRender(const OnEngineRender* event)
 
 void ScoreScene::OnCharacterKeyDown(const OnCharacterDown* event)
 {
-	if (playerName.length() < 3) { playerName += static_cast<char>(event->key); }
+	char character = static_cast<char>(event->key);
+	if (playerName.length() < 3) 
+	{ 
+		playerName += std::toupper(character);
+	}
 }
 
 void ScoreScene::OnActualDown(const OnKeyDown* event)

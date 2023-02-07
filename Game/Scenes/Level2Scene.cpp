@@ -100,7 +100,7 @@ void Level2Scene::init()
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile* ()>>
 	{
 		{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
-		{ 14, [] { return new TestTile(Texture(), "victoryScreen"); } },
+		{ 14, [] { return new TestTile(Texture(), "victoryScreen", false); } },
 		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile25", glm::vec2(37, 50), bossEntranceTilePositions, bossPositionTiles); } },
 		{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
 	});

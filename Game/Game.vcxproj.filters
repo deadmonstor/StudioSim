@@ -85,6 +85,7 @@
     <ClCompile Include="Components\AI Behaviours\Boss\BossIdleBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossStateMachine.cpp" />
     <ClCompile Include="Tiles\BossRoomEntryTile.cpp" />
+    <ClCompile Include="Scenes\TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -181,9 +182,6 @@
     <ClInclude Include="Tiles\BossRoomEntryTile.h" />
     <ClInclude Include="GameEvents.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossStateMachine.h" />
-    <ClInclude Include="Components\UI\InventoryHUD.h" />
-    <ClInclude Include="Components\Items\Spells\FireBallSpell.h" />
-    <ClInclude Include="Components\Items\Spells\PoisonSpell.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />
