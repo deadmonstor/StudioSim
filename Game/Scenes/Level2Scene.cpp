@@ -20,6 +20,7 @@
 #include "../LootTable.h"
 #include "../Components/UI/InventoryHUD.h"
 #include "Core/AudioEngine.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
 {
@@ -30,14 +31,21 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 	
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
+
+	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+	auto sprite = enemy->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
+	sprite->setColor(glm::vec3(1, 1, 1));
+	sprite->setLit(true);
+	sprite->setPivot(Pivot::Center);
+
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
 	EnemyStats slimeStats = EnemyStats();
 	slimeStats.attack = 2;
 	slimeStats.critChance = 0.2f;
-	slimeStats.maxHealth = 10;
-	slimeStats.currentHealth = 10;
+	slimeStats.maxHealth = 100;
+	slimeStats.currentHealth = 100;
 	slimeStats.defence = 2;
-	EnemyComponent component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
+	EnemyComponent component = EnemyComponent(fsm, slimeStats);
 	enemy->addComponent<EnemyComponent>(component);
 
 	GridSystem::Instance()->setSatOnTile(0, pos, enemy);
@@ -85,11 +93,15 @@ void Level2Scene::init()
 	bossEntranceTilePositions.push_back(glm::vec2(37, 49));
 	bossEntranceTilePositions.push_back(glm::vec2(38, 49));
 
+	std::vector<glm::vec2> bossPositionTiles;
+	bossPositionTiles.push_back(glm::vec2(32, 53));
+	bossPositionTiles.push_back(glm::vec2(32, 54));
+
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile* ()>>
 	{
 		{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
 		{ 14, [] { return new TestTile(Texture(), "victoryScreen"); } },
-		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile25", glm::vec2(37, 50), bossEntranceTilePositions); } },
+		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile25", glm::vec2(37, 50), bossEntranceTilePositions, bossPositionTiles); } },
 		{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
 	});
 	

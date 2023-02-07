@@ -20,10 +20,9 @@ EnemyComponent::EnemyComponent()
 {
 	enemyFSM = nullptr;
 	stats = EnemyStats();
-	spriteName = "";
 }
 
-EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsArg, std::string spriteNameArg)
+EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsArg)
 {
 	enemyFSM = stateMachineArg;
 	stats = statsArg;
@@ -35,13 +34,9 @@ EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsAr
 
 void EnemyComponent::start()
 {
-	getOwner()->addComponent<Health>();
+	Health* healthComponent = getOwner()->addComponent<Health>();
+	healthComponent->setHealth(stats.maxHealth);
 	getOwner()->addComponent<Camera>();
-	const std::vector textureList = ResourceManager::GetTexturesContaining(spriteName);
-	auto sprite = getOwner()->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
-	sprite->setColor(glm::vec3(1, 1, 1));
-	sprite->setLit(true);
-	sprite->setPivot(Pivot::Center);
 
 	TurnManager::Instance()->addToTurnQueue(getOwner());
 

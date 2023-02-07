@@ -3,7 +3,7 @@
 void BossStateMachine::start()
 {
 	StateMachine::start();
-	baseState = new BossIdleBehaviour(this);
+	baseState = new BossIdleBehaviour(this, spawnerPositions);
 	currentState = baseState;
 	currentState->start();
 }
