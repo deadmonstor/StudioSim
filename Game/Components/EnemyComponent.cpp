@@ -13,6 +13,7 @@
 #include "Core/Components/Transform.h"
 #include "PickUp.h"
 #include "Core/AudioEngine.h"
+#include "../ScoreSystem.h"
 
 EnemyComponent::EnemyComponent()
 {
@@ -57,7 +58,7 @@ void EnemyComponent::destroy()
 	int expGained = 5;
 	PlayerController::Instance()->playerStats->currentEXP += expGained;
 	PlayerController::Instance()->UpdateStats();
-
+	ScoreSystem::Instance()->addEnemiesKilled(1);
 
 	DropLoot();
 	Component::destroy();
