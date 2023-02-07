@@ -24,6 +24,7 @@ public:
 
 	EnemyStats getStats() { return stats; }
 	int roundsFreeze = 0;
+	int roundsPoisoned = 0;
 
 private:
 	void DropLoot();

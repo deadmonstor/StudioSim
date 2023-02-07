@@ -14,6 +14,7 @@
 #include "PickUp.h"
 #include "Core/AudioEngine.h"
 #include "../ScoreSystem.h"
+#include "../Components/Items/Spells/PoisonSpell.h"
 
 EnemyComponent::EnemyComponent()
 {
@@ -71,13 +72,40 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 {
 	if (roundsFreeze <= 0)
 	{
-		if (event->objectToStart == getOwner())
+		if (roundsPoisoned <= 0)
 		{
-			getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
-			if (enemyFSM != nullptr)
-				enemyFSM->Act();
-			else
-				LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			if (event->objectToStart == getOwner())
+			{
+				getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
+				if (enemyFSM != nullptr)
+					enemyFSM->Act();
+				else
+					LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			}
+		}
+		else
+		{
+
+			if (event->objectToStart == getOwner())
+			{
+				roundsPoisoned -= 1;
+				PoisonSpell* poison = new PoisonSpell();
+				int spellDMG = poison->spellStats->damagePerTurn;
+				float currentHealth = getOwner()->getComponent<Health>()->getHealth();
+				int newHealth = currentHealth -= spellDMG;
+				getOwner()->getComponent<Health>()->setHealth(newHealth);
+				if (getOwner()->isBeingDeleted())
+				{
+					GridSystem::Instance()->resetSatOnTile(0, GridSystem::Instance()->getTilePosition(getOwner()->getTransform()->getPosition()));
+					return;
+				}
+
+				LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn() -> " + std::to_string(roundsPoisoned));
+				if (enemyFSM != nullptr)
+					enemyFSM->Act();
+				else
+					LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			}
 		}
 	}
 	else

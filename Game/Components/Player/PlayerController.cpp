@@ -7,6 +7,7 @@
 #include "../Items/Weapons/RareSword.h"
 #include "../Items/Spells/FireBallSpell.h"
 #include "../Items/Spells/IceSpell.h"
+#include "../Items/Spells/PoisonSpell.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
