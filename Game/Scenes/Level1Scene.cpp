@@ -15,13 +15,14 @@
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
+#include "../Tiles/BossRoomEntryTile.h"
 #include "../LootTable.h"
 #include "../Components/UI/InventoryHUD.h"
 #include "../Tiles/ChestTile.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 
-void Level1Scene::createEnemy(const glm::vec2 pos)
+void Level1Scene::createSlime(const glm::vec2 pos)
 {
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
 	int random = rand() % 10000000;
@@ -75,11 +76,17 @@ void Level1Scene::init()
 		{ 9, ResourceManager::GetTexture("tile26") },
 		{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
 		{ 11, ResourceManager::GetTexture("tile242") },
+		{ 19, ResourceManager::GetTexture("tile218") },
 		{ 56, ResourceManager::GetTexture("tile218") } // Spike
 	});
+	std::vector<glm::vec2> bossEntranceTiles;
+	bossEntranceTiles.push_back(glm::vec2(31, 23));
+	bossEntranceTiles.push_back(glm::vec2(31, 22));
+	bossEntranceTiles.push_back(glm::vec2(31, 21));
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
 	{
 		{ 10, [] { return new TestTile(Texture(), "level2"); } },
+		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile26", glm::vec2(30, 22), bossEntranceTiles); } },
 		{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	
@@ -142,7 +149,7 @@ void Level1Scene::init()
 		} },
 		{ 92, [this](glm::vec2 pos)
 		{
-			createEnemy(pos);
+			createSlime(pos);
 		} },
 		{ 98, [this](glm::vec2 pos)
 		{
