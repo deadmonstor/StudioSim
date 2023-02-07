@@ -7,9 +7,10 @@
 class TestTile : public Tile
 {
 public:
-    explicit TestTile(const Texture& _texture, std::string SceneToChangeTo)
+    explicit TestTile(const Texture& _texture, std::string SceneToChangeTo, bool FromTutorial)
         : Tile(_texture)
     {
+        Teleportable = FromTutorial;
         m_SceneToChangeTo = SceneToChangeTo;
     }
 

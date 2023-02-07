@@ -22,6 +22,7 @@
 #include "Scenes/MainMenu.h"
 #include "Scenes/VictoryScene.h"
 #include "Scenes/ScoreScene.h"
+#include "Scenes/TutorialScene.h"
 #include "Scenes/LeaderboardScene.h"
 #include "Util/Events/Events.h"
 #include <Core/AudioEngine.h>
@@ -77,6 +78,11 @@ int main(int, char**)
 		{"mainMenu", []
 			{
 				return new MainMenu();
+			}
+		},
+		{"tutorial", []
+			{
+				return new TutorialScene();
 			}
 		},
 		{"level1", []

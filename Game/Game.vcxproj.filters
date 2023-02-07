@@ -83,6 +83,9 @@
     <ClCompile Include="Components\AI Behaviours\Boss\BossIdleBehaviour.cpp" />
     <ClCompile Include="Tiles\BossRoomEntryTile.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossStateMachine.cpp" />
+    <ClCompile Include="Components\UI\InventoryHUD.cpp" />
+    <ClCompile Include="Components\UI\ItemSlot.cpp" />
+    <ClCompile Include="Scenes\TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -179,6 +182,9 @@
     <ClInclude Include="Tiles\BossRoomEntryTile.h" />
     <ClInclude Include="GameEvents.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossStateMachine.h" />
+    <ClInclude Include="Components\UI\InventoryHUD.h" />
+    <ClInclude Include="Components\UI\ItemSlot.h" />
+    <ClInclude Include="Scenes\TutorialScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />

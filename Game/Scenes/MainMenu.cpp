@@ -54,6 +54,6 @@ void MainMenu::onKeyDown(const OnKeyDown* event)
 {
     if (event->key == GLFW_KEY_ENTER)
     {
-        SceneManager::Instance()->changeScene("level1");
+        SceneManager::Instance()->changeScene("tutorial");
     }
 }
