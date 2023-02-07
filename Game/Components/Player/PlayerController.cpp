@@ -48,9 +48,9 @@ void PlayerController::createPlayer()
 		delete playerStats;
 		
 		playerStats = new PlayerStats();
-		playerStats->maxHealth = 10;
-		playerStats->currentHealth = 10;
-		lastHealth = 10;
+		playerStats->maxHealth = 25;
+		playerStats->currentHealth = 25;
+		lastHealth = 25;
 		playerStats->currentEXP = 0;
 		playerStats->maxEXP = 100;
 		playerStats->currentMana = 10;
