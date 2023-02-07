@@ -40,10 +40,10 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
 	EnemyStats slimeStats = EnemyStats();
-	slimeStats.attack = 2;
+	slimeStats.attack = 4;
 	slimeStats.critChance = 0.2f;
-	slimeStats.maxHealth = 100;
-	slimeStats.currentHealth = 100;
+	slimeStats.maxHealth = 50;
+	slimeStats.currentHealth = slimeStats.maxHealth;
 	slimeStats.defence = 2;
 	EnemyComponent component = EnemyComponent(fsm, slimeStats);
 	enemy->addComponent<EnemyComponent>(component);

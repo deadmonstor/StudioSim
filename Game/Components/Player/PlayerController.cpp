@@ -40,8 +40,11 @@ void PlayerController::createPlayer()
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
 	hitmarkers = playerPTR->addComponent<Hitmarkers>();
+	bool isTutorial = SceneManager::Instance()->getScene()->name == "tutorial";
 
-	if (playerStats == nullptr || SceneManager::Instance()->getScene()->name == "level1")
+	if (playerStats == nullptr ||
+		SceneManager::Instance()->getScene()->name == "level1" ||
+		isTutorial)
 	{
 		if (playerStats != nullptr && playerStats->myInventory != nullptr)
 			delete playerStats->myInventory;
@@ -64,6 +67,13 @@ void PlayerController::createPlayer()
 		playerStats->level = 1;
 		
 		playerStats->myInventory = new Inventory(20);
+		if (isTutorial)
+		{
+			for(auto func : Inventory::getItemByName | std::views::values)
+			{
+				playerStats->myInventory->add_item(func());
+			}
+		}
 	}
 	
 	myInventory = playerStats->myInventory;
@@ -151,6 +161,13 @@ void PlayerController::UpdateStats()
 		playerStats->currentMana = playerStats->maxMana;
 
 		lastHealth = playerStats->currentHealth;
+	}
+
+	if (SceneManager::Instance()->getScene()->name == "tutorial")
+	{
+		// GODMODE + Other stuff
+		playerStats->currentHealth = playerStats->maxHealth;
+		playerStats->currentMana = playerStats->maxMana;
 	}
 }
 

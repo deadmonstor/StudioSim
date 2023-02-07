@@ -40,8 +40,8 @@ void Level1Scene::createSlime(const glm::vec2 pos)
 	EnemyStats slimeStats = EnemyStats();
 	slimeStats.attack = 2;
 	slimeStats.critChance = 0.2f;
-	slimeStats.maxHealth = 100;
-	slimeStats.currentHealth = 100;
+	slimeStats.maxHealth = 25;
+	slimeStats.currentHealth = slimeStats.maxHealth;
 	slimeStats.defence = 2;
 	EnemyComponent component = EnemyComponent(fsm, slimeStats);
 	enemy->addComponent<EnemyComponent>(component);

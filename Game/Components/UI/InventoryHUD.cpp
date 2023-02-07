@@ -144,5 +144,6 @@ void InventoryHUD::updateHUD()
 
 void InventoryHUD::onSceneChange(OnSceneChanged* event)
 {
+	slots.clear();
 	hasLoaded = false;
 }
