@@ -92,7 +92,7 @@ void ScoreSystem::calcFinalScore()
 {
 	currentScore = 0;
 	currentScore += enemiesKilled * 10;
-	currentScore += tilesMoved * 10;
+	currentScore -= tilesMoved;
 	currentScore -= damageTaken * 10;
 }
 

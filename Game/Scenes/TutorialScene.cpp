@@ -15,7 +15,6 @@
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
-#include "../Tiles/BossRoomEntryTile.h"
 #include "../LootTable.h"
 #include "../Components/UI/InventoryHUD.h"
 #include "../Tiles/ChestTile.h"
@@ -190,6 +189,11 @@ void TutorialScene::init()
 
 void TutorialScene::update()
 {
+	if (hasCompletedTutorialLevel)
+	{
+		SceneManager::Instance()->changeScene("level1");
+	}
+	
 	if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
 	{
 		if (!HUD::Instance()->getHasLoaded())
@@ -209,5 +213,5 @@ void TutorialScene::update()
 
 void TutorialScene::destroy()
 {
-    
+	
 }

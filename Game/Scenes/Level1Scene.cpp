@@ -1,5 +1,6 @@
 ﻿#include "Level1Scene.h"
 
+#include "TutorialScene.h"
 #include "Core/SceneManager.h"
 #include "Core/Components/Camera.h"
 #include "Core/Components/TextRenderer.h"
@@ -83,6 +84,8 @@ void Level1Scene::createBoss(const glm::vec2 pos)
 
 void Level1Scene::init()
 {
+	TutorialScene::hasCompletedTutorialLevel = true;
+	
 	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 	LootTable::Instance()->LoadingIntoLootTableArray();
 	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();

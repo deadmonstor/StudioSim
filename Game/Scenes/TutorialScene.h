@@ -11,4 +11,6 @@ public:
     void init() override;
     void update() override;
     void destroy() override;
+
+	inline static bool hasCompletedTutorialLevel = false;
 };
