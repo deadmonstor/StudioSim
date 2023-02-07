@@ -102,24 +102,10 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 #ifdef _DEBUG
 	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr)
 	{
-		//Testing pathfinding
-		myInventory->add_item(new LegendaryHammer());
-		Item* hammer = new LegendaryHammer();
-		myInventory->add_item(hammer);
-		myInventory->equip_item(hammer->name());
-		
-		myInventory->add_item(new RareSword());
-		myInventory->add_item(new HealthPotion());
-		
-		Item* armour = new LegendaryArmour();
-		myInventory->add_item(armour);
-		myInventory->equip_item(armour->name());
-		
-		myInventory->add_item(new FireBallSpell());
-
-		Item* iceSpell = new IceSpell();
-		myInventory->add_item(iceSpell);
-		myInventory->equip_item(iceSpell->name());
+		for(auto func : Inventory::getItemByName | std::views::values)
+		{
+			PlayerController::Instance()->myInventory->add_item(func());
+		}
 	}
 #endif
 	

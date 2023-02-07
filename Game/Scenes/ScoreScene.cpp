@@ -72,6 +72,7 @@ void ScoreScene::onEngineRender(const OnEngineRender* event)
 	                                     glm::vec3{1, 1, 1},
 	                                     glm::vec2{0, 0});
 
+	ScoreSystem::Instance()->calcFinalScore();
 	//Total Score
 	sizeOfText = TextRenderer::Instance()->renderTextSize(
 		"Total Score: " + std::format("{:.0f}", ScoreSystem::Instance()->getScore()), 1);

@@ -240,6 +240,8 @@ void Inventory::unequip_item(const std::string& item_name)
 				{
 					/*auto armour = dynamic_cast<ArmourStats*>(item);
 					playerStats->maxHealth -= armour->health;*/
+					item->isEquipped = false;
+					break;
 				}
 				case ItemType::CONSUMABLE:
 				{

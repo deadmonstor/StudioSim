@@ -12,7 +12,7 @@ void UIManager::render()
 		SceneManager::Instance()->isShuttingDown())
 		return;
 	
-	for (const auto& panel : UIElements | std::views::values)
+	for (const auto& panel : renderPanels)
 	{
 		if (!panel->shouldRender)
 			continue;
@@ -33,4 +33,18 @@ void UIManager::clear()
 	}
 
 	UIElements.clear();
+}
+
+void UIManager::sortOrder()
+{
+	renderPanels.clear();
+	for(auto it = UIElements.begin(); it != UIElements.end(); ++it )
+	{
+		renderPanels.push_back( it->second );
+	}
+
+	std::ranges::sort(renderPanels, [](const Panel* a, const Panel* b)
+	{
+		return a->getSortingOrder() < b->getSortingOrder();
+	});
 }

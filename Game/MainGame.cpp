@@ -60,6 +60,21 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\Weapons\\", "Potion", 3);
 	ResourceManager::LoadTexture("Sprites\\whitetexture.png", "whitetexture");
 
+	ResourceManager::LoadTexture("Sprites/Weapons/Axe.png", "Inventory-Axe");
+	ResourceManager::LoadTexture("Sprites/Weapons/Sword.png", "Inventory-Sword");
+	ResourceManager::LoadTexture("Sprites/Weapons/Dagger.png", "Inventory-Dagger");
+	ResourceManager::LoadTexture("Sprites/Weapons/Hammer.png", "Inventory-Hammer");
+	ResourceManager::LoadTexture("Sprites/Weapons/Spellbook1.png", "Inventory-IceSpell");
+	ResourceManager::LoadTexture("Sprites/Weapons/Spellbook2.png", "Inventory-PoisonSpell");
+	ResourceManager::LoadTexture("Sprites/Weapons/Spellbook4.png", "Inventory-FireSpell");
+	ResourceManager::LoadTexture("Sprites/Armour/BasicArmourChest.png", "Inventory-BasicArmourChest");
+	ResourceManager::LoadTexture("Sprites/Armour/MidArmourChest.png", "Inventory-MidArmourChest");
+	ResourceManager::LoadTexture("Sprites/Armour/TopArmourChest.png", "Inventory-TopArmourChest");
+	ResourceManager::LoadTexture("Sprites/Weapons/Potion0.png", "Inventory-Potion0");
+	ResourceManager::LoadTexture("Sprites/Weapons/Potion1.png", "Inventory-Potion1");
+	ResourceManager::LoadTexture("Sprites/Weapons/Potion2.png", "Inventory-Potion2");
+
+	
 	AudioEngine::Instance()->loadSound("Sounds\\MainTheme.wav", FMOD_3D);
 	AudioEngine::Instance()->loadSound("Sounds\\Defeat.wav", FMOD_3D);
 	AudioEngine::Instance()->loadSound("Sounds\\Victory.wav", FMOD_3D);

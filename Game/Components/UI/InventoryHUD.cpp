@@ -1,7 +1,5 @@
 ﻿#include "InventoryHUD.h"
 
-#include "ButtonComponent.h"
-#include "InventoryButton.h"
 #include "InventoryIconButton.h"
 #include "UIManager.h"
 #include "../Player/PlayerController.h"
@@ -20,6 +18,24 @@ void InventoryHUD::createHUD()
 		sceneChangeID = Griddy::Events::subscribe(this, &InventoryHUD::onSceneChange);
 
 	ResourceManager::LoadTexture("Sprites/UI/Background.png", "inventoryBackground");
+
+	const auto MiddleRight =
+				glm::vec2(Renderer::getWindowSize().x, Renderer::getWindowSize().y / 2) / Renderer::Instance()->getAspectRatio();
+	
+	int y = 0;
+	for (int i = 0; i <= 20; i++)
+	{
+		slots.push_back(createButton(MiddleRight - glm::vec2{100, 0} - (glm::vec2{(i % 5) * 50, y * 50}), nullptr));
+
+		if (i != 0 && i % 5 == 0)
+			y++;
+	}
+
+	weaponSlot = createButton(MiddleRight - glm::vec2{100, 0} - (glm::vec2{200, -125}), nullptr);
+	armourSlot = createButton(MiddleRight - glm::vec2{100, 0} - (glm::vec2{100, -125}), nullptr);
+	spellSlot = createButton(MiddleRight - glm::vec2{100, 0} - (glm::vec2{0, -125}), nullptr);
+	
+	UIManager::Instance()->sortOrder();
 	
 	backgroundPanelInventory = UIManager::Instance()->createUIElement<Panel>("backgroundPanelInventory");
 	backgroundPanelEquip = UIManager::Instance()->createUIElement<Panel>("backgroundPanelEquip");
@@ -27,14 +43,20 @@ void InventoryHUD::createHUD()
 	hasLoaded = true;
 }
 
-ButtonComponent* InventoryHUD::createButton(const glm::vec2& pos, Item* item)
+InventoryIconButton* InventoryHUD::createButton(const glm::vec2& pos, Item* item)
 {
-	ButtonComponent* button = UIManager::Instance()->createUIElement<InventoryIconButton>(
+	ResourceManager::LoadTexture("Sprites/Weapons/Hammer.png", "Hammer");
+	
+	InventoryIconButton* button = UIManager::Instance()->createUIElement<InventoryIconButton>(
 		"Inventory_" + std::to_string(pos.x) + " " + std::to_string(pos.y),
-		ResourceManager::GetTexture("inventoryBackground"),
+		ResourceManager::GetTexture("whitetexture"),
 		item);
 	button->getTransform()->setPosition(pos);
-	button->setColor({1, 0, 0});
+	button->getTransform()->setSize({50, 50});
+	button->setColor({1, 1, 1});
+	button->setLit(false);
+	button->setSortingOrder(3);
+	button->shouldRender = shouldRender;
 	
 	return button;
 }
@@ -72,6 +94,7 @@ void InventoryHUD::updateHUD()
 	backgroundPanelEquip->setTexture(ResourceManager::GetTexture("inventoryBackground"));
 	backgroundPanelEquip->setPivot(Pivot::RightCenter);
 	backgroundPanelEquip->setColor({1, 0.85f, 0.88f});
+	backgroundPanelEquip->setSortingOrder(2);
 	
 	// =============================== BACKGROUND PANEL ===============================
 	backgroundPanelInventory->shouldRender = shouldRender;
@@ -80,6 +103,7 @@ void InventoryHUD::updateHUD()
 	backgroundPanelInventory->setTexture(ResourceManager::GetTexture("inventoryBackground"));
 	backgroundPanelInventory->setPivot(Pivot::RightCenter);
 	backgroundPanelInventory->setColor({0.81f, 0.85f, 0.88f});
+	backgroundPanelInventory->setSortingOrder(2);
 	
 	// =============================== BACKGROUND PANEL INVENTORY TEXT ===============================
 	const glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize("Inventory", 0.4f);
@@ -88,14 +112,34 @@ void InventoryHUD::updateHUD()
 	backgroundPanelInventoryText->getTransform()->setSize(sizeOfText);
 	backgroundPanelInventoryText->setText("Inventory");
 	backgroundPanelInventoryText->setScale(0.4f);
+	backgroundPanelInventoryText->setSortingOrder(2);
 
-	const auto items = PlayerController::Instance()->myInventory->items;
-
-	for (int i = 0; i < items.size(); i++)
+	Inventory* inventory = PlayerController::Instance()->myInventory;
+	int i = 0;
+	for (const auto& slot : slots)
 	{
-		createButton(MiddleRight - glm::vec2{sizeOfText.x / 2, -50} - (glm::vec2{350, 0} / 2.0f), items[i]);
-		break;
+		slot->shouldRender = shouldRender;
+		i++;
+		
+		if (inventory->items.size() > i && inventory->items[i] != nullptr)
+		{
+			slot->setItem(inventory->items[i]);
+		}
+		else
+		{
+			slot->setItem(nullptr);
+		}
 	}
+
+	weaponSlot->shouldRender = shouldRender;
+	weaponSlot->setItem(inventory->getFirstItemWithEquipSlot(EquipSlot::WEAPON));
+	
+	armourSlot->shouldRender = shouldRender;
+	armourSlot->setItem(inventory->getFirstItemWithEquipSlot(EquipSlot::ARMOUR));
+	
+	spellSlot->shouldRender = shouldRender;
+	spellSlot->setItem(inventory->getFirstItemWithEquipSlot(EquipSlot::SPELL));
+	
 }
 
 void InventoryHUD::onSceneChange(OnSceneChanged* event)
