@@ -37,7 +37,6 @@
     <ClCompile Include="Tiles\ChestTile.cpp" />
     <ClCompile Include="Components\DelayTask.cpp" />
     <ClCompile Include="Components\UI\PauseButton.cpp" />
-    <ClCompile Include="Components\Items\FireBallSpell.cpp" />
     <ClCompile Include="Components\Items\Spells\FireBallSpell.cpp" />
     <ClCompile Include="Components\Items\Spells\Spell.cpp" />
     <ClCompile Include="Components\Items\Armour\CommonArmour.cpp" />
@@ -80,6 +79,9 @@
     <ClCompile Include="Components\InventoryButton.cpp" />
     <ClCompile Include="Components\MasterAudioPlusButton.cpp" />
     <ClCompile Include="Components\MasterAudioMinusButton.cpp" />
+    <ClCompile Include="Components\Hitmarkers.cpp" />
+    <ClCompile Include="Components\UI\InventoryHUD.cpp" />
+    <ClCompile Include="Components\Items\Spells\PoisonSpell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -121,7 +123,6 @@
     <ClInclude Include="Tiles\ChestTile.h" />
     <ClInclude Include="Components\DelayTask.h" />
     <ClInclude Include="Components\UI\PauseButton.h" />
-    <ClInclude Include="Components\Items\FireBallSpell.h" />
     <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
     <ClInclude Include="Components\Items\Armour\ArmourItem.h" />
     <ClInclude Include="Components\Items\Armour\CommonArmour.h" />
@@ -131,7 +132,6 @@
     <ClInclude Include="Components\Items\Consumables\ExpPotion.h" />
     <ClInclude Include="Components\Items\Consumables\HealthPotion.h" />
     <ClInclude Include="Components\Items\Consumables\ManaPotion.h" />
-    <ClInclude Include="Components\Items\Spells\SpellItem.h" />
     <ClInclude Include="Components\Items\Weapons\Axe.h" />
     <ClInclude Include="Components\Items\Weapons\CommonAxe.h" />
     <ClInclude Include="Components\Items\Weapons\CommonDagger.h" />
@@ -145,7 +145,6 @@
     <ClInclude Include="Components\Items\Weapons\Weapon.h" />
     <ClInclude Include="Components\Items\Weapons\WeaponEnum.h" />
     <ClInclude Include="Components\PickUp.h" />
-    <ClInclude Include="Components\Items\Spells\FireBallSpell.h" />
     <ClInclude Include="Components\Items\Spells\Spell.h" />
     <ClInclude Include="Components\Items\Armour\ArmourItem.h" />
     <ClInclude Include="Components\Items\Armour\CommonArmour.h" />
@@ -174,6 +173,10 @@
     <ClInclude Include="Components\UI\InventoryButton.h" />
     <ClInclude Include="Components\UI\MasterAudioPlusButton.h" />
     <ClInclude Include="Components\UI\MasterAudioMinusButton.h" />
+    <ClInclude Include="Components\Hitmarkers.h" />
+    <ClInclude Include="Components\UI\InventoryHUD.h" />
+    <ClInclude Include="Components\Items\Spells\FireBallSpell.h" />
+    <ClInclude Include="Components\Items\Spells\PoisonSpell.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />

@@ -7,6 +7,7 @@
 #include "../Items/Weapons/RareSword.h"
 #include "../Items/Spells/FireBallSpell.h"
 #include "../Items/Spells/IceSpell.h"
+#include "../Items/Spells/PoisonSpell.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
@@ -126,6 +127,10 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 		Item* iceSpell = new IceSpell();
 		myInventory->add_item(iceSpell);
 		myInventory->equip_item(iceSpell->name());
+		
+		Item* poisonSpell = new PoisonSpell();
+		myInventory->add_item(poisonSpell);
+		myInventory->equip_item(poisonSpell->name());
 	}
 #endif
 	

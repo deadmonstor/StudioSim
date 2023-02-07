@@ -9,6 +9,7 @@
 #include "Components/Items/Consumables/ManaPotion.h"
 #include "Components/Items/Spells/FireBallSpell.h"
 #include "Components/Items/Spells/IceSpell.h"
+#include "Components/Items/Spells/PoisonSpell.h"
 #include "Components/Items/Weapons/CommonAxe.h"
 #include "Components/Items/Weapons/CommonDagger.h"
 #include "Components/Items/Weapons/CommonSword.h"
@@ -69,6 +70,7 @@ int main(int, char**)
 	AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
 	AudioEngine::Instance()->loadSound("Sounds\\FireBall.wav", FMOD_3D);
 	AudioEngine::Instance()->loadSound("Sounds\\Ice.wav", FMOD_3D);
+	AudioEngine::Instance()->loadSound("Sounds\\Poison.wav", FMOD_3D);
 
 	SceneManager::Instance()->sceneToTypeID = std::map<std::string, std::function<Scene*()>>
 	{
@@ -123,6 +125,7 @@ int main(int, char**)
 		// SPELLS
 		{"fireBallSpell", []() { return new FireBallSpell(); }},
 		{"iceSpell", []() { return new IceSpell(); }},
+		{"poisonSpell", []() { return new PoisonSpell(); }},
 
 		// CONSUMABLES
 		{"healthPotion", []() { return new HealthPotion(); }},

@@ -4,6 +4,7 @@
 #include "../../EnemyComponent.h"
 #include "../../Player/PlayerController.h"
 #include "Core/AudioEngine.h"
+#include <Core/Components/Health.h>
 
 FireBallSpell::FireBallSpell()
 {
@@ -87,8 +88,8 @@ void FireBallSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 			spellDMG *= 2;
 		}
 
-		targetStats.currentHealth -= spellDMG;
-		LOG_INFO(targetStats.currentHealth);
+		int newHealth = targetStats.currentHealth -= spellDMG;
+		lastTile->gameObjectSatOnTile->getComponent<Health>()->setHealth(newHealth);
 	}
 	
 	

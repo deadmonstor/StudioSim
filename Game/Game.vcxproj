@@ -36,7 +36,9 @@
     <ClInclude Include="Components\Items\Consumables\HealthPotion.h" />
     <ClInclude Include="Components\Items\Consumables\ManaPotion.h" />
     <ClInclude Include="Components\Items\ItemStats.h" />
+    <ClInclude Include="Components\Items\Spells\FireBallSpell.h" />
     <ClInclude Include="Components\Items\Spells\IceSpell.h" />
+    <ClInclude Include="Components\Items\Spells\PoisonSpell.h" />
     <ClInclude Include="Components\Items\Spells\Spell.h" />
     <ClInclude Include="Components\Items\Stats.h" />
     <ClInclude Include="Components\Items\Weapons\Axe.h" />
@@ -107,6 +109,7 @@
     <ClCompile Include="Components\Items\Consumables\ManaPotion.cpp" />
     <ClCompile Include="Components\Items\Spells\FireBallSpell.cpp" />
     <ClCompile Include="Components\Items\Spells\IceSpell.cpp" />
+    <ClCompile Include="Components\Items\Spells\PoisonSpell.cpp" />
     <ClCompile Include="Components\Items\Spells\Spell.cpp" />
     <ClCompile Include="Components\Items\Weapons\Axe.cpp" />
     <ClCompile Include="Components\Items\Weapons\CommonAxe.cpp" />

@@ -13,6 +13,7 @@
 #include "Core/Components/Transform.h"
 #include "PickUp.h"
 #include "Core/AudioEngine.h"
+#include "../Components/Items/Spells/PoisonSpell.h"
 
 EnemyComponent::EnemyComponent()
 {
@@ -67,13 +68,39 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 {
 	if (roundsFreeze <= 0)
 	{
-		if (event->objectToStart == getOwner())
+		if (roundsPoisoned <= 0)
 		{
-			getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
-			if (enemyFSM != nullptr)
-				enemyFSM->Act();
-			else
-				LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			if (event->objectToStart == getOwner())
+			{
+				getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
+				if (enemyFSM != nullptr)
+					enemyFSM->Act();
+				else
+					LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			}
+		}
+		else
+		{
+			roundsPoisoned -= 1;
+			PoisonSpell* poison = new PoisonSpell();
+			int spellDMG = poison->spellStats->damagePerTurn - stats.defence;
+			
+			if (spellDMG < 0)
+			{
+				spellDMG = 0;
+			}
+
+			int newHealth = stats.currentHealth -= spellDMG;
+			getOwner()->getComponent<Health>()->setHealth(newHealth);
+
+			if (event->objectToStart == getOwner())
+			{
+				LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn() -> " + std::to_string(roundsPoisoned));
+				if (enemyFSM != nullptr)
+					enemyFSM->Act();
+				else
+					LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			}
 		}
 	}
 	else
