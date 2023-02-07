@@ -82,6 +82,7 @@
     <ClCompile Include="Components\Hitmarkers.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossIdleBehaviour.cpp" />
     <ClCompile Include="Tiles\BossRoomEntryTile.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Boss\BossStateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -176,6 +177,8 @@
     <ClInclude Include="Components\Hitmarkers.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossIdleBehaviour.h" />
     <ClInclude Include="Tiles\BossRoomEntryTile.h" />
+    <ClInclude Include="GameEvents.h" />
+    <ClInclude Include="Components\AI Behaviours\Boss\BossStateMachine.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />

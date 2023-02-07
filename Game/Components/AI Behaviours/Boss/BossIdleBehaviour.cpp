@@ -1,12 +1,31 @@
 #include "BossIdleBehaviour.h"
 
-FunctionMap BossIdleBehaviour::CreateFunctionMap()
+void BossIdleBehaviour::start()
 {
-	FunctionMap map = {};
-	//map[typeid(OnKeyDown)] =
-	//	[](Behaviour* pointer, Griddy::Event* event)
-	//{
-	//	dynamic_cast<BossIdleBehaviour*>(pointer)->onPlayerEnterBossRoom(event);
-	//};
-	return map;
+	if (enterRoomEventID == -1) {
+		enterRoomEventID = Griddy::Events::subscribe(this, &BossIdleBehaviour::onPlayerEnterBossRoom);
+	}
+	Behaviour::start();
+}
+
+void BossIdleBehaviour::destroy()
+{
+	if (enterRoomEventID != -1)
+	{
+		Griddy::Events::unsubscribe(this, &BossIdleBehaviour::onPlayerEnterBossRoom, enterRoomEventID);
+
+		enterRoomEventID = -1;
+	}
+}
+
+BossIdleBehaviour::BossIdleBehaviour(StateMachine* parentFSMArg)
+{
+	isInFSM = true;
+	parentFSM = parentFSMArg;
+}
+
+void BossIdleBehaviour::onPlayerEnterBossRoom(EnterBossRoomEvent* event)
+{
+	//start attack behaviour
+	LOG_INFO("Boss Attack!");
 }

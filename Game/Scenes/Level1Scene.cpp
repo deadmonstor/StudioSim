@@ -20,7 +20,7 @@
 #include "../Tiles/ChestTile.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 
-void Level1Scene::createEnemy(const glm::vec2 pos)
+void Level1Scene::createSlime(const glm::vec2 pos)
 {
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
 		
@@ -146,7 +146,7 @@ void Level1Scene::init()
 		} },
 		{ 92, [this](glm::vec2 pos)
 		{
-			createEnemy(pos);
+			createSlime(pos);
 		} },
 		{ 93, [this](glm::vec2 pos)
 		{

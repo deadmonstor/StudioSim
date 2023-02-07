@@ -6,12 +6,10 @@ class StateMachine : public Behaviour
 {
 // Properties
 protected:
-
+	int8_t onTransitionReceivedID = -1;
 	//The base state that the state machine can return into.
 	Behaviour* baseState = nullptr;
 	Behaviour* currentState = nullptr;
-	int8_t eventResponseID = -1;
-	int8_t onTransitionReceivedID = -1;
 
 //Public Methods
 public:
