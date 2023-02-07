@@ -15,6 +15,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\AI Behaviours\Boss\BossStateMachine.h" />
+    <ClInclude Include="GameEvents.h" />
+    <ClInclude Include="Tiles\BossRoomEntryTile.h" />
+    <ClInclude Include="Components\AI Behaviours\Boss\BossIdleBehaviour.h" />
     <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
     <ClInclude Include="Components\AI Behaviours\EnemyCombatBehaviour.h" />
     <ClInclude Include="Components\AI Behaviours\EnemyIdleBehaviour.h" />
@@ -89,6 +93,9 @@
     <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\AI Behaviours\Boss\BossStateMachine.cpp" />
+    <ClCompile Include="Tiles\BossRoomEntryTile.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Boss\BossIdleBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\AttackAction.cpp" />
     <ClCompile Include="Components\AI Behaviours\EnemyCombatBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\EnemyIdleBehaviour.cpp" />
