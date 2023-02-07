@@ -73,7 +73,7 @@ namespace Griddy
 			if (list == nullptr || !list || list->empty())
 			{
 #ifdef _DEBUG_ECS
-				if (false && !isBlacklistedLog(typeid(EventType).name()))
+				if (true && !isBlacklistedLog(typeid(EventType).name()))
 					LOG_INFO("Invoking event: " + std::string(typeid(EventType).name()) + " with 0 subscribers");
 #endif
 				
