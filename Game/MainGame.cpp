@@ -48,7 +48,7 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\FX3\\", "FXSExpl", 5);
 	ResourceManager::LoadTextureArray("Sprites\\Red-Slash-Wide\\", "Red-Slash-Wide", 6);
 	ResourceManager::LoadTextureArray("Sprites\\Red-Slash-Thin\\", "RedSlashThin", 6);
-	ResourceManager::LoadTextureArray("Sprites\\Crab\\", "crab", 16);
+	ResourceManager::LoadTextureArray("Sprites\\Crab\\", "crab", 9);
 	ResourceManager::LoadTextureArray("Sprites\\player\\", "hero", 5);
 	ResourceManager::LoadTextureArray("Sprites\\TileMap\\", "tile", 293);
 	//Coins and chest

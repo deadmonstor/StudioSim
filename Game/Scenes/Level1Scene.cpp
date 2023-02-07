@@ -24,19 +24,58 @@ void Level1Scene::createSlime(const glm::vec2 pos)
 {
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
 		
-	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy", tileWorldSpace);
+	auto* enemy = SceneManager::Instance()->createGameObject("Slime", tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
+
+	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+	auto sprite = enemy->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
+	sprite->setColor(glm::vec3(1, 1, 1));
+	sprite->setLit(true);
+	sprite->setPivot(Pivot::Center);
+
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
 	EnemyStats slimeStats = EnemyStats();
 	slimeStats.attack = 2;
 	slimeStats.critChance = 0.2f;
-	slimeStats.maxHealth = 10;
-	slimeStats.currentHealth = 10;
+	slimeStats.maxHealth = 100;
+	slimeStats.currentHealth = 100;
 	slimeStats.defence = 2;
-	EnemyComponent component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
+	EnemyComponent component = EnemyComponent(fsm, slimeStats);
 	enemy->addComponent<EnemyComponent>(component);
 
 	GridSystem::Instance()->setSatOnTile(0, pos, enemy);
+}
+
+void Level1Scene::createBoss(const glm::vec2 pos)
+{
+	//Crab
+	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
+	auto* Crab = SceneManager::Instance()->createGameObject("Crab", tileWorldSpace);
+	Crab->getTransform()->setPosition(glm::vec2(tileWorldSpace.x + 20, tileWorldSpace.y - 28));
+	Crab->getTransform()->setSize(glm::vec2(192, 192));
+
+	GridSystem::Instance()->setSatOnTile(0, pos, Crab);
+	GridSystem::Instance()->setSatOnTile(0, pos + glm::vec2(1, 0), Crab);
+
+	const std::vector textureListCrab = ResourceManager::GetTexturesContaining("crab");
+	auto sprite = Crab->addComponent<AnimatedSpriteRenderer>(textureListCrab, 0.075f);
+	sprite->setPivot(Pivot::BottomCenter);
+	sprite->setColor(glm::vec3(1, 1, 1));
+	sprite->setLit(false);
+
+	std::vector<glm::vec2> spawnerPositions;
+	spawnerPositions.push_back(glm::vec2(17 ,18));
+	spawnerPositions.push_back(glm::vec2(30, 18));
+
+	StateMachine* fsm = Crab->addComponent<BossStateMachine>(spawnerPositions);
+	EnemyStats bossStats = EnemyStats();
+	bossStats.attack = 5;
+	bossStats.critChance = 0.15f;
+	bossStats.maxHealth = 2000;
+	bossStats.currentHealth = 2000;
+	bossStats.defence = 8;
+	EnemyComponent component = EnemyComponent(fsm, bossStats);
+	Crab->addComponent<EnemyComponent>(component);
 }
 
 void Level1Scene::init()
@@ -80,10 +119,15 @@ void Level1Scene::init()
 	bossEntranceTiles.push_back(glm::vec2(31, 23));
 	bossEntranceTiles.push_back(glm::vec2(31, 22));
 	bossEntranceTiles.push_back(glm::vec2(31, 21));
+
+	std::vector<glm::vec2> bossPositionTiles;
+	bossPositionTiles.push_back(glm::vec2(23, 18));
+	bossPositionTiles.push_back(glm::vec2(24, 18));
+
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
 	{
 		{ 10, [] { return new TestTile(Texture(), "level2"); } },
-		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile26", glm::vec2(30, 22), bossEntranceTiles); } },
+		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile26", glm::vec2(30, 22), bossEntranceTiles, bossPositionTiles); } },
 		{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	
@@ -154,14 +198,7 @@ void Level1Scene::init()
 		} },
 		{ 98, [this](glm::vec2 pos)
 		{
-			//Crab Anim
-			auto* Crab = SceneManager::Instance()->createGameObject("Crab", pos * GridSystem::Instance()->getTileSize());
-			Crab->getTransform()->setSize(glm::vec2(256, 256));
-
-			const std::vector textureListCrab = ResourceManager::GetTexturesContaining("crab");
-			auto sprite = Crab->addComponent<AnimatedSpriteRenderer>(textureListCrab, 0.075f);
-			sprite->setColor(glm::vec3(1, 1, 1));
-			sprite->setLit(false);
+				createBoss(pos);
 		} }
 	});
 	

@@ -5,11 +5,12 @@
 #include <Util/Events/Events.h>
 #include "..\GameEvents.h"
 
-BossRoomEntryTile::BossRoomEntryTile(const Texture& _texture, std::string wallStringArg, glm::vec2 teleportPosArg, std::vector<glm::vec2> bossEntryPointsArg) : Tile(_texture)
+BossRoomEntryTile::BossRoomEntryTile(const Texture& _texture, std::string wallStringArg, glm::vec2 teleportPosArg, std::vector<glm::vec2> bossEntryPointsArg, std::vector<glm::vec2> bossPositionsArg) : Tile(_texture)
 {
 	teleportPos = teleportPosArg;
 	wallString = wallStringArg;
 	bossEntryPoints = bossEntryPointsArg;
+	bossPositions = bossPositionsArg;
 }
 
 bool BossRoomEntryTile::canInteractWith()
@@ -30,5 +31,5 @@ void BossRoomEntryTile::onInteractedWith(TileHolder* curTileHolder)
 	PlayerController::Instance()->playerPTR->getTransform()->setPosition(teleportWorldPos);
 	GridSystem::Instance()->setSatOnTile(0, teleportPos, PlayerController::Instance()->playerPTR);
 	
-	Griddy::Events::invoke<EnterBossRoomEvent>();
+	Griddy::Events::invoke<EnterBossRoomEvent>(bossPositions);
 }
