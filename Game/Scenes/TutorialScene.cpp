@@ -29,6 +29,13 @@ void TutorialScene::createSlime(const glm::vec2 pos)
 		
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
+
+	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+	auto sprite = enemy->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
+	sprite->setColor(glm::vec3(1, 1, 1));
+	sprite->setLit(true);
+	sprite->setPivot(Pivot::Center);
+	
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
 	EnemyStats slimeStats = EnemyStats();
 	slimeStats.attack = 2;
@@ -36,7 +43,8 @@ void TutorialScene::createSlime(const glm::vec2 pos)
 	slimeStats.maxHealth = 10;
 	slimeStats.currentHealth = 10;
 	slimeStats.defence = 2;
-	EnemyComponent component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
+	
+	EnemyComponent component = EnemyComponent(fsm, slimeStats);
 	enemy->addComponent<EnemyComponent>(component);
 
 	GridSystem::Instance()->setSatOnTile(0, pos, enemy);
@@ -86,7 +94,6 @@ void TutorialScene::init()
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
 	{
 		{ 10, [] { return new TestTile(Texture(), "level1", true); } },
-		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile26", glm::vec2(30, 22), bossEntranceTiles); } },
 		{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	

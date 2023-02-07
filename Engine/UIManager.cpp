@@ -32,6 +32,7 @@ void UIManager::clear()
 		delete panel;
 	}
 
+	renderPanels.clear();
 	UIElements.clear();
 }
 
