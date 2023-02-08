@@ -28,6 +28,7 @@
     <ClInclude Include="Components\AI Behaviours\Reaper\ReaperStateMachine.h" />
     <ClInclude Include="GameEvents.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
+    <ClInclude Include="Tiles\ShopTile.h" />
     <ClInclude Include="Tiles\BossRoomEntryTile.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossIdleBehaviour.h" />
     <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
@@ -118,6 +119,7 @@
     <ClCompile Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.cpp" />
     <ClCompile Include="Components\AI Behaviours\Reaper\ReaperStateMachine.cpp" />
     <ClCompile Include="Scenes\TutorialScene.cpp" />
+    <ClCompile Include="Tiles\ShopTile.cpp" />
     <ClCompile Include="Tiles\BossRoomEntryTile.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossIdleBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\AttackAction.cpp" />

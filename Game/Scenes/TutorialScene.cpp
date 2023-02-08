@@ -19,6 +19,10 @@
 #include "../Tiles/ChestTile.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
+#include "../Tiles/ShopTile.h"
+#include "../Components/Items/Armour/LegendaryArmour.h"
+#include "../Components/Items/Armour/CommonArmour.h"
+#include "../Components/Items/Weapons/LegendaryHammer.h"
 
 void TutorialScene::createSlime(const glm::vec2 pos)
 {
@@ -133,14 +137,14 @@ void TutorialScene::init()
 		{ 48, ResourceManager::GetTexture("tile130") },//Jar
 		{ 49, ResourceManager::GetTexture("tile154") },
 		{ 56, ResourceManager::GetTexture("tile60") }, // Spike
-		{ 93, ResourceManager::GetTexture("chest_2") }, //Chest
+		//{ 93, ResourceManager::GetTexture("chest_2") }, //Chest
 	});
 	
 	grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile*()>>
 	{
 		{ 37, [] { return new LightTile(Texture()); } },
 		{ 56, [] { return new SpikeTile(Texture()); } },
-		{ 93, [] { return new ChestTile(Texture()); } }
+		{ 93, [] { return new ShopTile(Texture(), new LegendaryHammer()); } }
 	});
 	
 	grid_system->loadFromFile(1, "Grid/TutorialLevelDesignDetail.txt");

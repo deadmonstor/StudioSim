@@ -9,7 +9,6 @@ public:
     std::string name() override { return "Legendary Armour"; }
     std::string itemDescription() override { return "Legendary Armour"; }
     std::string rarity() override { return "Legendary"; }
-
     ArmourStats* legendaryArmourStats{};
 };
 

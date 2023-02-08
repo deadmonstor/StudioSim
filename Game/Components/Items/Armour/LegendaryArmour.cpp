@@ -6,6 +6,5 @@ LegendaryArmour::LegendaryArmour()
 	legendaryArmourStats->defence = 3;
 	legendaryArmourStats->health = 10;
 	legendaryArmourStats->mana = 10;
-	legendaryArmourStats->price = 20;
-
+	price = 20;
 }

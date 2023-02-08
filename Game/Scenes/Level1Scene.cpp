@@ -22,6 +22,8 @@
 #include "../Tiles/ChestTile.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
+#include "../Tiles/ShopTile.h"
+#include "../Components/Items/Armour/LegendaryArmour.h"
 
 void Level1Scene::createSlime(const glm::vec2 pos)
 {
@@ -229,7 +231,8 @@ void Level1Scene::init()
 	{
 		{ 37, [] { return new LightTile(Texture()); } },
 		{ 56, [] { return new SpikeTile(Texture()); } },
-		{ 93, [] { return new ChestTile(Texture()); } }
+		{ 93, [] { return new ChestTile(Texture()); } },
+		{ 95, [] {return new ShopTile(Texture(), new LegendaryArmour());  } }
 	});
 	
 	grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");

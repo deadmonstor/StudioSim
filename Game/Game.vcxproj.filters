@@ -93,11 +93,15 @@
     <ClCompile Include="Components\AI Behaviours\DoNothingAction.cpp" />
     <ClCompile Include="Scenes\CreditsScene.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossSpawnAction.cpp" />
+<<<<<<< Updated upstream
     <ClCompile Include="Components\AI Behaviours\Reaper\ReaperStateMachine.cpp" />
     <ClCompile Include="Components\AI Behaviours\Reaper\ReaperIdleBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\Reaper\ReaperCombatBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\Reaper\ReaperAttackAction.cpp" />
     <ClCompile Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.cpp" />
+=======
+    <ClCompile Include="Tiles\ShopTile.cpp" />
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -211,6 +215,7 @@
     <ClInclude Include="Components\AI Behaviours\Reaper\ReaperAttackAction.h" />
     <ClInclude Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.h" />
     <ClInclude Include="Scenes\CreditsScene.h" />
+    <ClInclude Include="Tiles\ShopTile.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />

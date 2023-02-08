@@ -11,7 +11,7 @@ PoisonSpell::PoisonSpell()
 	spellStats->damagePerTurn = 20;
 	spellStats->range = 4;
 	spellStats->manaCost = 10;
-	spellStats->price = 20;
+	price = 20;
 	spellStats->currentCooldown = 0;
 }
 

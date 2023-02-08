@@ -2,6 +2,6 @@
 
 LegendaryHammer::LegendaryHammer()
 {
-	stats->price = 70;
+	price = 30;
 	stats->attack = 10;
 }

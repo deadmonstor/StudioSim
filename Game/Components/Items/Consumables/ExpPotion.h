@@ -11,7 +11,6 @@ public:
     std::string name() override { return "Exp Potion"; }
     std::string itemDescription() override { return "A potion that gives you experience."; }
     std::string rarity() override { return "Common"; }
-
     ConsumableStats* expPotionStats{};
 private:
     void use() override

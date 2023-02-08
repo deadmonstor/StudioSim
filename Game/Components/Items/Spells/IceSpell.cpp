@@ -6,7 +6,7 @@
 
 IceSpell::IceSpell()
 {
-	spellStats->price = 15;
+	price = 15;
 	spellStats->maxCooldown = 2;
 	spellStats->manaCost = 2;
 	spellStats->currentCooldown = 0;
