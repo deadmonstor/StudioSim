@@ -92,6 +92,11 @@
     <ClCompile Include="Components\UI\MasterAudioPlusButton.cpp" />
     <ClCompile Include="Components\AI Behaviours\DoNothingAction.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossSpawnAction.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperStateMachine.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperIdleBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperCombatBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperAttackAction.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -199,6 +204,11 @@
     <ClInclude Include="Components\UI\InventoryIconButton.h" />
     <ClInclude Include="Components\UI\ItemSlot.h" />
     <ClInclude Include="Components\AI Behaviours\DoNothingAction.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperStateMachine.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperIdleBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperCombatBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperAttackAction.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />

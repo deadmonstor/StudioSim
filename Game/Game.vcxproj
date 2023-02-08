@@ -20,7 +20,12 @@
     <ClInclude Include="Components\AI Behaviours\Boss\BossEnemyComponent.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossSpawnAction.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossStateMachine.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.h" />
     <ClInclude Include="Components\AI Behaviours\DoNothingAction.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperAttackAction.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperCombatBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperIdleBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperStateMachine.h" />
     <ClInclude Include="GameEvents.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Tiles\BossRoomEntryTile.h" />
@@ -106,6 +111,11 @@
     <ClCompile Include="Components\AI Behaviours\Boss\BossSpawnAction.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossStateMachine.cpp" />
     <ClCompile Include="Components\AI Behaviours\DoNothingAction.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperAttackAction.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperCombatBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperIdleBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperStateMachine.cpp" />
     <ClCompile Include="Scenes\TutorialScene.cpp" />
     <ClCompile Include="Tiles\BossRoomEntryTile.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossIdleBehaviour.cpp" />
