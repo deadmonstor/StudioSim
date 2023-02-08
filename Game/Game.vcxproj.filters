@@ -215,6 +215,7 @@
     <ClInclude Include="Scenes\CreditsScene.h" />
     <ClInclude Include="BossMusic.h" />
     <ClInclude Include="Tiles\ShopTile.h" />
+    <ClInclude Include="AllItemInclude.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />
