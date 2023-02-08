@@ -179,7 +179,7 @@ void TutorialScene::update()
 {
 	if (hasCompletedTutorialLevel)
 	{
-		SceneManager::Instance()->changeScene("creditsScene");
+		SceneManager::Instance()->changeScene("level1");
 	}
 	
 	if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
