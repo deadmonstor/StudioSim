@@ -37,8 +37,8 @@ void ButtonComponent::onMouseDown(const OnMouseDown* event)
 	const Transform* transform = getTransform();
 	if (transform == nullptr) return;
 	
-	glm::vec2 pos = transform->getPosition() * Renderer::Instance()->getAspectRatio();
-	const glm::vec2 size = transform->getScale() * Renderer::Instance()->getAspectRatio();
+	glm::vec2 pos = transform->getPosition();
+	const glm::vec2 size = transform->getScale();
 	const glm::vec2 pivot = getPivot();
 	
 	pos = pos + glm::vec2(-pivot.x * size.x, -pivot.y * size.y);

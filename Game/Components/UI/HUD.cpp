@@ -81,22 +81,22 @@ void HUD::updateHUD()
 	}
 	
 	const auto topLeft =
-					glm::vec2(0, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
+					glm::vec2(0, Renderer::getViewportSize().y);
 
 	const auto MiddleLeft =
-					glm::vec2(0, Renderer::getWindowSize().y / 2) / Renderer::Instance()->getAspectRatio();
+					glm::vec2(0, Renderer::getViewportSize().y / 2);
 
 	const auto topRight =
-					glm::vec2(Renderer::getWindowSize().x, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
+					glm::vec2(Renderer::getViewportSize().x, Renderer::getViewportSize().y);
 
 	const auto bottomRight =
-					glm::vec2(Renderer::getWindowSize().x, 0) / Renderer::Instance()->getAspectRatio();
+					glm::vec2(Renderer::getViewportSize().x, 0);
 
 	const auto topMiddle =
-					glm::vec2((Renderer::getWindowSize().x / 2), Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
+					glm::vec2((Renderer::getViewportSize().x / 2), Renderer::getViewportSize().y);
                     
     const auto bottomLeft = 
-                    glm::vec2(0, 0) / Renderer::Instance()->getAspectRatio();
+                    glm::vec2(0, 0);
 
 	// =============================================Update Audio Text ==========================================
 	plusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -60, -10 });
