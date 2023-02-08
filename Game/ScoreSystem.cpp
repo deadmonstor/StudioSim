@@ -20,7 +20,7 @@ void ScoreSystem::SaveScore(std::string Username)
 	file.open("Score.txt", std::ios::app);
 	if (file)
 	{
-		file << Username << "-" << currentScore << "\n";
+		file << Username << "," << currentScore << "\n";
 		file.close();
 
 	}
@@ -28,7 +28,7 @@ void ScoreSystem::SaveScore(std::string Username)
 	{
 		std::cout << "File Doesn't Exist";
 		file.open("Score.txt", std::ios::out);
-		file << Username << "-" << currentScore << "\n";
+		file << Username << "," << currentScore << "\n";
 		file.close();
 	}
 
@@ -40,7 +40,7 @@ void ScoreSystem::ReadScores(bool FromMainMenu)
 	file.open("Score.txt");
 	std::string line, m_Name;
 	size_t pos = 0;
-	std::string delim = "-";
+	std::string delim = ",";
 
 	for (int i = 0; i < 11 && std::getline(file, line); i++)
 	{
@@ -81,7 +81,7 @@ void ScoreSystem::UpdateScoreFile()
 	for (int i = 0; m_FileData[i].Score != NULL && i < 10; i++)
 	{
 		
-		file << m_FileData[i].Name << "-" << m_FileData[i].Score << "\n";
+		file << m_FileData[i].Name << "," << m_FileData[i].Score << "\n";
 		
 	}
 	file.close();
