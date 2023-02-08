@@ -137,7 +137,7 @@ void TutorialScene::init()
 		{ 48, ResourceManager::GetTexture("tile130") },//Jar
 		{ 49, ResourceManager::GetTexture("tile154") },
 		{ 56, ResourceManager::GetTexture("tile60") }, // Spike
-		//{ 93, ResourceManager::GetTexture("chest_2") }, //Chest
+		{ 93, ResourceManager::GetTexture("chest_2") }, //Chest
 	});
 	
 	grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile*()>>
