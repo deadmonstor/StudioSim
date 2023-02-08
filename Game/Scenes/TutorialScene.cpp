@@ -22,8 +22,6 @@
 
 void TutorialScene::createSlime(const glm::vec2 pos)
 {
-	engineRenderID = Griddy::Events::subscribe(this, &TutorialScene::onEngineRender);
-	
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
 	int random = rand() % 10000000;
 		
@@ -52,6 +50,8 @@ void TutorialScene::createSlime(const glm::vec2 pos)
 
 void TutorialScene::init()
 {
+	engineRenderID = Griddy::Events::subscribe(this, &TutorialScene::onEngineRender);
+	
 	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 	LootTable::Instance()->LoadingIntoLootTableArray();
 	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
