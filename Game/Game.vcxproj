@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AllItemInclude.h" />
     <ClInclude Include="BossMusic.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossAttackAction.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossCombatBehaviour.h" />
