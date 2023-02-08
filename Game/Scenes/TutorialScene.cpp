@@ -56,7 +56,7 @@ void TutorialScene::init()
 {
 	engineRenderID = Griddy::Events::subscribe(this, &TutorialScene::onEngineRender);
 	
-	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
+
 	LootTable::Instance()->LoadingIntoLootTableArray();
 	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
 
@@ -177,6 +177,9 @@ void TutorialScene::init()
 	
 	grid_system->loadFromFile(2, "Grid/TutorialLevelDesignSP.txt");
 	TurnManager::Instance()->startTurnSystem();
+
+	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, PlayerController::Instance()->playerPTR->getTransform()->getPosition().x,
+		PlayerController::Instance()->playerPTR->getTransform()->getPosition().y, AudioType::BackgroundMusic);
 }
 
 void TutorialScene::update()
