@@ -41,6 +41,8 @@ int main(int, char**)
 	Renderer->setWindowIcon("Sprites\\icon.png");
 	Renderer->setWindowSize({ 1920, 1080 });
 
+	ResourceManager::LoadTextureArray("Sprites\\Red-Slime-Idle\\", "Green-Slime-Idle", 7);
+	ResourceManager::LoadTextureArray("Sprites\\Red-Slime-Idle\\", "Red-Slime-Idle", 7);
 	ResourceManager::LoadTextureArray("Sprites\\Blue-Slime-Idle\\", "Blue-Slime-Idle", 7);
 	ResourceManager::LoadTextureArray("Sprites\\Blue-Slime-Hurt\\", "Blue-Slime-Hurt", 11);
 	ResourceManager::LoadTextureArray("Sprites\\Blue-Slime-Death\\", "Blue-Slime-Death", 14);
