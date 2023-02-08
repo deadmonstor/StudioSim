@@ -30,6 +30,7 @@ void PlayerSpellBehaviour::Act()
 		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) && !willFlashOnce)
 		{
 			spellCasted->spellStats->currentCooldown = spellCasted->spellStats->maxCooldown;
+			
 			//TurnManager::Instance()->endTurn();
 		}
 	}
