@@ -50,6 +50,8 @@ void GridSystem::init(const glm::fvec2 _tileSize, const glm::ivec2 _gridSize)
 	gridSize = _gridSize;
 	hasLoaded = false;
 
+	gridLayers.clear();
+	
 	// subscribe to the event
 	Griddy::Events::subscribe(this, &GridSystem::onDebugEvent);
 }
@@ -74,7 +76,8 @@ void GridSystem::renderInternal(const int id)
 		const glm::vec2 camPos = Renderer::Instance()->getCameraPos();
 
 		// Skip the first round of rendering if the x position is not in the right place
-		if (!Renderer::Instance()->getCamera()->isInFrustum({tileX, camPos.y}, pivotAndSize))
+		if (Renderer::Instance()->getCamera() == nullptr ||
+			!Renderer::Instance()->getCamera()->isInFrustum({tileX, camPos.y}, pivotAndSize))
 		{
 			continue;
 		}
