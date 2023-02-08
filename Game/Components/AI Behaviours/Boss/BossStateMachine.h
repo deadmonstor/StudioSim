@@ -7,6 +7,7 @@ class BossStateMachine :
 public:
     explicit BossStateMachine(glm::vec2 myPosArg, std::vector<glm::vec2> spawnerPositionsArg) : myPos(myPosArg), spawnerPositions(spawnerPositionsArg) {}
     void start() override;
+    void destroy() override;
 private:
     glm::vec2 myPos;
     std::vector<glm::vec2> spawnerPositions;
