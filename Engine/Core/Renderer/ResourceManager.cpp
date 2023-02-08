@@ -46,6 +46,11 @@ Texture ResourceManager::LoadTexture(const char *file, const std::string name)
     return Textures[name];
 }
 
+bool ResourceManager::HasTexture(const std::string name)
+{
+    return Textures.contains(name);
+}
+
 std::list<Texture> ResourceManager::LoadTextureArray(const char* folder,
                                                         const std::string& name,
                                                         const int numTextures)
