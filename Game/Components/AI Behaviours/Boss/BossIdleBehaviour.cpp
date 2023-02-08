@@ -2,13 +2,15 @@
 #include "Core/Grid/GridSystem.h"
 #include "Core/Components\Transform.h"
 #include "Core\Components\AI\StateMachine.h"
+#include "BossCombatBehaviour.h"
 
 #include "../../TurnManager.h"
 #include "../../DelayTask.h"
 
 
-BossIdleBehaviour::BossIdleBehaviour(StateMachine* parentFSMArg, std::vector<glm::vec2> spawnerPositionsArg)
+BossIdleBehaviour::BossIdleBehaviour(StateMachine* parentFSMArg, glm::vec2 myPosArg, std::vector<glm::vec2> spawnerPositionsArg)
 {
+	myPos = myPosArg;
 	isInFSM = true;
 	parentFSM = parentFSMArg;
 	spawnerPositions = spawnerPositionsArg;
@@ -16,11 +18,13 @@ BossIdleBehaviour::BossIdleBehaviour(StateMachine* parentFSMArg, std::vector<glm
 
 void BossIdleBehaviour::Act()
 {
-	DelayTask::createTask(parentFSM->getOwner(), 2, [this]()
-		{
-			TurnManager::Instance()->endTurn();
-			LOG_INFO("Boss Idle Behaviour -> DelayTask::createTask -> TurnManager::Instance()->endTurn()");
-		});
+	if (shouldEndTurn) {
+		DelayTask::createTask(parentFSM->getOwner(), 2, [this]()
+			{
+				TurnManager::Instance()->endTurn();
+		LOG_INFO("Boss Idle Behaviour -> DelayTask::createTask -> TurnManager::Instance()->endTurn()");
+			});
+	}
 }
 
 void BossIdleBehaviour::start()
@@ -43,6 +47,7 @@ void BossIdleBehaviour::destroy()
 
 void BossIdleBehaviour::onPlayerEnterBossRoom(EnterBossRoomEvent* event)
 {
+	shouldEndTurn = false;
 	GameObject* enemy = parentFSM->getOwner();
 	for (auto position : event->bossPositions)
 	{
@@ -50,5 +55,5 @@ void BossIdleBehaviour::onPlayerEnterBossRoom(EnterBossRoomEvent* event)
 	}
 
 	//start attack behaviour
-	LOG_INFO("Boss Attack!");
+	Griddy::Events::invoke<StateTransition>(parentFSM, new BossCombatBehaviour(parentFSM, myPos, spawnerPositions));
 }
