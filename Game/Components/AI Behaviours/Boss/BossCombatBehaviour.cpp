@@ -35,6 +35,7 @@ void BossCombatBehaviour::GenerateBehaviourList()
 
 void BossCombatBehaviour::GenerateEffects()
 {
+	effects["AttackOnCooldown"] = Effect();
 }
 
 void BossCombatBehaviour::endTurn()

@@ -5,7 +5,6 @@
 #include "BossCombatBehaviour.h"
 
 #include "../../TurnManager.h"
-#include "../../DelayTask.h"
 
 
 BossIdleBehaviour::BossIdleBehaviour(StateMachine* parentFSMArg, glm::vec2 myPosArg, std::vector<glm::vec2> spawnerPositionsArg)
@@ -19,11 +18,7 @@ BossIdleBehaviour::BossIdleBehaviour(StateMachine* parentFSMArg, glm::vec2 myPos
 void BossIdleBehaviour::Act()
 {
 	if (shouldEndTurn) {
-		DelayTask::createTask(parentFSM->getOwner(), 2, [this]()
-			{
-				TurnManager::Instance()->endTurn();
-		LOG_INFO("Boss Idle Behaviour -> DelayTask::createTask -> TurnManager::Instance()->endTurn()");
-			});
+		TurnManager::Instance()->endTurn();
 	}
 }
 
