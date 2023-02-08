@@ -28,23 +28,55 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 	
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
 	int random = rand() % 10000000;
+	int randomEnemy = rand() % 2; //% by how many different types of enemies
 	
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(35, 35));
 
-	const std::vector textureList = ResourceManager::GetTexturesContaining("SkeletonMove");
+	std::vector textureList = ResourceManager::GetTexturesContaining("SkeletonMove");
+	
+
+	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
+	EnemyStats slimeStats = EnemyStats();
+	switch (randomEnemy)
+	{
+	case 0:
+		textureList = ResourceManager::GetTexturesContaining("SkeletonMove");
+
+		slimeStats.attack = 4;
+		slimeStats.critChance = 0.2f;
+		slimeStats.maxHealth = 50;
+		slimeStats.currentHealth = slimeStats.maxHealth;
+		slimeStats.defence = 2;
+		break;
+
+	case 1:
+		textureList = ResourceManager::GetTexturesContaining("ZombieMove");
+
+		slimeStats.attack = 2;
+		slimeStats.critChance = 0.4f;
+		slimeStats.maxHealth = 80;
+		slimeStats.currentHealth = slimeStats.maxHealth;
+		slimeStats.defence = 4;
+		break;
+
+	default:
+		textureList = ResourceManager::GetTexturesContaining("SkeletonMove");
+
+		slimeStats.attack = 4;
+		slimeStats.critChance = 0.2f;
+		slimeStats.maxHealth = 50;
+		slimeStats.currentHealth = slimeStats.maxHealth;
+		slimeStats.defence = 2;
+		//, "Blue-Slime-Idle"
+		break;
+	}
+		
 	auto sprite = enemy->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 	sprite->setColor(glm::vec3(1, 1, 1));
 	sprite->setLit(false);
 	sprite->setPivot(Pivot::Center);
-
-	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
-	EnemyStats slimeStats = EnemyStats();
-	slimeStats.attack = 4;
-	slimeStats.critChance = 0.2f;
-	slimeStats.maxHealth = 50;
-	slimeStats.currentHealth = slimeStats.maxHealth;
-	slimeStats.defence = 2;
+	
 	EnemyComponent component = EnemyComponent(fsm, slimeStats);
 	enemy->addComponent<EnemyComponent>(component);
 
