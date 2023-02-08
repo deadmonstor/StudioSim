@@ -120,17 +120,17 @@ void HUD::updateHUD()
 	int offset = 15;
 
 #ifdef _DEBUG
-	offset = 35;
+	offset = 25;
 #endif
 	
 	// =============================================Update health icon=============================================
-	healthIcon->getTransform()->setPosition(topLeft - glm::vec2{-20, offset});
+	healthIcon->getTransform()->setPosition(topLeft - glm::vec2{-10, offset});
 	healthIcon->getTransform()->setSize({50, 50});
 	healthIcon->setTexture(ResourceManager::GetTexture("healthIcon"));
 	healthIcon->setPivot(Pivot::TopLeft);
 	
 	// =============================================Update mana icon===============================================
-	manaIcon->getTransform()->setPosition(topLeft - glm::vec2{-20, 75 + offset});
+	manaIcon->getTransform()->setPosition(topLeft - glm::vec2{-10, 75 + offset});
 	manaIcon->getTransform()->setSize({50, 50});
 	manaIcon->setTexture(ResourceManager::GetTexture("ManaIcon"));
 	manaIcon->setPivot(Pivot::TopLeft);
@@ -141,7 +141,7 @@ void HUD::updateHUD()
 	coinsIcon->setPivot(Pivot::TopRight);
 
 	// =============================================Update pause icon=============================================
-	pauseButton->getTransform()->setPosition(MiddleLeft + glm::vec2{45, 125});
+	pauseButton->getTransform()->setPosition(MiddleLeft + glm::vec2{35, 125});
 	pauseButton->getTransform()->setSize({ 30, 30 });
 	pauseButton->setTexture(ResourceManager::GetTexture("pauseButton"));
 	pauseButton->setPivot(Pivot::Center);
@@ -151,7 +151,7 @@ void HUD::updateHUD()
 	const int maxHealth = playerStats->maxHealth;
 	
 	auto sizeOfText = TextRenderer::Instance()->renderTextSize(std::to_string(health) + "/" + std::to_string(maxHealth), 1);
-	auto position = topLeft - glm::vec2{-75, sizeOfText.y} - glm::vec2{0, offset};
+	auto position = topLeft - glm::vec2{-55, sizeOfText.y} - glm::vec2{0, offset + 2};
 	
 	healthText->getTransform()->setPosition(position);
 	healthText->getTransform()->setSize(sizeOfText);
