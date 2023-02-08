@@ -126,7 +126,7 @@ void Level1Scene::createBoss(const glm::vec2 pos)
 	bossStats.critChance = 0.15f;
 	bossStats.maxHealth = 70;
 	bossStats.currentHealth = 70;
-	bossStats.defence = 8;
+	bossStats.defence = 5;
 	EnemyComponent component = EnemyComponent(fsm, bossStats);
 	Crab->addComponent<EnemyComponent>(component);
 }
