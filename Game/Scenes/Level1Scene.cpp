@@ -51,7 +51,7 @@ void Level1Scene::createSlime(const glm::vec2 pos)
 		case 1:
 			textureList = ResourceManager::GetTexturesContaining("Red-Slime-Idle");
 
-			slimeStats.attack = 1;
+			slimeStats.attack = 3;
 			slimeStats.critChance = 0.5f;
 			slimeStats.maxHealth = 20;
 			slimeStats.currentHealth = 20;
@@ -63,8 +63,8 @@ void Level1Scene::createSlime(const glm::vec2 pos)
 
 			slimeStats.attack = 2;
 			slimeStats.critChance = 0.2f;
-			slimeStats.maxHealth = 10;
-			slimeStats.currentHealth = 10;
+			slimeStats.maxHealth = 15;
+			slimeStats.currentHealth = 15;
 			slimeStats.defence = 3;
 			//, "Green-Slime-Idle"
 			break;

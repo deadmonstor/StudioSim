@@ -18,6 +18,6 @@ public:
 private:
     double m_x, m_y;
     bool Teleportable = false;
-    void ChangeTeleport(EnterBossRoomEvent* event);
+    void ChangeTeleport(BossDeathEvent* event);
 };
 
