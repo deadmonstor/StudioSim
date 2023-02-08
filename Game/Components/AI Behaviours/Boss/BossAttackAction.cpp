@@ -6,21 +6,18 @@
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "../../DestroyAfterAnimation.h"
 
-BossAttackAction::BossAttackAction(GameObject* parentObjectArg)
-	: parentObject(parentObjectArg)
+BossAttackAction::BossAttackAction(glm::vec2 myPosArg, GameObject* parentObjectArg)
+	: currentPos(myPosArg), parentObject(parentObjectArg)
 {
-	currentPos = parentObject->getTransform()->getPosition();
 }
 
 void BossAttackAction::Act()
 {
-	//Initialize values
-	currentPos = parentObject->getTransform()->getPosition();
-	GridSystem* gridSystem = GridSystem::Instance();
 
 	//Find attack positions
 	std::vector<glm::vec2> attackPositions = FindAttackPositions();
 	
+	//do attacks
 	for (auto pos : attackPositions) 
 	{
 		createSlashGameObject(pos);
@@ -32,8 +29,8 @@ void BossAttackAction::Act()
 
 std::vector<glm::vec2> BossAttackAction::FindAttackPositions()
 {
-	currentPos = currentPos = parentObject->getTransform()->getPosition();
 	glm::vec2 playerPos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
+	playerPos = GridSystem::Instance()->getTilePosition(playerPos);
 	glm::vec2 directionVec = playerPos - currentPos;
 	std::vector<glm::vec2> outputPositions = std::vector<glm::vec2>();
 
@@ -44,9 +41,9 @@ std::vector<glm::vec2> BossAttackAction::FindAttackPositions()
 		if (directionVec.x < 0)
 		{
 			for (int xPos = -4; xPos <= -1; xPos++)
-				for (int yPos = 2; yPos >= 0; yPos--)
+				for (int yPos = 1; yPos >= -1; yPos--)
 				{
-					glm::vec2 pos = GridSystem::Instance()->getTilePosition(currentPos) + glm::vec2(xPos, yPos);
+					glm::vec2 pos = currentPos + glm::vec2(xPos, yPos);
 					outputPositions.push_back(pos);
 				}
 		}
@@ -55,9 +52,9 @@ std::vector<glm::vec2> BossAttackAction::FindAttackPositions()
 		else
 		{
 			for (int xPos = 2; xPos <= 5; xPos++)
-				for (int yPos = 2; yPos >= 0; yPos--)
+				for (int yPos = 1; yPos >= -1; yPos--)
 				{
-					glm::vec2 pos = GridSystem::Instance()->getTilePosition(currentPos) + glm::vec2(xPos, yPos);
+					glm::vec2 pos = currentPos + glm::vec2(xPos, yPos);
 					outputPositions.push_back(pos);
 				}
 		}
@@ -69,9 +66,9 @@ std::vector<glm::vec2> BossAttackAction::FindAttackPositions()
 		if (directionVec.y < 0)
 		{
 			for (int xPos = -1; xPos <= 2; xPos++)
-				for (int yPos = 0; yPos >= -2; yPos--)
+				for (int yPos = -1; yPos >= -3; yPos--)
 				{
-					glm::vec2 pos = GridSystem::Instance()->getTilePosition(currentPos) + glm::vec2(xPos, yPos);
+					glm::vec2 pos = currentPos + glm::vec2(xPos, yPos);
 					outputPositions.push_back(pos);
 				}
 		}
@@ -80,9 +77,9 @@ std::vector<glm::vec2> BossAttackAction::FindAttackPositions()
 		else
 		{
 			for(int xPos = -1; xPos <=2; xPos++)
-				for (int yPos = 4; yPos >= 2; yPos--)
+				for (int yPos = 3; yPos >= 1; yPos--)
 				{
-					glm::vec2 pos = GridSystem::Instance()->getTilePosition(currentPos) + glm::vec2(xPos, yPos);
+					glm::vec2 pos = currentPos + glm::vec2(xPos, yPos);
 					outputPositions.push_back(pos);
 				}
 		}

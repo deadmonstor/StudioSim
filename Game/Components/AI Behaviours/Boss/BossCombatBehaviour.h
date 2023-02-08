@@ -7,7 +7,7 @@ class BossCombatBehaviour :
     public PlannedBehaviour
 {
 public:
-    explicit BossCombatBehaviour(StateMachine* parentFSMArg, std::vector<glm::vec2> spawnerPositionsArg);
+    explicit BossCombatBehaviour(StateMachine* parentFSMArg, glm::vec2 myPosArg, std::vector<glm::vec2> spawnerPositionsArg);
     void WorldAnalysis() override;
     void ActionAnalysis() override;
     void GenerateBehaviourList() override;
@@ -16,6 +16,7 @@ public:
     void endTurn();
 private:
     StateMachine* parentFSM;
+    glm::vec2 myPos;
     std::vector<glm::vec2> spawnerPositions;
 };
 

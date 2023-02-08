@@ -8,8 +8,9 @@
 #include "../../DelayTask.h"
 
 
-BossIdleBehaviour::BossIdleBehaviour(StateMachine* parentFSMArg, std::vector<glm::vec2> spawnerPositionsArg)
+BossIdleBehaviour::BossIdleBehaviour(StateMachine* parentFSMArg, glm::vec2 myPosArg, std::vector<glm::vec2> spawnerPositionsArg)
 {
+	myPos = myPosArg;
 	isInFSM = true;
 	parentFSM = parentFSMArg;
 	spawnerPositions = spawnerPositionsArg;
@@ -54,5 +55,5 @@ void BossIdleBehaviour::onPlayerEnterBossRoom(EnterBossRoomEvent* event)
 	}
 
 	//start attack behaviour
-	Griddy::Events::invoke<StateTransition>(parentFSM, new BossCombatBehaviour(parentFSM, spawnerPositions));
+	Griddy::Events::invoke<StateTransition>(parentFSM, new BossCombatBehaviour(parentFSM, myPos, spawnerPositions));
 }

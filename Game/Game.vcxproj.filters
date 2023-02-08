@@ -184,6 +184,7 @@
     <ClInclude Include="Components\AI Behaviours\Boss\BossCombatBehaviour.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossAttackAction.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossSpawnAction.h" />
+    <ClInclude Include="Components\AI Behaviours\Boss\BossEnemyComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />

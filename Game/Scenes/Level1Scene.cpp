@@ -67,7 +67,7 @@ void Level1Scene::createBoss(const glm::vec2 pos)
 	spawnerPositions.push_back(glm::vec2(17 ,18));
 	spawnerPositions.push_back(glm::vec2(30, 18));
 
-	StateMachine* fsm = Crab->addComponent<BossStateMachine>(spawnerPositions);
+	StateMachine* fsm = Crab->addComponent<BossStateMachine>(pos, spawnerPositions);
 	EnemyStats bossStats = EnemyStats();
 	bossStats.attack = 1;
 	bossStats.critChance = 0.15f;

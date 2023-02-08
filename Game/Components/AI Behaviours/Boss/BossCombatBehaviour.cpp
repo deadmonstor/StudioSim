@@ -2,10 +2,11 @@
 #include "../../TurnManager.h"
 #include "BossAttackAction.h"
 
-BossCombatBehaviour::BossCombatBehaviour(StateMachine* parentFSMArg, std::vector<glm::vec2> spawnerPositionsArg)
+BossCombatBehaviour::BossCombatBehaviour(StateMachine* parentFSMArg, glm::vec2 myPosArg, std::vector<glm::vec2> spawnerPositionsArg)
 {
 	isInFSM = true;
 	parentFSM = parentFSMArg;
+	myPos = myPosArg;
 	spawnerPositions = spawnerPositionsArg;
 }
 
@@ -22,7 +23,7 @@ void BossCombatBehaviour::ActionAnalysis()
 
 void BossCombatBehaviour::GenerateBehaviourList()
 {
-	availableActions["Attack"] = std::make_pair(0, new BossAttackAction(parentFSM->getOwner()));
+	availableActions["Attack"] = std::make_pair(0, new BossAttackAction(myPos, parentFSM->getOwner()));
 	for (auto action : availableActions)
 	{
 		if (!action.second.second->GetInitValue())

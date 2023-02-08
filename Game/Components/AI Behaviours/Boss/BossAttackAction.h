@@ -9,7 +9,7 @@ class BossAttackAction :
     public Behaviour
 {
 public:
-    explicit BossAttackAction(GameObject* parentObjectArg);
+    explicit BossAttackAction(glm::vec2 myPosArg, GameObject* parentObjectArg);
     void Act() override;
     std::vector<glm::vec2> FindAttackPositions();
 private:
