@@ -173,7 +173,7 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 		}
 
 		//Set min/max falloff
-		fmodResult = fmodChannel->set3DMinMaxDistance(10, 1000);
+		fmodResult = fmodChannel->set3DMinMaxDistance(1, 1000);
 		if (!checkResult(fmodResult, "Set 3D Min/Max Distance"))
 		{
 			return false;
