@@ -92,6 +92,7 @@
     <ClCompile Include="Components\UI\MasterAudioPlusButton.cpp" />
     <ClCompile Include="Components\AI Behaviours\DoNothingAction.cpp" />
     <ClCompile Include="Scenes\CreditsScene.cpp" />
+    <ClCompile Include="BossMusic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Components\UI\ItemSlot.h" />
     <ClInclude Include="Components\AI Behaviours\DoNothingAction.h" />
     <ClInclude Include="Scenes\CreditsScene.h" />
+    <ClInclude Include="BossMusic.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />

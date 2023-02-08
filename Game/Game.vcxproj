@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BossMusic.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossAttackAction.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossCombatBehaviour.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossEnemyComponent.h" />
@@ -102,6 +103,7 @@
     <ClInclude Include="Scenes\CreditsScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BossMusic.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossAttackAction.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossCombatBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossStateMachine.cpp" />
