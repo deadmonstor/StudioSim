@@ -121,6 +121,7 @@ void EnemyComponent::DropLoot()
 
 	if (getOwner()->getName() == "bossSpawn")
 		return;
+	
 	std::string itemToSpawn = EnemyDropLootTable::Instance()->EnemyDropRollLoot();
 	Texture m_ItemTexture;
 
@@ -188,7 +189,7 @@ void EnemyComponent::DropLoot()
 	Item->addComponent<SpriteComponent>();
 	Item->getComponent<SpriteComponent>()->setPivot(Pivot::Center);
 	Item->getComponent<SpriteComponent>()->setTexture(m_ItemTexture);
-	Item->getComponent<SpriteComponent>()->setLit(false);
+	Item->getComponent<SpriteComponent>()->setLit(true);
 	Item->getComponent<SpriteComponent>()->setSortingLayer(Renderer::getSortingLayer("Background Grid"));
 	Item->addComponent<PickUp>();
 	Item->getComponent<PickUp>()->SetAmount(Amount);
