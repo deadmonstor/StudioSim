@@ -1,5 +1,6 @@
 #include "PlayerFSM.h"
 #include "../TurnManager.h"
+#include "../../ScoreSystem.h"
 
 #include "../Items/Consumables/HealthPotion.h"
 #include "../Items/Armour/LegendaryArmour.h"
@@ -74,6 +75,8 @@ void PlayerController::createPlayer()
 				playerStats->myInventory->add_item(func());
 			}
 		}
+
+		ScoreSystem::Instance()->resetScoreSystem();
 	}
 	
 	myInventory = playerStats->myInventory;
@@ -111,11 +114,11 @@ void PlayerController::onEngineRender(const OnEngineRender* render)
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
 #ifdef _DEBUG
-	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr)
+	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr && playerPTR != nullptr)
 	{
 		for(auto func : Inventory::getItemByName | std::views::values)
 		{
-			PlayerController::Instance()->myInventory->add_item(func());
+			myInventory->add_item(func());
 		}
 	}
 #endif
@@ -181,9 +184,9 @@ void PlayerController::ReduceSpellCooldown()
 	if (Item* spell = PlayerController::Instance()->myInventory->getFirstItemWithEquipSlot(EquipSlot::SPELL); spell != nullptr)
 	{
 		const auto spellCasted = dynamic_cast<SpellItem*>(spell);
-		if (spellCasted->spellStats->currentCooldown != spellCasted->spellStats->maxCooldown)
+		if (spellCasted->spellStats->currentCooldown > 0)
 		{
-			spellCasted->spellStats->currentCooldown += 1;
+			spellCasted->spellStats->currentCooldown -= 1;
 		}
 	}
 }

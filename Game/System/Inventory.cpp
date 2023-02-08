@@ -192,22 +192,39 @@ void Inventory::equip_item(const std::string& item_name)
 				LOG_INFO(item->name() + " is not equippable.");
 				break;
 			}
+
+
+			const auto playerStats = PlayerController::Instance()->playerStats;
 			
 			switch(item->getItemType())
 			{
 				case ItemType::ARMOUR:
 				{
-					/*auto armour = dynamic_cast<ArmourStats*>(item);
-					playerStats->maxHealth += armour->health;*/
-					break;
+					const auto armourItem = dynamic_cast<ArmourItem*>(item);
+					const auto armour = armourItem->armour;
+
+					if (playerStats->currentHealth == playerStats->maxHealth)
+					{
+						playerStats->currentHealth = playerStats->maxHealth + armour->health;
+					}
+						
+					playerStats->maxHealth += armour->health;
+
+					if (playerStats->currentMana == playerStats->maxMana)
+					{
+						playerStats->currentMana = playerStats->maxMana + armour->mana;
+					}
+
+					playerStats->maxMana += armour->mana;
+					playerStats->defence += armour->defence;
 				}
+				case ItemType::WEAPON:
+				case ItemType::SPELL:
 				case ItemType::CONSUMABLE:
 				{
 					LOG_INFO(item->name() + " equipped.");
 					break;
 				}
-				case ItemType::WEAPON:
-				case ItemType::SPELL:
 				case ItemType::NOTSET:
 				{
 					std::cout << item_name << " is not equippable." << std::endl;
@@ -231,18 +248,26 @@ void Inventory::unequip_item(const std::string& item_name)
 				LOG_INFO(item->name() + " is not equipped");
 				break;
 			}
+
+			const auto playerStats = PlayerController::Instance()->playerStats;
 			
 			switch(item->getItemType())
 			{
-				case ItemType::WEAPON:
-				case ItemType::SPELL:
 				case ItemType::ARMOUR:
 				{
-					/*auto armour = dynamic_cast<ArmourStats*>(item);
-					playerStats->maxHealth -= armour->health;*/
+					const auto armourItem = dynamic_cast<ArmourItem*>(item);
+					const auto armour = armourItem->armour;
+					playerStats->maxHealth -= armour->health;
+					playerStats->currentHealth = glm::min(playerStats->currentHealth, playerStats->maxHealth);
+						
+					playerStats->maxMana -= armour->mana;
+					playerStats->currentMana = glm::min(playerStats->currentMana, playerStats->maxMana);
+
+					playerStats->defence -= armour->defence;
 					item->isEquipped = false;
-					break;
 				}
+				case ItemType::WEAPON:
+				case ItemType::SPELL:
 				case ItemType::CONSUMABLE:
 				{
 					item->isEquipped = false;

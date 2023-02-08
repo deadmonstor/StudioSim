@@ -9,10 +9,16 @@
 
 ScoreSystem::ScoreSystem()
 {
+	resetScoreSystem();
+}
+
+void ScoreSystem::resetScoreSystem()
+{
 	currentScore = 0;
 	damageTaken = 0;
 	enemiesKilled = 0;
 	tilesMoved = 0;
+	goldEarned = 0;
 }
 
 void ScoreSystem::SaveScore(std::string Username)
@@ -22,7 +28,6 @@ void ScoreSystem::SaveScore(std::string Username)
 	{
 		file << Username << "," << currentScore << "\n";
 		file.close();
-
 	}
 	else
 	{
@@ -31,8 +36,6 @@ void ScoreSystem::SaveScore(std::string Username)
 		file << Username << "," << currentScore << "\n";
 		file.close();
 	}
-
-
 }
 
 void ScoreSystem::ReadScores(bool FromMainMenu)
@@ -92,8 +95,9 @@ void ScoreSystem::calcFinalScore()
 {
 	currentScore = 0;
 	currentScore += enemiesKilled * 10;
-	currentScore -= tilesMoved;
-	currentScore -= damageTaken * 10;
+	currentScore += tilesMoved;
+	currentScore += goldEarned;
+	currentScore -= damageTaken;
 }
 
 void ScoreSystem::RenderTopScores()
@@ -163,6 +167,16 @@ void ScoreSystem::RenderTopScores()
 		glm::vec3{ 1, 1, 1 },
 		glm::vec2{ 0, 0 });
 
+	TopRight.y -= 50;
+	
+	sizeOfText = TextRenderer::Instance()->renderTextSize("Gold Earned: " + std::to_string(goldEarned), 0.6f);
+	TextRenderer::Instance()->renderText("Gold Earned: " + std::to_string(goldEarned),
+		TopRight.x - (sizeOfText.x / 2),
+		TopRight.y - (sizeOfText.y / 2) - 50,
+		0.6f,
+		glm::vec3{ 1, 1, 1 },
+		glm::vec2{ 0, 0 });
+	
 	TopRight.y -= 75;
 	calcFinalScore();
 	

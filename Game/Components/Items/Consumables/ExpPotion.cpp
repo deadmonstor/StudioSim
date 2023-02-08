@@ -4,5 +4,5 @@ ExpPotion::ExpPotion()
 {
 	expPotionStats = new ConsumableStats();
 	expPotionStats->EXPGained = 10;
-	expPotionStats->price = 5;
+	price = 5;
 }

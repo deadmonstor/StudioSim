@@ -5,11 +5,11 @@
 #include "Core\Components\Transform.h"
 #include <Core/Renderer/ResourceManager.h>
 
-class BossSpawnAction :
+class ReaperSpawnAction :
     public Behaviour
 {
 public:
-    explicit BossSpawnAction(std::vector<glm::vec2> spawnerPositionsArg);
+    explicit ReaperSpawnAction(std::vector<glm::vec2> spawnerPositionsArg);
     void Act() override;
     bool UpdateCooldown();
 private:

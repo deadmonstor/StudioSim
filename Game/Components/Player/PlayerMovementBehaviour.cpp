@@ -60,8 +60,9 @@ void PlayerMovementBehaviour::Act()
 		{
 			ScoreSystem::Instance()->addTilesMoved(1);
 
-			PlayerController::Instance()->playerPTR->getTransform()->
-				setPosition(GridSystem::Instance()->getWorldPosition(origPos + moveDir));
+			const auto pos = GridSystem::Instance()->getWorldPosition(origPos + moveDir);
+			PlayerController::Instance()->playerPTR->getTransform()->setPosition(pos);
+			AudioEngine::Instance()->updateListenerPositon(pos.x, pos.y);
 
 			//Set grid system "satOnTile" values
 			gridSystem->resetSatOnTile(0, origPos);

@@ -10,7 +10,6 @@ public:
 
     std::string name() override { return "Mana Potion"; }
     std::string itemDescription() override { return "A mana potion"; }
-
     void use() override
     {
         // ASSUMED THAT THIS IS ONLY ON THE PLAYER

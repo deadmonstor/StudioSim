@@ -1,4 +1,4 @@
-#include "BossAttackAction.h"
+#include "ReaperAttackAction.h"
 #include "Core\Grid\GridSystem.h"
 #include "../../EnemyComponent.h"
 #include "../../TurnManager.h"
@@ -6,29 +6,29 @@
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "../../DestroyAfterAnimation.h"
 
-BossAttackAction::BossAttackAction(glm::vec2 myPosArg, GameObject* parentObjectArg)
+ReaperAttackAction::ReaperAttackAction(glm::vec2 myPosArg, GameObject* parentObjectArg)
 	: currentPos(myPosArg), parentObject(parentObjectArg)
 {
 	cooldown = 0;
 }
 
-void BossAttackAction::Act()
+void ReaperAttackAction::Act()
 {
 
 	//Find attack positions
 	std::vector<glm::vec2> attackPositions = FindAttackPositions();
-	
+
 	//do attacks
-	for (auto pos : attackPositions) 
+	for (auto pos : attackPositions)
 	{
 		createSlashGameObject(pos);
 	}
-	cooldown = 4;
+	cooldown = 3;
 	TurnManager::Instance()->endTurn();
 }
 
 
-std::vector<glm::vec2> BossAttackAction::FindAttackPositions()
+std::vector<glm::vec2> ReaperAttackAction::FindAttackPositions()
 {
 	glm::vec2 playerPos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
 	playerPos = GridSystem::Instance()->getTilePosition(playerPos);
@@ -41,55 +41,55 @@ std::vector<glm::vec2> BossAttackAction::FindAttackPositions()
 		//left
 		if (directionVec.x < 0)
 		{
-			for (int xPos = -4; xPos <= -1; xPos++)
-				for (int yPos = 1; yPos >= -1; yPos--)
+			for (int xPos = -3; xPos <= -1; xPos++)
+				for (int yPos = 2; yPos >= -1; yPos--)
 				{
 					glm::vec2 pos = currentPos + glm::vec2(xPos, yPos);
 					outputPositions.push_back(pos);
 				}
 		}
-			
+
 		//right
 		else
 		{
-			for (int xPos = 2; xPos <= 5; xPos++)
-				for (int yPos = 1; yPos >= -1; yPos--)
+			for (int xPos = 1; xPos <= 3; xPos++)
+				for (int yPos = 2; yPos >= -1; yPos--)
 				{
 					glm::vec2 pos = currentPos + glm::vec2(xPos, yPos);
 					outputPositions.push_back(pos);
 				}
 		}
-			
+
 	}
 	//Vertical
 	else {
 		//down
 		if (directionVec.y < 0)
 		{
-			for (int xPos = -1; xPos <= 2; xPos++)
-				for (int yPos = -1; yPos >= -3; yPos--)
+			for (int xPos = -1; xPos <= 1; xPos++)
+				for (int yPos = -1; yPos >= -4; yPos--)
 				{
 					glm::vec2 pos = currentPos + glm::vec2(xPos, yPos);
 					outputPositions.push_back(pos);
 				}
 		}
-			
+
 		//up
 		else
 		{
-			for(int xPos = -1; xPos <=2; xPos++)
-				for (int yPos = 3; yPos >= 1; yPos--)
+			for (int xPos = -1; xPos <= 1; xPos++)
+				for (int yPos = 5; yPos >= 2; yPos--)
 				{
 					glm::vec2 pos = currentPos + glm::vec2(xPos, yPos);
 					outputPositions.push_back(pos);
 				}
 		}
-			
+
 	}
 	return outputPositions;
 }
 
-bool BossAttackAction::isInRange()
+bool ReaperAttackAction::isInRange()
 {
 	//Find attack positions
 	std::vector<glm::vec2> attackPositions = FindAttackPositions();
@@ -104,7 +104,7 @@ bool BossAttackAction::isInRange()
 	return false;
 }
 
-bool BossAttackAction::UpdateCooldown()
+bool ReaperAttackAction::UpdateCooldown()
 {
 	if (cooldown > 0)
 	{
@@ -115,7 +115,7 @@ bool BossAttackAction::UpdateCooldown()
 		return true;
 }
 
-void BossAttackAction::createSlashGameObject(glm::vec2 pos)
+void ReaperAttackAction::createSlashGameObject(glm::vec2 pos)
 {
 	const TileHolder* tile = GridSystem::Instance()->getTileHolder(0, pos);
 
@@ -153,7 +153,7 @@ void BossAttackAction::createSlashGameObject(glm::vec2 pos)
 	slash->addComponent<DestroyAfterAnimation>();
 }
 
-void BossAttackAction::flashPlayer(GameObject* object, const glm::vec3 targetColor)
+void ReaperAttackAction::flashPlayer(GameObject* object, const glm::vec3 targetColor)
 {
 	Flash::createFlash(object, object->getComponent<AnimatedSpriteRenderer>(), targetColor, 5, [this]
 		{

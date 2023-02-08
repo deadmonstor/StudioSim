@@ -33,8 +33,7 @@ EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsAr
 
 void EnemyComponent::start()
 {
-	Health* healthComponent = getOwner()->addComponent<Health>();
-	healthComponent->setHealth(stats.maxHealth);
+	Health* healthComponent = getOwner()->addComponent<Health>(stats.maxHealth);
 	getOwner()->addComponent<Camera>();
 
 	TurnManager::Instance()->addToTurnQueue(getOwner());
@@ -119,6 +118,9 @@ void EnemyComponent::DropLoot()
 {
 	if (SceneManager::Instance()->isLoadingScene() || SceneManager::Instance()->isShuttingDown())
 		return;
+
+	if (getOwner()->getName() == "bossSpawn")
+		return;
 	
 	std::string itemToSpawn = EnemyDropLootTable::Instance()->EnemyDropRollLoot();
 	Texture m_ItemTexture;
@@ -187,7 +189,7 @@ void EnemyComponent::DropLoot()
 	Item->addComponent<SpriteComponent>();
 	Item->getComponent<SpriteComponent>()->setPivot(Pivot::Center);
 	Item->getComponent<SpriteComponent>()->setTexture(m_ItemTexture);
-	Item->getComponent<SpriteComponent>()->setLit(false);
+	Item->getComponent<SpriteComponent>()->setLit(true);
 	Item->getComponent<SpriteComponent>()->setSortingLayer(Renderer::getSortingLayer("Background Grid"));
 	Item->addComponent<PickUp>();
 	Item->getComponent<PickUp>()->SetAmount(Amount);

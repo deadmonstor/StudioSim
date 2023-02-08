@@ -68,7 +68,7 @@ void ScoreScene::onEngineRender(const OnEngineRender* event)
 		"Total Score: " + std::format("{:.0f}", ScoreSystem::Instance()->getScore()), 1);
 	TextRenderer::Instance()->renderText("Total Score: " + std::format("{:.0f}", ScoreSystem::Instance()->getScore()),
 	                                     MiddleTop.x - (sizeOfText.x / 2),
-	                                     MiddleTop.y - (sizeOfText.y / 2) - 275,
+	                                     MiddleTop.y - (sizeOfText.y / 2) - 335,
 	                                     1,
 	                                     glm::vec3{1, 1, 1},
 	                                     glm::vec2{0, 0});
@@ -94,8 +94,15 @@ void ScoreScene::onEngineRender(const OnEngineRender* event)
 		"Damage Taken: " + std::to_string(ScoreSystem::Instance()->getDamageTaken()), 0.6f);
 	TextRenderer::Instance()->renderText("Damage Taken: " + std::to_string(ScoreSystem::Instance()->getDamageTaken()),
 	                                     MiddleTop.x - (sizeOfText.x / 2),
-	                                     MiddleTop.y - (sizeOfText.y / 2) - 215, 0.6f, glm::vec3{1, 1, 1},
+	                                     MiddleTop.y - (sizeOfText.y / 2) - 225, 0.6f, glm::vec3{1, 1, 1},
 	                                     glm::vec2{0, 0});
+
+	sizeOfText = TextRenderer::Instance()->renderTextSize(
+	"Gold Earned: " + std::to_string(ScoreSystem::Instance()->getGoldEarned()), 0.6f);
+	TextRenderer::Instance()->renderText("Gold Earned: " + std::to_string(ScoreSystem::Instance()->getGoldEarned()),
+										 MiddleTop.x - (sizeOfText.x / 2),
+										 MiddleTop.y - (sizeOfText.y / 2) - 275, 0.6f, glm::vec3{1, 1, 1},
+										 glm::vec2{0, 0});
 }
 
 void ScoreScene::OnCharacterKeyDown(const OnCharacterDown* event)

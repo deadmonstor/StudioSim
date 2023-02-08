@@ -1,4 +1,4 @@
-﻿#include "Level1Scene.h"
+#include "Level1Scene.h"
 
 #include "TutorialScene.h"
 #include "Core/SceneManager.h"
@@ -23,6 +23,8 @@
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "../BossMusic.h"
+#include "../Tiles/ShopTile.h"
+#include "../Components/Items/Armour/LegendaryArmour.h"
 
 void Level1Scene::createSlime(const glm::vec2 pos)
 {
@@ -117,7 +119,7 @@ void Level1Scene::createBoss(const glm::vec2 pos)
 	auto sprite = Crab->addComponent<AnimatedSpriteRenderer>(textureListCrab, 0.075f);
 	sprite->setPivot(Pivot::BottomCenter);
 	sprite->setColor(glm::vec3(1, 1, 1));
-	sprite->setLit(false);
+	sprite->setLit(true);
 
 	std::vector<glm::vec2> spawnerPositions;
 	spawnerPositions.push_back(glm::vec2(17 ,18));
@@ -125,11 +127,11 @@ void Level1Scene::createBoss(const glm::vec2 pos)
 
 	StateMachine* fsm = Crab->addComponent<BossStateMachine>(pos, spawnerPositions);
 	EnemyStats bossStats = EnemyStats();
-	bossStats.attack = 1;
+	bossStats.attack = 4;
 	bossStats.critChance = 0.15f;
-	bossStats.maxHealth = 5;
-	bossStats.currentHealth = 5;
-	bossStats.defence = 8;
+	bossStats.maxHealth = 70;
+	bossStats.currentHealth = 70;
+	bossStats.defence = 5;
 	EnemyComponent component = EnemyComponent(fsm, bossStats);
 	Crab->addComponent<EnemyComponent>(component);
 }
@@ -233,7 +235,8 @@ void Level1Scene::init()
 	{
 		{ 37, [] { return new LightTile(Texture()); } },
 		{ 56, [] { return new SpikeTile(Texture()); } },
-		{ 93, [] { return new ChestTile(Texture()); } }
+		{ 93, [] { return new ChestTile(Texture()); } },
+		{ 95, [] {return new ShopTile(Texture(), new LegendaryArmour());  } }
 	});
 	
 	grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");

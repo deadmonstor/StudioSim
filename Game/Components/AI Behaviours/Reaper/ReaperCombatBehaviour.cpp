@@ -1,10 +1,10 @@
-#include "BossCombatBehaviour.h"
+#include "ReaperCombatBehaviour.h"
 #include "../../TurnManager.h"
-#include "BossAttackAction.h"
+#include "ReaperAttackAction.h"
 #include "../DoNothingAction.h"
-#include "BossSpawnAction.h"
+#include "ReaperSpawnAction.h"
 
-BossCombatBehaviour::BossCombatBehaviour(StateMachine* parentFSMArg, glm::vec2 myPosArg, std::vector<glm::vec2> spawnerPositionsArg)
+ReaperCombatBehaviour::ReaperCombatBehaviour(StateMachine* parentFSMArg, glm::vec2 myPosArg, std::vector<glm::vec2> spawnerPositionsArg)
 {
 	isInFSM = true;
 	parentFSM = parentFSMArg;
@@ -12,16 +12,16 @@ BossCombatBehaviour::BossCombatBehaviour(StateMachine* parentFSMArg, glm::vec2 m
 	spawnerPositions = spawnerPositionsArg;
 }
 
-void BossCombatBehaviour::WorldAnalysis()
+void ReaperCombatBehaviour::WorldAnalysis()
 {
-	bool spawnerOffCooldown = static_cast<BossSpawnAction*>(availableActions["Spawn"].second)->UpdateCooldown();
+	bool spawnerOffCooldown = static_cast<ReaperSpawnAction*>(availableActions["Spawn"].second)->UpdateCooldown();
 	if (spawnerOffCooldown)
 		effects["SpawnOffCooldown"].active = true;
 	else
 		effects["SpawnOffCooldown"].active = false;
 
-	bool attackOffCooldown = static_cast<BossAttackAction*>(availableActions["Attack"].second)->UpdateCooldown();
-	bool attackInRange = static_cast<BossAttackAction*>(availableActions["Attack"].second)->isInRange();
+	bool attackOffCooldown = static_cast<ReaperAttackAction*>(availableActions["Attack"].second)->UpdateCooldown();
+	bool attackInRange = static_cast<ReaperAttackAction*>(availableActions["Attack"].second)->isInRange();
 	if (attackOffCooldown && attackInRange)
 		effects["AttackAvailable"].active = true;
 	else
@@ -32,17 +32,17 @@ void BossCombatBehaviour::WorldAnalysis()
 		effects["NothingAvailable"].active = false;
 }
 
-void BossCombatBehaviour::ActionAnalysis()
+void ReaperCombatBehaviour::ActionAnalysis()
 {
 	PlannedBehaviour::ActionAnalysis();
 }
 
-void BossCombatBehaviour::GenerateBehaviourList()
+void ReaperCombatBehaviour::GenerateBehaviourList()
 {
-	availableActions["Attack"] = std::make_pair(0, new BossAttackAction(myPos, parentFSM->getOwner()));
+	availableActions["Attack"] = std::make_pair(0, new ReaperAttackAction(myPos, parentFSM->getOwner()));
 	availableActions["DoNothing"] = std::make_pair(0, new DoNothingAction());
-	availableActions["Spawn"] = std::make_pair(0, new BossSpawnAction(spawnerPositions));
-	for (auto action : availableActions) 
+	availableActions["Spawn"] = std::make_pair(0, new ReaperSpawnAction(spawnerPositions));
+	for (auto action : availableActions)
 	{
 		if (!action.second.second->GetInitValue())
 		{
@@ -51,7 +51,7 @@ void BossCombatBehaviour::GenerateBehaviourList()
 	}
 }
 
-void BossCombatBehaviour::GenerateEffects()
+void ReaperCombatBehaviour::GenerateEffects()
 {
 	effects["AttackAvailable"] = Effect();
 	effects["SpawnOffCooldown"] = Effect();
@@ -68,8 +68,8 @@ void BossCombatBehaviour::GenerateEffects()
 	effects["SpawnOffCooldown"].influencedActions["Spawn"] = std::make_pair(20, availableActions["Spawn"].second);
 }
 
-void BossCombatBehaviour::endTurn()
+void ReaperCombatBehaviour::endTurn()
 {
 	TurnManager::Instance()->endTurn();
-	LOG_INFO("BossCombatBehaviour::endTurn() - Enemy turn ended");
+	LOG_INFO("ReaperCombatBehaviour::endTurn() - Enemy turn ended");
 }

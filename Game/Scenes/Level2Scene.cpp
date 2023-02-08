@@ -21,6 +21,7 @@
 #include "../Components/UI/InventoryHUD.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
+#include "../Components/AI Behaviours/Reaper/ReaperStateMachine.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
 {
@@ -81,6 +82,38 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 	enemy->addComponent<EnemyComponent>(component);
 
 	GridSystem::Instance()->setSatOnTile(0, pos, enemy);
+}
+
+void Level2Scene::createBoss(const glm::vec2 pos)
+{
+	//Reaper
+	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
+	auto* reaper = SceneManager::Instance()->createGameObject("Reaper", tileWorldSpace);
+	reaper->getTransform()->setPosition(glm::vec2(tileWorldSpace.x, tileWorldSpace.y + 40));
+	reaper->getTransform()->setSize(glm::vec2(144, 168));
+
+	GridSystem::Instance()->setSatOnTile(0, pos, reaper);
+	GridSystem::Instance()->setSatOnTile(0, pos + glm::vec2(0, 1), reaper);
+
+	const std::vector textureListReaper = ResourceManager::GetTexturesContaining("GRI");
+	auto sprite = reaper->addComponent<AnimatedSpriteRenderer>(textureListReaper, 0.075f);
+	sprite->setPivot(Pivot::Center);
+	sprite->setColor(glm::vec3(1, 1, 1));
+	sprite->setLit(false);
+
+	std::vector<glm::vec2> spawnerPositions;
+	spawnerPositions.push_back(glm::vec2(30, 58));
+	spawnerPositions.push_back(glm::vec2(30, 50));
+
+	StateMachine* fsm = reaper->addComponent<ReaperStateMachine>(pos, spawnerPositions);
+	EnemyStats bossStats = EnemyStats();
+	bossStats.attack = 8;
+	bossStats.critChance = 0.0f;
+	bossStats.maxHealth = 150;
+	bossStats.currentHealth = 150;
+	bossStats.defence = 6;
+	EnemyComponent component = EnemyComponent(fsm, bossStats);
+	reaper->addComponent<EnemyComponent>(component);
 }
 
 void Level2Scene::init()
@@ -197,6 +230,10 @@ void Level2Scene::init()
 		{ 92, [this](glm::vec2 pos)
 		{
 			createEnemy(pos);
+		} },
+		{ 98, [this](glm::vec2 pos)
+		{
+			createBoss(pos);
 		} }
 	});
 	

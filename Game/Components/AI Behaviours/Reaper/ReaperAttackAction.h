@@ -5,11 +5,11 @@
 #include "Core\Components\Transform.h"
 #include <Core/Renderer/ResourceManager.h>
 
-class BossAttackAction :
+class ReaperAttackAction :
     public Behaviour
 {
 public:
-    explicit BossAttackAction(glm::vec2 myPosArg, GameObject* parentObjectArg);
+    explicit ReaperAttackAction(glm::vec2 myPosArg, GameObject* parentObjectArg);
     void Act() override;
     std::vector<glm::vec2> FindAttackPositions();
 

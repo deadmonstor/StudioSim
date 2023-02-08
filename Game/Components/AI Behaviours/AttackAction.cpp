@@ -70,7 +70,10 @@ void AttackAction::createSlashGameObject(glm::vec2 pos)
 
 	if (tile != nullptr && tile->gameObjectSatOnTile == PlayerController::Instance()->playerPTR)
 	{
-		AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
+		AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 
+			parentObject->getTransform()->getPosition().x,
+			parentObject->getTransform()->getPosition().y,
+			AudioType::SoundEffect);
 		PlayerStats* targetStats = PlayerController::Instance()->playerStats;
 		const EnemyStats myStats = parentObject->getComponent<EnemyComponent>()->getStats();
 		
