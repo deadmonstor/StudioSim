@@ -11,7 +11,9 @@ public:
 
 	void render() override;
 	void destroy() override;
+	void update() override;
 	void onMouseDown(const OnMouseDown* event);
+	bool isMouseInButton();
 	virtual void onClick();
 protected:
 	//Text 

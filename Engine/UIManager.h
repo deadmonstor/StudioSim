@@ -17,6 +17,7 @@ public:
 	void render();
 	void clear();
 	void sortOrder();
+	void update();
 
 	template<typename T, typename... Args>
 	std::enable_if_t<std::is_base_of_v<Panel, T>, T*> createUIElement(const std::string& name, Args... args)

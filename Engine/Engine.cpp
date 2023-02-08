@@ -113,6 +113,7 @@ namespace Griddy
 			Events::invoke<OnEngineUpdate>();
 			
 			AudioEngine::Instance()->update();
+			UIManager::Instance()->update();
 		}
 		// Check if we need to stop the engine
 		if (auto *window = Renderer::getWindow(); window == nullptr || glfwWindowShouldClose(window))

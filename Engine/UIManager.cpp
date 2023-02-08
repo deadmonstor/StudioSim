@@ -24,6 +24,8 @@ void UIManager::render()
 	}
 }
 
+
+
 void UIManager::clear()
 {
 	for (const auto& panel : UIElements | std::views::values)
@@ -48,4 +50,15 @@ void UIManager::sortOrder()
 	{
 		return a->getSortingOrder() < b->getSortingOrder();
 	});
+}
+
+void UIManager::update()
+{
+	for (const auto& panel : renderPanels)
+	{
+		if (!panel->shouldRender)
+			continue;
+
+		panel->update();
+	}
 }
