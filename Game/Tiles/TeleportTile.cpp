@@ -25,7 +25,7 @@ void TeleportTile::onInteractedWith(TileHolder* curTileHolder)
 	}
 }
 
-void TeleportTile::ChangeTeleport(EnterBossRoomEvent* event)
+void TeleportTile::ChangeTeleport(BossDeathEvent* event)
 {
 	Teleportable = true;
 }
