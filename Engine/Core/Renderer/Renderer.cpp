@@ -226,7 +226,9 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	if (mainCam == nullptr)
 		return;
 
-	if (!mainCam->isInFrustum(position, size))
+	const glm::vec2 pivot = spriteRenderer->getPivot();
+	const auto pivotAndSize = glm::vec3(-pivot.x * size.x, -pivot.y * size.y, 0.0f);
+	if (!mainCam->isInFrustum(position, pivotAndSize))
 	{
 		spriteRenderer->wasInFrame = false;
 		return;
@@ -234,8 +236,6 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	const glm::vec2 pivot = spriteRenderer->getPivot();
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 
 	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);

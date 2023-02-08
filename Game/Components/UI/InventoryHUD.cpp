@@ -133,11 +133,13 @@ void InventoryHUD::updateHUD()
 	backgroundPanelInventoryText->setSortingOrder(2);
 
 	Inventory* inventory = PlayerController::Instance()->myInventory;
-	int i = 0;
-	for (const auto& slot : slots)
+	int y = 0;
+	for (int i = 0; i <= 20; i++)
 	{
+		InventoryIconButton* slot = slots[i];
+		
 		slot->shouldRender = shouldRender;
-		i++;
+		slot->getTransform()->setPosition(MiddleRight - glm::vec2{100, 0} - (glm::vec2{(i % 5) * 50, y * 50}));
 		
 		if (inventory->items.size() > i && inventory->items[i] != nullptr)
 		{
@@ -147,7 +149,14 @@ void InventoryHUD::updateHUD()
 		{
 			slot->setItem(nullptr);
 		}
+		
+		if (i != 0 && i % 5 == 0)
+			y++;
 	}
+	
+	weaponSlot->getTransform()->setPosition(MiddleRight - glm::vec2{100, 0} - (glm::vec2{200, -125}));
+	armourSlot->getTransform()->setPosition(MiddleRight - glm::vec2{100, 0} - (glm::vec2{100, -125}));
+	spellSlot->getTransform()->setPosition(MiddleRight - glm::vec2{100, 0} - (glm::vec2{0, -125}));
 
 	weaponSlot->shouldRender = shouldRender;
 	weaponSlot->setItem(inventory->getFirstItemWithEquipSlot(EquipSlot::WEAPON));
