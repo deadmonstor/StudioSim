@@ -99,6 +99,7 @@
     <ClInclude Include="Tiles\SpikeTile.h" />
     <ClInclude Include="Tiles\TeleportTile.h" />
     <ClInclude Include="Tiles\TestTile.h" />
+    <ClInclude Include="Scenes\CreditsScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Components\AI Behaviours\Boss\BossAttackAction.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Tiles\SpikeTile.cpp" />
     <ClCompile Include="Tiles\TeleportTile.cpp" />
     <ClCompile Include="Tiles\TestTile.cpp" />
+    <ClCompile Include="Scenes\CreditsScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

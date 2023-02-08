@@ -91,6 +91,7 @@
     <ClCompile Include="Components\UI\MasterAudioMinusButton.cpp" />
     <ClCompile Include="Components\UI\MasterAudioPlusButton.cpp" />
     <ClCompile Include="Components\AI Behaviours\DoNothingAction.cpp" />
+    <ClCompile Include="Scenes\CreditsScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="Components\UI\InventoryIconButton.h" />
     <ClInclude Include="Components\UI\ItemSlot.h" />
     <ClInclude Include="Components\AI Behaviours\DoNothingAction.h" />
+    <ClInclude Include="Scenes\CreditsScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />

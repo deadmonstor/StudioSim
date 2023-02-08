@@ -32,62 +32,67 @@ void Level1Scene::createSlime(const glm::vec2 pos)
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
 
-	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
-	auto sprite = enemy->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
-	sprite->setColor(glm::vec3(1, 1, 1));
-	sprite->setLit(true);
-	sprite->setPivot(Pivot::Center);
+	std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
 
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
-	EnemyComponent component;
+	EnemyStats slimeStats = EnemyStats();
 	switch (randomEnemy)
 	{
 		case 0:
-			EnemyStats slimeStats = EnemyStats();
+			textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+
 			slimeStats.attack = 2;
 			slimeStats.critChance = 0.2f;
 			slimeStats.maxHealth = 10;
 			slimeStats.currentHealth = 10;
 			slimeStats.defence = 2;
-			component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
 			break;
 
 		case 1:
-			EnemyStats slimeStats = EnemyStats();
+			textureList = ResourceManager::GetTexturesContaining("Red-Slime-Idle");
+
 			slimeStats.attack = 1;
 			slimeStats.critChance = 0.5f;
 			slimeStats.maxHealth = 20;
 			slimeStats.currentHealth = 20;
 			slimeStats.defence = 1;
-			component = EnemyComponent(fsm, slimeStats, "Red-Slime-Idle");
 			break;
 
 		case 2:
-			EnemyStats slimeStats = EnemyStats();
+			textureList = ResourceManager::GetTexturesContaining("Green-Slime-Idle");
+
 			slimeStats.attack = 2;
 			slimeStats.critChance = 0.2f;
 			slimeStats.maxHealth = 10;
 			slimeStats.currentHealth = 10;
-			slimeStats.defence = 5;
-			component = EnemyComponent(fsm, slimeStats, "Green-Slime-Idle");
+			slimeStats.defence = 3;
+			//, "Green-Slime-Idle"
 			break;
 
 		default:
-			EnemyStats slimeStats = EnemyStats();
+			textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+
 			slimeStats.attack = 2;
 			slimeStats.critChance = 0.2f;
 			slimeStats.maxHealth = 10;
 			slimeStats.currentHealth = 10;
 			slimeStats.defence = 2;
-			component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
+			//, "Blue-Slime-Idle"
 			break;
 	}
-	EnemyStats slimeStats = EnemyStats();
-	slimeStats.attack = 2;
-	slimeStats.critChance = 0.2f;
-	slimeStats.maxHealth = 25;
-	slimeStats.currentHealth = slimeStats.maxHealth;
-	slimeStats.defence = 2;
+
+	EnemyComponent component = EnemyComponent(fsm, slimeStats);
+	auto sprite = enemy->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
+	sprite->setColor(glm::vec3(1, 1, 1));
+	sprite->setLit(true);
+	sprite->setPivot(Pivot::Center);
+
+	//EnemyStats slimeStats = EnemyStats();
+	//slimeStats.attack = 2;
+	//slimeStats.critChance = 0.2f;
+	//slimeStats.maxHealth = 25;
+	//slimeStats.currentHealth = slimeStats.maxHealth;
+	//slimeStats.defence = 2;
 	//EnemyComponent component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
 	enemy->addComponent<EnemyComponent>(component);
 
