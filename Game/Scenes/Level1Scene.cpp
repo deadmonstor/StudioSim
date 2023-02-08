@@ -236,13 +236,19 @@ void Level1Scene::init()
 		{ 37, [] { return new LightTile(Texture()); } },
 		{ 56, [] { return new SpikeTile(Texture()); } },
 		{ 93, [] { return new ChestTile(Texture()); } },
-		{ 95, [] {return new ShopTile(Texture(), new LegendaryArmour());  } }
+		//{ 95, [] {return new ShopTile(Texture(), new LegendaryArmour());  } }
 	});
 	
 	grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
 
 	grid_system->setEmptyTileIDs(2, std::vector<int>{});
 	grid_system->setWallIDs(2, std::vector<int>{});
+	grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile* ()>>
+	{
+		{ 95, [] {return new ShopTile(Texture(), new LegendaryArmour());  } },
+		{ 96, [] {return new ShopTile(Texture(), new LegendaryArmour());  } },
+		{ 97, [] {return new ShopTile(Texture(), new LegendaryArmour());  } }
+	});
 	grid_system->setSpawnFunctionMap(2,
 	{
 		{ 91, [this](glm::vec2 pos)
