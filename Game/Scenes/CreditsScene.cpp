@@ -168,8 +168,10 @@ void CreditsScene::onEngineRender(const OnEngineRender* event)
 	renderText({ 1600, 1968 }, "Fayzaan Ali", 0.5f, { 1, 1, 1 });
 	renderText({ 1800, 1968 }, "Lee Hall", 0.5f, { 1, 1, 1 });
 
-	renderText({ 2000, 1968 }, "Special Mentions: Jimmy", 0.5f, { 1, 1, 1 });
-	renderText({ 2300, 1968 }, "Special Mentions: Group 4", 0.5f, { 1, 1, 1 });
+	renderText({ 2100, 1968 }, "Special Mentions: Chris, The Brandons, and Group 4", 0.5f, { 1, 1, 1 });
+	renderText({ 2500, 1968 }, "Special Mentions: Jimmy", 0.5f, { 1, 1, 1 });
+	renderText({ 2900, 1968 }, "Special Mentions: The Ember Lounge Lecturers", 0.5f, { 1, 1, 1 });
+	//renderText({ 2600, 1968 }, "Special Mentions: ", 0.5f, { 1, 1, 1 });
 
 	
 }

@@ -93,7 +93,7 @@ void TutorialScene::init()
 	bossEntranceTiles.push_back(glm::vec2(31, 21));
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
 	{
-		{ 10, [] { return new TestTile(Texture(), "creditsScene", true); } },
+		{ 10, [] { return new TestTile(Texture(), "level1", true); } },
 		{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	
@@ -179,7 +179,7 @@ void TutorialScene::update()
 {
 	if (hasCompletedTutorialLevel)
 	{
-		SceneManager::Instance()->changeScene("creditsScene");
+		SceneManager::Instance()->changeScene("level1");
 	}
 	
 	if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
