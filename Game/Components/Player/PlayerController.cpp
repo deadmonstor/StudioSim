@@ -1,5 +1,6 @@
 #include "PlayerFSM.h"
 #include "../TurnManager.h"
+#include "../../ScoreSystem.h"
 
 #include "../Items/Consumables/HealthPotion.h"
 #include "../Items/Armour/LegendaryArmour.h"
@@ -74,6 +75,8 @@ void PlayerController::createPlayer()
 				playerStats->myInventory->add_item(func());
 			}
 		}
+
+		ScoreSystem::Instance()->resetScoreSystem();
 	}
 	
 	myInventory = playerStats->myInventory;
