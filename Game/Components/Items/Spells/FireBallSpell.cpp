@@ -14,7 +14,7 @@ FireBallSpell::FireBallSpell()
 	spellStats->manaCost = 1;
 	spellStats->maxCooldown = 1;
 	spellStats->spellPower = 20;
-	spellStats->currentCooldown = spellStats->maxCooldown;
+	spellStats->currentCooldown = 0;
 	spellStats->range = 6;
 }
 
