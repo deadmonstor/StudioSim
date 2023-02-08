@@ -9,7 +9,7 @@ IceSpell::IceSpell()
 	spellStats->price = 15;
 	spellStats->maxCooldown = 2;
 	spellStats->manaCost = 2;
-	spellStats->currentCooldown = spellStats->maxCooldown;
+	spellStats->currentCooldown = 0;
 }
 
 void IceSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)

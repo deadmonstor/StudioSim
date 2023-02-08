@@ -12,7 +12,7 @@ PoisonSpell::PoisonSpell()
 	spellStats->range = 4;
 	spellStats->manaCost = 10;
 	spellStats->price = 20;
-	spellStats->currentCooldown = spellStats->maxCooldown;
+	spellStats->currentCooldown = 0;
 }
 
 void PoisonSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
