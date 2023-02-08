@@ -99,7 +99,7 @@ void ScoreSystem::calcFinalScore()
 void ScoreSystem::RenderTopScores()
 {
 	const auto MiddleTop =
-					glm::vec2((Renderer::getViewportSize().x / 2), Renderer::getViewportSize().y);
+					glm::vec2((Renderer::getViewportSize().x / 3), Renderer::getViewportSize().y);
 
 	glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize("The Leaderboard:", 1);
 	TextRenderer::Instance()->renderText("The Leaderboard:",
