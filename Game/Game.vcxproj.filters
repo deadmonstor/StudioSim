@@ -92,6 +92,7 @@
     <ClCompile Include="Components\UI\MasterAudioPlusButton.cpp" />
     <ClCompile Include="Components\AI Behaviours\DoNothingAction.cpp" />
     <ClCompile Include="Scenes\CreditsScene.cpp" />
+    <ClCompile Include="BossMusic.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossSpawnAction.cpp" />
     <ClCompile Include="Components\AI Behaviours\Reaper\ReaperStateMachine.cpp" />
     <ClCompile Include="Components\AI Behaviours\Reaper\ReaperIdleBehaviour.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Components\AI Behaviours\Reaper\ReaperAttackAction.h" />
     <ClInclude Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.h" />
     <ClInclude Include="Scenes\CreditsScene.h" />
+    <ClInclude Include="BossMusic.h" />
     <ClInclude Include="Tiles\ShopTile.h" />
   </ItemGroup>
   <ItemGroup>

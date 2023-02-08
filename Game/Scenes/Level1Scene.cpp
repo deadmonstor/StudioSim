@@ -1,4 +1,4 @@
-﻿#include "Level1Scene.h"
+#include "Level1Scene.h"
 
 #include "TutorialScene.h"
 #include "Core/SceneManager.h"
@@ -22,6 +22,7 @@
 #include "../Tiles/ChestTile.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
+#include "../BossMusic.h"
 #include "../Tiles/ShopTile.h"
 #include "../Components/Items/Armour/LegendaryArmour.h"
 
@@ -112,6 +113,8 @@ void Level1Scene::createBoss(const glm::vec2 pos)
 	GridSystem::Instance()->setSatOnTile(0, pos, Crab);
 	GridSystem::Instance()->setSatOnTile(0, pos + glm::vec2(1, 0), Crab);
 
+	BossMusic::Instance()->Initialise();
+
 	const std::vector textureListCrab = ResourceManager::GetTexturesContaining("crab");
 	auto sprite = Crab->addComponent<AnimatedSpriteRenderer>(textureListCrab, 0.075f);
 	sprite->setPivot(Pivot::BottomCenter);
@@ -137,6 +140,7 @@ void Level1Scene::init()
 {
 	TutorialScene::hasCompletedTutorialLevel = true;
 	
+
 	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 	LootTable::Instance()->LoadingIntoLootTableArray();
 	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
