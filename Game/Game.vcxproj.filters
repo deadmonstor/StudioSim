@@ -80,11 +80,14 @@
     <ClCompile Include="Components\MasterAudioPlusButton.cpp" />
     <ClCompile Include="Components\MasterAudioMinusButton.cpp" />
     <ClCompile Include="Components\Hitmarkers.cpp" />
+    <ClCompile Include="Components\UI\InventoryHUD.cpp" />
+    <ClCompile Include="Components\Items\Spells\PoisonSpell.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossIdleBehaviour.cpp" />
-    <ClCompile Include="Tiles\BossRoomEntryTile.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossStateMachine.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossCombatBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossAttackAction.cpp" />
+    <ClCompile Include="Tiles\BossRoomEntryTile.cpp" />
+    <ClCompile Include="Scenes\TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />

@@ -4,13 +4,17 @@
 #include "Core/Components/Transform.h"
 #include "Core/Grid/GridSystem.h"
 #include "../../EnemyComponent.h"
+#include "Core/Renderer/ResourceManager.h"
+#include "Core/AudioEngine.h"
 
 Dagger::Dagger()
 {
+	
 }
 
 void Dagger::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 {
+	
 	const bool isWallTile = GridSystem::Instance()->isWallTile(playerPos + attackDir);
 	
 	if (!isWallTile)
@@ -18,6 +22,7 @@ void Dagger::Attack(glm::fvec2 playerPos, glm::fvec2 attackDir)
 		createSlashGameObject(playerPos + attackDir);
 
 	}
+	AudioEngine::Instance()->playSound("Sounds\\AirSlash.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 }
 
 void Dagger::createSlashGameObject(glm::fvec2 pos)
@@ -29,6 +34,7 @@ void Dagger::createSlashGameObject(glm::fvec2 pos)
 	{
 		if (gameObject->hasComponent(typeid(EnemyComponent)))
 		{
+			AudioEngine::Instance()->playSound("Sounds\\Damage.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 			auto* enemyInfo = gameObject->getComponent<EnemyComponent>();
 			int atkDamage = stats->attack - enemyInfo->getStats().defence;
 			if (atkDamage < 0)
@@ -43,7 +49,7 @@ void Dagger::createSlashGameObject(glm::fvec2 pos)
 				atkDamage *= 2; //double damage
 			}
 
-			int newHealth = enemyInfo->getStats().currentHealth - atkDamage;
+			int newHealth = gameObject->getComponent<Health>()->getHealth() - atkDamage;
 			gameObject->getComponent<Health>()->setHealth(newHealth);
 
 			// TODO: This is probably shitty 

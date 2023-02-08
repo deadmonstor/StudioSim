@@ -117,11 +117,11 @@ public:
 		
 		double x, y;
 		glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
-		glm::vec2 test = getMousePositionScreenSpace();
-
-		// TODO: Fix this to work with any resolution and aspect ratio (currently only works with 16:9) 
-		x = 1080 * (test.x / Renderer::getWindowSize().x) - 1080 / 2;
-		y = 600 * (test.y / Renderer::getWindowSize().y) - 600 / 2;
+		const glm::vec2 screenSpace = getMousePositionScreenSpace();
+		const glm::vec2 halfSize = Renderer::Instance()->getViewportHalfSize();
+		
+		x = halfSize.x * 2.0f * (screenSpace.x / Renderer::getViewportSize().x) - halfSize.x / 2.0f;
+		y = halfSize.y * 2.0f * (screenSpace.y / Renderer::getViewportSize().y) - halfSize.y / 2.0f;
 
 		x += Renderer::Instance()->getCameraPos().x;
 		y += Renderer::Instance()->getCameraPos().y;
@@ -140,10 +140,10 @@ public:
 		float absoluteCursorX = abs(static_cast<int>(std::floor(x)) / Renderer::getWindowSize().x);
 		float absoluteCursorY = abs(static_cast<int>(std::floor(y)) / Renderer::getWindowSize().y);
 
-		absoluteCursorY = 1 - absoluteCursorY;
+		absoluteCursorY = 1.0f - absoluteCursorY;
 		
-		absoluteCursorX *= Renderer::getWindowSize().x;
-		absoluteCursorY *= Renderer::getWindowSize().y;
+		absoluteCursorX *= Renderer::getViewportSize().x;
+		absoluteCursorY *= Renderer::getViewportSize().y;
 
 		glm::vec2 pos = { absoluteCursorX, absoluteCursorY };
 		

@@ -9,7 +9,7 @@ void TextComponent::render()
 	TextRenderer::Instance()->renderText(text,
 		transform->getPosition().x,
 		transform->getPosition().y,
-		1 ,
+		size,
 		{1, 1, 1},
 		getPivot());
 }

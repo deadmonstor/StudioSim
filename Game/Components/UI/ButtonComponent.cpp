@@ -3,6 +3,7 @@
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
+#include "Core/AudioEngine.h"
 
 ButtonComponent::ButtonComponent(const Texture& _texture): Panel()
 {
@@ -10,6 +11,7 @@ ButtonComponent::ButtonComponent(const Texture& _texture): Panel()
 		eventID = Griddy::Events::subscribe(this, &ButtonComponent::onMouseDown);
 	
 	SetTexture(_texture);
+	
 }
 
 void ButtonComponent::render()
@@ -30,32 +32,44 @@ void ButtonComponent::destroy()
 		Griddy::Events::unsubscribe(this, &ButtonComponent::onMouseDown, eventID);
 }
 
+void ButtonComponent::update()
+{
+	if(isMouseInButton())
+		setColor({ 0.5, 0.5, 0.5 });
+}
+
 void ButtonComponent::onMouseDown(const OnMouseDown* event)
 {
-	const Transform* transform = getTransform();
-	if (transform == nullptr) return;
-	
-	glm::vec2 pos = transform->getPosition() * Renderer::Instance()->getAspectRatio();
-	const glm::vec2 size = transform->getScale() * Renderer::Instance()->getAspectRatio();
-	const glm::vec2 pivot = getPivot();
-	
-	pos = pos + glm::vec2(-pivot.x * size.x, -pivot.y * size.y);
-	
-	const glm::vec2 mousePos = Input::getMousePositionScreenSpace();
-	/*
-		std::cout << "Button Pos X: " << pos.x << " Button PosY: " << pos.y << std::endl;
-		std::cout << "Button Size X: " << size.x << " Button Size Y: " << size.y << std::endl;
-		std::cout << "Mouse Pos X: " << mousePos.x << " Mouse PosY: " << mousePos.y << std::endl;
-	*/
+	if (isMouseInButton())
+		onClick();
+}
 
-	if (mousePos.x >= pos.x && mousePos.x <= pos.x + size.x  &&
+bool ButtonComponent::isMouseInButton()
+{
+	const Transform* transform = getTransform();
+	if (transform == nullptr) return false;
+
+	glm::vec2 pos = transform->getPosition();
+	const glm::vec2 size = transform->getScale();
+	const glm::vec2 pivot = getPivot();
+
+	pos = pos + glm::vec2(-pivot.x * size.x, -pivot.y * size.y);
+
+	const glm::vec2 mousePos = Input::getMousePositionScreenSpace();
+
+	if (mousePos.x >= pos.x && mousePos.x <= pos.x + size.x &&
 		mousePos.y >= pos.y && mousePos.y <= pos.y + size.y)
 	{
-		onClick();
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
 void ButtonComponent::onClick()
 {
+	AudioEngine::Instance()->playSound("Sounds\\Click.wav", false, 0.2f, 0, 0, AudioType::SoundEffect);
 	setColor({1, 0, 0});
 }

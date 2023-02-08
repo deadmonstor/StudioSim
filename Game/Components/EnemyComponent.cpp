@@ -12,7 +12,9 @@
 #include "../LootTable.h"
 #include "Core/Components/Transform.h"
 #include "PickUp.h"
-
+#include "Core/AudioEngine.h"
+#include "../ScoreSystem.h"
+#include "../Components/Items/Spells/PoisonSpell.h"
 
 EnemyComponent::EnemyComponent()
 {
@@ -24,6 +26,9 @@ EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsAr
 {
 	enemyFSM = stateMachineArg;
 	stats = statsArg;
+
+	if (!ResourceManager::HasSound("Sounds\\Damage.wav"))
+		AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 void EnemyComponent::start()
@@ -35,7 +40,7 @@ void EnemyComponent::start()
 	TurnManager::Instance()->addToTurnQueue(getOwner());
 
 	if (onStartTurnID == -1)
-		Griddy::Events::subscribe(this, &EnemyComponent::onTurnChanged);
+		onStartTurnID = Griddy::Events::subscribe(this, &EnemyComponent::onTurnChanged);
 	
 	Component::start();
 }
@@ -45,10 +50,13 @@ void EnemyComponent::destroy()
 	if (onStartTurnID != -1)
 		Griddy::Events::unsubscribe(this, &EnemyComponent::onTurnChanged, onStartTurnID);
 	
-	int expGained = 5;
-	PlayerController::Instance()->playerStats->currentEXP += expGained;
-	PlayerController::Instance()->UpdateStats();
-
+	if (getOwner()->getComponent<Health>()->getHealth() <= 0)
+	{
+		int expGained = 5;
+		PlayerController::Instance()->playerStats->currentEXP += expGained;
+		PlayerController::Instance()->UpdateStats();
+		ScoreSystem::Instance()->addEnemiesKilled(1);
+	}
 
 	DropLoot();
 	Component::destroy();
@@ -56,21 +64,51 @@ void EnemyComponent::destroy()
 
 void EnemyComponent::onTurnChanged(const onStartTurn* event)
 {
-	if (roundsFreeze == 0)
+	if (roundsFreeze <= 0)
 	{
-		if (event->objectToStart == getOwner())
+		if (roundsPoisoned <= 0)
 		{
-			getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
-			enemyFSM->Act();
+			if (event->objectToStart == getOwner())
+			{
+				getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
+				if (enemyFSM != nullptr)
+					enemyFSM->Act();
+				else
+					LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			}
+		}
+		else
+		{
+
+			if (event->objectToStart == getOwner())
+			{
+				roundsPoisoned -= 1;
+				PoisonSpell* poison = new PoisonSpell();
+				int spellDMG = poison->spellStats->damagePerTurn;
+				float currentHealth = getOwner()->getComponent<Health>()->getHealth();
+				int newHealth = currentHealth -= spellDMG;
+				getOwner()->getComponent<Health>()->setHealth(newHealth);
+				if (getOwner()->isBeingDeleted())
+				{
+					GridSystem::Instance()->resetSatOnTile(0, GridSystem::Instance()->getTilePosition(getOwner()->getTransform()->getPosition()));
+					return;
+				}
+
+				LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn() -> " + std::to_string(roundsPoisoned));
+				if (enemyFSM != nullptr)
+					enemyFSM->Act();
+				else
+					LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			}
 		}
 	}
 	else
 	{
-		if (TurnManager::Instance()->isCurrentTurnObject(getOwner()))
+		if (event->objectToStart == getOwner())
 		{
 			roundsFreeze -= 1;
+			LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn() -> " + std::to_string(roundsFreeze));
 			TurnManager::Instance()->endTurn();
-			LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn()");
 		}
 	}
 	

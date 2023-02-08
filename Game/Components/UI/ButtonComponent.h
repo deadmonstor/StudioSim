@@ -4,14 +4,16 @@
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
 
-class ButtonComponent  : public Panel
+class ButtonComponent : public Panel
 {
 public:
 	ButtonComponent(const Texture& _texture);
 
 	void render() override;
 	void destroy() override;
+	void update() override;
 	void onMouseDown(const OnMouseDown* event);
+	bool isMouseInButton();
 	virtual void onClick();
 protected:
 	//Text 

@@ -1,5 +1,6 @@
 ﻿#include "Level1Scene.h"
 
+#include "TutorialScene.h"
 #include "Core/SceneManager.h"
 #include "Core/Components/Camera.h"
 #include "Core/Components/TextRenderer.h"
@@ -17,14 +18,17 @@
 #include "../Tiles/SpikeTile.h"
 #include "../Tiles/BossRoomEntryTile.h"
 #include "../LootTable.h"
+#include "../Components/UI/InventoryHUD.h"
 #include "../Tiles/ChestTile.h"
+#include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 
 void Level1Scene::createSlime(const glm::vec2 pos)
 {
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
+	int random = rand() % 10000000;
 		
-	auto* enemy = SceneManager::Instance()->createGameObject("Slime", tileWorldSpace);
+	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
 
 	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
@@ -37,8 +41,8 @@ void Level1Scene::createSlime(const glm::vec2 pos)
 	EnemyStats slimeStats = EnemyStats();
 	slimeStats.attack = 2;
 	slimeStats.critChance = 0.2f;
-	slimeStats.maxHealth = 100;
-	slimeStats.currentHealth = 100;
+	slimeStats.maxHealth = 25;
+	slimeStats.currentHealth = slimeStats.maxHealth;
 	slimeStats.defence = 2;
 	EnemyComponent component = EnemyComponent(fsm, slimeStats);
 	enemy->addComponent<EnemyComponent>(component);
@@ -80,6 +84,9 @@ void Level1Scene::createBoss(const glm::vec2 pos)
 
 void Level1Scene::init()
 {
+	TutorialScene::hasCompletedTutorialLevel = true;
+	
+	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 	LootTable::Instance()->LoadingIntoLootTableArray();
 	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
 
@@ -97,7 +104,6 @@ void Level1Scene::init()
 	});
 	
 	grid_system->setEmptyTileIDs(0, std::vector<int>{0});
-	// TODO: Fill these out lol
 	grid_system->setWallIDs(0, std::vector<int>{1,9,3,4,5,6});
 	grid_system->setTextureMap(0, std::map<int, Texture>
 	{
@@ -110,7 +116,7 @@ void Level1Scene::init()
 		{ 7, ResourceManager::GetTexture("tile51") },
 		{ 8, ResourceManager::GetTexture("tile204") },
 		{ 9, ResourceManager::GetTexture("tile26") },
-		{ 10, ResourceManager::GetTexture("tile33") }, //Stairs. 57 is lattice
+		{ 10, ResourceManager::GetTexture("tile57") }, //Stairs. 57 is lattice
 		{ 11, ResourceManager::GetTexture("tile242") },
 		{ 19, ResourceManager::GetTexture("tile218") },
 		{ 56, ResourceManager::GetTexture("tile218") } // Spike
@@ -126,8 +132,8 @@ void Level1Scene::init()
 
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
 	{
-		{ 10, [] { return new TestTile(Texture(), "level2"); } },
 		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile26", glm::vec2(30, 22), bossEntranceTiles, bossPositionTiles); } },
+		{ 10, [] { return new TestTile(Texture(), "level2", false); } },
 		{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	
@@ -192,10 +198,6 @@ void Level1Scene::init()
 		{
 			createSlime(pos);
 		} },
-		{ 93, [this](glm::vec2 pos)
-		{
-			// TODO: Create a chest
-		} },
 		{ 98, [this](glm::vec2 pos)
 		{
 				createBoss(pos);
@@ -227,6 +229,14 @@ void Level1Scene::update()
 			HUD::Instance()->createHUD();
 
 		HUD::Instance()->updateHUD();
+	}
+
+	if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
+	{
+		if (!InventoryHUD::Instance()->getHasLoaded())
+			InventoryHUD::Instance()->createHUD();
+
+		InventoryHUD::Instance()->updateHUD();
 	}
 }
 

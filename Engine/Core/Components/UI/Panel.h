@@ -7,6 +7,7 @@ class Panel : public SpriteComponent
 public:
 	Panel(); 
 
+	bool shouldRender = true;
 	virtual void render();
 	
 	void SetTexture(const Texture& texture);

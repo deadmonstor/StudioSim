@@ -18,27 +18,32 @@
 #include "../Tiles/LightTile.h"
 #include "../Tiles/BossRoomEntryTile.h"
 #include "../LootTable.h"
+#include "../Components/UI/InventoryHUD.h"
+#include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
 {
+	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
+	
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
+	int random = rand() % 10000000;
+	
+	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
+	enemy->getTransform()->setSize(glm::vec2(35, 35));
 
-	auto* enemy = SceneManager::Instance()->createGameObject("Slime", tileWorldSpace);
-	enemy->getTransform()->setSize(glm::vec2(48, 24));
-
-	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+	const std::vector textureList = ResourceManager::GetTexturesContaining("SkeletonMove");
 	auto sprite = enemy->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 	sprite->setColor(glm::vec3(1, 1, 1));
-	sprite->setLit(true);
+	sprite->setLit(false);
 	sprite->setPivot(Pivot::Center);
 
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
 	EnemyStats slimeStats = EnemyStats();
-	slimeStats.attack = 2;
+	slimeStats.attack = 4;
 	slimeStats.critChance = 0.2f;
-	slimeStats.maxHealth = 100;
-	slimeStats.currentHealth = 100;
+	slimeStats.maxHealth = 50;
+	slimeStats.currentHealth = slimeStats.maxHealth;
 	slimeStats.defence = 2;
 	EnemyComponent component = EnemyComponent(fsm, slimeStats);
 	enemy->addComponent<EnemyComponent>(component);
@@ -64,7 +69,6 @@ void Level2Scene::init()
 	});
 	
 	grid_system->setEmptyTileIDs(0, std::vector<int>{0});
-	// TODO: Fill these out lol
 	grid_system->setWallIDs(0, std::vector<int>{1,9,3,4,5,6});
 	grid_system->setTextureMap(0, std::map<int, Texture>
 	{
@@ -96,7 +100,7 @@ void Level2Scene::init()
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile* ()>>
 	{
 		{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
-		{ 14, [] { return new TestTile(Texture(), "victoryScreen"); } },
+		{ 14, [] { return new TestTile(Texture(), "victoryScreen", false); } },
 		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile25", glm::vec2(37, 50), bossEntranceTilePositions, bossPositionTiles); } },
 		{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
 	});
@@ -161,10 +165,6 @@ void Level2Scene::init()
 		{ 92, [this](glm::vec2 pos)
 		{
 			createEnemy(pos);
-		} },
-		{ 93, [this](glm::vec2 pos)
-		{
-			// TODO: Create a chest
 		} }
 	});
 	
@@ -180,6 +180,14 @@ void Level2Scene::update()
 			HUD::Instance()->createHUD();
 
 		HUD::Instance()->updateHUD();
+	}
+
+	if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
+	{
+		if (!InventoryHUD::Instance()->getHasLoaded())
+			InventoryHUD::Instance()->createHUD();
+
+		InventoryHUD::Instance()->updateHUD();
 	}
 }
 

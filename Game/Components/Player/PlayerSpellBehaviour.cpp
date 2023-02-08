@@ -84,7 +84,8 @@ void PlayerSpellBehaviour::onKeyDownResponse(Griddy::Event* event)
 				{
 					const auto spellCasted = dynamic_cast<SpellItem*>(spell);
 
-					if (spellCasted->spellStats->currentCooldown == spellCasted->spellStats->maxCooldown)
+					if (spellCasted->spellStats->currentCooldown == spellCasted->spellStats->maxCooldown && 
+						spellCasted->spellStats->manaCost <= PlayerController::Instance()->playerStats->currentMana)
 					{
 						Act();
 					}

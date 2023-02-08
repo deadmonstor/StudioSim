@@ -17,7 +17,7 @@ class Behaviour : public Component
 //Properties
 protected:
 	bool initialized = false;
-	int8_t eventResponseID = -1;
+	int32_t eventResponseID = -1;
 	FunctionMap map;
 	bool isInFSM = false;
 

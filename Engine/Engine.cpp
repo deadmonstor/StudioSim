@@ -92,12 +92,6 @@ namespace Griddy
 		m_Initialized = true;
 		ImGuiHandler::Instance()->init();
 
-		/*Score Stuff
-		ScoreSystem::Instance()->setScore(10);
-		ScoreSystem::Instance()->SaveScore("CONNER");
-		ScoreSystem::Instance()->ReadScores(false);
-		*/
-
 		glfwSetKeyCallback(Renderer::getWindow(), key_callback);
 		glfwSetCharCallback(Renderer::getWindow(), char_key_callback);
 		glfwSetMouseButtonCallback(Renderer::getWindow(), mouse_callback);
@@ -119,6 +113,7 @@ namespace Griddy
 			Events::invoke<OnEngineUpdate>();
 			
 			AudioEngine::Instance()->update();
+			UIManager::Instance()->update();
 		}
 		// Check if we need to stop the engine
 		if (auto *window = Renderer::getWindow(); window == nullptr || glfwWindowShouldClose(window))
@@ -144,8 +139,7 @@ namespace Griddy
 		UIManager::Instance()->render();
 		
 		ImGuiHandler::render();
-
-		//ScoreSystem::Instance()->RenderTopScores();
+		
 		glfwSwapBuffers(Renderer::getWindow());
 	}
 
@@ -177,10 +171,6 @@ namespace Griddy
 		m_Running = true;
 
 		Renderer::Instance()->init();
-		ResourceManager::LoadTexture("Sprites\\image.png", "face");
-		ResourceManager::LoadTexture("Sprites\\rock_n.png", "normals");
-		ResourceManager::LoadTexture("Sprites\\image2.png", "face2");
-		ResourceManager::LoadTexture("Sprites\\engine.png", "engine");
 
 		if (!SceneManager::Instance()->init())
 		{

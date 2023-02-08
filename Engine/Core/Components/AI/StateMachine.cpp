@@ -6,7 +6,6 @@ void StateMachine::destroy()
 	if (eventResponseID != -1)
 	{
 		Griddy::Events::unsubscribe(this, &StateMachine::EventResponse, eventResponseID);
-
 		eventResponseID = -1;
 	}
 	

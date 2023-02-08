@@ -163,6 +163,8 @@ static std::map<std::string, std::string> debugScenes
 	{"Debug Level 2", "level2"},
 	{"Debug Victory", "victoryScreen"},
 	{"Debug Defeat", "defeatScreen"},
+	{"Debug LeaderboardScene", "leaderboardScene"},
+	{"Debug ScoreScene", "scoreScene"},
 };
 
 void ImGuiHandler::update()

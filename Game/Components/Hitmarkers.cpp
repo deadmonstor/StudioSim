@@ -21,7 +21,7 @@ void Hitmarkers::onEngineRender(OnEngineRender* event)
 			{ 0,0 });
 
 		time -= Time::getDeltaTime();
-		pos = pos + direction;
+		pos = pos + glm::vec2{direction.x * Time::getDeltaTime(), direction.y * Time::getDeltaTime()};
 	}
 }
 
@@ -55,9 +55,10 @@ void Hitmarkers::addHitmarker(const std::string text, const double time, const g
 	// add random value to pos to make it look more natural
 	const auto random = [](const float min, const float max) { return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min))); };
 	const auto randomPos = glm::vec2(random(-randomAmount, randomAmount), random(-randomAmount, randomAmount));
+	auto randomDirection =  glm::vec2(random(-1, 1), random(-1, 1));
 
-	// TODO: Unsure if I like this
-	const auto randomDirection = glm::vec2{0,0};// glm::vec2(random(-1, 1), random(-1, 1));
+	randomDirection.x = 50 * randomDirection.x;
+	randomDirection.y = 50 * randomDirection.y;
 	
 	hitmarkerTexts.push_back({ text, pos + randomPos, color, time, randomDirection});
 }

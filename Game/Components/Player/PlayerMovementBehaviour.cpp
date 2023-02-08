@@ -8,15 +8,13 @@
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
+#include "../../ScoreSystem.h"
 
 PlayerMovementBehaviour::PlayerMovementBehaviour()
 {
 	isInFSM = false; 
 	map = CreateFunctionMap(); 
 	origPos = GridSystem::Instance()->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
-	
-	if (!ResourceManager::HasSound("Sounds\\softStep.wav"))
-		AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
 	
 	attackBehaviour = new PlayerAttackBehaviour();
 }
@@ -25,9 +23,6 @@ PlayerMovementBehaviour::PlayerMovementBehaviour(bool isInFSMParam)
 {
 	isInFSM = isInFSMParam;
 	origPos = GridSystem::Instance()->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
-
-	if (!ResourceManager::HasSound("Sounds\\softStep.wav"))
-		AudioEngine::Instance()->loadSound("Sounds\\softStep.wav", FMOD_3D);
 	
 	map = CreateFunctionMap();
 	attackBehaviour = new PlayerAttackBehaviour();
@@ -63,6 +58,8 @@ void PlayerMovementBehaviour::Act()
 		}
 		else
 		{
+			ScoreSystem::Instance()->addTilesMoved(1);
+
 			PlayerController::Instance()->playerPTR->getTransform()->
 				setPosition(GridSystem::Instance()->getWorldPosition(origPos + moveDir));
 
@@ -72,18 +69,23 @@ void PlayerMovementBehaviour::Act()
 				PlayerController::Instance()->playerPTR);
 
 
-			if(curTileHolder->tile->canInteractWith())
-				curTileHolder->tile->onInteractedWith(curTileHolder);
+			for (int i = 0; i < gridSystem->getOrderMap().size(); i++)
+			{
+				TileHolder* tileHolder = gridSystem->getTileHolder(i, origPos + moveDir);
+
+				if (tileHolder->tile->canInteractWith())
+					tileHolder->tile->onInteractedWith(tileHolder);
+			}
 
 			origPos = gridSystem->getTilePosition(PlayerController::Instance()->playerPTR->getTransform()->getPosition());
 		
-			AudioEngine::Instance()->playSound("Sounds\\softStep.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
+			AudioEngine::Instance()->playSound("Sounds\\softStep.wav", false, 0.4f, 0, 0, AudioType::SoundEffect);
 			
 			
 			if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR))
 			{
-				TurnManager::Instance()->endTurn();
 				LOG_INFO("PlayerMovementBehaviour::Act() -> TurnManager::Instance()->endTurn()");
+				TurnManager::Instance()->endTurn();
 			}
 		}
 	}
