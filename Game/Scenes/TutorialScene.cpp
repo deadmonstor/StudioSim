@@ -11,7 +11,6 @@
 #include "../Tiles/LightTile.h"
 #include "../Components/Player/PlayerController.h"
 #include "../Components/EnemyComponent.h"
-#include "../ScoreSystem.h"
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
@@ -23,6 +22,8 @@
 
 void TutorialScene::createSlime(const glm::vec2 pos)
 {
+	engineRenderID = Griddy::Events::subscribe(this, &TutorialScene::onEngineRender);
+	
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
 	int random = rand() % 10000000;
 		
@@ -171,19 +172,6 @@ void TutorialScene::init()
 	});
 	
 	grid_system->loadFromFile(2, "Grid/TutorialLevelDesignSP.txt");
-
-	int m_count = 0;
-	if (m_count == 1)
-	{
-		ScoreSystem::Instance()->ReadScores(false);
-		m_count++;
-	}
-
-	if (m_count == 2)
-	{
-		ScoreSystem::Instance()->RenderTopScores();
-	}
-	
 	TurnManager::Instance()->startTurnSystem();
 }
 
@@ -211,7 +199,47 @@ void TutorialScene::update()
 	}
 }
 
+void TutorialScene::renderTextOutlined(const glm::vec2 worldPosition,
+	const std::string& text,
+	const float scale,
+	const float outlineThickness,
+	const glm::vec3& color,
+	const glm::vec3& colorOutline)
+{
+	renderText(worldPosition, text, scale - outlineThickness, colorOutline);
+	renderText(worldPosition, text, scale, color);
+}
+
+void TutorialScene::renderText(const glm::vec2 worldPosition, const std::string& text, const float scale, const glm::vec3& color)
+{
+	const glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize(text, scale);
+	TextRenderer::Instance()->renderText(text,
+		worldPosition.x - Renderer::Instance()->getCameraPosScreenSpace().x - sizeOfText.x / 2,
+		worldPosition.y - Renderer::Instance()->getCameraPosScreenSpace().y - sizeOfText.y / 2,
+		scale,
+		color,
+		glm::vec2{0.5f, 0.5f}
+	);
+}
+
+void TutorialScene::onEngineRender(const OnEngineRender* event)
+{
+	// TODO: POC
+	renderTextOutlined(
+		{240, 2208}, 
+		"Press W-A-S-D to move the Character",
+		0.4f,
+		-0.0075f,
+		{1, 1, 1},
+		{0,0,0}
+	);
+	
+	renderText({240, 1968}, "Press Q to change to Attack Mode", 0.5f, {1, 1, 1});
+	renderText({240, 1920}, "Press E to change to Spell Mode", 0.5f, {1, 1, 1});
+	renderText({240, 1872}, "You can see what mode you are in at the bottom right of your HUD", 0.4f, {1, 1, 1});
+}
+
 void TutorialScene::destroy()
 {
-	
+	Griddy::Events::unsubscribe(this, &TutorialScene::onEngineRender, engineRenderID);
 }
