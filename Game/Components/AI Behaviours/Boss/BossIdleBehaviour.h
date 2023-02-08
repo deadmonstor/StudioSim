@@ -21,5 +21,6 @@ private:
 	void onPlayerEnterBossRoom(EnterBossRoomEvent* event);
 protected:
 	int8_t enterRoomEventID = -1;
+	bool shouldEndTurn = true;
 };
 
