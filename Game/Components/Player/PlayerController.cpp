@@ -181,7 +181,7 @@ void PlayerController::ReduceSpellCooldown()
 	if (Item* spell = PlayerController::Instance()->myInventory->getFirstItemWithEquipSlot(EquipSlot::SPELL); spell != nullptr)
 	{
 		const auto spellCasted = dynamic_cast<SpellItem*>(spell);
-		if (spellCasted->spellStats->currentCooldown == spellCasted->spellStats->maxCooldown)
+		if (spellCasted->spellStats->currentCooldown > 0)
 		{
 			spellCasted->spellStats->currentCooldown -= 1;
 		}
