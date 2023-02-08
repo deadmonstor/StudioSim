@@ -9,6 +9,7 @@
 BossAttackAction::BossAttackAction(glm::vec2 myPosArg, GameObject* parentObjectArg)
 	: currentPos(myPosArg), parentObject(parentObjectArg)
 {
+	cooldown = 0;
 }
 
 void BossAttackAction::Act()
@@ -22,7 +23,7 @@ void BossAttackAction::Act()
 	{
 		createSlashGameObject(pos);
 	}
-
+	cooldown = 4;
 	TurnManager::Instance()->endTurn();
 }
 
@@ -86,6 +87,32 @@ std::vector<glm::vec2> BossAttackAction::FindAttackPositions()
 			
 	}
 	return outputPositions;
+}
+
+bool BossAttackAction::isInRange()
+{
+	//Find attack positions
+	std::vector<glm::vec2> attackPositions = FindAttackPositions();
+	GridSystem* gridSystem = GridSystem::Instance();
+	//do attacks
+	for (auto pos : attackPositions)
+	{
+		TileHolder* tile = gridSystem->getTileHolder(0, pos);
+		if (tile != nullptr && tile->gameObjectSatOnTile != nullptr && tile->gameObjectSatOnTile->getName() == "Player")
+			return true;
+	}
+	return false;
+}
+
+bool BossAttackAction::UpdateCooldown()
+{
+	if (cooldown > 0)
+	{
+		cooldown--;
+		return false;
+	}
+	else
+		return true;
 }
 
 void BossAttackAction::createSlashGameObject(glm::vec2 pos)

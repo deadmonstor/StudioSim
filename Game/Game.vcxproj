@@ -103,6 +103,7 @@
   <ItemGroup>
     <ClCompile Include="Components\AI Behaviours\Boss\BossAttackAction.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossCombatBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Boss\BossSpawnAction.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossStateMachine.cpp" />
     <ClCompile Include="Components\AI Behaviours\DoNothingAction.cpp" />
     <ClCompile Include="Scenes\TutorialScene.cpp" />
