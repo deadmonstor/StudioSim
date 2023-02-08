@@ -18,10 +18,12 @@
 #include "../Tiles/LightTile.h"
 #include "../Tiles/BossRoomEntryTile.h"
 #include "../LootTable.h"
+#include "../Tiles/ShopTile.h"
 #include "../Components/UI/InventoryHUD.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "../Components/AI Behaviours/Reaper/ReaperStateMachine.h"
+#include "../AllItemInclude.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
 {
@@ -219,7 +221,13 @@ void Level2Scene::init()
 	grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");
 
 	grid_system->setEmptyTileIDs(2, std::vector<int>{});
-	grid_system->setWallIDs(2, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
+	grid_system->setTileFunctionMap(2, std::map<int, std::function<Tile* ()>>
+	{
+		{ 95, [] {return new ShopTile(Texture(), new ManaPotion());  } },
+		{ 96, [] {return new ShopTile(Texture(), new PoisonSpell());  } },
+		{ 97, [] {return new ShopTile(Texture(), new LegendaryArmour());  } },
+		{ 101, [] {return new ShopTile(Texture(), new LegendaryHammer());  } }
+	});
 	grid_system->setSpawnFunctionMap(2,
 	{
 		{ 91, [this](glm::vec2 pos)
