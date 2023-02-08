@@ -2,9 +2,9 @@
 
 LegendaryArmour::LegendaryArmour()
 {
-	legendaryArmourStats = new ArmourStats();
-	legendaryArmourStats->defence = 3;
-	legendaryArmourStats->health = 10;
-	legendaryArmourStats->mana = 10;
+	armour = new ArmourStats();
+	armour->defence = 3;
+	armour->health = 10;
+	armour->mana = 10;
 	price = 20;
 }

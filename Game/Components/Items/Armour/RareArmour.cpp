@@ -2,9 +2,9 @@
 
 RareArmour::RareArmour()
 {
-	rareArmourStats = new ArmourStats();
-	rareArmourStats->defence = 2;
-	rareArmourStats->health = 5;
-	rareArmourStats->mana = 5;
+	armour = new ArmourStats();
+	armour->defence = 2;
+	armour->health = 5;
+	armour->mana = 5;
 	price = 10;
 }

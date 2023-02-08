@@ -2,9 +2,9 @@
 
 CommonArmour::CommonArmour()
 {
-	commonArmourStats = new ArmourStats();
-	commonArmourStats->defence = 1;
-	commonArmourStats->health = 2;
-	commonArmourStats->mana = 2;
+	armour = new ArmourStats();
+	armour->defence = 1;
+	armour->health = 2;
+	armour->mana = 2;
 	price = 5;
 }

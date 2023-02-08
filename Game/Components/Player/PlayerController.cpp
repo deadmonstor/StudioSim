@@ -111,11 +111,11 @@ void PlayerController::onEngineRender(const OnEngineRender* render)
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
 #ifdef _DEBUG
-	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr)
+	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr && playerPTR != nullptr)
 	{
 		for(auto func : Inventory::getItemByName | std::views::values)
 		{
-			PlayerController::Instance()->myInventory->add_item(func());
+			myInventory->add_item(func());
 		}
 	}
 #endif
