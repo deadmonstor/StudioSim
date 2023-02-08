@@ -75,13 +75,18 @@ glm::vec2 Renderer::getCameraPos() const
 
 glm::vec2 Renderer::getCameraPosScreenSpace() const
 {
-	const glm::vec2 result = Renderer::getWindowSize();
-	const float aspectRatio = Renderer::Instance()->getAspectRatio();
-
 	if (mainCam == nullptr  || mainCam->getOwner() == nullptr || !mainCam->getOwner()->isValidTransform() )
-		return {-((result.x / aspectRatio) / 2) , -((result.y / aspectRatio) / 2)};
+		return getViewportHalfSize();
 
-	return mainCam->getOwner()->getTransform()->getPosition() + glm::vec2{-((result.x / aspectRatio) / 2), -((result.y / aspectRatio) / 2)};
+	return mainCam->getOwner()->getTransform()->getPosition() + getViewportHalfSize();
+}
+
+glm::vec2 Renderer::getViewportHalfSize() const
+{
+	if (mainCam == nullptr)
+		return {0, 0};
+
+	return glm::vec2{-(getViewportSize().x / 2) , -(getViewportSize().y / 2)};
 }
 
 void Renderer::setupCommonShader(const std::string& name, const glm::ivec2 value, const glm::mat4 projection, const glm::mat4 view)
@@ -119,8 +124,8 @@ void Renderer::setWindowSize(const glm::ivec2 value)
 	if (!ResourceManager::HasShader("textunlit"))
 		ResourceManager::LoadShader("Shader/textunlit.vs", "Shader/textunlit.frag", nullptr, "textunlit");
 
-	resetShaders();
 	glfwSetWindowSize(window, value.x, value.y);
+	resetShaders();
 }
 
 void Renderer::resetShaders()
@@ -135,6 +140,10 @@ void Renderer::resetShaders()
 	const glm::mat4 projectionMatrix = mainCam->getProjectMatrix();
 	const glm::mat4 viewProjectionMatrix = mainCam->getViewProjectMatrix();
 	const glm::vec2 value = getWindowSize();
+
+	auto test = glm::inverse(projectionMatrix);
+	viewportSize[0] = test[0][0] * 2;
+	viewportSize[1] = test[1][1] * 2;
 	
 	setupCommonShader("sprite", value, projectionMatrix, viewProjectionMatrix);
 	setupCommonShader("spriteunlit", value, projectionMatrix, viewProjectionMatrix);
@@ -217,7 +226,9 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 	if (mainCam == nullptr)
 		return;
 
-	if (!mainCam->isInFrustum(position, size))
+	const glm::vec2 pivot = spriteRenderer->getPivot();
+	const auto pivotAndSize = glm::vec3(-pivot.x * size.x, -pivot.y * size.y, 0.0f);
+	if (!mainCam->isInFrustum(position, pivotAndSize))
 	{
 		spriteRenderer->wasInFrame = false;
 		return;
@@ -225,8 +236,6 @@ void Renderer::renderSprite(SpriteComponent* spriteRenderer, const glm::vec2 pos
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	const glm::vec2 pivot = spriteRenderer->getPivot();
 	Lighting::Instance()->refreshLightData(spriteRenderer, LightUpdateRequest::Position);
 
 	spriteRenderer->getShader().SetVector3f("spriteColor", spriteRenderer->getColor(), true);

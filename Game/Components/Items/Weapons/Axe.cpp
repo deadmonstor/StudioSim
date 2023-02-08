@@ -55,7 +55,7 @@ void Axe::createSlashGameObject(glm::fvec2 pos)
 				atkDamage *= 2; //double damage
 			}
 
-			int newHealth = enemyInfo->getStats().currentHealth - atkDamage;
+			int newHealth = gameObject->getComponent<Health>()->getHealth() - atkDamage;
 			gameObject->getComponent<Health>()->setHealth(newHealth);
 
 			// TODO: This is probably shitty 

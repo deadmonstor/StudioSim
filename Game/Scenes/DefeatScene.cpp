@@ -33,10 +33,10 @@ void DefeatScene::onEngineRender(const OnEngineRender* event)
         SceneManager::Instance()->getScene()->name != "defeatScreen") return;
     
     const auto MiddleTopHalf =
-                    glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y / 1.5)) / Renderer::Instance()->getAspectRatio();
+                    glm::vec2((Renderer::getViewportSize().x / 2), (Renderer::getViewportSize().y / 1.5));
 
     const auto MiddleMiddle =
-                  glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y / 2.5)) / Renderer::Instance()->getAspectRatio();
+                  glm::vec2((Renderer::getViewportSize().x / 2), (Renderer::getViewportSize().y / 2.5));
     
     glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize("Defeat!", 1);
     TextRenderer::Instance()->renderText(" Defeat!", MiddleTopHalf.x - (sizeOfText.x / 2),

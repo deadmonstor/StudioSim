@@ -67,6 +67,17 @@ void GridSystem::renderInternal(const int id)
 		const float tileHeight = tileSize.y;
 		
 		const float tileX = x * tileWidth;
+
+		const glm::vec2 pivot = Pivot::Center;
+		const glm::vec2 size = {tileWidth, tileHeight};
+		const glm::vec3 pivotAndSize = glm::vec3(-pivot.x * size.x, -pivot.y * size.y, 0.0f);
+		const glm::vec2 camPos = Renderer::Instance()->getCameraPos();
+
+		// Skip the first round of rendering if the x position is not in the right place
+		if (!Renderer::Instance()->getCamera()->isInFrustum({tileX, camPos.y}, pivotAndSize))
+		{
+			continue;
+		}
 		
 		for(auto [y, holder] : pointer)
 		{
@@ -80,7 +91,7 @@ void GridSystem::renderInternal(const int id)
 			holder->tile->update();
 			Renderer::Instance()->renderSprite(holder->tile,
 			                                   pos,
-			                                   {tileWidth, tileHeight},
+			                                   size,
 			                                   0
 			);
 

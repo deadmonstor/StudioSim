@@ -23,6 +23,7 @@ class Renderer : public SingletonTemplate<Renderer>
 	GLFWwindow* window = nullptr;
 	Camera* mainCam = nullptr;
 	glm::vec2 windowSize = { 1, 1 };
+	glm::vec2 viewportSize = { 1, 1 };
 	std::vector<SpriteComponent*> spriteRenderQueue;
 
 	std::map<std::string, SortingLayer*> sortingLayers
@@ -39,15 +40,16 @@ class Renderer : public SingletonTemplate<Renderer>
 public:
 	static GLFWwindow* getWindow() { return Instance()->window; }
 	static glm::vec2 getWindowSize() { return Instance()->windowSize; }
+	static glm::vec2 getViewportSize() { return Instance()->viewportSize; }
 	
 	[[nodiscard]] glm::mat4 getViewProjectMatrix() const { return mainCam->getViewProjectMatrix(); }
 	[[nodiscard]] glm::mat4 getProjectMatrix() const { return mainCam->getProjectMatrix(); }
 	void getModelMatrix(glm::vec2 position, glm::vec2 size, float rotation, glm::vec2 pivot, glm::mat4& model);
 	
 	[[nodiscard]] unsigned int getCameraSize() const { return mainCam->getSize(); }
-	[[nodiscard]] float getAspectRatio() const { return mainCam->getAspectRatio(); }
 	[[nodiscard]] glm::vec2 getCameraPos() const;
 	[[nodiscard]] glm::vec2 getCameraPosScreenSpace() const;
+	[[nodiscard]] glm::vec2 getViewportHalfSize() const;
 	[[nodiscard]] Camera* getCamera() const { return mainCam; }
 	void setCamera(Camera* cam)
 	{

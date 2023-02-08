@@ -34,20 +34,10 @@ void ScoreScene::onEngineRender(const OnEngineRender* event)
 		return;
 
 	const auto MiddleTop =
-		glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y)) / Renderer::Instance()->
-		getAspectRatio();
-
-	const auto MiddleTopHalf =
-		glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y / 1.5)) / Renderer::Instance()->
-		getAspectRatio();
-
-	const auto MiddleMiddle =
-		glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y / 2.5)) / Renderer::Instance()->
-		getAspectRatio();
-
+		glm::vec2((Renderer::getViewportSize().x / 2), (Renderer::getViewportSize().y));
+	
 	const auto MiddleBottom =
-		glm::vec2((Renderer::getWindowSize().x / 2), (Renderer::getWindowSize().y / 5)) / Renderer::Instance()->
-		getAspectRatio();
+		glm::vec2((Renderer::getViewportSize().x / 2), (Renderer::getViewportSize().y / 5));
 
 	//Player Name
 	glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize(playerName, 1);
@@ -72,6 +62,7 @@ void ScoreScene::onEngineRender(const OnEngineRender* event)
 	                                     glm::vec3{1, 1, 1},
 	                                     glm::vec2{0, 0});
 
+	ScoreSystem::Instance()->calcFinalScore();
 	//Total Score
 	sizeOfText = TextRenderer::Instance()->renderTextSize(
 		"Total Score: " + std::format("{:.0f}", ScoreSystem::Instance()->getScore()), 1);
