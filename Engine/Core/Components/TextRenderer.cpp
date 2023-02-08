@@ -67,12 +67,9 @@ void TextRenderer::renderText(std::string text, float screenPosX, float screenPo
 	if (Renderer::Instance()->getCamera() == nullptr) return;
 	
 	internalSpriteComponent->getShader().SetVector3f("spriteColor", colour.x, colour.y, colour.z, true);
-
-	const glm::vec2 result = Renderer::getWindowSize();
-	const float aspectRatio = Renderer::Instance()->getAspectRatio();
 	
-	screenPosX += -((result.x / aspectRatio) / 2);
-	screenPosY += -((result.y / aspectRatio) / 2);
+	screenPosX += Renderer::Instance()->getViewportHalfSize().x;
+	screenPosY += Renderer::Instance()->getViewportHalfSize().y;
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

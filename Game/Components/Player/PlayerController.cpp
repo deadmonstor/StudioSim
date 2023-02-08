@@ -7,6 +7,7 @@
 #include "../Items/Weapons/RareSword.h"
 #include "../Items/Spells/FireBallSpell.h"
 #include "../Items/Spells/IceSpell.h"
+#include "../Items/Spells/PoisonSpell.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "Core/Components/Transform.h"
@@ -39,8 +40,11 @@ void PlayerController::createPlayer()
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
 	hitmarkers = playerPTR->addComponent<Hitmarkers>();
+	bool isTutorial = SceneManager::Instance()->getScene()->name == "tutorial";
 
-	if (playerStats == nullptr || SceneManager::Instance()->getScene()->name == "level1")
+	if (playerStats == nullptr ||
+		SceneManager::Instance()->getScene()->name == "level1" ||
+		isTutorial)
 	{
 		if (playerStats != nullptr && playerStats->myInventory != nullptr)
 			delete playerStats->myInventory;
@@ -48,9 +52,9 @@ void PlayerController::createPlayer()
 		delete playerStats;
 		
 		playerStats = new PlayerStats();
-		playerStats->maxHealth = 10;
-		playerStats->currentHealth = 10;
-		lastHealth = 10;
+		playerStats->maxHealth = 25;
+		playerStats->currentHealth = 25;
+		lastHealth = 25;
 		playerStats->currentEXP = 0;
 		playerStats->maxEXP = 100;
 		playerStats->currentMana = 10;
@@ -63,6 +67,13 @@ void PlayerController::createPlayer()
 		playerStats->level = 1;
 		
 		playerStats->myInventory = new Inventory(20);
+		if (isTutorial)
+		{
+			for(auto func : Inventory::getItemByName | std::views::values)
+			{
+				playerStats->myInventory->add_item(func());
+			}
+		}
 	}
 	
 	myInventory = playerStats->myInventory;
@@ -100,32 +111,12 @@ void PlayerController::onEngineRender(const OnEngineRender* render)
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
 #ifdef _DEBUG
-	if (keyDown->key == GLFW_KEY_P)
+	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr)
 	{
-		//Testing pathfinding
-		glm::vec2 gridSize = GridSystem::Instance()->getGridSize();
-		glm::vec2 start = playerPTR->getTransform()->getPosition();
-		glm::vec2 goal = start + glm::vec2(0 * gridSize.x, -30 * gridSize.y);
-		//PathfindingMachine::Instance()->FindPath(start, goal);
-		bool sight = PathfindingMachine::Instance()->LineOfSight(start, goal);
-
-		myInventory->add_item(new LegendaryHammer());
-		Item* hammer = new LegendaryHammer();
-		myInventory->add_item(hammer);
-		myInventory->equip_item(hammer->name());
-		
-		myInventory->add_item(new RareSword());
-		myInventory->add_item(new HealthPotion());
-		
-		Item* armour = new LegendaryArmour();
-		myInventory->add_item(armour);
-		myInventory->equip_item(armour->name());
-		
-		myInventory->add_item(new FireBallSpell());
-
-		Item* iceSpell = new IceSpell();
-		myInventory->add_item(iceSpell);
-		myInventory->equip_item(iceSpell->name());
+		for(auto func : Inventory::getItemByName | std::views::values)
+		{
+			PlayerController::Instance()->myInventory->add_item(func());
+		}
 	}
 #endif
 	
@@ -136,7 +127,7 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 
 void PlayerController::onKeyHold(const OnKeyRepeat* keyHold)
 {
-	std::type_index eventType = typeid(OnKeyRepeat);
+	const std::type_index eventType = typeid(OnKeyRepeat);
 	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyRepeat(keyHold->key, keyHold->scancode), eventType);
 }
 
@@ -170,6 +161,13 @@ void PlayerController::UpdateStats()
 		playerStats->currentMana = playerStats->maxMana;
 
 		lastHealth = playerStats->currentHealth;
+	}
+
+	if (SceneManager::Instance()->getScene()->name == "tutorial")
+	{
+		// GODMODE + Other stuff
+		playerStats->currentHealth = playerStats->maxHealth;
+		playerStats->currentMana = playerStats->maxMana;
 	}
 }
 

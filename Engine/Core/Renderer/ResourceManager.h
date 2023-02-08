@@ -17,9 +17,9 @@ public:
 	static bool		 HasShader(std::string name);
 	static Shader    GetShader(std::string name);
 
-	static Texture            LoadTexture(const char *file, std::string name);
-	static std::list<Texture> LoadTextureArray(const char* folder, const std::string& name, int numTextures);
-
+	static Texture				LoadTexture(const char *file, std::string name);
+	static std::list<Texture>	LoadTextureArray(const char* folder, const std::string& name, int numTextures);
+	static bool					HasTexture(std::string name);
 	static Texture              GetTexture(std::string name);
 	static std::vector<Texture> GetTexturesContaining(std::string name);
 	

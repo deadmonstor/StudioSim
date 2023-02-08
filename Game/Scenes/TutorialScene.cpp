@@ -11,11 +11,9 @@
 #include "../Tiles/LightTile.h"
 #include "../Components/Player/PlayerController.h"
 #include "../Components/EnemyComponent.h"
-#include "../ScoreSystem.h"
 #include "../Components/UI/HUD.h"
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
-#include "../Tiles/BossRoomEntryTile.h"
 #include "../LootTable.h"
 #include "../Components/UI/InventoryHUD.h"
 #include "../Tiles/ChestTile.h"
@@ -29,14 +27,22 @@ void TutorialScene::createSlime(const glm::vec2 pos)
 		
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
+
+	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+	auto sprite = enemy->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
+	sprite->setColor(glm::vec3(1, 1, 1));
+	sprite->setLit(true);
+	sprite->setPivot(Pivot::Center);
+	
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
 	EnemyStats slimeStats = EnemyStats();
-	slimeStats.attack = 2;
-	slimeStats.critChance = 0.2f;
-	slimeStats.maxHealth = 10;
-	slimeStats.currentHealth = 10;
-	slimeStats.defence = 2;
-	EnemyComponent component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
+	slimeStats.attack = 0;
+	slimeStats.critChance = 0.0f;
+	slimeStats.maxHealth = 5;
+	slimeStats.currentHealth = slimeStats.maxHealth;
+	slimeStats.defence = 0;
+	
+	EnemyComponent component = EnemyComponent(fsm, slimeStats);
 	enemy->addComponent<EnemyComponent>(component);
 
 	GridSystem::Instance()->setSatOnTile(0, pos, enemy);
@@ -44,6 +50,8 @@ void TutorialScene::createSlime(const glm::vec2 pos)
 
 void TutorialScene::init()
 {
+	engineRenderID = Griddy::Events::subscribe(this, &TutorialScene::onEngineRender);
+	
 	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 	LootTable::Instance()->LoadingIntoLootTableArray();
 	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
@@ -86,7 +94,6 @@ void TutorialScene::init()
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile*()>>
 	{
 		{ 10, [] { return new TestTile(Texture(), "level1", true); } },
-		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile26", glm::vec2(30, 22), bossEntranceTiles); } },
 		{ 56, [] { return new SpikeTile(Texture()); } }
 	});
 	
@@ -165,24 +172,16 @@ void TutorialScene::init()
 	});
 	
 	grid_system->loadFromFile(2, "Grid/TutorialLevelDesignSP.txt");
-
-	int m_count = 0;
-	if (m_count == 1)
-	{
-		ScoreSystem::Instance()->ReadScores(false);
-		m_count++;
-	}
-
-	if (m_count == 2)
-	{
-		ScoreSystem::Instance()->RenderTopScores();
-	}
-	
 	TurnManager::Instance()->startTurnSystem();
 }
 
 void TutorialScene::update()
 {
+	if (hasCompletedTutorialLevel)
+	{
+		SceneManager::Instance()->changeScene("level1");
+	}
+	
 	if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
 	{
 		if (!HUD::Instance()->getHasLoaded())
@@ -200,7 +199,47 @@ void TutorialScene::update()
 	}
 }
 
+void TutorialScene::renderTextOutlined(const glm::vec2 worldPosition,
+	const std::string& text,
+	const float scale,
+	const float outlineThickness,
+	const glm::vec3& color,
+	const glm::vec3& colorOutline)
+{
+	renderText(worldPosition, text, scale - outlineThickness, colorOutline);
+	renderText(worldPosition, text, scale, color);
+}
+
+void TutorialScene::renderText(const glm::vec2 worldPosition, const std::string& text, const float scale, const glm::vec3& color)
+{
+	const glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize(text, scale);
+	TextRenderer::Instance()->renderText(text,
+		worldPosition.x - Renderer::Instance()->getCameraPosScreenSpace().x - sizeOfText.x / 2,
+		worldPosition.y - Renderer::Instance()->getCameraPosScreenSpace().y - sizeOfText.y / 2,
+		scale,
+		color,
+		glm::vec2{0.5f, 0.5f}
+	);
+}
+
+void TutorialScene::onEngineRender(const OnEngineRender* event)
+{
+	// TODO: POC
+	renderTextOutlined(
+		{240, 2208}, 
+		"Press W-A-S-D to move the Character",
+		0.4f,
+		-0.0075f,
+		{1, 1, 1},
+		{0,0,0}
+	);
+	
+	renderText({240, 1968}, "Press Q to change to Attack Mode", 0.5f, {1, 1, 1});
+	renderText({240, 1920}, "Press E to change to Spell Mode", 0.5f, {1, 1, 1});
+	renderText({240, 1872}, "You can see what mode you are in at the bottom right of your HUD", 0.4f, {1, 1, 1});
+}
+
 void TutorialScene::destroy()
 {
-    
+	Griddy::Events::unsubscribe(this, &TutorialScene::onEngineRender, engineRenderID);
 }

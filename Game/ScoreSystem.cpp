@@ -92,14 +92,14 @@ void ScoreSystem::calcFinalScore()
 {
 	currentScore = 0;
 	currentScore += enemiesKilled * 10;
-	currentScore += tilesMoved * 10;
+	currentScore -= tilesMoved;
 	currentScore -= damageTaken * 10;
 }
 
 void ScoreSystem::RenderTopScores()
 {
 	const auto MiddleTop =
-		glm::vec2(Renderer::getWindowSize().x / 4, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
+					glm::vec2((Renderer::getViewportSize().x / 3), Renderer::getViewportSize().y);
 
 	glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize("The Leaderboard:", 1);
 	TextRenderer::Instance()->renderText("The Leaderboard:",
@@ -123,7 +123,7 @@ void ScoreSystem::RenderTopScores()
 	}
 
 	auto TopRight =
-		glm::vec2(Renderer::getWindowSize().x / 1.5f, Renderer::getWindowSize().y) / Renderer::Instance()->getAspectRatio();
+		glm::vec2(Renderer::getViewportSize().x / 1.5f, Renderer::getViewportSize().y);
 
 	sizeOfText = TextRenderer::Instance()->renderTextSize("Your Score:", 1);
 	TextRenderer::Instance()->renderText("Your Score:",

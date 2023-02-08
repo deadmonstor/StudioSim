@@ -142,8 +142,7 @@ void PlayerAttackBehaviour::createSlashGameObject(const glm::fvec2 pos)
 					TurnManager::Instance()->endTurn();
 
 					auto* health = gameObject->getComponent<Health>();
-					// TODO: Change this
-					health->setHealth(health->getHealth() - 1);
+					health->setHealth(health->getHealth() - 5);
 
 					// TODO: This is probably shitty 
 					if (gameObject->isBeingDeleted())

@@ -6,6 +6,7 @@
 #include "../Core/Components/AnimatedSpriteRenderer.h"
 #include "../DestroyAfterAnimation.h"
 #include "Core/AudioEngine.h"
+#include "../../ScoreSystem.h"
 
 AttackAction::AttackAction(GameObject* parentObjectArg)
 	: parentObject(parentObjectArg)
@@ -83,6 +84,7 @@ void AttackAction::createSlashGameObject(glm::vec2 pos)
 			attackDamage *= 2; //double damage!
 		
 		targetStats->currentHealth -= attackDamage;
+		ScoreSystem::Instance()->addDamageTaken(attackDamage);
 		PlayerController::Instance()->UpdateStats();
 	}
 	// get world position from grid position

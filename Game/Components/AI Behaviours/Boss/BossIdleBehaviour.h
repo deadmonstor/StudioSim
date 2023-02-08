@@ -3,19 +3,25 @@
 #include <Util/Events/Events.h>
 #include "..\..\..\GameEvents.h"
 
+
+
 class StateMachine;
 
 class BossIdleBehaviour : 
 	public Behaviour
 {
 public:
+	explicit BossIdleBehaviour(StateMachine* parentFSMArg, glm::vec2 myPosArg, std::vector<glm::vec2> spawnerPositionsArg);
+	void Act() override;
 	void start() override;
 	void destroy() override;
-	explicit BossIdleBehaviour(StateMachine* parentFSMArg);
 private:
 	StateMachine* parentFSM;
+	std::vector<glm::vec2> spawnerPositions;
 	void onPlayerEnterBossRoom(EnterBossRoomEvent* event);
 protected:
+	glm::vec2 myPos;
 	int8_t enterRoomEventID = -1;
+	bool shouldEndTurn = true;
 };
 

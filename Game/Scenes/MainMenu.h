@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Core/Scene.h"
+#include "Core/Components/UI/Panel.h"
 #include "Util/Events/EngineEvents.h"
 
 class MainMenu : public Scene

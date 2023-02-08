@@ -13,19 +13,19 @@
 #include "Core/Components/Transform.h"
 #include "PickUp.h"
 #include "Core/AudioEngine.h"
+#include "../ScoreSystem.h"
+#include "../Components/Items/Spells/PoisonSpell.h"
 
 EnemyComponent::EnemyComponent()
 {
 	enemyFSM = nullptr;
 	stats = EnemyStats();
-	spriteName = "";
 }
 
-EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsArg, std::string spriteNameArg)
+EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsArg)
 {
 	enemyFSM = stateMachineArg;
 	stats = statsArg;
-	spriteName = spriteNameArg;
 
 	if (!ResourceManager::HasSound("Sounds\\Damage.wav"))
 		AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
@@ -33,13 +33,9 @@ EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsAr
 
 void EnemyComponent::start()
 {
-	getOwner()->addComponent<Health>();
+	Health* healthComponent = getOwner()->addComponent<Health>();
+	healthComponent->setHealth(stats.maxHealth);
 	getOwner()->addComponent<Camera>();
-	const std::vector textureList = ResourceManager::GetTexturesContaining(spriteName);
-	auto sprite = getOwner()->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
-	sprite->setColor(glm::vec3(1, 1, 1));
-	sprite->setLit(true);
-	sprite->setPivot(Pivot::Center);
 
 	TurnManager::Instance()->addToTurnQueue(getOwner());
 
@@ -59,8 +55,8 @@ void EnemyComponent::destroy()
 		int expGained = 5;
 		PlayerController::Instance()->playerStats->currentEXP += expGained;
 		PlayerController::Instance()->UpdateStats();
+		ScoreSystem::Instance()->addEnemiesKilled(1);
 	}
-
 
 	DropLoot();
 	Component::destroy();
@@ -70,13 +66,40 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 {
 	if (roundsFreeze <= 0)
 	{
-		if (event->objectToStart == getOwner())
+		if (roundsPoisoned <= 0)
 		{
-			getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
-			if (enemyFSM != nullptr)
-				enemyFSM->Act();
-			else
-				LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			if (event->objectToStart == getOwner())
+			{
+				getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
+				if (enemyFSM != nullptr)
+					enemyFSM->Act();
+				else
+					LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			}
+		}
+		else
+		{
+
+			if (event->objectToStart == getOwner())
+			{
+				roundsPoisoned -= 1;
+				PoisonSpell* poison = new PoisonSpell();
+				int spellDMG = poison->spellStats->damagePerTurn;
+				float currentHealth = getOwner()->getComponent<Health>()->getHealth();
+				int newHealth = currentHealth -= spellDMG;
+				getOwner()->getComponent<Health>()->setHealth(newHealth);
+				if (getOwner()->isBeingDeleted())
+				{
+					GridSystem::Instance()->resetSatOnTile(0, GridSystem::Instance()->getTilePosition(getOwner()->getTransform()->getPosition()));
+					return;
+				}
+
+				LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn() -> " + std::to_string(roundsPoisoned));
+				if (enemyFSM != nullptr)
+					enemyFSM->Act();
+				else
+					LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			}
 		}
 	}
 	else
