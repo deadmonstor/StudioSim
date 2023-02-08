@@ -30,12 +30,12 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 	int random = rand() % 10000000;
 	
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
-	enemy->getTransform()->setSize(glm::vec2(48, 24));
+	enemy->getTransform()->setSize(glm::vec2(35, 35));
 
-	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+	const std::vector textureList = ResourceManager::GetTexturesContaining("SkeletonMove");
 	auto sprite = enemy->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 	sprite->setColor(glm::vec3(1, 1, 1));
-	sprite->setLit(true);
+	sprite->setLit(false);
 	sprite->setPivot(Pivot::Center);
 
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
