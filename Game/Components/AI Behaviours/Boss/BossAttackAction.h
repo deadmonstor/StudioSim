@@ -12,7 +12,11 @@ public:
     explicit BossAttackAction(glm::vec2 myPosArg, GameObject* parentObjectArg);
     void Act() override;
     std::vector<glm::vec2> FindAttackPositions();
+
+    bool isInRange();
+    bool UpdateCooldown();
 private:
+    int cooldown;
     glm::vec2 currentPos;
     GameObject* parentObject;
     const std::vector<Texture> textureListRST = ResourceManager::GetTexturesContaining("RedSlashThin");

@@ -33,8 +33,7 @@ EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsAr
 
 void EnemyComponent::start()
 {
-	Health* healthComponent = getOwner()->addComponent<Health>();
-	healthComponent->setHealth(stats.maxHealth);
+	Health* healthComponent = getOwner()->addComponent<Health>(stats.maxHealth);
 	getOwner()->addComponent<Camera>();
 
 	TurnManager::Instance()->addToTurnQueue(getOwner());
@@ -119,7 +118,9 @@ void EnemyComponent::DropLoot()
 {
 	if (SceneManager::Instance()->isLoadingScene() || SceneManager::Instance()->isShuttingDown())
 		return;
-	
+
+	if (getOwner()->getName() == "bossSpawn")
+		return;
 	std::string itemToSpawn = EnemyDropLootTable::Instance()->EnemyDropRollLoot();
 	Texture m_ItemTexture;
 
