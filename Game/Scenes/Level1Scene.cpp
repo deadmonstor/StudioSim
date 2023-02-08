@@ -114,7 +114,7 @@ void Level1Scene::createBoss(const glm::vec2 pos)
 	auto sprite = Crab->addComponent<AnimatedSpriteRenderer>(textureListCrab, 0.075f);
 	sprite->setPivot(Pivot::BottomCenter);
 	sprite->setColor(glm::vec3(1, 1, 1));
-	sprite->setLit(false);
+	sprite->setLit(true);
 
 	std::vector<glm::vec2> spawnerPositions;
 	spawnerPositions.push_back(glm::vec2(17 ,18));
