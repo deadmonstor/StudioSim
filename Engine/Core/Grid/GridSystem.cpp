@@ -20,8 +20,18 @@ void GridSystem::clearGrid(const int id)
 {
 	if (gridLayers[id])
 	{
-		//TODO this is probably a mem leak, fix it later
-		gridLayers[id]->internalMap.clear();
+		for (auto pointer : gridLayers[id]->internalMap | std::views::values)
+		{
+			for (const auto tileHolder : pointer | std::views::values)
+			{
+				if (tileHolder->tile != nullptr)
+					tileHolder->tile->destroy();
+				
+				delete tileHolder->tile;
+				tileHolder->tile = nullptr;
+				delete tileHolder;
+			}
+		}
 	}
 	else
 	{
@@ -49,8 +59,6 @@ void GridSystem::init(const glm::fvec2 _tileSize, const glm::ivec2 _gridSize)
 	tileSize = _tileSize;
 	gridSize = _gridSize;
 	hasLoaded = false;
-
-	gridLayers.clear();
 	
 	// subscribe to the event
 	Griddy::Events::subscribe(this, &GridSystem::onDebugEvent);
@@ -139,6 +147,27 @@ void GridSystem::render()
 	}
 
 	glDisable(GL_BLEND);
+}
+
+void GridSystem::onSceneShutdown()
+{
+	for (const auto& id : gridLayers | std::views::keys)
+	{
+		for (auto pointer : gridLayers[id]->internalMap | std::views::values)
+		{
+			for (const auto tileHolder : pointer | std::views::values)
+			{
+				if (tileHolder->tile != nullptr)
+					tileHolder->tile->destroy();
+				
+				delete tileHolder->tile;
+				tileHolder->tile = nullptr;
+				delete tileHolder;
+			}
+		}
+	}
+
+	gridLayers.clear();
 }
 
 void GridSystem::onDebugEvent(const OnDebugEventChanged* event)

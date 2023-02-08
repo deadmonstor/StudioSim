@@ -7,8 +7,12 @@ class Item;
 
 class ShopTile : public Tile
 {
-	int price;
     Item* m_item;
+	bool hasBeenBought = false;
+	TileHolder* curTileHolder;
+
+	int engineRenderID = -1;
+    void onEngineRender(OnEngineRender*);
 public:
     explicit ShopTile(const Texture& _texture, Item* item)
         : Tile(_texture) 
@@ -44,7 +48,6 @@ public:
 		}
 		else if (itemToSpawn.contains("legendary") && itemToSpawn.contains("armour"))
 		{
-			price = 0;
 			SetTexture(ResourceManager::GetTexture("Inventory-TopArmourChest"));
 		}
 		else if (itemToSpawn.contains("health"))
@@ -78,7 +81,10 @@ public:
 		}
     }
 
+	void init(TileHolder* curTileHolder) override;
+	void destroy() override;
+	
     bool canInteractWith() override;
     void onInteractedWith(TileHolder* curTileHolder) override;
-	void ChangeTexture(class TileHolder* curTileHolder);
+	void ChangeTexture(const TileHolder* curTileHolder);
 };

@@ -9,3 +9,8 @@ void Tile::SetShader(const Shader& _shader)
 {
 	this->setShader(_shader);
 }
+
+void Tile::destroy()
+{ 
+	// Ignore sprite component destroy
+}

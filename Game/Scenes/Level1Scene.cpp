@@ -243,7 +243,7 @@ void Level1Scene::init()
 
 	grid_system->setEmptyTileIDs(2, std::vector<int>{});
 	grid_system->setWallIDs(2, std::vector<int>{});
-	grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile* ()>>
+	grid_system->setTileFunctionMap(2, std::map<int, std::function<Tile* ()>>
 	{
 		{ 95, [] {return new ShopTile(Texture(), new LegendaryArmour());  } },
 		{ 96, [] {return new ShopTile(Texture(), new LegendaryArmour());  } },
