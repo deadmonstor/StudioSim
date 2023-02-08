@@ -26,17 +26,61 @@ void Level1Scene::createSlime(const glm::vec2 pos)
 {
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
 	int random = rand() % 10000000;
+	int randomEnemy = rand() % 3;
 		
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
+	EnemyComponent component;
+	switch (randomEnemy)
+	{
+		case 0:
+			EnemyStats slimeStats = EnemyStats();
+			slimeStats.attack = 2;
+			slimeStats.critChance = 0.2f;
+			slimeStats.maxHealth = 10;
+			slimeStats.currentHealth = 10;
+			slimeStats.defence = 2;
+			component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
+			break;
+
+		case 1:
+			EnemyStats slimeStats = EnemyStats();
+			slimeStats.attack = 1;
+			slimeStats.critChance = 0.5f;
+			slimeStats.maxHealth = 20;
+			slimeStats.currentHealth = 20;
+			slimeStats.defence = 1;
+			component = EnemyComponent(fsm, slimeStats, "Red-Slime-Idle");
+			break;
+
+		case 2:
+			EnemyStats slimeStats = EnemyStats();
+			slimeStats.attack = 2;
+			slimeStats.critChance = 0.2f;
+			slimeStats.maxHealth = 10;
+			slimeStats.currentHealth = 10;
+			slimeStats.defence = 5;
+			component = EnemyComponent(fsm, slimeStats, "Green-Slime-Idle");
+			break;
+
+		default:
+			EnemyStats slimeStats = EnemyStats();
+			slimeStats.attack = 2;
+			slimeStats.critChance = 0.2f;
+			slimeStats.maxHealth = 10;
+			slimeStats.currentHealth = 10;
+			slimeStats.defence = 2;
+			component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
+			break;
+	}
 	EnemyStats slimeStats = EnemyStats();
 	slimeStats.attack = 2;
 	slimeStats.critChance = 0.2f;
 	slimeStats.maxHealth = 10;
 	slimeStats.currentHealth = 10;
 	slimeStats.defence = 2;
-	EnemyComponent component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
+	//EnemyComponent component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
 	enemy->addComponent<EnemyComponent>(component);
 
 	GridSystem::Instance()->setSatOnTile(0, pos, enemy);
