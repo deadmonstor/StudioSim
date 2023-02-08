@@ -24,7 +24,7 @@
 #include "Core/Components/AnimatedSpriteRenderer.h"
 #include "../BossMusic.h"
 #include "../Tiles/ShopTile.h"
-#include "../Components/Items/Armour/LegendaryArmour.h"
+#include "../AllItemInclude.h"
 
 void Level1Scene::createSlime(const glm::vec2 pos)
 {
@@ -243,11 +243,11 @@ void Level1Scene::init()
 
 	grid_system->setEmptyTileIDs(2, std::vector<int>{});
 	grid_system->setWallIDs(2, std::vector<int>{});
-	grid_system->setTileFunctionMap(1, std::map<int, std::function<Tile* ()>>
+	grid_system->setTileFunctionMap(2, std::map<int, std::function<Tile* ()>>
 	{
-		{ 95, [] {return new ShopTile(Texture(), new LegendaryArmour());  } },
-		{ 96, [] {return new ShopTile(Texture(), new LegendaryArmour());  } },
-		{ 97, [] {return new ShopTile(Texture(), new LegendaryArmour());  } }
+		{ 95, [] {return new ShopTile(Texture(), new FireBallSpell());  } },
+		{ 96, [] {return new ShopTile(Texture(), new IceSpell());  } },
+		{ 97, [] {return new ShopTile(Texture(), new RareArmour());  } }
 	});
 	grid_system->setSpawnFunctionMap(2,
 	{

@@ -144,7 +144,7 @@ void TutorialScene::init()
 	{
 		{ 37, [] { return new LightTile(Texture()); } },
 		{ 56, [] { return new SpikeTile(Texture()); } },
-		{ 93, [] { return new ShopTile(Texture(), new LegendaryHammer()); } }
+		{ 93, [] { return new ChestTile(Texture()); } }
 	});
 	
 	grid_system->loadFromFile(1, "Grid/TutorialLevelDesignDetail.txt");
