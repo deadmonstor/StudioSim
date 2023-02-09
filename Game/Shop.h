@@ -8,7 +8,7 @@ class Shop {
 
 public:
     Shop(std::vector<Item*> items, std::string currency, Inventory& inventory);
-    //Shop(int items, std::string currency, Inventory& inventory);
+    
 
     void displayItems();
     void purchase(Item* item, PlayerStats& playerStats);
