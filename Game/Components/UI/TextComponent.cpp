@@ -10,6 +10,6 @@ void TextComponent::render()
 		transform->getPosition().x,
 		transform->getPosition().y,
 		size,
-		{1, 1, 1},
+		getColor(),
 		getPivot());
 }
