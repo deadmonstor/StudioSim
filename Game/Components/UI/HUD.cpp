@@ -20,42 +20,60 @@ void HUD::createHUD()
 	if (playerChangedID == -1)
 		playerChangedID = Griddy::Events::subscribe(this, &HUD::onPlayerChanged);
 	
-	ResourceManager::LoadTexture("Sprites\\Armour\\BasicArmourChest.png", "BasicArmourChestInventoryUI");
+	if (!ResourceManager::HasTexture("BasicArmourChestInventoryUI"))
+		ResourceManager::LoadTexture("Sprites\\Armour\\BasicArmourChest.png", "BasicArmourChestInventoryUI");
+	
 	inventoryButton =
 		UIManager::Instance()->createUIElement<InventoryButton>("inventoryButton", ResourceManager::GetTexture("BasicArmourChestInventoryUI"));
 
-	ResourceManager::LoadTexture("Sprites\\Armour\\TopArmourBoots.png", "TopArmourBoots");
-	ResourceManager::LoadTexture("Sprites\\Weapons\\Sword.png", "SwordInventoryUI");
+	if (!ResourceManager::HasTexture("TopArmourBoots"))
+		ResourceManager::LoadTexture("Sprites\\Armour\\TopArmourBoots.png", "TopArmourBoots");
+
+	if (!ResourceManager::HasTexture("SwordInventoryUI"))
+		ResourceManager::LoadTexture("Sprites\\Weapons\\Sword.png", "SwordInventoryUI");
+	
 	weaponButton =
 		UIManager::Instance()->createUIElement<ButtonComponent>("weaponButton", ResourceManager::GetTexture("TopArmourBoots"));
 
-	ResourceManager::LoadTexture("Sprites\\Weapons\\Potion0.png", "healthIcon");
+	if (!ResourceManager::HasTexture("healthIcon"))
+		ResourceManager::LoadTexture("Sprites\\Weapons\\Potion0.png", "healthIcon");
+
 	healthIcon = UIManager::Instance()->createUIElement<Panel>("healthIcon");
 	healthText = UIManager::Instance()->createUIElement<TextComponent>("healthText");
+
+	if (!ResourceManager::HasTexture("ManaIcon"))
+		ResourceManager::LoadTexture("Sprites\\Weapons\\Potion1.png", "ManaIcon");
 	
-	ResourceManager::LoadTexture("Sprites\\Weapons\\Potion1.png", "ManaIcon");
 	manaIcon = UIManager::Instance()->createUIElement<Panel>("manaIcon");
 	manaText = UIManager::Instance()->createUIElement<TextComponent>("manaText");
 	coinsText = UIManager::Instance()->createUIElement<TextComponent>("coinsText");
+
+	if (!ResourceManager::HasTexture("coinsIcon"))
+		ResourceManager::LoadTexture("Sprites\\Coins\\coin3.png", "coinsIcon");
 	
-	ResourceManager::LoadTexture("Sprites\\Coins\\coin3.png", "coinsIcon");
 	coinsIcon = UIManager::Instance()->createUIElement<Panel>("coinsIcon");
 	xpText = UIManager::Instance()->createUIElement<TextComponent>("xpText");
 	levelText = UIManager::Instance()->createUIElement<TextComponent>("levelText");
 
 	//Audio Controls
-	ResourceManager::LoadTexture("Sprites\\Audio\\Plus.png", "plusIcon");
+	if (!ResourceManager::HasTexture("plusIcon"))
+		ResourceManager::LoadTexture("Sprites\\Audio\\Plus.png", "plusIcon");
+	
 	plusAudioButton =
 		UIManager::Instance()->createUIElement<MasterAudioPlusButton>("plusAudioButton", ResourceManager::GetTexture("plusIcon"));
 
-	ResourceManager::LoadTexture("Sprites\\Audio\\Minus.png", "minusIcon");
+	if (!ResourceManager::HasTexture("minusIcon"))
+		ResourceManager::LoadTexture("Sprites\\Audio\\Minus.png", "minusIcon");
+	
 	minusAudioButton =
 		UIManager::Instance()->createUIElement<MasterAudioMinusButton>("minusAudioButton", ResourceManager::GetTexture("minusIcon"));
 
 	audioText = UIManager::Instance()->createUIElement<TextComponent>("audioText");
 
 	//Pause Button
-	ResourceManager::LoadTexture("Sprites\\pauseButton.png", "pauseButton");
+	if (!ResourceManager::HasTexture("pauseButton"))
+		ResourceManager::LoadTexture("Sprites\\pauseButton.png", "pauseButton");
+	
 	pauseButton = UIManager::Instance()->createUIElement<PauseButton>("pauseButton", ResourceManager::GetTexture("pauseButton"));
 
 	hasLoaded = true;

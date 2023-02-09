@@ -17,7 +17,8 @@ void InventoryHUD::createHUD()
 	if (sceneChangeID == -1)
 		sceneChangeID = Griddy::Events::subscribe(this, &InventoryHUD::onSceneChange);
 
-	ResourceManager::LoadTexture("Sprites/UI/Background.png", "inventoryBackground");
+	if (!ResourceManager::HasTexture("inventoryBackground"))
+		ResourceManager::LoadTexture("Sprites/UI/Background.png", "inventoryBackground");
 
 	const auto topLeft =
 					glm::vec2(0, Renderer::getViewportSize().y);
@@ -63,12 +64,11 @@ void InventoryHUD::createHUD()
 
 InventoryIconButton* InventoryHUD::createButton(const glm::vec2& pos, Item* item)
 {
-	ResourceManager::LoadTexture("Sprites/Weapons/Hammer.png", "Hammer");
-	
 	InventoryIconButton* button = UIManager::Instance()->createUIElement<InventoryIconButton>(
 		"Inventory_" + std::to_string(pos.x) + " " + std::to_string(pos.y),
 		ResourceManager::GetTexture("whitetexture"),
 		item);
+	
 	button->getTransform()->setPosition(pos);
 	button->getTransform()->setSize({50, 50});
 	button->setColor({1, 1, 1});

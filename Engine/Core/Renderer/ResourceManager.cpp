@@ -42,6 +42,11 @@ Shader ResourceManager::GetShader(const std::string name)
 
 Texture ResourceManager::LoadTexture(const char *file, const std::string name)
 {
+    if (HasTexture(name))
+    {
+        LOG_ERROR("ERROR::TEXTURE: Loading texture twice: " + name);
+    }
+    
     Textures[name] = loadTextureFromFile(file);
     return Textures[name];
 }
