@@ -144,9 +144,96 @@ void EnemyComponent::DropLoot()
 
 	if (getOwner()->getName() == "bossSpawn")
 		return;
-	
-	std::string itemToSpawn = EnemyDropLootTable::Instance()->EnemyDropRollLoot();
+	std::string itemToSpawn;
 	Texture m_ItemTexture;
+	int Amount = 1;
+	if (getOwner()->getName() == "Crab" || getOwner()->getName() == "Reaper")
+	{
+		itemToSpawn = LootTable::Instance()->RollLoot();
+		if (itemToSpawn.contains("Axe"))
+		{
+			m_ItemTexture = ResourceManager::GetTexture("Inventory-Axe");
+		}
+		else if (itemToSpawn.contains("Sword"))
+		{
+			m_ItemTexture = ResourceManager::GetTexture("Inventory-Sword");
+		}
+		else if (itemToSpawn.contains("Dagger"))
+		{
+			m_ItemTexture = ResourceManager::GetTexture("Inventory-Dagger");
+		}
+		else if (itemToSpawn.contains("Hammer"))
+		{
+			m_ItemTexture = ResourceManager::GetTexture("Inventory-Hammer");
+		}
+		else if (itemToSpawn.contains("common"))
+		{
+			m_ItemTexture = ResourceManager::GetTexture("Inventory-BasicArmourChest");
+		}
+		else if (itemToSpawn.contains("rare"))
+		{
+			m_ItemTexture = ResourceManager::GetTexture("Inventory-MidArmourChest");
+		}
+		else if (itemToSpawn.contains("legendary"))
+		{
+			m_ItemTexture = ResourceManager::GetTexture("Inventory-TopArmourChest");
+		}
+	}
+	else
+	{
+		itemToSpawn = EnemyDropLootTable::Instance()->EnemyDropRollLoot();
+		if (itemToSpawn.contains("money"))
+		{
+			std::string delim = ",";
+			std::string temp = itemToSpawn;
+			std::string nameTemp;
+			size_t pos = 0;
+
+			while ((pos = temp.find(delim)) != std::string::npos)
+			{
+				itemToSpawn = temp.substr(0, pos);
+				temp.erase(0, pos + delim.length());
+				Amount = std::stoi(temp);
+				break;
+			}
+			switch (Amount)
+			{
+			case 1:
+				m_ItemTexture = ResourceManager::GetTexture("coin0");
+				break;
+			case 2:
+			case 3:
+				m_ItemTexture = ResourceManager::GetTexture("coin1");
+				break;
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+				m_ItemTexture = ResourceManager::GetTexture("coin2");
+				break;
+			case 16:
+				m_ItemTexture = ResourceManager::GetTexture("coin4");
+				break;
+			default:
+				m_ItemTexture = ResourceManager::GetTexture("coin3");
+				break;
+			}
+		}
+		else if (itemToSpawn.contains("health"))
+		{
+			m_ItemTexture = ResourceManager::GetTexture("Potion0");
+		}
+		else if (itemToSpawn.contains("mana"))
+		{
+			m_ItemTexture = ResourceManager::GetTexture("Potion1");
+		}
+		else if (itemToSpawn.contains("exp"))
+		{
+			m_ItemTexture = ResourceManager::GetTexture("Potion2");
+		}
+	}
+
+	//std::string itemToSpawn = EnemyDropLootTable::Instance()->EnemyDropRollLoot();
 
 	glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(getOwner()->getTransform()->getPosition());
 	tileWorldSpace.x = tileWorldSpace.x / GridSystem::Instance()->getTileSize().x;
@@ -154,59 +241,8 @@ void EnemyComponent::DropLoot()
 
 	GameObject* Item = SceneManager::Instance()->createGameObject(itemToSpawn, tileWorldSpace);
 	Item->getTransform()->setSize(glm::vec2(32, 32));
-	int Amount = 1;
 	
-	if (itemToSpawn.contains("money"))
-	{
-		std::string delim = ",";
-		std::string temp = itemToSpawn;
-		std::string nameTemp;
-		size_t pos = 0;
 	
-		while ((pos = temp.find(delim)) != std::string::npos)
-		{	
-			itemToSpawn = temp.substr(0, pos);
-			temp.erase(0, pos + delim.length());
-			Amount = std::stoi(temp);
-			break;
-		}
-		switch (Amount)
-		{
-		case 1:
-			m_ItemTexture = ResourceManager::GetTexture("coin0");
-			break;
-		case 2:
-		case 3:
-			m_ItemTexture = ResourceManager::GetTexture("coin1");
-			break;
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-			m_ItemTexture = ResourceManager::GetTexture("coin2");
-			break;
-		case 16:
-			m_ItemTexture = ResourceManager::GetTexture("coin4");
-			break;
-		default:
-			m_ItemTexture = ResourceManager::GetTexture("coin3");
-			break;
-		}
-		
-
-	}
-	else if (itemToSpawn.contains("health"))
-	{
-		m_ItemTexture = ResourceManager::GetTexture("Potion0");
-	}
-	else if (itemToSpawn.contains("mana"))
-	{
-		m_ItemTexture = ResourceManager::GetTexture("Potion1");
-	}
-	else if (itemToSpawn.contains("exp"))
-	{
-		m_ItemTexture = ResourceManager::GetTexture("Potion2");
-	}
 
 
 	Item->addComponent<SpriteComponent>();
