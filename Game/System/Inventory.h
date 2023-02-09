@@ -32,8 +32,8 @@ public:
 	virtual std::string itemDescription() { return "NOT SET"; }
 	virtual std::string rarity() { return "NOT SET"; }
 	
-	int price;
-	int getPrice() { return price; }
+	//int price;
+	//int getPrice() { return price; }
 	
 	virtual bool isUsable() { return false; }
 	virtual bool isEquipable() { return false; }

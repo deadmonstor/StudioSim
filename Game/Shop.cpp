@@ -1,4 +1,5 @@
 #include "Shop.h"
+#include "Components/Player/PlayerController.h"
 
 Shop::Shop(std::vector<Item*> items, std::string currency, Inventory& inventory) : items_(items), currency_(currency), inventory_(inventory) {}
 //Shop::Shop(int items, std::string currency, Inventory& inventory) : items_(items), currency_(currency), inventory_(inventory) {}
@@ -30,9 +31,9 @@ void Shop::purchase(Item* item, PlayerStats& playerStats) {
         std::cout << "You do not have enough " << currency_ << " to make this purchase." << std::endl;
         return;
     }
-
+    /*PlayerController::Instance()->playerStats->coinsHeld = PlayerController::Instance()->playerStats->coinsHeld - item*/
     // Update player's currency and inventory
-    playerStats.coinsHeld -= item->price;
+    PlayerController::Instance()->playerStats->coinsHeld -= item->price;
 
     inventory_.add_item(item);
     std::cout << "Purchase successful! You now have " << playerStats.coinsHeld << " " << currency_ << " remaining." << std::endl;
