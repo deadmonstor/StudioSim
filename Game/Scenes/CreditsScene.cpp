@@ -19,7 +19,8 @@
 #include "../Tiles/ChestTile.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
-
+#include "glm/ext/scalar_common.hpp"
+#include "Util/Time.h"
 
 
 void CreditsScene::init()
@@ -95,30 +96,14 @@ void CreditsScene::init()
 	
 	grid_system->loadFromFile(2, "Grid/TutorialLevelDesignSP.txt");
 	TurnManager::Instance()->startTurnSystem();
+
+	Lighting::Instance()->debugLightColor = true;
+	Lighting::Instance()->refreshLightData(LightUpdateRequest::All);
 }
 
 void CreditsScene::update()
 {
-	if (hasCompletedTutorialLevel)
-	{
-		SceneManager::Instance()->changeScene("mainMenu");
-	}
-	
-	if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
-	{
-		if (!HUD::Instance()->getHasLoaded())
-			HUD::Instance()->createHUD();
 
-		HUD::Instance()->updateHUD();
-	}
-
-	if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
-	{
-		if (!InventoryHUD::Instance()->getHasLoaded())
-			InventoryHUD::Instance()->createHUD();
-
-		InventoryHUD::Instance()->updateHUD();
-	}
 }
 
 void CreditsScene::renderTextOutlined(const glm::vec2 worldPosition,
@@ -148,29 +133,48 @@ void CreditsScene::onEngineRender(const OnEngineRender* event)
 {
 	auto pos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
 
-	// TODO: POC
+	const auto base_value = Time::getTime() + 600;
+
+	const auto r = 0.5 * (sin(base_value - 2)	    + 1);
+	const auto g = 0.5 * (sin(base_value + 2)	    + 1);
+	const auto b = 0.5 * (sin(base_value      )	    + 1);
+
+
+	const auto lightColor = glm::vec3(r,g,b);
+	
 	renderTextOutlined(
 		{ pos.x, 2208},
 		"Credits",
 		1.0f,
 		-0.0075f,
-		{1, 1, 1},
+		lightColor,
 		{0,0,0}
 	);
 	
-	renderText({200, 1968}, "Lewis Powell", 0.5f, {1, 1, 1});
-	renderText({ 400, 1968 }, "Josh Mobley", 0.5f, { 1, 1, 1 });
-	renderText({ 600, 1968 }, "Szymon Sadunski", 0.5f, { 1, 1, 1 });
-	renderText({ 800, 1968 }, "Pablo Cano San Roman", 0.5f, { 1, 1, 1 });
-	renderText({ 1000, 1968 }, "Conner Pittway", 0.5f, { 1, 1, 1 });
-	renderText({ 1200, 1968 }, "Charlotte Marriner", 0.5f, { 1, 1, 1 });
-	renderText({ 1400, 1968 }, "Tolu Arowolo", 0.5f, { 1, 1, 1 });
-	renderText({ 1600, 1968 }, "Fayzaan Ali", 0.5f, { 1, 1, 1 });
-	renderText({ 1800, 1968 }, "Lee Hall", 0.5f, { 1, 1, 1 });
-
-	renderText({ 2100, 1968 }, "Special Mentions: Chris, The Brandons, and Group 4", 0.5f, { 1, 1, 1 });
-	renderText({ 2500, 1968 }, "Special Mentions: Jimmy", 0.5f, { 1, 1, 1 });
-	renderText({ 2900, 1968 }, "Special Mentions: The Ember Lounge Lecturers", 0.5f, { 1, 1, 1 });
+	auto size = 0.2 * (sin(base_value) + 1) + 0.2;
+	renderText({200, 1968}, "Lewis Powell", size, lightColor);
+	size = 0.2 * (sin(base_value + 2) + 1) + 0.2;
+	renderText({ 400, 1968 }, "Josh Mobley", size, lightColor);
+	size = 0.2 * (sin(base_value + 4) + 1) + 0.2;
+	renderText({ 600, 1968 }, "Szymon Sadunski", size, lightColor);
+	size = 0.2 * (sin(base_value + 6) + 1) + 0.2;
+	renderText({ 800, 1968 }, "Pablo Cano San Roman", size, lightColor);
+	size = 0.2 * (sin(base_value + 8) + 1) + 0.2;
+	renderText({ 1000, 1968 }, "Conner Pittway", size, lightColor);
+	size = 0.2 * (sin(base_value + 10) + 1) + 0.2;
+	renderText({ 1200, 1968 }, "Charlotte Marriner", size, lightColor);
+	size = 0.2 * (sin(base_value + 12) + 1) + 0.2;
+	renderText({ 1400, 1968 }, "Tolu Arowolo", size, lightColor);
+	size = 0.2 * (sin(base_value + 14) + 1) + 0.2;
+	renderText({ 1600, 1968 }, "Fayzaan Ali", size, lightColor);
+	size = 0.2 * (sin(base_value + 16) + 1) + 0.2;
+	renderText({ 1800, 1968 }, "Lee Hall", size, lightColor);
+	size = 0.2 * (sin(base_value + 18) + 1) + 0.2;
+	renderText({ 2100, 1968 }, "Special Mentions: Chris, The Brandons, and Group 4", size, lightColor);
+	size = 0.2 * (sin(base_value + 20) + 1) + 0.2;
+	renderText({ 2500, 1968 }, "Special Mentions: Jimmy", size, lightColor);
+	size = 0.2 * (sin(base_value + 22) + 1) + 0.2;
+	renderText({ 2900, 1968 }, "Special Mentions: The Ember Lounge Lecturers", size, lightColor);
 	//renderText({ 2600, 1968 }, "Special Mentions: ", 0.5f, { 1, 1, 1 });
 
 	
@@ -178,5 +182,6 @@ void CreditsScene::onEngineRender(const OnEngineRender* event)
 
 void CreditsScene::destroy()
 {
+	Lighting::Instance()->debugLightColor = false;
 	Griddy::Events::unsubscribe(this, &CreditsScene::onEngineRender, engineRenderID);
 }

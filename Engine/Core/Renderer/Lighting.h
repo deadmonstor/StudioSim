@@ -37,11 +37,11 @@ public:
 
 	[[nodiscard]] const glm::vec4& getAmbientColor() const { return ambientColor; }
 	void setAmbientColor(const glm::vec4& _ambientColor) { this->ambientColor = _ambientColor; }
+	bool debugLightColor = false;
 private:
 	std::list<Light*> lightRenderQueue;
 	glm::vec4 ambientColor = {0.0f, 0.0f, 0.0f, 1.0f};
 	bool showMouseLight = false;
-	bool debugLightColor = false;
 };
 
 struct LightName
