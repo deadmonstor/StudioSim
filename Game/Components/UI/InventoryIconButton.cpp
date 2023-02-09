@@ -29,21 +29,33 @@ void InventoryIconButton::onClick()
 	}
 }
 
-void InventoryIconButton::update()
+void InventoryIconButton::render()
 {
+	ButtonComponent::render();
+	
 	if (isMouseInButton())
 	{
 		setColor({ 0.5, 0.5, 0.5 });
+
 		if (item != nullptr)
 		{
-			std::string text = item->name();
-			const glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize("asdasd", 1);
-			TextRenderer::Instance()->renderText("asdasd",
-				500,
-				500,
-				1,
-				glm::vec3(1, 1, 1),
-				glm::vec2{ 0.5f, 0.5f }
+			const std::string text = item->name();
+			const glm::vec2 position = getTransform()->getPosition();
+			glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize(text, 0.5);
+			TextRenderer::Instance()->renderText(text,
+				position.x - sizeOfText.x,
+				position.y + sizeOfText.y / 2,
+				0.51,
+				{0, 0, 0},
+				glm::vec2{0.5f, 0.5f}
+			);
+			
+			TextRenderer::Instance()->renderText(text,
+				position.x - sizeOfText.x,
+				position.y + sizeOfText.y / 2,
+				0.5,
+				{1, 1, 1},
+				glm::vec2{0.5f, 0.5f}
 			);
 		}
 	}
