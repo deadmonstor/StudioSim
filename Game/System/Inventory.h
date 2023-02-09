@@ -67,7 +67,6 @@ public:
 	void use_item(const std::string& item_name);
 	void equip_item(const std::string& item_name);
 	void unequip_item(const std::string& item_name);
-	PlayerStats* playerStats;
 
 	Item* getFirstItemWithEquipSlot(EquipSlot slot);
 	

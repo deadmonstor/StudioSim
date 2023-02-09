@@ -5,6 +5,7 @@
 class Level2Scene : public Scene
 {
     void createEnemy(const glm::vec2 pos);
+    void createBoss(const glm::vec2 pos);
     
 public:
     void init() override;

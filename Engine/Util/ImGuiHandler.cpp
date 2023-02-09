@@ -29,7 +29,13 @@ void ImGuiHandler::init()
 	ImGui_ImplGlfw_InitForOpenGL(Renderer::getWindow(), true);
 
 	pausedSprite = new SpriteComponent();
-	const Texture pause = ResourceManager::LoadTexture("Sprites\\pause.png", "pause");
+
+	if (!ResourceManager::HasTexture("pause"))
+	{
+		ResourceManager::LoadTexture("Sprites\\pause.png", "pause");
+	}
+	
+	const Texture pause = ResourceManager::GetTexture("pause");
 	pausedSprite->setTexture(pause);
 	pausedSprite->setLit(false);
 }
@@ -163,6 +169,9 @@ static std::map<std::string, std::string> debugScenes
 	{"Debug Level 2", "level2"},
 	{"Debug Victory", "victoryScreen"},
 	{"Debug Defeat", "defeatScreen"},
+	{"Debug LeaderboardScene", "leaderboardScene"},
+	{"Debug ScoreScene", "scoreScene"},
+	{"Debug Credits", "creditsScene"},
 };
 
 void ImGuiHandler::update()

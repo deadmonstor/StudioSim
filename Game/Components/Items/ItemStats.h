@@ -2,5 +2,5 @@
 struct ItemInfo
 {
 	int price;
-	int getPrice() { return price; }
+	virtual int getPrice() { return price; }
 };

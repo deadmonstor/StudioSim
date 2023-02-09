@@ -23,18 +23,14 @@ void PlayerSpellBehaviour::Act()
 	currentPlayerPos = (PlayerController::Instance()->playerPTR->getTransform()->getPosition()) / GridSystem::Instance()->getTileSize();
 	if (Item* spell = PlayerController::Instance()->myInventory->getFirstItemWithEquipSlot(EquipSlot::SPELL); spell != nullptr)
 	{
-		const auto spellCasted = dynamic_cast<SpellItem*>(spell);
-		spellCasted->UseSpell(currentPlayerPos, attackDir);
-		PlayerController::Instance()->playerStats->currentMana -= spellCasted->spellStats->manaCost;
-
 		if (TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR) && !willFlashOnce)
 		{
-			spellCasted->spellStats->currentCooldown = 0;
-			//TurnManager::Instance()->endTurn();
+			const auto spellCasted = dynamic_cast<SpellItem*>(spell);
+			spellCasted->UseSpell(currentPlayerPos, attackDir);
+			PlayerController::Instance()->playerStats->currentMana -= spellCasted->spellStats->manaCost;
+			spellCasted->spellStats->currentCooldown = spellCasted->spellStats->maxCooldown;
 		}
 	}
-	/*fireBall = new FireBallSpell();
-	fireBall->UseSpellAt(currentPlayerPos, attackDir);*/
 }
 
 void PlayerSpellBehaviour::onKeyDownResponse(Griddy::Event* event)
@@ -78,18 +74,27 @@ void PlayerSpellBehaviour::onKeyDownResponse(Griddy::Event* event)
 		if ((TurnManager::gNoclipMode || TurnManager::Instance()->isCurrentTurnObject(PlayerController::Instance()->playerPTR)) /*&&
 			 spell != nullptr*/)
 		{
-			if (PlayerController::Instance()->playerStats->currentMana > 0)
+			if (Item* spell = PlayerController::Instance()->myInventory->getFirstItemWithEquipSlot(EquipSlot::SPELL); spell != nullptr)
 			{
-				if (Item* spell = PlayerController::Instance()->myInventory->getFirstItemWithEquipSlot(EquipSlot::SPELL); spell != nullptr)
+				const auto spellCasted = dynamic_cast<SpellItem*>(spell);
+				glm::vec2 pos = PlayerController::Instance()->playerPTR->getTransform()->getPosition();
+				Hitmarkers* hitmarkers = PlayerController::Instance()->hitmarkers;
+				
+				if (spellCasted->spellStats->currentCooldown != 0)
 				{
-					const auto spellCasted = dynamic_cast<SpellItem*>(spell);
-
-					if (spellCasted->spellStats->currentCooldown == spellCasted->spellStats->maxCooldown)
-					{
-						Act();
-					}
+					// hit markers for cooldown
+					hitmarkers->addHitmarker("Spell is on cooldown", 0.5, pos, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+					return;
 				}
-			
+
+				if (spellCasted->spellStats->manaCost > PlayerController::Instance()->playerStats->currentMana)
+				{
+					// hit markers for mana
+					hitmarkers->addHitmarker(std::to_string(spellCasted->spellStats->manaCost) + " mana needed", 0.5, pos, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+					return;
+				}
+				
+				Act();
 			}
 			/*const auto spellCasted = dynamic_cast<SpellItem*>(spell);
 			if (spellCasted->getCoolDown() != 0)

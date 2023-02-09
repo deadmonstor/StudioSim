@@ -50,7 +50,7 @@ void GameObject::update()
 	if (isBeingDeleted()) return;
 	for (Component* curComponent : components)
 	{
-		if (isBeingDeleted()) return;
+		if (isBeingDeleted() || curComponent == nullptr) return;
 		curComponent->update();
 	}
 }

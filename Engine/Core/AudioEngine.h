@@ -60,7 +60,7 @@ public:
 	bool deleteReverbZone(const int zone);
 
 	bool firstRun = false;
-
+	float masterVolume = 1.0f;
 	int backgroundChannelIndex = 0, backgroundChannel2Index = 0;
 };
 

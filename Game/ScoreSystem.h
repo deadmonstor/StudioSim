@@ -38,14 +38,21 @@ public:
 	void addTilesMoved(int scoreToSet) { tilesMoved += scoreToSet; }
 	int getTilesMoved() { return tilesMoved; }
 
+	void setGoldEarned(int scoreToSet) { goldEarned = scoreToSet; }
+	void addGoldEarned(int scoreToSet) { goldEarned += scoreToSet; }
+	int getGoldEarned() { return goldEarned; }
+
 	//Calculate Final Score (Do this on player killed or victory)
 	void calcFinalScore();
+
+	void resetScoreSystem();
 
 private:
 	int currentScore;
 	int enemiesKilled;
 	int damageTaken;
 	int tilesMoved;
+	int goldEarned;
 
 	std::fstream file;
 

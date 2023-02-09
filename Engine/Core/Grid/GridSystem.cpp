@@ -49,7 +49,7 @@ void GridSystem::init(const glm::fvec2 _tileSize, const glm::ivec2 _gridSize)
 	tileSize = _tileSize;
 	gridSize = _gridSize;
 	hasLoaded = false;
-
+	
 	// subscribe to the event
 	Griddy::Events::subscribe(this, &GridSystem::onDebugEvent);
 }
@@ -67,6 +67,18 @@ void GridSystem::renderInternal(const int id)
 		const float tileHeight = tileSize.y;
 		
 		const float tileX = x * tileWidth;
+
+		const glm::vec2 pivot = Pivot::Center;
+		const glm::vec2 size = {tileWidth, tileHeight};
+		const glm::vec3 pivotAndSize = glm::vec3(-pivot.x * size.x, -pivot.y * size.y, 0.0f);
+		const glm::vec2 camPos = Renderer::Instance()->getCameraPos();
+
+		// Skip the first round of rendering if the x position is not in the right place
+		if (Renderer::Instance()->getCamera() == nullptr ||
+			!Renderer::Instance()->getCamera()->isInFrustum({tileX, camPos.y}, pivotAndSize))
+		{
+			continue;
+		}
 		
 		for(auto [y, holder] : pointer)
 		{
@@ -80,7 +92,7 @@ void GridSystem::renderInternal(const int id)
 			holder->tile->update();
 			Renderer::Instance()->renderSprite(holder->tile,
 			                                   pos,
-			                                   {tileWidth, tileHeight},
+			                                   size,
 			                                   0
 			);
 
@@ -125,6 +137,23 @@ void GridSystem::render()
 	}
 
 	glDisable(GL_BLEND);
+}
+
+void GridSystem::onSceneShutdown()
+{
+	for (const auto& id : gridLayers | std::views::keys)
+	{
+		for (auto pointer : gridLayers[id]->internalMap | std::views::values)
+		{
+			for (const auto tileHolder : pointer | std::views::values)
+			{
+				if (tileHolder->tile != nullptr)
+					tileHolder->tile->destroy();
+			}
+		}
+	}
+
+	gridLayers.clear();
 }
 
 void GridSystem::onDebugEvent(const OnDebugEventChanged* event)

@@ -16,30 +16,114 @@
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
 #include "../Tiles/LightTile.h"
+#include "../Tiles/BossRoomEntryTile.h"
 #include "../LootTable.h"
+#include "../Tiles/ShopTile.h"
+#include "../Components/UI/InventoryHUD.h"
+#include "Core/AudioEngine.h"
+#include "Core/Components/AnimatedSpriteRenderer.h"
+#include "../Components/AI Behaviours/Reaper/ReaperStateMachine.h"
+#include "../AllItemInclude.h"
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
 {
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
-		
-	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy", tileWorldSpace);
-	enemy->getTransform()->setSize(glm::vec2(48, 24));
+	int random = rand() % 10000000;
+	int randomEnemy = rand() % 2; //% by how many different types of enemies
+	
+	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
+	enemy->getTransform()->setSize(glm::vec2(35, 35));
+
+	std::vector<Texture> textureList;
+	
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
 	EnemyStats slimeStats = EnemyStats();
-	slimeStats.attack = 2;
-	slimeStats.critChance = 0.2f;
-	slimeStats.maxHealth = 10;
-	slimeStats.currentHealth = 10;
-	slimeStats.defence = 2;
-	EnemyComponent component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
+	switch (randomEnemy)
+	{
+	case 0:
+		textureList = ResourceManager::GetTexturesContaining("SkeletonMove");
+
+		slimeStats.attack = 4;
+		slimeStats.critChance = 0.2f;
+		slimeStats.maxHealth = 50;
+		slimeStats.currentHealth = slimeStats.maxHealth;
+		slimeStats.defence = 2;
+		slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("SkeletonDeath");
+		break;
+
+	case 1:
+		textureList = ResourceManager::GetTexturesContaining("ZombieMove");
+
+		slimeStats.attack = 2;
+		slimeStats.critChance = 0.4f;
+		slimeStats.maxHealth = 80;
+		slimeStats.currentHealth = slimeStats.maxHealth;
+		slimeStats.defence = 4;
+		slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("ZombieDeath");
+		break;
+
+	default:
+		textureList = ResourceManager::GetTexturesContaining("SkeletonMove");
+
+		slimeStats.attack = 4;
+		slimeStats.critChance = 0.2f;
+		slimeStats.maxHealth = 50;
+		slimeStats.currentHealth = slimeStats.maxHealth;
+		slimeStats.defence = 2;
+		slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("SkeletonDeath");
+		//, "Blue-Slime-Idle"
+		break;
+	}
+		
+	auto sprite = enemy->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
+	sprite->setColor(glm::vec3(1, 1, 1));
+	sprite->setLit(false);
+	sprite->setPivot(Pivot::Center);
+	
+	EnemyComponent component = EnemyComponent(fsm, slimeStats);
 	enemy->addComponent<EnemyComponent>(component);
 
 	GridSystem::Instance()->setSatOnTile(0, pos, enemy);
 }
 
+void Level2Scene::createBoss(const glm::vec2 pos)
+{
+	//Reaper
+	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
+	auto* reaper = SceneManager::Instance()->createGameObject("Reaper", tileWorldSpace);
+	reaper->getTransform()->setPosition(glm::vec2(tileWorldSpace.x, tileWorldSpace.y + 40));
+	reaper->getTransform()->setSize(glm::vec2(144, 168));
+
+	GridSystem::Instance()->setSatOnTile(0, pos, reaper);
+	GridSystem::Instance()->setSatOnTile(0, pos + glm::vec2(0, 1), reaper);
+
+	const std::vector textureListReaper = ResourceManager::GetTexturesContaining("GRI");
+	auto sprite = reaper->addComponent<AnimatedSpriteRenderer>(textureListReaper, 0.075f);
+	sprite->setPivot(Pivot::Center);
+	sprite->setColor(glm::vec3(1, 1, 1));
+	sprite->setLit(false);
+
+	std::vector<glm::vec2> spawnerPositions;
+	spawnerPositions.push_back(glm::vec2(30, 58));
+	spawnerPositions.push_back(glm::vec2(30, 50));
+
+	StateMachine* fsm = reaper->addComponent<ReaperStateMachine>(pos, spawnerPositions);
+	EnemyStats bossStats = EnemyStats();
+	bossStats.attack = 7;
+	bossStats.critChance = 0.0f;
+	bossStats.maxHealth = 180;
+	bossStats.currentHealth = 180;
+	bossStats.defence = 9;
+	EnemyComponent component = EnemyComponent(fsm, bossStats);
+	reaper->addComponent<EnemyComponent>(component);
+}
+
 void Level2Scene::init()
 {
+	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
+	
 	LootTable::Instance()->LoadingIntoLootTableArray();
+	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
 	
 	auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
 	auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);
@@ -55,7 +139,6 @@ void Level2Scene::init()
 	});
 	
 	grid_system->setEmptyTileIDs(0, std::vector<int>{0});
-	// TODO: Fill these out lol
 	grid_system->setWallIDs(0, std::vector<int>{1,9,3,4,5,6});
 	grid_system->setTextureMap(0, std::map<int, Texture>
 	{
@@ -73,20 +156,29 @@ void Level2Scene::init()
 		{ 12, ResourceManager::GetTexture("tile57") },
 		{ 13, ResourceManager::GetTexture("tile57") },
 		{ 15, ResourceManager::GetTexture("tile57") },
+		{ 19, ResourceManager::GetTexture("tile218") },
 		{ 14, ResourceManager::GetTexture("tile270") }
 	});
+	std::vector<glm::vec2> bossEntranceTilePositions;
+	bossEntranceTilePositions.push_back(glm::vec2(37, 49));
+	bossEntranceTilePositions.push_back(glm::vec2(38, 49));
+
+	std::vector<glm::vec2> bossPositionTiles;
+	bossPositionTiles.push_back(glm::vec2(31, 53));
+	bossPositionTiles.push_back(glm::vec2(31, 54));
 
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile* ()>>
 	{
 		{ 13, [] { return new TeleportTile(Texture(), 61, 68); } }, //Change Values so aren't hard coded
-		{ 14, [] { return new TestTile(Texture(), "victoryScreen"); } },
+		{ 14, [] { return new TestTile(Texture(), "victoryScreen", false); } },
+		{ 19, [&] { return new BossRoomEntryTile(Texture(), "tile25", glm::vec2(37, 50), bossEntranceTilePositions, bossPositionTiles); } },
 		{ 15, [] { return new TeleportTile(Texture(), 11, 54); } },
 	});
 	
 	grid_system->loadFromFile(0, "Grid/SecondLevelDesign.txt");
 
 		grid_system->setEmptyTileIDs(1, std::vector<int>{});
-		grid_system->setWallIDs(1, std::vector<int>{35, 36, 41, 42, 43, 44, 31, 32, 33});
+		grid_system->setWallIDs(1, std::vector<int>{35, 36, 41, 42, 43, 44, 31, 32, 33, 29, 30});
 		grid_system->setTextureMap(1, std::map<int, Texture>
 		{
 			{ 21, ResourceManager::GetTexture("tile12")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
@@ -132,7 +224,13 @@ void Level2Scene::init()
 	grid_system->loadFromFile(1, "Grid/SecondLevelDesignDetail.txt");
 
 	grid_system->setEmptyTileIDs(2, std::vector<int>{});
-	grid_system->setWallIDs(2, std::vector<int>{29, 35, 36, 41, 42, 43, 44, 32, 33});
+	grid_system->setTileFunctionMap(2, std::map<int, std::function<Tile* ()>>
+	{
+		{ 95, [] {return new ShopTile(Texture(), new ManaPotion());  } },
+		{ 96, [] {return new ShopTile(Texture(), new PoisonSpell());  } },
+		{ 97, [] {return new ShopTile(Texture(), new LegendaryArmour());  } },
+		{ 101, [] {return new ShopTile(Texture(), new LegendaryHammer());  } }
+	});
 	grid_system->setSpawnFunctionMap(2,
 	{
 		{ 91, [this](glm::vec2 pos)
@@ -144,9 +242,23 @@ void Level2Scene::init()
 		{
 			createEnemy(pos);
 		} },
-		{ 93, [this](glm::vec2 pos)
+		{ 94, [this](glm::vec2 pos)
 		{
-			// TODO: Create a chest
+			//Create shopkeeper
+
+			const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
+			GameObject* ShopKeeper = SceneManager::Instance()->createGameObject("ShopKeeper", tileWorldSpace);
+			ShopKeeper->getTransform()->setPosition(tileWorldSpace);
+			ShopKeeper->getTransform()->setSize(glm::vec2(48, 48));
+			const std::vector textureListCrab = ResourceManager::GetTexturesContaining("ShopKeeper");
+			AnimatedSpriteRenderer* sprite = ShopKeeper->addComponent<AnimatedSpriteRenderer>(textureListCrab, 0.075f);
+			sprite->setPivot(Pivot::Center);
+			sprite->setColor(glm::vec3(1, 1, 1));
+			sprite->setLit(true);
+		} },
+		{ 98, [this](glm::vec2 pos)
+		{
+			createBoss(pos);
 		} }
 	});
 	
@@ -162,6 +274,14 @@ void Level2Scene::update()
 			HUD::Instance()->createHUD();
 
 		HUD::Instance()->updateHUD();
+	}
+
+	if (GridSystem::Instance()->isLoaded() && PlayerController::Instance()->playerPTR != nullptr)
+	{
+		if (!InventoryHUD::Instance()->getHasLoaded())
+			InventoryHUD::Instance()->createHUD();
+
+		InventoryHUD::Instance()->updateHUD();
 	}
 }
 

@@ -12,36 +12,35 @@
 #include "../LootTable.h"
 #include "Core/Components/Transform.h"
 #include "PickUp.h"
-
+#include "Core/AudioEngine.h"
+#include "../ScoreSystem.h"
+#include "../Components/Items/Spells/PoisonSpell.h"
+#include "DestroyAfterAnimation.h"
 
 EnemyComponent::EnemyComponent()
 {
 	enemyFSM = nullptr;
 	stats = EnemyStats();
-	spriteName = "";
 }
 
-EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsArg, std::string spriteNameArg)
+EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsArg)
 {
 	enemyFSM = stateMachineArg;
 	stats = statsArg;
-	spriteName = spriteNameArg;
+
+	if (!ResourceManager::HasSound("Sounds\\Damage.wav"))
+		AudioEngine::Instance()->loadSound("Sounds\\Damage.wav", FMOD_3D);
 }
 
 void EnemyComponent::start()
 {
-	getOwner()->addComponent<Health>();
+	Health* healthComponent = getOwner()->addComponent<Health>(stats.maxHealth);
 	getOwner()->addComponent<Camera>();
-	const std::vector textureList = ResourceManager::GetTexturesContaining(spriteName);
-	auto sprite = getOwner()->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
-	sprite->setColor(glm::vec3(1, 1, 1));
-	sprite->setLit(true);
-	sprite->setPivot(Pivot::Center);
 
 	TurnManager::Instance()->addToTurnQueue(getOwner());
 
 	if (onStartTurnID == -1)
-		Griddy::Events::subscribe(this, &EnemyComponent::onTurnChanged);
+		onStartTurnID = Griddy::Events::subscribe(this, &EnemyComponent::onTurnChanged);
 	
 	Component::start();
 }
@@ -50,11 +49,16 @@ void EnemyComponent::destroy()
 {
 	if (onStartTurnID != -1)
 		Griddy::Events::unsubscribe(this, &EnemyComponent::onTurnChanged, onStartTurnID);
-	
-	int expGained = 5;
-	PlayerController::Instance()->playerStats->currentEXP += expGained;
-	PlayerController::Instance()->UpdateStats();
 
+	
+	if (getOwner()->getComponent<Health>()->getHealth() <= 0)
+	{
+		playDeath();
+		int expGained = 5;
+		PlayerController::Instance()->playerStats->currentEXP += expGained;
+		PlayerController::Instance()->UpdateStats();
+		ScoreSystem::Instance()->addEnemiesKilled(1);
+	}
 
 	DropLoot();
 	Component::destroy();
@@ -62,23 +66,73 @@ void EnemyComponent::destroy()
 
 void EnemyComponent::onTurnChanged(const onStartTurn* event)
 {
-	if (roundsFreeze == 0)
+	if (roundsFreeze <= 0)
 	{
-		if (event->objectToStart == getOwner())
+		if (roundsPoisoned <= 0)
 		{
-			getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
-			enemyFSM->Act();
+			if (event->objectToStart == getOwner())
+			{
+				getOwner()->getComponent<AnimatedSpriteRenderer>()->setColor(glm::vec3(1, 1, 1));
+				if (enemyFSM != nullptr)
+					enemyFSM->Act();
+				else
+					LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			}
+		}
+		else
+		{
+
+			if (event->objectToStart == getOwner())
+			{
+				roundsPoisoned -= 1;
+				PoisonSpell* poison = new PoisonSpell();
+				int spellDMG = poison->spellStats->damagePerTurn;
+				float currentHealth = getOwner()->getComponent<Health>()->getHealth();
+				int newHealth = currentHealth -= spellDMG;
+				getOwner()->getComponent<Health>()->setHealth(newHealth);
+				if (getOwner()->isBeingDeleted())
+				{
+					GridSystem::Instance()->resetSatOnTile(0, GridSystem::Instance()->getTilePosition(getOwner()->getTransform()->getPosition()));
+					return;
+				}
+
+				LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn() -> " + std::to_string(roundsPoisoned));
+				if (enemyFSM != nullptr)
+					enemyFSM->Act();
+				else
+					LOG_ERROR("EnemyComponent -> onTurnChanged -> enemyFSM is nullptr");
+			}
 		}
 	}
 	else
 	{
-		if (TurnManager::Instance()->isCurrentTurnObject(getOwner()))
+		if (event->objectToStart == getOwner())
 		{
 			roundsFreeze -= 1;
+			LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn() -> " + std::to_string(roundsFreeze));
 			TurnManager::Instance()->endTurn();
-			LOG_INFO("EnemyComponent -> onTurnChanged -> TurnManager::Instance()->endTurn()");
 		}
 	}
+	
+}
+
+void EnemyComponent::playDeath()
+{
+	if (stats.deathEnemyList.empty())
+	{
+		return;
+	}
+
+	GameObject* death = SceneManager::Instance()->createGameObject("death", getOwner()->getTransform()->getPosition());
+	AnimatedSpriteRenderer* oldSpriteRenderer = getOwner()->getComponent<AnimatedSpriteRenderer>();
+
+	death->getTransform()->setSize(getOwner()->getTransform()->getScale());
+	AnimatedSpriteRenderer* spriteRender = death->addComponent<AnimatedSpriteRenderer>(stats.deathEnemyList, abs(0.9 - (stats.deathEnemyList.size() / 13)));
+	spriteRender->setPivot(oldSpriteRenderer->getPivot());
+	spriteRender->setColor(oldSpriteRenderer->getColor());
+	spriteRender->setLit(false);
+
+	death->addComponent<DestroyAfterAnimation>();
 	
 }
 
@@ -86,6 +140,9 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 void EnemyComponent::DropLoot()
 {
 	if (SceneManager::Instance()->isLoadingScene() || SceneManager::Instance()->isShuttingDown())
+		return;
+
+	if (getOwner()->getName() == "bossSpawn")
 		return;
 	
 	std::string itemToSpawn = EnemyDropLootTable::Instance()->EnemyDropRollLoot();
@@ -116,23 +173,23 @@ void EnemyComponent::DropLoot()
 		switch (Amount)
 		{
 		case 1:
-			m_ItemTexture = ResourceManager::LoadTexture("Sprites/Coins/coin0.png", itemToSpawn);
+			m_ItemTexture = ResourceManager::GetTexture("coin0");
 			break;
 		case 2:
 		case 3:
-			m_ItemTexture = ResourceManager::LoadTexture("Sprites/Coins/coin1.png", itemToSpawn);
+			m_ItemTexture = ResourceManager::GetTexture("coin1");
 			break;
 		case 4:
 		case 5:
 		case 6:
 		case 7:
-			m_ItemTexture = ResourceManager::LoadTexture("Sprites/Coins/coin2.png", itemToSpawn);
+			m_ItemTexture = ResourceManager::GetTexture("coin2");
 			break;
 		case 16:
-			m_ItemTexture = ResourceManager::LoadTexture("Sprites/Coins/coin4.png", itemToSpawn);
+			m_ItemTexture = ResourceManager::GetTexture("coin4");
 			break;
 		default:
-			m_ItemTexture = ResourceManager::LoadTexture("Sprites/Coins/coin3.png", itemToSpawn);
+			m_ItemTexture = ResourceManager::GetTexture("coin3");
 			break;
 		}
 		
@@ -140,22 +197,22 @@ void EnemyComponent::DropLoot()
 	}
 	else if (itemToSpawn.contains("health"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Potion0.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Potion0");
 	}
 	else if (itemToSpawn.contains("mana"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Potion1.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Potion1");
 	}
 	else if (itemToSpawn.contains("exp"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Potion2.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Potion2");
 	}
 
 
 	Item->addComponent<SpriteComponent>();
 	Item->getComponent<SpriteComponent>()->setPivot(Pivot::Center);
 	Item->getComponent<SpriteComponent>()->setTexture(m_ItemTexture);
-	Item->getComponent<SpriteComponent>()->setLit(false);
+	Item->getComponent<SpriteComponent>()->setLit(true);
 	Item->getComponent<SpriteComponent>()->setSortingLayer(Renderer::getSortingLayer("Background Grid"));
 	Item->addComponent<PickUp>();
 	Item->getComponent<PickUp>()->SetAmount(Amount);

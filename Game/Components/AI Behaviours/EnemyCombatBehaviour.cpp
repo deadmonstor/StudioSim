@@ -1,12 +1,10 @@
 #include "EnemyCombatBehaviour.h"
 
 #include "MoveTowardsAction.h"
-#include "../DelayTask.h"
 #include "../Player/PlayerController.h"
 #include "Core/Components/Transform.h"
 #include "Core/Grid/PathfindingMachine.h"
 #include "../TurnManager.h"
-#include "../../Components/Flash.h"
 #include "AttackAction.h"
 
 EnemyCombatBehaviour::EnemyCombatBehaviour()
@@ -74,7 +72,7 @@ void EnemyCombatBehaviour::GenerateBehaviourList()
 	{
 		if (!action.second.second->GetInitValue())
 		{
-			availableActions["MoveTowards"].second->start();
+			action.second.second->start();
 		}
 	}
 }
@@ -92,6 +90,6 @@ void EnemyCombatBehaviour::GenerateEffects()
 
 void EnemyCombatBehaviour::endTurn()
 {
-	TurnManager::Instance()->endTurn();
 	LOG_INFO("EnemyCombatBehaviour::endTurn() - Enemy turn ended");
+	TurnManager::Instance()->endTurn();
 }

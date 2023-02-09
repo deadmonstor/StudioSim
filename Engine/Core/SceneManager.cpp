@@ -3,6 +3,7 @@
 #include "UIManager.h"
 #include "Components/AnimatedSpriteRenderer.h"
 #include "Components/Transform.h"
+#include "Grid/GridSystem.h"
 #include "Renderer/Renderer.h"
 #include "Util/Events/EngineEvents.h"
 #include "Util/Events/Events.h"
@@ -154,6 +155,7 @@ void SceneManager::lateShutdown()
 		}
 		
 		Renderer::Instance()->setCamera(nullptr);
+		GridSystem::Instance()->onSceneShutdown();
 
 		shuttingDown = false;
 		LOG_INFO("Changed scene to " + loadNextScene->name);

@@ -26,7 +26,6 @@ void ChestTile::onInteractedWith(TileHolder* curTileHolder)
 	else
 	{
 		std::string itemToSpawn = LootTable::Instance()->RollLoot();
-		std::cout << itemToSpawn << std::endl;
 		chestOpened = true;
 		ChangeTexture(curTileHolder, itemToSpawn);
 		//Pass in the item(s) name to be dropped
@@ -44,31 +43,31 @@ void ChestTile::ChangeTexture(TileHolder* curTileHolder, std::string itemToSpawn
 	Item->getTransform()->setSize(glm::vec2(32, 32));
 	if (itemToSpawn.contains("Axe"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Axe.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Inventory-Axe");
 	}
 	else if (itemToSpawn.contains("Sword"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Sword.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Inventory-Sword");
 	}
 	else if (itemToSpawn.contains("Dagger"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Dagger.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Inventory-Dagger");
 	}
 	else if (itemToSpawn.contains("Hammer"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Hammer.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Inventory-Hammer");
 	}
 	else if (itemToSpawn.contains("common"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Armour/BasicArmourChest.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Inventory-BasicArmourChest");
 	}
 	else if (itemToSpawn.contains("rare"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Armour/MidArmourChest.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Inventory-MidArmourChest");
 	}
 	else if (itemToSpawn.contains("legendary"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Armour/TopArmourChest.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Inventory-TopArmourChest");
 	}
 
 	Item->addComponent<SpriteComponent>();

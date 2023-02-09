@@ -1,5 +1,7 @@
 #pragma once
 #include "Core/Grid/Tiles/Tile.h"
+#include <Util/Events/Events.h>
+#include "..\GameEvents.h"
 class TeleportTile : public Tile
 {
 public:
@@ -10,8 +12,12 @@ public:
         m_y = y;
     }
 
+    void init(TileHolder* curTileHolder) override;
     bool canInteractWith() override;
     void onInteractedWith(TileHolder* curTileHolder) override;
+private:
     double m_x, m_y;
+    bool Teleportable = false;
+    void ChangeTeleport(BossDeathEvent* event);
 };
 

@@ -4,10 +4,11 @@
 class Health : public Component
 {
 public:
+	explicit Health(int healthArg) : currentHealth(healthArg) {}
 	float getHealth() const { return currentHealth; }
 	void setHealth(float healthToSet);
 	void die();
 
 private:
-	float currentHealth = 100;
+	float currentHealth = -1;
 };

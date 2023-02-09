@@ -32,18 +32,15 @@ void EnemyIdleBehaviour::Act()
 				shouldEndTurn = false;
 				//Enemy can sense player here. engage combat.
 				Griddy::Events::invoke<StateTransition>(parentFSM, new EnemyCombatBehaviour(parentFSM));
-				TurnManager::Instance()->endTurn();
 				LOG_INFO("Enemy Idle Behaviour -> Act -> TurnManager::Instance()->endTurn()");
+				TurnManager::Instance()->endTurn();
 			}
 		}
 	}
 
 	if (shouldEndTurn)
 	{
-		DelayTask::createTask(parentFSM->getOwner(), 2, [this]()
-		{
-			TurnManager::Instance()->endTurn();
-			LOG_INFO("Enemy Idle Behaviour -> DelayTask::createTask -> TurnManager::Instance()->endTurn()");
-		});
+		LOG_INFO("Enemy Idle Behaviour -> DelayTask::createTask -> TurnManager::Instance()->endTurn() -> " + parentFSM->getOwner()->getName());
+		TurnManager::Instance()->endTurn();
 	}
 }

@@ -10,6 +10,9 @@ bool AudioEngine::init()
 	//To Do Abstract Into Classes
 	FMOD_RESULT fmodResult;
 
+	//Volume Defaults
+	masterVolume = 1.0f;
+
 	//Create the System
 	fmodResult = FMOD::System_Create(&fmodSystem);
 
@@ -67,6 +70,12 @@ bool AudioEngine::init()
 		return false;
 	}
 
+	fmodResult = audioEffectsChannel->set3DLevel(0.0f);
+	if (!checkResult(fmodResult, "Set 3D Level"))
+	{
+		return false;
+	}
+
 	fmodResult = fmodSystem->createChannelGroup("backgroundMusic", &backgroundMusicChannel);
 	if (!checkResult(fmodResult, "Failed to create backgroundMusic channel"))
 	{
@@ -85,6 +94,11 @@ bool AudioEngine::init()
 		return false;
 	}
 
+	fmodResult = backgroundMusicChannel->set3DLevel(0.0f);
+	if (!checkResult(fmodResult, "Set 3D Level"))
+	{
+		return false;
+	}
 
 	//Add audio channel groups
 	masterChannel->addGroup(audioEffectsChannel);
@@ -99,10 +113,11 @@ void AudioEngine::update()
 {
 	FMOD_RESULT fmodResult;
 
-	//Position of listener
-	// Test Function
-	//updateListenerPositon(listenerPosition.x - 1, 0); 
+	//Position of listener (Should be Player)
 	const FMOD_VECTOR listenerPos = {listenerPosition.x, listenerPosition.y, 0};
+
+	//Background Audio Will Follow Player
+	channelGroups["Background Music"]->set3DAttributes(&listenerPos, nullptr);
 
 	//forward/up vectors left at default for now (probably not needed)
 	//const FMOD_VECTOR forward = FMOD_VECTOR(0, 0, 0);
@@ -173,9 +188,16 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 			return false;
 		}
 
+
 		//Set min/max falloff
-		fmodResult = fmodChannel->set3DMinMaxDistance(10, 1000);
+		fmodResult = fmodChannel->set3DMinMaxDistance(10, 10000);
 		if (!checkResult(fmodResult, "Set 3D Min/Max Distance"))
+		{
+			return false;
+		}
+
+		fmodResult = fmodChannel->set3DLevel(0.0f);
+		if (!checkResult(fmodResult, "Set 3D Level"))
 		{
 			return false;
 		}
@@ -202,6 +224,8 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 		}
 
 		backgroundChannel->getIndex(&backgroundChannelIndex);
+
+		ResourceManager::GetSound(path)->setLoopCount(-1);
 		fmodSystem->playSound(ResourceManager::GetSound(path), channelGroups["Background Music"], isPaused, &backgroundChannel);
 
 		//Audio source position
@@ -210,6 +234,18 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 		//Enable Channel Modes
 		fmodResult = backgroundChannel->setMode(FMOD_3D);
 		if (!checkResult(fmodResult, "Set Channel Volume"))
+		{
+			return false;
+		}
+
+		fmodResult = backgroundChannel->set3DLevel(0.0f);
+		if (!checkResult(fmodResult, "Set 3D Level"))
+		{
+			return false;
+		}
+
+		fmodResult = backgroundChannel->setMode(FMOD_LOOP_NORMAL);
+		if (!checkResult(fmodResult, "Set Looping"))
 		{
 			return false;
 		}
@@ -235,16 +271,19 @@ bool AudioEngine::playSound(const char *path, bool isPaused, float volume, float
 		}
 
 		//Set min/max falloff
-		fmodResult = backgroundChannel->set3DMinMaxDistance(10, 1000);
+		fmodResult = backgroundChannel->set3DMinMaxDistance(10, 10000);
 		if (!checkResult(fmodResult, "Set 3D Min/Max Distance"))
 		{
 			return false;
 		}
 
+
+
 		//Loop(0 - Oneshot, 1 - Loop Once and Stop, -1 - Loop Forever
 		fmodResult = backgroundChannel->setLoopCount(-1);
 		if (!checkResult(fmodResult, "Set Loop"))
 		{
+			std::cout << "Loop Set\n";
 			return false;
 		}
 	}
@@ -354,8 +393,18 @@ bool AudioEngine::setPitchChannelGroup(std::string channelGroupName, float pitch
 
 bool AudioEngine::setVolumeChannelGroup(std::string channelGroupName, float volume)
 {
+	masterVolume = volume;
+	if (masterVolume < 0.0f)
+	{
+		masterVolume = 0;
+	}
+	else if (masterVolume > 1.0f)
+	{
+		masterVolume = 1.0f;
+	}
+
 	FMOD_RESULT fmodResult;
-	fmodResult = channelGroups[channelGroupName]->setVolume(volume);
+	fmodResult = channelGroups[channelGroupName]->setVolume(masterVolume);
 	if (!checkResult(fmodResult, "setVolumeChannelGroup"))
 	{
 		return false;

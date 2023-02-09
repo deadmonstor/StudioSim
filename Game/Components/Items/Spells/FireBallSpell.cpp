@@ -3,22 +3,24 @@
 #include "../../FireballComponent.h"
 #include "../../EnemyComponent.h"
 #include "../../Player/PlayerController.h"
+#include "Core/AudioEngine.h"
+#include <Core/Components/Health.h>
 
 FireBallSpell::FireBallSpell()
 {
 
 	//fireBallStats->name = "Fire Ball";
-	spellStats->price = 10;
+	price = 10;
 	spellStats->manaCost = 1;
-	spellStats->maxCooldown = 1;
-	spellStats->spellPower = 10;
-	spellStats->currentCooldown = spellStats->maxCooldown;
-	spellStats->range = 3;
+	spellStats->maxCooldown = 2;
+	spellStats->spellPower = 30;
+	spellStats->currentCooldown = 0;
+	spellStats->range = 4;
 }
 
 void FireBallSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 {
-
+	AudioEngine::Instance()->playSound("Sounds\\FireBall.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 	GameObject* spell = SceneManager::Instance()->createGameObject("FireballSpell", GridSystem::Instance()->getWorldPosition(playerPos));
 	spell->getTransform()->setSize(glm::vec2(48, 48));
 	const std::vector textureListFireball = ResourceManager::GetTexturesContaining("Fireball");
@@ -60,36 +62,34 @@ void FireBallSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 			break;
 		}
 	}
-
-
-	lerp = spell->addComponent<LerpPosition>(targetPos, 3);
-	lerp->onLerpComplete = [spell]
-	{
-		LOG_INFO("FireBallSpell -> LerpPosition -> TurnManager::Instance()->endTurn()");
-		TurnManager::Instance()->endTurn();
-		SceneManager::Instance()->destroyGameObject(spell);
-	};
-
+	
+	bool shouldHitmarker = false;
 	TileHolder* lastTile = GridSystem::Instance()->getTileHolder(0, GridSystem::Instance()->getTilePosition(targetPos));
 	if (lastTile != nullptr && lastTile->gameObjectSatOnTile != nullptr && lastTile->gameObjectSatOnTile->hasComponent(typeid(EnemyComponent)))
 	{
-		EnemyStats targetStats = lastTile->gameObjectSatOnTile->getComponent<EnemyComponent>()->getStats();
-		int spellDMG = spellStats->spellPower - targetStats.defence;
-		if (spellDMG < 0)
-		{
-			spellDMG = 0;
-		}
-
-		float r = static_cast<float> (rand()) / static_cast<float> (RAND_MAX);
-		if (r < PlayerController::Instance()->playerStats->critChance)
-		{
-			spellDMG *= 2;
-		}
-
-		targetStats.currentHealth -= spellDMG;
-		LOG_INFO(targetStats.currentHealth);
+		shouldHitmarker = true;
 	}
 	
+	lerp = spell->addComponent<LerpPosition>(targetPos, 3);
+	lerp->onLerpComplete = [lastTile, spell, this, shouldHitmarker]
+	{
+		LOG_INFO("FireBallSpell -> LerpPosition -> TurnManager::Instance()->endTurn()");
+		if (shouldHitmarker)
+		{
+			EnemyStats targetStats = lastTile->gameObjectSatOnTile->getComponent<EnemyComponent>()->getStats();
+			int spellDMG = spellStats->spellPower;
+			float currentHealth = lastTile->gameObjectSatOnTile->getComponent<Health>()->getHealth();
+			int newHealth = currentHealth -= spellDMG;
+			lastTile->gameObjectSatOnTile->getComponent<Health>()->setHealth(newHealth);
+			if (newHealth <= 0)
+			{
+				GridSystem::Instance()->resetSatOnTile(0, lastTile->position);
+			}
+		}
+		
+		TurnManager::Instance()->endTurn();
+		SceneManager::Instance()->destroyGameObject(spell);
+	};
 	
 	//if (spell->getTransform()->getPosition() == (playerPos + glm::fvec2(attackDir.x * range, attackDir.y * range)))
 	//{

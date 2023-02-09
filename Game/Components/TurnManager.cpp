@@ -91,7 +91,8 @@ void TurnManager::nextTurn()
 		{
 			//Renderer::Instance()->setCamera(cam);
 		}
-		
+
+		LOG_INFO("Starting turn for " + m_CurrentTurnObject->getName());
 		Griddy::Events::invoke<onStartTurn>(m_CurrentTurnObject);
 	}
 	else
@@ -129,8 +130,17 @@ bool TurnManager::isCurrentTurnObject(const GameObject* object)
 
 void TurnManager::endTurn()
 {
+	if (m_CurrentTurnObject == nullptr)
+	{
+		LOG_ERROR("What the hell happened here");
+		return; //This should never happen.
+	}
+
+	LOG_INFO("Ending turn for " + m_CurrentTurnObject->getName());
+	
 	canMakeATurn.push(m_CurrentTurnObject);
 	shouldGoNextTurn = true;
+	m_CurrentTurnObject = nullptr;
 }
 
 //Called when the last enemy is spawned.

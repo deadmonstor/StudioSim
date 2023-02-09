@@ -61,7 +61,5 @@ public:
 	TileHolder* FindClosestEmptyTile(glm::vec2 startPos, glm::vec2 goalPos, int maxDepth, int startDepth);
 	TileHolder* FindClosestEmptyTile(TileHolder* goal, int maxDepth, int startDepth);
 	TileHolder* FindClosestEmptyTile(glm::vec2 goalPos, int maxDepth, int startDepth);
-
-	//breadcrumb pathfinding implementation here also
 };
 

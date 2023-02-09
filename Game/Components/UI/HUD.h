@@ -20,11 +20,7 @@ private:
 	TextComponent* levelText;
 	TextComponent* audioText;
 
-	//ButtonComponent* inventoryButton;
 	ButtonComponent* weaponButton;
-	ButtonComponent* spellsButton;
-	//ButtonComponent* plusAudioButton;
-	//ButtonComponent* minusAudioButton;
 
 	//Buttons
 	PauseButton* pauseButton;
