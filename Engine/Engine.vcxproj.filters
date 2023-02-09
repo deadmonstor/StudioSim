@@ -87,9 +87,6 @@
     <ClCompile Include="Core\Grid\GridSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Grid\Tile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Renderer\Lighting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -109,9 +106,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Grid\GridSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Grid\Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Renderer\Lighting.cpp">
@@ -136,6 +130,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Components\UI\Panel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Grid\Tiles\Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1520,16 +1520,10 @@
     <ClInclude Include="Core\Grid\GridSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Grid\Tile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Renderer\Lighting.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\Renderer\SortingLayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Util\Events\RenderEvents.h">
@@ -1556,16 +1550,10 @@
     <ClInclude Include="Core\Grid\GridSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Grid\Tile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Renderer\Lighting.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\Renderer\SortingLayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Util\Events\RenderEvents.h">
@@ -1590,6 +1578,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UIManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\UI\Panel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Grid\Tiles\Tile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

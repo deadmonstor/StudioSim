@@ -8,6 +8,7 @@
 #include"../Game/Shop.h"
 
 
+
 class OnPlayerControllerFSMUpdate : public Griddy::Event
 {
 public:
@@ -38,4 +39,5 @@ public:
 	Inventory* myInventory{};
 	PlayerStats* playerStats{};
 	Hitmarkers* hitmarkers {};
+	
 };

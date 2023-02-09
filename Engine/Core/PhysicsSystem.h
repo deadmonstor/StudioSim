@@ -20,6 +20,42 @@ public:
 		return collisionXAxis && collisionYAxis;
 	}
 
+	void resolveCollision(Transform& gameObject1, Transform& gameObject2)
+
+	{
+		float x_overlap = (gameObject1.getScale().x + gameObject2.getScale().x) - (gameObject1.getPosition().x - gameObject2.getPosition().x);
+		float y_overlap = (gameObject1.getScale().y + gameObject2.getScale().y) - (gameObject2.getPosition().y - gameObject2.getPosition().y);
+
+		if (x_overlap < y_overlap) {
+			if (gameObject1.getPosition().x < gameObject2.getPosition().x)
+			{
+				gameObject1.setPosition(gameObject1.getPosition() - x_overlap / 2);
+				//position_.x -= x_overlap / 2.0f;
+				gameObject2.setPosition(gameObject2.getPosition() + x_overlap / 2);
+				//other.position_.x += x_overlap / 2.0f;
+			}
+			else {
+				gameObject1.setPosition(gameObject1.getPosition() + x_overlap / 2);
+				//position_.x += x_overlap / 2.0f;
+				gameObject2.setPosition(gameObject2.getPosition() - x_overlap / 2);
+				//other.position_.x -= x_overlap / 2.0f;
+			}
+		}
+		else {
+			if (gameObject1.getPosition().y < gameObject2.getPosition().y) {
+				gameObject1.setPosition(gameObject1.getPosition() - y_overlap / 2);
+				//position_.y -= y_overlap / 2.0f;
+				gameObject2.setPosition(gameObject2.getPosition() + y_overlap / 2);
+				//other.position_.y += y_overlap / 2.0f;
+			}
+			else {
+				gameObject1.setPosition(gameObject1.getPosition() + y_overlap / 2);
+				//position_.y += y_overlap / 2.0f;
+				gameObject2.setPosition(gameObject2.getPosition() - y_overlap / 2);
+				//other.position_.y -= y_overlap / 2.0f;
+			}
+		}
+	}
 	void applyGravity(Transform &gameObject)
 	{
 		glm::vec2 currentPos = gameObject.getPosition();

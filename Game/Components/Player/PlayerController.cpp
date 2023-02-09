@@ -41,6 +41,7 @@ void PlayerController::createPlayer()
 	playerFSM = playerPTR->addComponent<PlayerFSM>();
 	cameraComponent = playerPTR->addComponent<Camera>();
 	hitmarkers = playerPTR->addComponent<Hitmarkers>();
+	//playerBoxCollider =  playerPTR->addComponent<BoxCollider>();
 	bool isTutorial = SceneManager::Instance()->getScene()->name == "tutorial";
 
 	if (playerStats == nullptr ||
