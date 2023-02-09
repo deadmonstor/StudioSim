@@ -114,9 +114,9 @@ void PlayerController::onEngineRender(const OnEngineRender* render)
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
 #ifdef _DEBUG
-	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr && playerPTR != nullptr)
+	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr && playerPTR != nullptr && playerPTR->isBeingDeleted() == false)
 	{
-		for(auto func : Inventory::getItemByName | std::views::values)
+		for(const auto& func : Inventory::getItemByName | std::views::values)
 		{
 			myInventory->add_item(func());
 		}
