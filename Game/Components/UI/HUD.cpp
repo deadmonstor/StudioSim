@@ -20,11 +20,11 @@ void HUD::createHUD()
 	if (playerChangedID == -1)
 		playerChangedID = Griddy::Events::subscribe(this, &HUD::onPlayerChanged);
 	
-	if (!ResourceManager::HasTexture("BasicArmourChestInventoryUI"))
-		ResourceManager::LoadTexture("Sprites\\Armour\\BasicArmourChest.png", "BasicArmourChestInventoryUI");
+	if (!ResourceManager::HasTexture("Backpack")) //ResourceManager::LoadTexture("Sprites / Backpack.png", "Backpack");
+		ResourceManager::LoadTexture("Sprites\\Backpack.png", "Backpack");
 	
 	inventoryButton =
-		UIManager::Instance()->createUIElement<InventoryButton>("inventoryButton", ResourceManager::GetTexture("BasicArmourChestInventoryUI"));
+		UIManager::Instance()->createUIElement<InventoryButton>("inventoryButton", ResourceManager::GetTexture("Backpack"));
 
 	if (!ResourceManager::HasTexture("TopArmourBoots"))
 		ResourceManager::LoadTexture("Sprites\\Armour\\TopArmourBoots.png", "TopArmourBoots");

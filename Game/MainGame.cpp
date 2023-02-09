@@ -72,6 +72,10 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\GRAttack\\", "GRA", 13);
 	ResourceManager::LoadTextureArray("Sprites\\GRIdle\\", "GRI", 8);
 	ResourceManager::LoadTexture("Sprites\\whitetexture.png", "whitetexture");
+	
+	ResourceManager::LoadTexture("Sprites/ShopKeeper/ShopKeeper0.png", "ShopKeeper");
+	
+	ResourceManager::LoadTexture("Sprites/Backpack.png", "Backpack");
 
 	ResourceManager::LoadTexture("Sprites/Weapons/Axe.png", "Inventory-Axe");
 	ResourceManager::LoadTexture("Sprites/Weapons/Sword.png", "Inventory-Sword");
