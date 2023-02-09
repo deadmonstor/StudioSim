@@ -1,4 +1,4 @@
-﻿#include "Level1Scene.h"
+#include "Level1Scene.h"
 
 #include "TutorialScene.h"
 #include "Core/SceneManager.h"
@@ -24,29 +24,81 @@
 #include "../Tiles/ChestTile.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
+#include "../BossMusic.h"
+#include "../Tiles/ShopTile.h"
+#include "../AllItemInclude.h"
 
 void Level1Scene::createSlime(const glm::vec2 pos)
 {
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
 	int random = rand() % 10000000;
+	int randomEnemy = rand() % 3;
 		
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(48, 24));
 
-	const std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+	std::vector textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+
+	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
+	EnemyStats slimeStats = EnemyStats();
+	switch (randomEnemy)
+	{
+		case 0:
+			textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+
+			slimeStats.attack = 2;
+			slimeStats.critChance = 0.2f;
+			slimeStats.maxHealth = 10;
+			slimeStats.currentHealth = 10;
+			slimeStats.defence = 2;
+			break;
+
+		case 1:
+			textureList = ResourceManager::GetTexturesContaining("Red-Slime-Idle");
+
+			slimeStats.attack = 3;
+			slimeStats.critChance = 0.5f;
+			slimeStats.maxHealth = 20;
+			slimeStats.currentHealth = 20;
+			slimeStats.defence = 1;
+			break;
+
+		case 2:
+			textureList = ResourceManager::GetTexturesContaining("Green-Slime-Idle");
+
+			slimeStats.attack = 2;
+			slimeStats.critChance = 0.2f;
+			slimeStats.maxHealth = 15;
+			slimeStats.currentHealth = 15;
+			slimeStats.defence = 3;
+			//, "Green-Slime-Idle"
+			break;
+
+		default:
+			textureList = ResourceManager::GetTexturesContaining("Blue-Slime-Idle");
+
+			slimeStats.attack = 2;
+			slimeStats.critChance = 0.2f;
+			slimeStats.maxHealth = 10;
+			slimeStats.currentHealth = 10;
+			slimeStats.defence = 2;
+			//, "Blue-Slime-Idle"
+			break;
+	}
+
+	EnemyComponent component = EnemyComponent(fsm, slimeStats);
 	auto sprite = enemy->addComponent<AnimatedSpriteRenderer>(textureList, 0.05f);
 	sprite->setColor(glm::vec3(1, 1, 1));
 	sprite->setLit(true);
 	sprite->setPivot(Pivot::Center);
 
-	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
-	EnemyStats slimeStats = EnemyStats();
-	slimeStats.attack = 2;
-	slimeStats.critChance = 0.2f;
-	slimeStats.maxHealth = 25;
-	slimeStats.currentHealth = slimeStats.maxHealth;
-	slimeStats.defence = 2;
-	EnemyComponent component = EnemyComponent(fsm, slimeStats);
+	//EnemyStats slimeStats = EnemyStats();
+	//slimeStats.attack = 2;
+	//slimeStats.critChance = 0.2f;
+	//slimeStats.maxHealth = 25;
+	//slimeStats.currentHealth = slimeStats.maxHealth;
+	//slimeStats.defence = 2;
+	//EnemyComponent component = EnemyComponent(fsm, slimeStats, "Blue-Slime-Idle");
 	enemy->addComponent<EnemyComponent>(component);
 
 	GridSystem::Instance()->setSatOnTile(0, pos, enemy);
@@ -63,23 +115,25 @@ void Level1Scene::createBoss(const glm::vec2 pos)
 	GridSystem::Instance()->setSatOnTile(0, pos, Crab);
 	GridSystem::Instance()->setSatOnTile(0, pos + glm::vec2(1, 0), Crab);
 
+	BossMusic::Instance()->Initialise();
+
 	const std::vector textureListCrab = ResourceManager::GetTexturesContaining("crab");
 	auto sprite = Crab->addComponent<AnimatedSpriteRenderer>(textureListCrab, 0.075f);
 	sprite->setPivot(Pivot::BottomCenter);
 	sprite->setColor(glm::vec3(1, 1, 1));
-	sprite->setLit(false);
+	sprite->setLit(true);
 
 	std::vector<glm::vec2> spawnerPositions;
 	spawnerPositions.push_back(glm::vec2(17 ,18));
 	spawnerPositions.push_back(glm::vec2(30, 18));
 
-	StateMachine* fsm = Crab->addComponent<BossStateMachine>(spawnerPositions);
+	StateMachine* fsm = Crab->addComponent<BossStateMachine>(pos, spawnerPositions);
 	EnemyStats bossStats = EnemyStats();
-	bossStats.attack = 5;
+	bossStats.attack = 4;
 	bossStats.critChance = 0.15f;
-	bossStats.maxHealth = 2000;
-	bossStats.currentHealth = 2000;
-	bossStats.defence = 8;
+	bossStats.maxHealth = 70;
+	bossStats.currentHealth = 70;
+	bossStats.defence = 5;
 	EnemyComponent component = EnemyComponent(fsm, bossStats);
 	Crab->addComponent<EnemyComponent>(component);
 }
@@ -92,6 +146,7 @@ void Level1Scene::init()
 {
 	TutorialScene::hasCompletedTutorialLevel = true;
 	
+
 	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 	LootTable::Instance()->LoadingIntoLootTableArray();
 	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
@@ -146,7 +201,7 @@ void Level1Scene::init()
 	grid_system->loadFromFile(0, "Grid/Test2.txt");
 	
 	grid_system->setEmptyTileIDs(1, std::vector<int>{});
-	grid_system->setWallIDs(1, std::vector<int>{35, 36, 41, 42, 43, 44, 31, 32, 33});
+	grid_system->setWallIDs(1, std::vector<int>{35, 36, 41, 42, 43, 44, 29, 30, 31, 32, 33});
 	grid_system->setTextureMap(1, std::map<int, Texture>
 	{
 		{ 21, ResourceManager::GetTexture("tile12")},//tile 12 above tile 36 // tile 11 above 35 // tile 13 above 37
@@ -186,22 +241,19 @@ void Level1Scene::init()
 	{
 		{ 37, [] { return new LightTile(Texture()); } },
 		{ 56, [] { return new SpikeTile(Texture()); } },
-		{ 93, [] { return new ChestTile(Texture()); } }
+		{ 93, [] { return new ChestTile(Texture()); } },
+		//{ 95, [] {return new ShopTile(Texture(), new LegendaryArmour());  } }
 	});
 	
 	grid_system->loadFromFile(1, "Grid/LvlLayer2.txt");
 
 	grid_system->setEmptyTileIDs(2, std::vector<int>{});
 	grid_system->setWallIDs(2, std::vector<int>{});
-	grid_system->setTextureMap(2, std::map<int, Texture>
-	{ 
-		{96, ResourceManager::GetTexture("Inventory-Sword")},
-		{95, ResourceManager::GetTexture("Inventory-MidArmourChest")}
-	});
 	grid_system->setTileFunctionMap(2, std::map<int, std::function<Tile* ()>>
 	{
-		{96, [] {return new SwordShopItemTile(Texture()); }},
-		{95, [] {return new ArmourShopItemTile(Texture()); }}
+		{ 95, [] {return new ShopTile(Texture(), new FireBallSpell());  } },
+		{ 96, [] {return new ShopTile(Texture(), new IceSpell());  } },
+		{ 97, [] {return new ShopTile(Texture(), new RareArmour());  } }
 	});
 	grid_system->setSpawnFunctionMap(2,
 	{

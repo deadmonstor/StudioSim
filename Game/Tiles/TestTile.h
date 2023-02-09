@@ -23,6 +23,6 @@ public:
 private:
     std::string m_SceneToChangeTo;
     bool Teleportable = false;
-    void ChangeTeleport(EnterBossRoomEvent* event);
+    void ChangeTeleport(BossDeathEvent* event);
 
 };

@@ -21,6 +21,7 @@
 #include "Scenes/Level1Scene.h"
 #include "Scenes/Level2Scene.h"
 #include "Scenes/MainMenu.h"
+#include "Scenes/CreditsScene.h"
 #include "Scenes/VictoryScene.h"
 #include "Scenes/ScoreScene.h"
 #include "Scenes/TutorialScene.h"
@@ -41,12 +42,15 @@ int main(int, char**)
 	Renderer->setWindowIcon("Sprites\\icon.png");
 	Renderer->setWindowSize({ 1920, 1080 });
 
+	ResourceManager::LoadTextureArray("Sprites\\Green-Slime-Idle\\", "Green-Slime-Idle", 7);
+	ResourceManager::LoadTextureArray("Sprites\\Red-Slime-Idle\\", "Red-Slime-Idle", 7);
 	ResourceManager::LoadTextureArray("Sprites\\Blue-Slime-Idle\\", "Blue-Slime-Idle", 7);
 	ResourceManager::LoadTextureArray("Sprites\\Blue-Slime-Hurt\\", "Blue-Slime-Hurt", 11);
 	ResourceManager::LoadTextureArray("Sprites\\Blue-Slime-Death\\", "Blue-Slime-Death", 14);
 	ResourceManager::LoadTextureArray("Sprites\\Zombie\\", "Zombie", 8);
 	ResourceManager::LoadTextureArray("Sprites\\Skeleton\\", "Skeleton", 8);
 	ResourceManager::LoadTextureArray("Sprites\\SkeletonMove\\", "SkeletonMove", 6);
+	ResourceManager::LoadTextureArray("Sprites\\ZombieMove\\", "ZombieMove", 6);
 	ResourceManager::LoadTextureArray("Sprites\\Fireball\\", "Fireball", 15);
 	ResourceManager::LoadTextureArray("Sprites\\FX1\\", "FXSCircle", 5);
 	ResourceManager::LoadTextureArray("Sprites\\FX2\\", "FXSDrop", 8);
@@ -131,6 +135,11 @@ int main(int, char**)
 		{"leaderboardScene", []
 			{
 				return new LeaderboardScene();
+			}
+		},
+		{"creditsScene", []
+			{
+				return new CreditsScene();
 			}
 		},
 	};

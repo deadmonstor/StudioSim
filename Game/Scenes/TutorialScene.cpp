@@ -19,11 +19,13 @@
 #include "../Tiles/ChestTile.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
+#include "../Tiles/ShopTile.h"
+#include "../Components/Items/Armour/LegendaryArmour.h"
+#include "../Components/Items/Armour/CommonArmour.h"
+#include "../Components/Items/Weapons/LegendaryHammer.h"
 
 void TutorialScene::createSlime(const glm::vec2 pos)
 {
-	engineRenderID = Griddy::Events::subscribe(this, &TutorialScene::onEngineRender);
-	
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
 	int random = rand() % 10000000;
 		
@@ -52,7 +54,9 @@ void TutorialScene::createSlime(const glm::vec2 pos)
 
 void TutorialScene::init()
 {
-	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
+	engineRenderID = Griddy::Events::subscribe(this, &TutorialScene::onEngineRender);
+	
+
 	LootTable::Instance()->LoadingIntoLootTableArray();
 	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
 
@@ -173,6 +177,9 @@ void TutorialScene::init()
 	
 	grid_system->loadFromFile(2, "Grid/TutorialLevelDesignSP.txt");
 	TurnManager::Instance()->startTurnSystem();
+
+	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, PlayerController::Instance()->playerPTR->getTransform()->getPosition().x,
+		PlayerController::Instance()->playerPTR->getTransform()->getPosition().y, AudioType::BackgroundMusic);
 }
 
 void TutorialScene::update()

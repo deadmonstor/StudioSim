@@ -43,6 +43,7 @@ class GridSystem : public SingletonTemplate<GridSystem>
 
 public:
 	void render();
+	void onSceneShutdown();
 	
 	void setTextureMap(int id, const std::map<int, Texture>& textureMap);
 	void setWallIDs(int id, const std::vector<int>& wallIDs);

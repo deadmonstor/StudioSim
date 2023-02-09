@@ -17,7 +17,6 @@ public:
     {
         return "A health potion";
     }
-
     void use() override
     {
         // ASSUMED THAT THIS IS ONLY ON THE PLAYER

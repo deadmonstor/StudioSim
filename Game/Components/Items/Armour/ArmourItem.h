@@ -9,7 +9,6 @@ public:
     bool isEquipable() override { return true; }
     ItemType getItemType() override { return ItemType::ARMOUR; }
     EquipSlot getEquipSlot() override { return EquipSlot::ARMOUR; }
-
     
     ArmourStats* armour = new ArmourStats();
 };

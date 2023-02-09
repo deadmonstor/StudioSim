@@ -33,8 +33,7 @@ EnemyComponent::EnemyComponent(StateMachine* stateMachineArg, EnemyStats statsAr
 
 void EnemyComponent::start()
 {
-	Health* healthComponent = getOwner()->addComponent<Health>();
-	healthComponent->setHealth(stats.maxHealth);
+	Health* healthComponent = getOwner()->addComponent<Health>(stats.maxHealth);
 	getOwner()->addComponent<Camera>();
 
 	TurnManager::Instance()->addToTurnQueue(getOwner());
@@ -119,6 +118,9 @@ void EnemyComponent::DropLoot()
 {
 	if (SceneManager::Instance()->isLoadingScene() || SceneManager::Instance()->isShuttingDown())
 		return;
+
+	if (getOwner()->getName() == "bossSpawn")
+		return;
 	
 	std::string itemToSpawn = EnemyDropLootTable::Instance()->EnemyDropRollLoot();
 	Texture m_ItemTexture;
@@ -148,23 +150,23 @@ void EnemyComponent::DropLoot()
 		switch (Amount)
 		{
 		case 1:
-			m_ItemTexture = ResourceManager::LoadTexture("Sprites/Coins/coin0.png", itemToSpawn);
+			m_ItemTexture = ResourceManager::GetTexture("coin0");
 			break;
 		case 2:
 		case 3:
-			m_ItemTexture = ResourceManager::LoadTexture("Sprites/Coins/coin1.png", itemToSpawn);
+			m_ItemTexture = ResourceManager::GetTexture("coin1");
 			break;
 		case 4:
 		case 5:
 		case 6:
 		case 7:
-			m_ItemTexture = ResourceManager::LoadTexture("Sprites/Coins/coin2.png", itemToSpawn);
+			m_ItemTexture = ResourceManager::GetTexture("coin2");
 			break;
 		case 16:
-			m_ItemTexture = ResourceManager::LoadTexture("Sprites/Coins/coin4.png", itemToSpawn);
+			m_ItemTexture = ResourceManager::GetTexture("coin4");
 			break;
 		default:
-			m_ItemTexture = ResourceManager::LoadTexture("Sprites/Coins/coin3.png", itemToSpawn);
+			m_ItemTexture = ResourceManager::GetTexture("coin3");
 			break;
 		}
 		
@@ -172,22 +174,22 @@ void EnemyComponent::DropLoot()
 	}
 	else if (itemToSpawn.contains("health"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Potion0.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Potion0");
 	}
 	else if (itemToSpawn.contains("mana"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Potion1.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Potion1");
 	}
 	else if (itemToSpawn.contains("exp"))
 	{
-		m_ItemTexture = ResourceManager::LoadTexture("Sprites/Weapons/Potion2.png", itemToSpawn);
+		m_ItemTexture = ResourceManager::GetTexture("Potion2");
 	}
 
 
 	Item->addComponent<SpriteComponent>();
 	Item->getComponent<SpriteComponent>()->setPivot(Pivot::Center);
 	Item->getComponent<SpriteComponent>()->setTexture(m_ItemTexture);
-	Item->getComponent<SpriteComponent>()->setLit(false);
+	Item->getComponent<SpriteComponent>()->setLit(true);
 	Item->getComponent<SpriteComponent>()->setSortingLayer(Renderer::getSortingLayer("Background Grid"));
 	Item->addComponent<PickUp>();
 	Item->getComponent<PickUp>()->SetAmount(Amount);

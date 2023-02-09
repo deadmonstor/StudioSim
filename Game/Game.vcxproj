@@ -17,10 +17,17 @@
   <ItemGroup>
     <ClInclude Include="Tiles\ArmourShopItemTile.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossStateMachine.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.h" />
+    <ClInclude Include="Components\AI Behaviours\DoNothingAction.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperAttackAction.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperCombatBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperIdleBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperStateMachine.h" />
     <ClInclude Include="GameEvents.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Tiles\SwordShopItemTile.h" />
     <ClInclude Include="Tiles\ShopRoomEntryTile.h" />
+    <ClInclude Include="Tiles\ShopTile.h" />
     <ClInclude Include="Tiles\BossRoomEntryTile.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossIdleBehaviour.h" />
     <ClInclude Include="Components\AI Behaviours\AttackAction.h" />
@@ -97,13 +104,25 @@
     <ClInclude Include="Tiles\SpikeTile.h" />
     <ClInclude Include="Tiles\TeleportTile.h" />
     <ClInclude Include="Tiles\TestTile.h" />
+    <ClInclude Include="Scenes\CreditsScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tiles\ArmourShopItemTile.cpp" />
+    <ClCompile Include="BossMusic.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Boss\BossAttackAction.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Boss\BossCombatBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Boss\BossSpawnAction.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossStateMachine.cpp" />
+    <ClCompile Include="Components\AI Behaviours\DoNothingAction.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperAttackAction.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperCombatBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperIdleBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperStateMachine.cpp" />
     <ClCompile Include="Scenes\TutorialScene.cpp" />
     <ClCompile Include="Tiles\SwordShopItemTile.cpp" />
     <ClCompile Include="Tiles\ShopRoomEntryTile.cpp" />
+    <ClCompile Include="Tiles\ShopTile.cpp" />
     <ClCompile Include="Tiles\BossRoomEntryTile.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossIdleBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\AttackAction.cpp" />
@@ -172,6 +191,7 @@
     <ClCompile Include="Tiles\SpikeTile.cpp" />
     <ClCompile Include="Tiles\TeleportTile.cpp" />
     <ClCompile Include="Tiles\TestTile.cpp" />
+    <ClCompile Include="Scenes\CreditsScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

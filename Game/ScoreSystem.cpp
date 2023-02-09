@@ -9,10 +9,16 @@
 
 ScoreSystem::ScoreSystem()
 {
+	resetScoreSystem();
+}
+
+void ScoreSystem::resetScoreSystem()
+{
 	currentScore = 0;
 	damageTaken = 0;
 	enemiesKilled = 0;
 	tilesMoved = 0;
+	goldEarned = 0;
 }
 
 void ScoreSystem::SaveScore(std::string Username)
@@ -20,19 +26,16 @@ void ScoreSystem::SaveScore(std::string Username)
 	file.open("Score.txt", std::ios::app);
 	if (file)
 	{
-		file << Username << "-" << currentScore << "\n";
+		file << Username << "," << currentScore << "\n";
 		file.close();
-
 	}
 	else
 	{
 		std::cout << "File Doesn't Exist";
 		file.open("Score.txt", std::ios::out);
-		file << Username << "-" << currentScore << "\n";
+		file << Username << "," << currentScore << "\n";
 		file.close();
 	}
-
-
 }
 
 void ScoreSystem::ReadScores(bool FromMainMenu)
@@ -40,7 +43,7 @@ void ScoreSystem::ReadScores(bool FromMainMenu)
 	file.open("Score.txt");
 	std::string line, m_Name;
 	size_t pos = 0;
-	std::string delim = "-";
+	std::string delim = ",";
 
 	for (int i = 0; i < 11 && std::getline(file, line); i++)
 	{
@@ -81,7 +84,7 @@ void ScoreSystem::UpdateScoreFile()
 	for (int i = 0; m_FileData[i].Score != NULL && i < 10; i++)
 	{
 		
-		file << m_FileData[i].Name << "-" << m_FileData[i].Score << "\n";
+		file << m_FileData[i].Name << "," << m_FileData[i].Score << "\n";
 		
 	}
 	file.close();
@@ -92,14 +95,15 @@ void ScoreSystem::calcFinalScore()
 {
 	currentScore = 0;
 	currentScore += enemiesKilled * 10;
-	currentScore -= tilesMoved;
-	currentScore -= damageTaken * 10;
+	currentScore += tilesMoved;
+	currentScore += goldEarned;
+	currentScore -= damageTaken;
 }
 
 void ScoreSystem::RenderTopScores()
 {
 	const auto MiddleTop =
-					glm::vec2((Renderer::getViewportSize().x / 2), Renderer::getViewportSize().y);
+					glm::vec2((Renderer::getViewportSize().x / 3), Renderer::getViewportSize().y);
 
 	glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize("The Leaderboard:", 1);
 	TextRenderer::Instance()->renderText("The Leaderboard:",
@@ -163,6 +167,16 @@ void ScoreSystem::RenderTopScores()
 		glm::vec3{ 1, 1, 1 },
 		glm::vec2{ 0, 0 });
 
+	TopRight.y -= 50;
+	
+	sizeOfText = TextRenderer::Instance()->renderTextSize("Gold Earned: " + std::to_string(goldEarned), 0.6f);
+	TextRenderer::Instance()->renderText("Gold Earned: " + std::to_string(goldEarned),
+		TopRight.x - (sizeOfText.x / 2),
+		TopRight.y - (sizeOfText.y / 2) - 50,
+		0.6f,
+		glm::vec3{ 1, 1, 1 },
+		glm::vec2{ 0, 0 });
+	
 	TopRight.y -= 75;
 	calcFinalScore();
 	

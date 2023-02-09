@@ -16,6 +16,8 @@ class InventoryHUD : public SingletonTemplate<InventoryHUD>
 	Panel* backgroundPanelInventory;
 	Panel* backgroundPanelEquip;
 	TextComponent* backgroundPanelInventoryText;
+	TextComponent* currentInventoryText;
+	TextComponent* currentInventoryTextOnline;
 	std::vector<InventoryIconButton*> slots;
 
 	InventoryIconButton* weaponSlot;

@@ -4,5 +4,5 @@ HealthPotion::HealthPotion()
 {
 	healthPotionStats = new ConsumableStats();
 	healthPotionStats->healthGained = 10;
-	healthPotionStats->price = 5;
+	price = 5;
 }

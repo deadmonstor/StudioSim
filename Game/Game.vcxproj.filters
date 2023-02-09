@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Components\DestroyAfterAnimation.cpp" />
@@ -82,6 +82,8 @@
     <ClCompile Include="Components\Items\Spells\PoisonSpell.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossIdleBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossStateMachine.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Boss\BossCombatBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Boss\BossAttackAction.cpp" />
     <ClCompile Include="Tiles\BossRoomEntryTile.cpp" />
     <ClCompile Include="Scenes\TutorialScene.cpp" />
     <ClCompile Include="Tiles\SwordShopItemTile.cpp" />
@@ -91,6 +93,16 @@
     <ClCompile Include="Components\UI\MasterAudioMinusButton.cpp" />
     <ClCompile Include="Components\UI\MasterAudioPlusButton.cpp" />
     <ClCompile Include="Tiles\ArmourShopItemTile.cpp" />
+    <ClCompile Include="Components\AI Behaviours\DoNothingAction.cpp" />
+    <ClCompile Include="Scenes\CreditsScene.cpp" />
+    <ClCompile Include="BossMusic.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Boss\BossSpawnAction.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperStateMachine.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperIdleBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperCombatBehaviour.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperAttackAction.cpp" />
+    <ClCompile Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.cpp" />
+    <ClCompile Include="Tiles\ShopTile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\DestroyAfterAnimation.h" />
@@ -190,12 +202,27 @@
     <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Tiles\SwordShopItemTile.h" />
     <ClInclude Include="Tiles\ShopRoomEntryTile.h" />
+    <ClInclude Include="Components\AI Behaviours\Boss\BossCombatBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\Boss\BossAttackAction.h" />
+    <ClInclude Include="Components\AI Behaviours\Boss\BossSpawnAction.h" />
+    <ClInclude Include="Components\AI Behaviours\Boss\BossEnemyComponent.h" />
+    <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Components\Items\Spells\FireBallSpell.h" />
     <ClInclude Include="Components\Items\Spells\PoisonSpell.h" />
     <ClInclude Include="Components\UI\InventoryHUD.h" />
     <ClInclude Include="Components\UI\InventoryIconButton.h" />
     <ClInclude Include="Components\UI\ItemSlot.h" />
     <ClInclude Include="Tiles\ArmourShopItemTile.h" />
+    <ClInclude Include="Components\AI Behaviours\DoNothingAction.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperStateMachine.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperIdleBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperCombatBehaviour.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperAttackAction.h" />
+    <ClInclude Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.h" />
+    <ClInclude Include="Scenes\CreditsScene.h" />
+    <ClInclude Include="BossMusic.h" />
+    <ClInclude Include="Tiles\ShopTile.h" />
+    <ClInclude Include="AllItemInclude.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\Pixel.ttf" />

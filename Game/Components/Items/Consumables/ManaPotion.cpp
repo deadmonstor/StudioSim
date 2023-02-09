@@ -4,5 +4,5 @@ ManaPotion::ManaPotion()
 {
 	manaPotionStats = new ConsumableStats();
 	manaPotionStats->manaGained = 10;
-	manaPotionStats->price = 5;
+	price = 5;
 }
