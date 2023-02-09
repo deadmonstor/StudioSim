@@ -20,18 +20,8 @@ void GridSystem::clearGrid(const int id)
 {
 	if (gridLayers[id])
 	{
-		for (auto pointer : gridLayers[id]->internalMap | std::views::values)
-		{
-			for (const auto tileHolder : pointer | std::views::values)
-			{
-				if (tileHolder->tile != nullptr)
-					tileHolder->tile->destroy();
-				
-				delete tileHolder->tile;
-				tileHolder->tile = nullptr;
-				delete tileHolder;
-			}
-		}
+		//TODO this is probably a mem leak, fix it later
+		gridLayers[id]->internalMap.clear();
 	}
 	else
 	{
@@ -159,10 +149,6 @@ void GridSystem::onSceneShutdown()
 			{
 				if (tileHolder->tile != nullptr)
 					tileHolder->tile->destroy();
-				
-				delete tileHolder->tile;
-				tileHolder->tile = nullptr;
-				delete tileHolder;
 			}
 		}
 	}

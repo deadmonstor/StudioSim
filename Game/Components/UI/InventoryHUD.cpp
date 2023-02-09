@@ -42,7 +42,7 @@ void InventoryHUD::createHUD()
                     glm::vec2(0, 0);
 	
 	int y = 0;
-	for (int i = 0; i <= 20; i++)
+	for (int i = 1; i <= 20; i++)
 	{
 		slots.push_back(createButton(MiddleRight - glm::vec2{100, 0} - (glm::vec2{(i % 5) * 50, y * 50}), nullptr));
 
@@ -134,12 +134,13 @@ void InventoryHUD::updateHUD()
 
 	Inventory* inventory = PlayerController::Instance()->myInventory;
 	int y = 0;
-	for (int i = 0; i <= 20; i++)
+	for (int i = 0; i < 20; i++)
 	{
 		InventoryIconButton* slot = slots[i];
-		
+
+		const int testI = i + 1;
 		slot->shouldRender = shouldRender;
-		slot->getTransform()->setPosition(MiddleRight - glm::vec2{100, 0} - (glm::vec2{(i % 5) * 50, y * 50}));
+		slot->getTransform()->setPosition(MiddleRight - glm::vec2{100, 0} - (glm::vec2{(testI % 5) * 50, y * 50}));
 		
 		if (inventory->items.size() > i && inventory->items[i] != nullptr)
 		{
@@ -150,7 +151,7 @@ void InventoryHUD::updateHUD()
 			slot->setItem(nullptr);
 		}
 		
-		if (i != 0 && i % 5 == 0)
+		if (testI != 0 && testI % 5 == 0)
 			y++;
 	}
 	

@@ -13,6 +13,9 @@ public:
 	void onClick() override;
 	void setItem(Item* _item)
 	{
+		if (item == _item)
+			return;
+		
 		item = _item;
 		if (item == nullptr)
 		{
