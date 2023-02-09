@@ -123,6 +123,16 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 	}
 #endif
 	
+	if (keyDown->key == GLFW_KEY_EQUAL && playerPTR != nullptr)
+	{
+		AudioEngine::Instance()->setVolumeChannelGroup("Master Channel", (AudioEngine::Instance()->masterVolume + 0.1f));
+	}
+
+	if (keyDown->key == GLFW_KEY_MINUS && playerPTR != nullptr)
+	{
+		AudioEngine::Instance()->setVolumeChannelGroup("Master Channel", (AudioEngine::Instance()->masterVolume - 0.1f));
+	}
+
 	//find the input and send it to the state machine
 	const std::type_index eventType = typeid(OnKeyDown);
 	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyDown(keyDown->key, keyDown->scancode), eventType);
@@ -130,6 +140,16 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 
 void PlayerController::onKeyHold(const OnKeyRepeat* keyHold)
 {
+	if (keyHold->key == GLFW_KEY_EQUAL && playerPTR != nullptr)
+	{
+		AudioEngine::Instance()->setVolumeChannelGroup("Master Channel", (AudioEngine::Instance()->masterVolume + 0.1f));
+	}
+
+	if (keyHold->key == GLFW_KEY_MINUS && playerPTR != nullptr)
+	{
+		AudioEngine::Instance()->setVolumeChannelGroup("Master Channel", (AudioEngine::Instance()->masterVolume - 0.1f));
+	}
+
 	const std::type_index eventType = typeid(OnKeyRepeat);
 	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyRepeat(keyHold->key, keyHold->scancode), eventType);
 }
