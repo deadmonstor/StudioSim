@@ -63,7 +63,7 @@ void PlayerController::createPlayer()
 		playerStats->spellPower = 1;
 		playerStats->defence = 1;
 		playerStats->critChance = 0.0f;
-		playerStats->coinsHeld = 0;
+		playerStats->coinsHeld = 1000;
 		playerStats->level = 1;
 		
 		playerStats->myInventory = new Inventory(20);

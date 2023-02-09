@@ -17,6 +17,7 @@
 #include "Core/Components/Transform.h"
 #include "../Tiles/SpikeTile.h"
 #include "../Tiles/BossRoomEntryTile.h"
+#include "../Tiles/SwordShopItemTile.h"
 #include "../LootTable.h"
 #include "../Components/UI/InventoryHUD.h"
 #include "../Tiles/ChestTile.h"
@@ -82,6 +83,10 @@ void Level1Scene::createBoss(const glm::vec2 pos)
 	Crab->addComponent<EnemyComponent>(component);
 }
 
+void Level1Scene::createShop(const glm::vec2 pos)
+{
+}
+
 void Level1Scene::init()
 {
 	TutorialScene::hasCompletedTutorialLevel = true;
@@ -89,7 +94,7 @@ void Level1Scene::init()
 	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
 	LootTable::Instance()->LoadingIntoLootTableArray();
 	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
-
+	
 	auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
 	auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);
 	auto enemySortingLayer = Renderer::addSortingLayer("Top Grid", 1);
@@ -187,6 +192,11 @@ void Level1Scene::init()
 
 	grid_system->setEmptyTileIDs(2, std::vector<int>{});
 	grid_system->setWallIDs(2, std::vector<int>{});
+	grid_system->setTextureMap(2, std::map<int, Texture>{ {96, ResourceManager::GetTexture("Inventory-Sword")}});
+	grid_system->setTileFunctionMap(2, std::map<int, std::function<Tile* ()>>
+	{
+		{96, [] {return new SwordShopItemTile(Texture()); }}
+	});
 	grid_system->setSpawnFunctionMap(2,
 	{
 		{ 91, [this](glm::vec2 pos)
@@ -201,7 +211,12 @@ void Level1Scene::init()
 		{ 98, [this](glm::vec2 pos)
 		{
 				createBoss(pos);
-		} }
+		} },
+		{ 94, [this](glm::vec2 pos)
+		{
+			PlayerController::Instance()->createPlayer();
+			PlayerController::Instance()->playerPTR->getTransform()->setPosition(GridSystem::Instance()->getWorldPosition(pos));
+		} },
 	});
 	
 	grid_system->loadFromFile(2, "Grid/LevelDesignSP.txt");

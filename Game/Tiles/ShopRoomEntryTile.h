@@ -1,11 +1,10 @@
 #pragma once
 #include "Core/Grid/Tiles/Tile.h"
 #include "..\Components\Player\PlayerController.h"
-class ShopRoomEntryTile :
-    public Tile
+class ShopRoomEntryTile : public Tile
 {
 public:
-    explicit ShopRoomEntryTile(const Texture& _texture, std::string wallStringArg, glm::vec2 teleportPosArg, std::vector<glm::vec2> bossEntryPointsArg, std::vector<glm::vec2> bossPositionsArg);
+    explicit ShopRoomEntryTile(const Texture& _texture, std::string wallStringArg, glm::vec2 teleportPosArg, std::vector<glm::vec2> shopEntryPointsArg, std::vector<glm::vec2> shopPositionsArg);
     bool canInteractWith() override;
     void onInteractedWith(TileHolder* curTileHolder) override;
 

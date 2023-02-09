@@ -4,7 +4,8 @@
 #include "Core/Components/Camera.h"
 #include "Util/SingletonTemplate.h"
 #include "Util/Events/EngineEvents.h"
-#include "../../System/Inventory.h"
+//#include "../../System/Inventory.h"
+#include"../Game/Shop.h"
 
 
 class OnPlayerControllerFSMUpdate : public Griddy::Event
