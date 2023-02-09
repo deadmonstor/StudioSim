@@ -10,7 +10,7 @@ FireBallSpell::FireBallSpell()
 {
 
 	//fireBallStats->name = "Fire Ball";
-	price = 10;+
+	price = 10;
 	spellStats->manaCost = 1;
 	spellStats->maxCooldown = 2;
 	spellStats->spellPower = 30;
