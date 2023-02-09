@@ -10,6 +10,9 @@ bool AudioEngine::init()
 	//To Do Abstract Into Classes
 	FMOD_RESULT fmodResult;
 
+	//Volume Defaults
+	masterVolume = 1.0f;
+
 	//Create the System
 	fmodResult = FMOD::System_Create(&fmodSystem);
 
@@ -390,8 +393,18 @@ bool AudioEngine::setPitchChannelGroup(std::string channelGroupName, float pitch
 
 bool AudioEngine::setVolumeChannelGroup(std::string channelGroupName, float volume)
 {
+	masterVolume = volume;
+	if (masterVolume < 0.0f)
+	{
+		masterVolume = 0;
+	}
+	else if (masterVolume > 1.0f)
+	{
+		masterVolume = 1.0f;
+	}
+
 	FMOD_RESULT fmodResult;
-	fmodResult = channelGroups[channelGroupName]->setVolume(volume);
+	fmodResult = channelGroups[channelGroupName]->setVolume(masterVolume);
 	if (!checkResult(fmodResult, "setVolumeChannelGroup"))
 	{
 		return false;

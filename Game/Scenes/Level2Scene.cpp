@@ -161,8 +161,8 @@ void Level2Scene::init()
 	bossEntranceTilePositions.push_back(glm::vec2(38, 49));
 
 	std::vector<glm::vec2> bossPositionTiles;
-	bossPositionTiles.push_back(glm::vec2(32, 53));
-	bossPositionTiles.push_back(glm::vec2(32, 54));
+	bossPositionTiles.push_back(glm::vec2(31, 53));
+	bossPositionTiles.push_back(glm::vec2(31, 54));
 
 	grid_system->setTileFunctionMap(0, std::map<int, std::function<Tile* ()>>
 	{

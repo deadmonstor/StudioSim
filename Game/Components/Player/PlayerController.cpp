@@ -114,15 +114,25 @@ void PlayerController::onEngineRender(const OnEngineRender* render)
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
 #ifdef _DEBUG
-	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr && playerPTR != nullptr)
+	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr && playerPTR != nullptr && playerPTR->isBeingDeleted() == false)
 	{
-		for(auto func : Inventory::getItemByName | std::views::values)
+		for(const auto& func : Inventory::getItemByName | std::views::values)
 		{
 			myInventory->add_item(func());
 		}
 	}
 #endif
 	
+	if (keyDown->key == GLFW_KEY_EQUAL && playerPTR != nullptr)
+	{
+		AudioEngine::Instance()->setVolumeChannelGroup("Master Channel", (AudioEngine::Instance()->masterVolume + 0.1f));
+	}
+
+	if (keyDown->key == GLFW_KEY_MINUS && playerPTR != nullptr)
+	{
+		AudioEngine::Instance()->setVolumeChannelGroup("Master Channel", (AudioEngine::Instance()->masterVolume - 0.1f));
+	}
+
 	//find the input and send it to the state machine
 	const std::type_index eventType = typeid(OnKeyDown);
 	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyDown(keyDown->key, keyDown->scancode), eventType);
@@ -130,6 +140,16 @@ void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 
 void PlayerController::onKeyHold(const OnKeyRepeat* keyHold)
 {
+	if (keyHold->key == GLFW_KEY_EQUAL && playerPTR != nullptr)
+	{
+		AudioEngine::Instance()->setVolumeChannelGroup("Master Channel", (AudioEngine::Instance()->masterVolume + 0.1f));
+	}
+
+	if (keyHold->key == GLFW_KEY_MINUS && playerPTR != nullptr)
+	{
+		AudioEngine::Instance()->setVolumeChannelGroup("Master Channel", (AudioEngine::Instance()->masterVolume - 0.1f));
+	}
+
 	const std::type_index eventType = typeid(OnKeyRepeat);
 	Griddy::Events::invoke<BehaviourEvent>(playerFSM, new OnKeyRepeat(keyHold->key, keyHold->scancode), eventType);
 }
@@ -186,7 +206,15 @@ void PlayerController::ReduceSpellCooldown()
 		const auto spellCasted = dynamic_cast<SpellItem*>(spell);
 		if (spellCasted->spellStats->currentCooldown > 0)
 		{
-			spellCasted->spellStats->currentCooldown -= 1;
+			if (SceneManager::Instance()->getScene()->name == "tutorial")
+				spellCasted->spellStats->currentCooldown = 0;
+			else
+				spellCasted->spellStats->currentCooldown -= 1;
+
+			if (spellCasted->spellStats->currentCooldown <= 0)
+			{
+				hitmarkers->addHitmarker(spell->name() + " is now off cooldown", 1, playerPTR->getTransform()->getPosition(), {1, 1, 1}, 25);
+			}
 		}
 	}
 }

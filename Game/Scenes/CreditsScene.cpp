@@ -158,6 +158,7 @@ void CreditsScene::onEngineRender(const OnEngineRender* event)
 	size = 0.2 * (sin(base_value + 4) + 1) + 0.2;
 	renderText({ 600, 1968 }, "Szymon Sadunski", size, lightColor);
 	size = 0.2 * (sin(base_value + 6) + 1) + 0.2;
+	renderText({ 800, 2000 }, "We have no accent for the A :(", size, lightColor);
 	renderText({ 800, 1968 }, "Pablo Cano San Roman", size, lightColor);
 	size = 0.2 * (sin(base_value + 8) + 1) + 0.2;
 	renderText({ 1000, 1968 }, "Conner Pittway", size, lightColor);
