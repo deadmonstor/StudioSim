@@ -161,7 +161,6 @@
     <ClInclude Include="Components\Items\Weapons\RareSword.h" />
     <ClInclude Include="Components\Items\Weapons\Sword.h" />
     <ClInclude Include="Components\Items\Weapons\Weapon.h" />
-    <ClInclude Include="Components\Items\Weapons\WeaponEnum.h" />
     <ClInclude Include="Components\PickUp.h" />
     <ClInclude Include="Components\Items\Spells\Spell.h" />
     <ClInclude Include="Components\Items\Armour\ArmourItem.h" />
