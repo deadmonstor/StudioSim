@@ -76,16 +76,17 @@ void AttackAction::createSlashGameObject(glm::vec2 pos)
 			AudioType::SoundEffect);
 		PlayerStats* targetStats = PlayerController::Instance()->playerStats;
 		const EnemyStats myStats = parentObject->getComponent<EnemyComponent>()->getStats();
+		int attackDamage = myStats.attack;
 		
-		int attackDamage = myStats.attack - targetStats->defence;
-		if (attackDamage < 0)
-			attackDamage = 0;
-
 		//number betewen 0 and 1
 		const float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		if (r < myStats.critChance)
 			attackDamage *= 2; //double damage!
 		
+		attackDamage -= targetStats->defence;
+		if (attackDamage < 0)
+			attackDamage = 1;
+
 		targetStats->currentHealth -= attackDamage;
 		ScoreSystem::Instance()->addDamageTaken(attackDamage);
 		PlayerController::Instance()->UpdateStats();

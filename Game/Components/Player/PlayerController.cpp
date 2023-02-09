@@ -186,7 +186,15 @@ void PlayerController::ReduceSpellCooldown()
 		const auto spellCasted = dynamic_cast<SpellItem*>(spell);
 		if (spellCasted->spellStats->currentCooldown > 0)
 		{
-			spellCasted->spellStats->currentCooldown -= 1;
+			if (SceneManager::Instance()->getScene()->name == "tutorial")
+				spellCasted->spellStats->currentCooldown = 0;
+			else
+				spellCasted->spellStats->currentCooldown -= 1;
+
+			if (spellCasted->spellStats->currentCooldown <= 0)
+			{
+				hitmarkers->addHitmarker(spell->name() + " is now off cooldown", 1, playerPTR->getTransform()->getPosition(), {1, 1, 1}, 25);
+			}
 		}
 	}
 }
