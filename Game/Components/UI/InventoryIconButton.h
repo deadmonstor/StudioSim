@@ -11,6 +11,7 @@ class InventoryIconButton final : public ButtonComponent
 public:
 	InventoryIconButton(const Texture& _texture, Item* _item);
 	void onClick() override;
+	void update() override;
 	void setItem(Item* _item)
 	{
 		if (item == _item)

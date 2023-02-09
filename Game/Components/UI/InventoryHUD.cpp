@@ -108,7 +108,7 @@ void InventoryHUD::updateHUD()
 					glm::vec2(0, 0);
 
 	// =============================== BACKGROUND PANEL EQUIP ===============================
-	backgroundPanelEquip->shouldRender = shouldRender;
+	backgroundPanelEquip->shouldRender = false;
 	backgroundPanelEquip->getTransform()->setPosition(MiddleRight + glm::vec2(0, 150));
 	backgroundPanelEquip->getTransform()->setSize({350, 150});
 	backgroundPanelEquip->setTexture(ResourceManager::GetTexture("inventoryBackground"));
@@ -117,7 +117,7 @@ void InventoryHUD::updateHUD()
 	backgroundPanelEquip->setSortingOrder(2);
 	
 	// =============================== BACKGROUND PANEL ===============================
-	backgroundPanelInventory->shouldRender = shouldRender;
+	backgroundPanelInventory->shouldRender = false;
 	backgroundPanelInventory->getTransform()->setPosition(MiddleRight + glm::vec2(0, -50));
 	backgroundPanelInventory->getTransform()->setSize({350, 250});
 	backgroundPanelInventory->setTexture(ResourceManager::GetTexture("inventoryBackground"));
@@ -127,7 +127,7 @@ void InventoryHUD::updateHUD()
 	
 	// =============================== BACKGROUND PANEL INVENTORY TEXT ===============================
 	glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize("Inventory", 0.5f);
-	backgroundPanelInventoryText->shouldRender = shouldRender;
+	backgroundPanelInventoryText->shouldRender = false;
 	backgroundPanelInventoryText->getTransform()->setPosition(MiddleRight - glm::vec2{sizeOfText.x / 2, -50} - (glm::vec2{350, 0} / 2.0f));
 	backgroundPanelInventoryText->getTransform()->setSize(sizeOfText);
 	backgroundPanelInventoryText->setText("Inventory");
@@ -137,7 +137,7 @@ void InventoryHUD::updateHUD()
 	
 	// =============================== SLOTS  ===============================
 	sizeOfText = TextRenderer::Instance()->renderTextSize("Weapon      Armour     Spells", 0.7f);
-	currentInventoryText->shouldRender = shouldRender;
+	currentInventoryText->shouldRender = false;
 	currentInventoryText->getTransform()->setPosition(MiddleRight - glm::vec2{sizeOfText.x / 2, -175} - (glm::vec2{350, 0} / 2.0f));
 	currentInventoryText->getTransform()->setSize(sizeOfText);
 	currentInventoryText->setText("Weapon      Armour      Spells");
@@ -146,7 +146,7 @@ void InventoryHUD::updateHUD()
 	currentInventoryText->setColor({0,0,0});
 
 	sizeOfText = TextRenderer::Instance()->renderTextSize("Weapon      Armour     Spells", 0.709f);
-	currentInventoryTextOnline->shouldRender = shouldRender;
+	currentInventoryTextOnline->shouldRender = false;
 	currentInventoryTextOnline->getTransform()->setPosition(MiddleRight - glm::vec2{sizeOfText.x / 2, -175} - (glm::vec2{350, 0} / 2.0f));
 	currentInventoryTextOnline->getTransform()->setSize(sizeOfText);
 	currentInventoryTextOnline->setText("Weapon      Armour      Spells");

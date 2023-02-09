@@ -3,6 +3,8 @@
 #include "../../System/Inventory.h"
 #include "../Player/PlayerController.h"
 #include "Core/AudioEngine.h"
+#include "Core/Components/TextRenderer.h"
+#include "Core/Components/Transform.h"
 
 InventoryIconButton::InventoryIconButton(const Texture& _texture, Item* _item) : ButtonComponent(_texture)
 {
@@ -26,5 +28,26 @@ void InventoryIconButton::onClick()
 			inventory->use_item(item->name());
 	}
 }
+
+void InventoryIconButton::update()
+{
+	if (isMouseInButton())
+	{
+		setColor({ 0.5, 0.5, 0.5 });
+		if (item != nullptr)
+		{
+			std::string text = item->name();
+			const glm::vec2 sizeOfText = TextRenderer::Instance()->renderTextSize("asdasd", 1);
+			TextRenderer::Instance()->renderText("asdasd",
+				500,
+				500,
+				1,
+				glm::vec3(1, 1, 1),
+				glm::vec2{ 0.5f, 0.5f }
+			);
+		}
+	}
+}
+
 
 
