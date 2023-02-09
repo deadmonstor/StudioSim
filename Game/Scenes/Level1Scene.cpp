@@ -22,6 +22,7 @@
 #include "../Tiles/ChestTile.h"
 #include "Core/AudioEngine.h"
 #include "Core/Components/AnimatedSpriteRenderer.h"
+#include "../Components/DestroyAfterAnimation.h"
 #include "../BossMusic.h"
 #include "../Tiles/ShopTile.h"
 #include "../AllItemInclude.h"
@@ -49,6 +50,7 @@ void Level1Scene::createSlime(const glm::vec2 pos)
 			slimeStats.maxHealth = 10;
 			slimeStats.currentHealth = 10;
 			slimeStats.defence = 2;
+			slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("Blue-Slime-Death");
 			break;
 
 		case 1:
@@ -59,6 +61,7 @@ void Level1Scene::createSlime(const glm::vec2 pos)
 			slimeStats.maxHealth = 20;
 			slimeStats.currentHealth = 20;
 			slimeStats.defence = 1;
+			slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("Red-Slime-Death");
 			break;
 
 		case 2:
@@ -69,6 +72,7 @@ void Level1Scene::createSlime(const glm::vec2 pos)
 			slimeStats.maxHealth = 15;
 			slimeStats.currentHealth = 15;
 			slimeStats.defence = 3;
+			slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("Green-Slime-Death");
 			//, "Green-Slime-Idle"
 			break;
 
@@ -80,6 +84,7 @@ void Level1Scene::createSlime(const glm::vec2 pos)
 			slimeStats.maxHealth = 10;
 			slimeStats.currentHealth = 10;
 			slimeStats.defence = 2;
+			slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("Blue-Slime-Death");
 			//, "Blue-Slime-Idle"
 			break;
 	}
@@ -127,11 +132,11 @@ void Level1Scene::createBoss(const glm::vec2 pos)
 
 	StateMachine* fsm = Crab->addComponent<BossStateMachine>(pos, spawnerPositions);
 	EnemyStats bossStats = EnemyStats();
-	bossStats.attack = 4;
+	bossStats.attack = 5;
 	bossStats.critChance = 0.15f;
-	bossStats.maxHealth = 70;
-	bossStats.currentHealth = 70;
-	bossStats.defence = 5;
+	bossStats.maxHealth = 160;
+	bossStats.currentHealth = 160;
+	bossStats.defence = 8;
 	EnemyComponent component = EnemyComponent(fsm, bossStats);
 	Crab->addComponent<EnemyComponent>(component);
 }

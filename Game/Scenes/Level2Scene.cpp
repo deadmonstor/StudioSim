@@ -48,6 +48,7 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 		slimeStats.maxHealth = 50;
 		slimeStats.currentHealth = slimeStats.maxHealth;
 		slimeStats.defence = 2;
+		slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("SkeletonDeath");
 		break;
 
 	case 1:
@@ -58,6 +59,7 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 		slimeStats.maxHealth = 80;
 		slimeStats.currentHealth = slimeStats.maxHealth;
 		slimeStats.defence = 4;
+		slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("ZombieDeath");
 		break;
 
 	default:
@@ -68,6 +70,7 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 		slimeStats.maxHealth = 50;
 		slimeStats.currentHealth = slimeStats.maxHealth;
 		slimeStats.defence = 2;
+		slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("SkeletonDeath");
 		//, "Blue-Slime-Idle"
 		break;
 	}
@@ -106,11 +109,11 @@ void Level2Scene::createBoss(const glm::vec2 pos)
 
 	StateMachine* fsm = reaper->addComponent<ReaperStateMachine>(pos, spawnerPositions);
 	EnemyStats bossStats = EnemyStats();
-	bossStats.attack = 8;
+	bossStats.attack = 7;
 	bossStats.critChance = 0.0f;
-	bossStats.maxHealth = 150;
-	bossStats.currentHealth = 150;
-	bossStats.defence = 6;
+	bossStats.maxHealth = 180;
+	bossStats.currentHealth = 180;
+	bossStats.defence = 9;
 	EnemyComponent component = EnemyComponent(fsm, bossStats);
 	reaper->addComponent<EnemyComponent>(component);
 }
