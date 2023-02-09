@@ -265,6 +265,21 @@ void Level1Scene::init()
 		{
 			createSlime(pos);
 		} },
+		{ 94, [this](glm::vec2 pos)
+		{
+				//Create shopkeeper
+			
+			const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
+			GameObject* ShopKeeper = SceneManager::Instance()->createGameObject("ShopKeeper", tileWorldSpace);
+			ShopKeeper->getTransform()->setPosition(tileWorldSpace);
+			ShopKeeper->getTransform()->setSize(glm::vec2(48, 48));
+
+			const std::vector textureListCrab = ResourceManager::GetTexturesContaining("ShopKeeper");
+			AnimatedSpriteRenderer* sprite = ShopKeeper->addComponent<AnimatedSpriteRenderer>(textureListCrab, 0.075f);
+			sprite->setPivot(Pivot::Center);
+			sprite->setColor(glm::vec3(1, 1, 1));
+			sprite->setLit(true);
+		} },
 		{ 98, [this](glm::vec2 pos)
 		{
 				createBoss(pos);
