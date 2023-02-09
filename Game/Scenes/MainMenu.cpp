@@ -70,6 +70,14 @@ void MainMenu::onEngineRender(const OnEngineRender* event)
     sizeOfText = TextRenderer::Instance()->renderTextSize( "Press Enter to Start", 1);
     TextRenderer::Instance()->renderText(" Press Enter to Start", MiddleBottom.x - (sizeOfText.x / 2),
         MiddleBottom.y - (sizeOfText.y / 2), 1, glm::vec3(1, 1, 1), glm::vec2{0, 0});
+
+    sizeOfText = TextRenderer::Instance()->renderTextSize("Press C for Credits", 0.81f);
+    TextRenderer::Instance()->renderText(" Press C for Credits", MiddleBottom.x - (sizeOfText.x / 2),
+        MiddleBottom.y - (sizeOfText.y * 2.5), 0.81f, glm::vec3(r, g, b), glm::vec2{ 0, 0 });
+
+    sizeOfText = TextRenderer::Instance()->renderTextSize("Press C for Credits", 0.8);
+    TextRenderer::Instance()->renderText(" Press C for Credits", MiddleBottom.x - (sizeOfText.x / 2),
+        MiddleBottom.y - (sizeOfText.y * 2.5), 0.8, glm::vec3(1, 1, 1), glm::vec2{ 0, 0 });
 }
 
 void MainMenu::onKeyDown(const OnKeyDown* event)
@@ -77,5 +85,10 @@ void MainMenu::onKeyDown(const OnKeyDown* event)
     if (event->key == GLFW_KEY_ENTER)
     {
         SceneManager::Instance()->changeScene("tutorial");
+    }
+
+    if (event->key == GLFW_KEY_C)
+    {
+        SceneManager::Instance()->changeScene("creditsScene");
     }
 }
