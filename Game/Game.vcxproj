@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Tiles\ArmourShopItemTile.h" />
     <ClInclude Include="Components\AI Behaviours\Boss\BossStateMachine.h" />
     <ClInclude Include="GameEvents.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
@@ -98,6 +99,7 @@
     <ClInclude Include="Tiles\TestTile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Tiles\ArmourShopItemTile.cpp" />
     <ClCompile Include="Components\AI Behaviours\Boss\BossStateMachine.cpp" />
     <ClCompile Include="Scenes\TutorialScene.cpp" />
     <ClCompile Include="Tiles\SwordShopItemTile.cpp" />

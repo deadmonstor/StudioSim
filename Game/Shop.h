@@ -11,7 +11,8 @@ public:
     //Shop(int items, std::string currency, Inventory& inventory);
 
     void displayItems();
-    void purchase(Item* item, int &playerCurrency);
+    void purchase(Item* item, PlayerStats& playerStats);
+    void purchase(Item* item, int& playerStats);
     void sell(Item* item, int &playerCurrency);
 
 private:

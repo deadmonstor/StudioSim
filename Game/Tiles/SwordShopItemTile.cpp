@@ -15,5 +15,6 @@ void SwordShopItemTile::onInteractedWith(TileHolder* curTileHolder)
     std::string currency = "Gold";
     Inventory& playerInventory = *PlayerController::Instance()->myInventory;
     Shop shop(items, currency, playerInventory);
-    shop.purchase(sword, PlayerController::Instance()->playerStats->coinsHeld);
+    //shop.purchase(sword, PlayerController::Instance()->playerStats->coinsHeld);
+    shop.purchase(sword, *PlayerController::Instance()->playerStats);
 }

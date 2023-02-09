@@ -24,6 +24,20 @@ void Shop::purchase(Item* item, int& playerCurrency) {
     std::cout << "Purchase successful! You now have " << playerCurrency << " " << currency_ << " remaining." << std::endl;
 }
 
+void Shop::purchase(Item* item, PlayerStats& playerStats) {
+    // Check if player has enough currency to make the purchase
+    if (playerStats.coinsHeld < item->price) {
+        std::cout << "You do not have enough " << currency_ << " to make this purchase." << std::endl;
+        return;
+    }
+
+    // Update player's currency and inventory
+    playerStats.coinsHeld -= item->price;
+
+    inventory_.add_item(item);
+    std::cout << "Purchase successful! You now have " << playerStats.coinsHeld << " " << currency_ << " remaining." << std::endl;
+}
+
 void Shop::sell(Item* item, int& playerCurrency) {
     // Check if item is in player's inventory
     if (!inventory_.remove_item(item)) {

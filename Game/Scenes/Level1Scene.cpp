@@ -18,6 +18,7 @@
 #include "../Tiles/SpikeTile.h"
 #include "../Tiles/BossRoomEntryTile.h"
 #include "../Tiles/SwordShopItemTile.h"
+#include "../Tiles/ArmourShopItemTile.h"
 #include "../LootTable.h"
 #include "../Components/UI/InventoryHUD.h"
 #include "../Tiles/ChestTile.h"
@@ -192,10 +193,15 @@ void Level1Scene::init()
 
 	grid_system->setEmptyTileIDs(2, std::vector<int>{});
 	grid_system->setWallIDs(2, std::vector<int>{});
-	grid_system->setTextureMap(2, std::map<int, Texture>{ {96, ResourceManager::GetTexture("Inventory-Sword")}});
+	grid_system->setTextureMap(2, std::map<int, Texture>
+	{ 
+		{96, ResourceManager::GetTexture("Inventory-Sword")},
+		{95, ResourceManager::GetTexture("Inventory-MidArmourChest")}
+	});
 	grid_system->setTileFunctionMap(2, std::map<int, std::function<Tile* ()>>
 	{
-		{96, [] {return new SwordShopItemTile(Texture()); }}
+		{96, [] {return new SwordShopItemTile(Texture()); }},
+		{95, [] {return new ArmourShopItemTile(Texture()); }}
 	});
 	grid_system->setSpawnFunctionMap(2,
 	{
