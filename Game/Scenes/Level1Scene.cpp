@@ -268,17 +268,6 @@ void Level1Scene::init()
 	
 	grid_system->loadFromFile(2, "Grid/LevelDesignSP.txt");
 
-	int m_count = 0;
-	if (m_count == 1)
-	{
-		ScoreSystem::Instance()->ReadScores(false);
-		m_count++;
-	}
-
-	if (m_count == 2)
-	{
-		ScoreSystem::Instance()->RenderTopScores();
-	}
 	
 	TurnManager::Instance()->startTurnSystem();
 }
