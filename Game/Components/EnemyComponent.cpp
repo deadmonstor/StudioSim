@@ -15,6 +15,7 @@
 #include "Core/AudioEngine.h"
 #include "../ScoreSystem.h"
 #include "../Components/Items/Spells/PoisonSpell.h"
+#include "DestroyAfterAnimation.h"
 
 EnemyComponent::EnemyComponent()
 {
@@ -48,9 +49,11 @@ void EnemyComponent::destroy()
 {
 	if (onStartTurnID != -1)
 		Griddy::Events::unsubscribe(this, &EnemyComponent::onTurnChanged, onStartTurnID);
+
 	
 	if (getOwner()->getComponent<Health>()->getHealth() <= 0)
 	{
+		playDeath();
 		int expGained = 5;
 		PlayerController::Instance()->playerStats->currentEXP += expGained;
 		PlayerController::Instance()->UpdateStats();
@@ -110,6 +113,26 @@ void EnemyComponent::onTurnChanged(const onStartTurn* event)
 			TurnManager::Instance()->endTurn();
 		}
 	}
+	
+}
+
+void EnemyComponent::playDeath()
+{
+	if (stats.deathEnemyList.empty())
+	{
+		return;
+	}
+
+	GameObject* death = SceneManager::Instance()->createGameObject("death", getOwner()->getTransform()->getPosition());
+	AnimatedSpriteRenderer* oldSpriteRenderer = getOwner()->getComponent<AnimatedSpriteRenderer>();
+
+	death->getTransform()->setSize(getOwner()->getTransform()->getScale());
+	AnimatedSpriteRenderer* spriteRender = death->addComponent<AnimatedSpriteRenderer>(stats.deathEnemyList, abs(0.9 - (stats.deathEnemyList.size() / 13)));
+	spriteRender->setPivot(oldSpriteRenderer->getPivot());
+	spriteRender->setColor(oldSpriteRenderer->getColor());
+	spriteRender->setLit(false);
+
+	death->addComponent<DestroyAfterAnimation>();
 	
 }
 

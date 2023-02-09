@@ -48,6 +48,7 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 		slimeStats.maxHealth = 50;
 		slimeStats.currentHealth = slimeStats.maxHealth;
 		slimeStats.defence = 2;
+		slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("SkeletonDeath");
 		break;
 
 	case 1:
@@ -58,6 +59,7 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 		slimeStats.maxHealth = 80;
 		slimeStats.currentHealth = slimeStats.maxHealth;
 		slimeStats.defence = 4;
+		slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("ZombieDeath");
 		break;
 
 	default:
@@ -68,6 +70,7 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 		slimeStats.maxHealth = 50;
 		slimeStats.currentHealth = slimeStats.maxHealth;
 		slimeStats.defence = 2;
+		slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("SkeletonDeath");
 		//, "Blue-Slime-Idle"
 		break;
 	}

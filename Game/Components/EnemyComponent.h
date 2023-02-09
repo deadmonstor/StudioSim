@@ -20,6 +20,8 @@ public:
 	void destroy() override;
 	void onTurnChanged(const onStartTurn* event);
 
+
+	void playDeath();
 	void die();
 
 	EnemyStats getStats() { return stats; }

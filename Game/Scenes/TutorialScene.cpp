@@ -45,6 +45,7 @@ void TutorialScene::createSlime(const glm::vec2 pos)
 	slimeStats.maxHealth = 5;
 	slimeStats.currentHealth = slimeStats.maxHealth;
 	slimeStats.defence = 0;
+	slimeStats.deathEnemyList = ResourceManager::GetTexturesContaining("Blue-Slime-Death");
 	
 	EnemyComponent component = EnemyComponent(fsm, slimeStats);
 	enemy->addComponent<EnemyComponent>(component);

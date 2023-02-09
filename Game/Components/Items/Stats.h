@@ -1,6 +1,8 @@
 #pragma once
 #include "CharacterStats.h"
 #include "ItemStats.h"
+#include "../Core/Renderer/Texture.h"
+#include <vector>
 #include <iostream>
 #include <string>
 
@@ -22,6 +24,7 @@ struct PlayerStats : public Character
 struct EnemyStats : public Character
 {
 	int EXPDropped;
+	std::vector<Texture> deathEnemyList;
 };
 
 struct ArmourStats : public ItemInfo
