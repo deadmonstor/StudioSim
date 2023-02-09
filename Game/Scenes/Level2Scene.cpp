@@ -27,8 +27,6 @@
 
 void Level2Scene::createEnemy(const glm::vec2 pos)
 {
-	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
-	
 	const glm::vec2 tileWorldSpace = GridSystem::Instance()->getWorldPosition(pos);
 	int random = rand() % 10000000;
 	int randomEnemy = rand() % 2; //% by how many different types of enemies
@@ -36,9 +34,8 @@ void Level2Scene::createEnemy(const glm::vec2 pos)
 	auto* enemy = SceneManager::Instance()->createGameObject("TestEnemy-" + std::to_string(random), tileWorldSpace);
 	enemy->getTransform()->setSize(glm::vec2(35, 35));
 
-	std::vector textureList = ResourceManager::GetTexturesContaining("SkeletonMove");
+	std::vector<Texture> textureList;
 	
-
 	StateMachine* fsm = enemy->addComponent<NormalEnemyFSM>();
 	EnemyStats slimeStats = EnemyStats();
 	switch (randomEnemy)
@@ -120,7 +117,10 @@ void Level2Scene::createBoss(const glm::vec2 pos)
 
 void Level2Scene::init()
 {
+	AudioEngine::Instance()->playSound("Sounds\\MainTheme.wav", false, 0.1f, 0, 0, AudioType::BackgroundMusic);
+	
 	LootTable::Instance()->LoadingIntoLootTableArray();
+	EnemyDropLootTable::Instance()->EnemyDropLoadingIntoLootTableArray();
 	
 	auto backgroundSortingLayer = Renderer::addSortingLayer("Background Grid", -1);
 	auto middleSortingLayer = Renderer::addSortingLayer("Middle Grid", 0);

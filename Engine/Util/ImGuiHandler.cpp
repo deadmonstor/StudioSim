@@ -29,7 +29,13 @@ void ImGuiHandler::init()
 	ImGui_ImplGlfw_InitForOpenGL(Renderer::getWindow(), true);
 
 	pausedSprite = new SpriteComponent();
-	const Texture pause = ResourceManager::LoadTexture("Sprites\\pause.png", "pause");
+
+	if (!ResourceManager::HasTexture("pause"))
+	{
+		ResourceManager::LoadTexture("Sprites\\pause.png", "pause");
+	}
+	
+	const Texture pause = ResourceManager::GetTexture("pause");
 	pausedSprite->setTexture(pause);
 	pausedSprite->setLit(false);
 }
