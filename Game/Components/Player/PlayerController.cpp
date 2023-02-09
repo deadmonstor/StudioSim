@@ -148,6 +148,11 @@ void PlayerController::UpdateStats()
 	const int difference = playerStats->currentHealth - lastHealth;
 	lastHealth = playerStats->currentHealth;
 
+	if (Item* equippedItemp = myInventory->getFirstItemWithEquipSlot(EquipSlot::ARMOUR))
+	{
+
+	}
+
 	if (difference != 0)
 		hitmarkers->addHitmarker(std::to_string(difference), 1, playerPTR->getTransform()->getPosition(), {1, 1, 1}, 25);
 

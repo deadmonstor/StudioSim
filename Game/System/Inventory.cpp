@@ -197,8 +197,7 @@ void Inventory::equip_item(const std::string& item_name)
 			{
 				case ItemType::ARMOUR:
 				{
-					/*auto armour = dynamic_cast<ArmourStats*>(item);
-					playerStats->maxHealth += armour->health;*/
+
 					break;
 				}
 				case ItemType::CONSUMABLE:
