@@ -30,10 +30,6 @@ bool Inventory::remove_item(Item* item)
 {
 	for (int i = 0; i < items.size(); i++)
 	{
-		// TODO: Check if item is the same as the one in the inventory
-		// This could fail and remove two of the same item but with different stats?
-		// Probably a good idea to do some hash code lookup here
-		
 		if (items[i]->name() == item->name())
 		{
 			items.erase(items.begin() + i);
