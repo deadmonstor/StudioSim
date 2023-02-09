@@ -109,11 +109,11 @@ void Level2Scene::createBoss(const glm::vec2 pos)
 
 	StateMachine* fsm = reaper->addComponent<ReaperStateMachine>(pos, spawnerPositions);
 	EnemyStats bossStats = EnemyStats();
-	bossStats.attack = 8;
+	bossStats.attack = 7;
 	bossStats.critChance = 0.0f;
-	bossStats.maxHealth = 150;
-	bossStats.currentHealth = 150;
-	bossStats.defence = 6;
+	bossStats.maxHealth = 180;
+	bossStats.currentHealth = 180;
+	bossStats.defence = 9;
 	EnemyComponent component = EnemyComponent(fsm, bossStats);
 	reaper->addComponent<EnemyComponent>(component);
 }
