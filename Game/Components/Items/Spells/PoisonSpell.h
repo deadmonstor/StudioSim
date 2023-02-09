@@ -20,7 +20,7 @@ public:
 
 	SpriteComponent* poisonSprite;
 	LerpPosition* lerp;
-	int turnsPoisoned = 10;
+	int turnsPoisoned = 5;
 
 	std::string name() override { return "Poison Spell"; }
 	std::string itemDescription() override { return "Spell that will poison the enemies for a certain amount of turns"; }

@@ -114,9 +114,9 @@ void PlayerController::onEngineRender(const OnEngineRender* render)
 void PlayerController::onKeyDown(const OnKeyDown* keyDown)
 {
 #ifdef _DEBUG
-	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr && playerPTR != nullptr)
+	if (keyDown->key == GLFW_KEY_P && myInventory != nullptr && playerPTR != nullptr && playerPTR->isBeingDeleted() == false)
 	{
-		for(auto func : Inventory::getItemByName | std::views::values)
+		for(const auto& func : Inventory::getItemByName | std::views::values)
 		{
 			myInventory->add_item(func());
 		}
@@ -206,7 +206,15 @@ void PlayerController::ReduceSpellCooldown()
 		const auto spellCasted = dynamic_cast<SpellItem*>(spell);
 		if (spellCasted->spellStats->currentCooldown > 0)
 		{
-			spellCasted->spellStats->currentCooldown -= 1;
+			if (SceneManager::Instance()->getScene()->name == "tutorial")
+				spellCasted->spellStats->currentCooldown = 0;
+			else
+				spellCasted->spellStats->currentCooldown -= 1;
+
+			if (spellCasted->spellStats->currentCooldown <= 0)
+			{
+				hitmarkers->addHitmarker(spell->name() + " is now off cooldown", 1, playerPTR->getTransform()->getPosition(), {1, 1, 1}, 25);
+			}
 		}
 	}
 }

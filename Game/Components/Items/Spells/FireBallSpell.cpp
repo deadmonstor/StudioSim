@@ -12,10 +12,10 @@ FireBallSpell::FireBallSpell()
 	//fireBallStats->name = "Fire Ball";
 	price = 10;
 	spellStats->manaCost = 1;
-	spellStats->maxCooldown = 1;
-	spellStats->spellPower = 20;
+	spellStats->maxCooldown = 2;
+	spellStats->spellPower = 30;
 	spellStats->currentCooldown = 0;
-	spellStats->range = 6;
+	spellStats->range = 4;
 }
 
 void FireBallSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
@@ -62,15 +62,12 @@ void FireBallSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 			break;
 		}
 	}
-
-
 	
 	bool shouldHitmarker = false;
 	TileHolder* lastTile = GridSystem::Instance()->getTileHolder(0, GridSystem::Instance()->getTilePosition(targetPos));
 	if (lastTile != nullptr && lastTile->gameObjectSatOnTile != nullptr && lastTile->gameObjectSatOnTile->hasComponent(typeid(EnemyComponent)))
 	{
 		shouldHitmarker = true;
-		
 	}
 	
 	lerp = spell->addComponent<LerpPosition>(targetPos, 3);
@@ -84,9 +81,9 @@ void FireBallSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 			float currentHealth = lastTile->gameObjectSatOnTile->getComponent<Health>()->getHealth();
 			int newHealth = currentHealth -= spellDMG;
 			lastTile->gameObjectSatOnTile->getComponent<Health>()->setHealth(newHealth);
-			if (lastTile->gameObjectSatOnTile->isBeingDeleted())
+			if (newHealth <= 0)
 			{
-				GridSystem::Instance()->resetSatOnTile(0, GridSystem::Instance()->getTilePosition(lastTile->gameObjectSatOnTile->getTransform()->getPosition()));
+				GridSystem::Instance()->resetSatOnTile(0, lastTile->position);
 			}
 		}
 		

@@ -7,7 +7,7 @@
 
 PoisonSpell::PoisonSpell()
 {
-	spellStats->maxCooldown = 5;
+	spellStats->maxCooldown = 10;
 	spellStats->damagePerTurn = 20;
 	spellStats->range = 4;
 	spellStats->manaCost = 10;
@@ -20,8 +20,8 @@ void PoisonSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 	AudioEngine::Instance()->playSound("Sounds\\Poison.wav", false, 0.1f, 0, 0, AudioType::SoundEffect);
 	GameObject* spell = SceneManager::Instance()->createGameObject("PoisonSpell", GridSystem::Instance()->getWorldPosition(playerPos));
 	spell->getTransform()->setSize(glm::vec2(48, 48));
-	const std::vector textureListPosion = ResourceManager::GetTexturesContaining("Fireball");
-	poisonSprite = spell->addComponent<AnimatedSpriteRenderer>(textureListPosion, 0.1f);
+	const std::vector textureListPoison = ResourceManager::GetTexturesContaining("Fireball");
+	poisonSprite = spell->addComponent<AnimatedSpriteRenderer>(textureListPoison, 0.1f);
 	poisonSprite->setColor(glm::vec3(0, 1, 1));
 	poisonSprite->setSortingLayer(Renderer::getDefaultSortingLayer());
 	poisonSprite->setPivot(Pivot::Center);
@@ -95,7 +95,7 @@ void PoisonSpell::UseSpell(glm::fvec2 playerPos, glm::fvec2 attackDir)
 				"POISON",
 				1.0,
 				spell->getTransform()->getPosition(),
-				glm::vec3(0, 1, 1));
+				glm::vec3(0, 1, 0));
 		}
 
 		LOG_INFO("FireBallSpell -> LerpPosition -> TurnManager::Instance()->endTurn()");

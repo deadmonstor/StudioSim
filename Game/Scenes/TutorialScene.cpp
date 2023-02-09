@@ -244,6 +244,9 @@ void TutorialScene::onEngineRender(const OnEngineRender* event)
 	renderText({240, 1968}, "Press Q to change to Attack Mode", 0.5f, {1, 1, 1});
 	renderText({240, 1920}, "Press E to change to Spell Mode", 0.5f, {1, 1, 1});
 	renderText({240, 1872}, "You can see what mode you are in at the bottom right of your HUD", 0.4f, {1, 1, 1});
+	renderText({864, 2304}, "These are spikes, when you walk over them you take damage", 0.4f, {1, 1, 1});
+	renderText({1248, 2016}, "These are chests", 0.4f, {1, 1, 1});
+	renderText({1632, 2160}, "You can open your inventory by clicking the bottom right Icon.", 0.4f, {1, 1, 1});
 }
 
 void TutorialScene::destroy()
