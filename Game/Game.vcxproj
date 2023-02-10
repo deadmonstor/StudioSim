@@ -29,6 +29,7 @@
     <ClInclude Include="Components\AI Behaviours\Reaper\ReaperIdleBehaviour.h" />
     <ClInclude Include="Components\AI Behaviours\Reaper\ReaperStateMachine.h" />
     <ClInclude Include="GameEvents.h" />
+    <ClInclude Include="Components\UI\MasterAudioMuteButton.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Tiles\ShopTile.h" />
     <ClInclude Include="Tiles\BossRoomEntryTile.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="Components\AI Behaviours\Reaper\ReaperIdleBehaviour.cpp" />
     <ClCompile Include="Components\AI Behaviours\Reaper\ReaperSpawnAction.cpp" />
     <ClCompile Include="Components\AI Behaviours\Reaper\ReaperStateMachine.cpp" />
+    <ClCompile Include="Components\UI\MasterAudioMuteButton.cpp" />
     <ClCompile Include="Scenes\TutorialScene.cpp" />
     <ClCompile Include="Tiles\ShopTile.cpp" />
     <ClCompile Include="Tiles\BossRoomEntryTile.cpp" />

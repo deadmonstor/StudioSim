@@ -468,3 +468,15 @@ float AudioEngine::getChannelVolume(std::string channelGroupName)
 	}
 	return volume;
 }
+
+bool AudioEngine::getChannelGroupMuted(std::string channelGroupName)
+{
+	FMOD_RESULT fmodResult;
+	bool muted;
+	fmodResult = channelGroups[channelGroupName]->getMute(&muted);
+	if (!checkResult(fmodResult, "getMute"))
+	{
+		return 0;
+	}
+	return muted;
+}

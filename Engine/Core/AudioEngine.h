@@ -31,7 +31,7 @@ public:
 	//Store all of the current channels
 	std::map<int, FMOD::Channel *> currentChannels;
 
-	//FMod Channel Groups
+	//FMod Channel Groups Set
 	std::map<std::string, FMOD::ChannelGroup*> channelGroups;
 	bool stopChannelGroup(std::string channelGroupName);
 	bool setPauseChannelGroup(std::string channelGroupName, bool pause);
@@ -40,9 +40,12 @@ public:
 	bool setVolumeChannelGroup(std::string channelGroupName, float volume);
 	bool setMuteChannelGroup(std::string channelGroupName, bool mute);
 	bool set3DAttributeChannelGroup(std::string channelGroupName, FMOD_VECTOR pos, FMOD_VECTOR vel);
+
+	//Fmod Channel Groups Get
 	bool setMinMaxChannelGroup(std::string channelGroupName, float min, float max);
 	int getNumberOfChannelsInGroup(std::string channelGroupName);
 	float getChannelVolume(std::string channelGroupName);
+	bool getChannelGroupMuted(std::string channelGroupName);
 
 	//Channel Stuff
 	FMOD::ChannelGroup* masterChannel;

@@ -68,6 +68,12 @@ void HUD::createHUD()
 	minusAudioButton =
 		UIManager::Instance()->createUIElement<MasterAudioMinusButton>("minusAudioButton", ResourceManager::GetTexture("minusIcon"));
 
+	if (!ResourceManager::HasTexture("muteIcon"))
+		ResourceManager::LoadTexture("Sprites\\Audio\\Mute.png", "muteIcon");
+
+	muteAudioButton =
+		UIManager::Instance()->createUIElement<MasterAudioMuteButton>("muteAudioButton", ResourceManager::GetTexture("muteIcon"));
+
 	audioText = UIManager::Instance()->createUIElement<TextComponent>("audioText");
 
 	//Pause Button
@@ -124,6 +130,10 @@ void HUD::updateHUD()
 	minusAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -120, -10 });
 	minusAudioButton->getTransform()->setSize(glm::vec2(50, 50));
 	minusAudioButton->setPivot(Pivot::BottomRight);
+
+	muteAudioButton->getTransform()->setPosition(bottomLeft - glm::vec2{ -180, -10 });
+	muteAudioButton->getTransform()->setSize(glm::vec2(50, 50));
+	muteAudioButton->setPivot(Pivot::BottomRight);
 	
 	// =============================================Update Inventory Button ======================================
 	inventoryButton->getTransform()->setPosition(bottomRight);
@@ -225,13 +235,13 @@ void HUD::updateHUD()
 	// =============================================Update audio text===============================================
 	const float audioLevel = AudioEngine::Instance()->getChannelVolume("Master Channel") * 100 / 100;
 	
-	sizeOfText = TextRenderer::Instance()->renderTextSize("Volume: " + std::format("{:.2f}", audioLevel), 0.5);
+	sizeOfText = TextRenderer::Instance()->renderTextSize("Volume: " + std::format("{:.0f}", audioLevel * 100) + "%", 0.5);
 	position = bottomLeft - glm::vec2{ -5, sizeOfText.y } - glm::vec2{ -10, -70 - sizeOfText.y };
 
 	audioText = UIManager::Instance()->createUIElement<TextComponent>("audioText");
 	audioText->getTransform()->setPosition(position);
 	audioText->getTransform()->setSize(sizeOfText);
-	audioText->setText("Volume: " + std::format("{:.2f}", audioLevel));
+	audioText->setText("Volume: " + std::format("{:.0f}", audioLevel * 100) + "%");
 }
 
 void HUD::onSceneChange(OnSceneChanged*)
