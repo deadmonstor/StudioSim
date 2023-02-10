@@ -4,6 +4,7 @@
 #include "PauseButton.h"
 #include "MasterAudioPlusButton.h"
 #include "MasterAudioMinusButton.h"
+#include "MasterAudioMuteButton.h"
 #include "InventoryButton.h"
 #include "Util/SingletonTemplate.h"
 
@@ -27,6 +28,7 @@ private:
 	InventoryButton* inventoryButton;
 	MasterAudioPlusButton* plusAudioButton;
 	MasterAudioMinusButton* minusAudioButton;
+	MasterAudioMuteButton* muteAudioButton;
 
 	Panel* healthIcon;
 	Panel* manaIcon;

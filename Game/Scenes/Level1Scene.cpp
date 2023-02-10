@@ -137,6 +137,7 @@ void Level1Scene::createBoss(const glm::vec2 pos)
 	bossStats.maxHealth = 160;
 	bossStats.currentHealth = 160;
 	bossStats.defence = 8;
+	bossStats.deathEnemyList = ResourceManager::GetTexturesContaining("FXSExpl");
 	EnemyComponent component = EnemyComponent(fsm, bossStats);
 	Crab->addComponent<EnemyComponent>(component);
 }

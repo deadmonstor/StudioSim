@@ -127,7 +127,7 @@ void EnemyComponent::playDeath()
 	AnimatedSpriteRenderer* oldSpriteRenderer = getOwner()->getComponent<AnimatedSpriteRenderer>();
 
 	death->getTransform()->setSize(getOwner()->getTransform()->getScale());
-	AnimatedSpriteRenderer* spriteRender = death->addComponent<AnimatedSpriteRenderer>(stats.deathEnemyList, abs(0.9 - (stats.deathEnemyList.size() / 13)));
+	AnimatedSpriteRenderer* spriteRender = death->addComponent<AnimatedSpriteRenderer>(stats.deathEnemyList, abs(0.9f - (stats.deathEnemyList.size() / 13.0f)));
 	spriteRender->setPivot(oldSpriteRenderer->getPivot());
 	spriteRender->setColor(oldSpriteRenderer->getColor());
 	spriteRender->setLit(false);
