@@ -56,7 +56,7 @@ int main(int, char**)
 	ResourceManager::LoadTextureArray("Sprites\\SkeletonMove\\", "SkeletonMove", 6);
 	ResourceManager::LoadTextureArray("Sprites\\ZombieMove\\", "ZombieMove", 6);
 	ResourceManager::LoadTextureArray("Sprites\\Fireball\\", "Fireball", 15);
-	ResourceManager::LoadTextureArray("Sprites\\FX1\\", "FXSCircle", 5);
+	ResourceManager::LoadTextureArray("Sprites\\FX1\\", "FXSCircle", 10);
 	ResourceManager::LoadTextureArray("Sprites\\FX2\\", "FXSDrop", 8);
 	ResourceManager::LoadTextureArray("Sprites\\FX3\\", "FXSExpl", 10);
 	ResourceManager::LoadTextureArray("Sprites\\Red-Slash-Wide\\", "Red-Slash-Wide", 6);

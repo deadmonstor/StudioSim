@@ -114,6 +114,7 @@ void Level2Scene::createBoss(const glm::vec2 pos)
 	bossStats.maxHealth = 180;
 	bossStats.currentHealth = 180;
 	bossStats.defence = 9;
+	bossStats.deathEnemyList = ResourceManager::GetTexturesContaining("FXSCircle");
 	EnemyComponent component = EnemyComponent(fsm, bossStats);
 	reaper->addComponent<EnemyComponent>(component);
 }
