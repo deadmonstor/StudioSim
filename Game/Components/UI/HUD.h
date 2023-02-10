@@ -24,7 +24,6 @@ private:
 	ButtonComponent* weaponButton;
 
 	//Buttons
-	PauseButton* pauseButton;
 	InventoryButton* inventoryButton;
 	MasterAudioPlusButton* plusAudioButton;
 	MasterAudioMinusButton* minusAudioButton;
